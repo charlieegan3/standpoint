@@ -1,0 +1,25 @@
+app:
+  container_name: app
+  build: .
+  ports:
+   - "3000:3000"
+  links:
+    - postgres:postgres
+  volumes:
+    - ".:/app"
+  environment:
+    POSTGRES_USER: "${POSTGRES_USER}"
+    POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+  restart: always
+
+postgres:
+  container_name: postgres
+  image: postgres:9.4.5
+  ports:
+    - "5432:5432"
+  volumes:
+    - comment_store-postgres:/var/lib/postgresql/data
+  environment:
+    POSTGRES_USER: "${POSTGRES_USER}"
+    POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+  restart: always
