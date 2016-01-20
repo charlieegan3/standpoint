@@ -1,0 +1,4 @@
+p style=("margin-left: #{indent * 10}px;")
+  =comment.body
+-comment.children.each do |c|
+  =render 'view', comment: c, indent: indent += 1
