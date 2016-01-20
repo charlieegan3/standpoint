@@ -1,4 +1,4 @@
-p style=("margin-left: #{indent * 10}px;")
+p style=("margin-left: #{indent * 15}px;")
   =comment.body
 -comment.children.each do |c|
-  =render 'view', comment: c, indent: indent += 1
+  =render 'view', comment: c, indent: indent + 1
