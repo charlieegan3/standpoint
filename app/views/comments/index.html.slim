@@ -1,4 +1,5 @@
 -@comments.each do |c|
-  p ="Source: #{c.source}"
+  p.source =link_to c.source, c.source
+  p.source ="Root Comment: #{c.id}"
   =render 'view', comment: c, indent: 0
   hr

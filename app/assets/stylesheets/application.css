@@ -13,3 +13,34 @@
  *= require_tree .
  *= require_self
  */
+
+* {
+  margin: 0px;
+}
+
+body {
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 0.75em;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.source {
+  margin: 10px 0px;
+}
+
+body > .comment {
+  font-weight: bold;
+}
+
+.comment > .comment {
+  font-weight: normal;
+}
+
+.comment {
+  background-color: rgba(0,0,0,0.08);
+  padding: 3px 3px 0px 3px;
+  margin: 3px 0px 0px 0px;
+}
+
