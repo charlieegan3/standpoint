@@ -18,7 +18,7 @@ task :reddit, :url do |t, args|
   parent_comment = Comment.create(
     parent: nil,
     body: post["data"]["children"][0]["data"]["selftext"],
-    source: args[:url]
+    source: args[:url].gsub(".json", "")
   )
 
   comments["data"]["children"].each do |c|
