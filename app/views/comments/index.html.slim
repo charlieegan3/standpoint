@@ -1,10 +1,10 @@
-h1 Thread index
-ul
--@comments.each do |c|
-  li
-    p.source
-      =link_to "View Thread", comment_path(c)
-      |&nbsp;
-      =(c.body.split(/\s+/).take(8).join(" "))[0..100] + "..."
-      |&nbsp;
-      =link_to "Source", c.source, target: "_blank"
+h1 Collected Threads Index
+table
+  tbody
+    -@comments.each do |c|
+      tr
+        td =link_to "View Comments", comment_path(c)
+        td
+          |&nbsp;Source&nbsp;
+          =link_to c.domain, c.source, target: "_blank"
+        td =c.summary_text

@@ -23,11 +23,19 @@ body {
   font-size: 0.75em;
   max-width: 1000px;
   width: 100%;
-  margin: 0 auto;
+  margin: 20px auto 0px auto;
 }
 
 .source {
   margin: 10px 0px;
+}
+
+.source .domain {
+  color: grey;
+}
+
+.source .summary {
+  font-weight: bold;
 }
 
 body > .comment {
