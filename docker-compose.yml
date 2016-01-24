@@ -1,19 +1,28 @@
-app:
-  container_name: app
-  build: .
+topic_api:
+  container_name: topic_api
+  build: ./topic_api
+  environment:
+    PORT: 4567
+  ports:
+    - "4567:4567"
+  volumes:
+    - "./topic_api:/app"
+
+comment_store:
+  container_name: comment_store
+  build: ./comment_store
   ports:
    - "3000:3000"
   links:
-    - postgres:postgres
+    - comment_store_postgres:postgres
   volumes:
-    - ".:/app"
+    - "./comment_store:/app"
   environment:
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-  restart: always
 
-postgres:
-  container_name: postgres
+comment_store_postgres:
+  container_name: comment_store_postgres
   image: postgres:9.4.5
   ports:
     - "5432:5432"
@@ -22,4 +31,3 @@ postgres:
   environment:
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-  restart: always
