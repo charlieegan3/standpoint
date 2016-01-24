@@ -1,5 +1,3 @@
-local_env.sh
-
 *.rbc
 capybara-*.html
 .rspec
