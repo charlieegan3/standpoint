@@ -17,4 +17,15 @@ class Comment < ActiveRecord::Base
     end
     return text
   end
+
+  def ancestors(flat=false)
+    if flat
+      children.map { |c| c.ancestors(flat) }.flatten.unshift(self)
+    else
+      {
+        comment: self,
+        children: children.map { |c| { comment: c, children: c.ancestors(flat) } }
+      }
+    end
+  end
 end
