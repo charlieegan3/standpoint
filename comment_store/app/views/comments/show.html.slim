@@ -1,4 +1,4 @@
 p.source =link_to 'Back to Index', root_path
 p.source =link_to @comment.source, @comment.source
 p.source ="Root Comment: #{@comment.id}"
-=render 'view', comment: @comment, indent: 0
+=render 'view', comment: @comment, indent: -1
