@@ -31,3 +31,12 @@ comment_store_postgres:
   environment:
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
+corenlp_server:
+  container_name: corenlp_server
+  build: ./corenlp_server
+  ports:
+    - "9000:9000"
+  environment:
+    RELEASE: "stanford-corenlp-full-2015-12-09"
+    RELEASE_URL: "http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip"
