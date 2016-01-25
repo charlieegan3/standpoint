@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/neurosnap/sentences/english"
@@ -20,9 +21,30 @@ type Comment struct {
 	Updated  string
 }
 
+func formatText(text string) string {
+	re := regexp.MustCompile(`([^\.]$)`)
+	text = re.ReplaceAllString(text, "$1. ")
+
+	re = regexp.MustCompile(`https?\S+`)
+	text = re.ReplaceAllString(text, "URL")
+
+	re = regexp.MustCompile(`(\w{2,}[^\s\w-']+)(\w{2,})`)
+	text = re.ReplaceAllString(text, "$1 $2")
+
+	re = regexp.MustCompile(`\n`)
+	text = re.ReplaceAllString(text, " ")
+
+	re = regexp.MustCompile(`^-\s*`)
+	text = re.ReplaceAllString(text, "")
+
+	re = regexp.MustCompile(`\s+`)
+	text = re.ReplaceAllString(text, " ")
+	return text
+}
+
 func main() {
 	// get some comments
-	commentId := "294"
+	commentId := "993"
 	response, err := http.Get("http://192.168.99.100:3000/comments/" + commentId + ".json?flat=true")
 	if err != nil {
 		panic(err)
@@ -40,6 +62,7 @@ func main() {
 	for _, v := range comments {
 		allText += v.Body + "\n\n"
 	}
+	allText = formatText(allText)
 
 	// get the topics for the text
 	payload := struct {

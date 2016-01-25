@@ -19,6 +19,8 @@ class TopicAnalyzer
   end
 end
 
+blacklist = ["-"]
+
 get "/" do
   "Post to this route with a JSON payload. (text, topic_count, top_word_count)"
 end
@@ -31,7 +33,7 @@ post '/' do
   groups = ta.top_words(payload["top_word_count"].to_i)
 
   {
-    topics: groups.flatten.uniq.sort,
+    topics: groups.flatten.uniq.sort - blacklist,
     groups: groups
   }.to_json
 end
