@@ -19,6 +19,10 @@ class TopicAnalyzer
   end
 end
 
+get "/" do
+  "Post to this route with a JSON payload. (text, topic_count, top_word_count)"
+end
+
 post '/' do
   payload = JSON.parse(request.body.read)
   text = payload["text"].encode("UTF-8", :invalid=>:replace, :replace=>"?")
