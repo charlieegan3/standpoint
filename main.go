@@ -21,6 +21,15 @@ type Comment struct {
 	Updated  string
 }
 
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
 func formatText(text string) string {
 	re := regexp.MustCompile(`([^\.]$)`)
 	text = re.ReplaceAllString(text, "$1. ")
@@ -44,7 +53,7 @@ func formatText(text string) string {
 
 func main() {
 	// get some comments
-	commentId := "993"
+	commentId := "1"
 	response, err := http.Get("http://192.168.99.100:3000/comments/" + commentId + ".json?flat=true")
 	if err != nil {
 		panic(err)
@@ -110,7 +119,7 @@ func main() {
 				topics = append(topics, topic)
 			}
 		}
-		if len(topics) > 3 {
+		if contains(topics, "born") {
 			fmt.Println(topics)
 			fmt.Println(s.Text)
 			fmt.Println("-------")
