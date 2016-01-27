@@ -53,7 +53,7 @@ func formatText(text string) string {
 
 func main() {
 	// get some comments
-	commentId := "1"
+	commentId := "1667"
 	response, err := http.Get("http://192.168.99.100:3000/comments/" + commentId + ".json?flat=true")
 	if err != nil {
 		panic(err)
@@ -119,7 +119,7 @@ func main() {
 				topics = append(topics, topic)
 			}
 		}
-		if contains(topics, "born") {
+		if contains(topics, "evolution") {
 			fmt.Println(topics)
 			fmt.Println(s.Text)
 			fmt.Println("-------")

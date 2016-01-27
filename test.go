@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"sort"
+	"regexp"
 	"strings"
 )
 
@@ -54,6 +54,18 @@ func wordsForSentence(sentence string) ([]string, error) {
 	return words, nil
 }
 
+func formatResponse(response string) string {
+	re := regexp.MustCompile(`\A(.*\n){3}`)
+	response = re.ReplaceAllString(response, "[\n")
+	re = regexp.MustCompile(`(\n.*){3}\z`)
+	response = re.ReplaceAllString(response, "\n]")
+	re = regexp.MustCompile(`,\s+"length":.*\n`)
+	response = re.ReplaceAllString(response, "\n")
+	re = regexp.MustCompile(`"\d*":`)
+	response = re.ReplaceAllString(response, "")
+	return response
+}
+
 type Point struct {
 	text   string
 	tags   []string
@@ -61,59 +73,71 @@ type Point struct {
 }
 
 func pointForTopic(topic string, sentence string) (Point, error) {
+	patterns := []string{
+		"{}=verb >nsubj {}=subj >dobj {}=obj",
+		"{}=verb >/nmod.*/ {}=subj >dobj {}=obj",
+		"{}=verb >nsubj {}=subj >/nmod.*/ {}=obj",
+		"{}=obj >nsubj {}=subj >cop {}=verb",
+		"{}=verb >nsubj {}=subj >ccomp {}=verb2",
+		"{}=subj >advcl {}=verb",
+	}
+
 	params := url.Values{}
-	params.Set("pattern", fmt.Sprintf("{} >/.*/ {value: %v}", topic))
-	governorsResp, _ := coreNlpPost("http://192.168.99.100:9000", "semgrex", params, sentence)
-	params.Set("pattern", fmt.Sprintf("{} </.*/ {value: %v}", topic))
-	dependentsResp, _ := coreNlpPost("http://192.168.99.100:9000", "semgrex", params, sentence)
-
-	type Relation struct {
-		Sentences []struct {
-			Token struct {
-				Text string `json:"text"`
-				End  int    `json:"end"`
-			} `json:"0"`
-		} `json:"sentences"`
-	}
-	var governorsRel Relation
-	if err := json.Unmarshal(governorsResp, &governorsRel); err != nil {
-		return Point{}, err
-	}
-	var dependentsRel Relation
-	if err := json.Unmarshal(dependentsResp, &dependentsRel); err != nil {
-		return Point{}, err
+	for _, v := range patterns {
+		params.Set("pattern", v)
+		resp, _ := coreNlpPost("http://192.168.99.100:9000", "semgrex", params, sentence)
+		fmt.Println(v)
+		fmt.Println(formatResponse(string(resp)))
+		fmt.Println("-------------------------------------\n")
 	}
 
-	fmt.Println(string(governorsResp))
-	fmt.Println(string(dependentsResp))
+	//type Relation struct {
+	//Sentences []struct {
+	//Token struct {
+	//Text string `json:"text"`
+	//End  int    `json:"end"`
+	//} `json:"0"`
+	//} `json:"sentences"`
+	//}
+	//var governorsRel Relation
+	//if err := json.Unmarshal(governorsResp, &governorsRel); err != nil {
+	//return Point{}, err
+	//}
+	//var dependentsRel Relation
+	//if err := json.Unmarshal(dependentsResp, &dependentsRel); err != nil {
+	//return Point{}, err
+	//}
+	//
+	//fmt.Println(string(governorsResp))
+	//fmt.Println(string(dependentsResp))
+	//
+	//words, _ := wordsForSentence(sentence)
+	//var topicIndex int
+	//for i, word := range words {
+	//if word == topic {
+	//topicIndex = i + 1
+	//break
+	//}
+	//}
+	//
+	//indexes := []int{
+	//dependentsRel.Sentences[0].Token.End - 1,
+	//governorsRel.Sentences[0].Token.End - 1,
+	//topicIndex,
+	//}
+	//sort.Ints(indexes)
+	//span := words[indexes[0]:indexes[len(indexes)-1]]
+	//point := Point{
+	//text:   strings.Join(span, " "),
+	//tags:   words,
+	//source: sentence,
+	//}
 
-	words, _ := wordsForSentence(sentence)
-	var topicIndex int
-	for i, word := range words {
-		if word == topic {
-			topicIndex = i + 1
-			break
-		}
-	}
-
-	indexes := []int{
-		dependentsRel.Sentences[0].Token.End - 1,
-		governorsRel.Sentences[0].Token.End - 1,
-		topicIndex,
-	}
-	sort.Ints(indexes)
-	span := words[indexes[0]:indexes[len(indexes)-1]]
-	point := Point{
-		text:   strings.Join(span, " "),
-		tags:   []string{SORT BY THE ORDER},
-		source: sentence,
-	}
-
-	return point, nil
+	return Point{}, nil
 }
 
 func main() {
-	body := `being born in the uk isn't the be all and end all of being british`
+	body := `i stand by opening statement, that evolution is a lie`
 	topic := "british"
 
 	fmt.Println(pointForTopic(topic, body))
