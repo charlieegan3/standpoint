@@ -32,8 +32,10 @@ post '/' do
   ta = TopicAnalyzer.new(text, payload["topic_count"].to_i)
   groups = ta.top_words(payload["top_word_count"].to_i)
 
+  groups.map! { |g| g - blacklist }
+
   {
-    topics: groups.flatten.uniq.sort - blacklist,
+    topics: groups.flatten.uniq.sort,
     groups: groups
   }.to_json
 end
