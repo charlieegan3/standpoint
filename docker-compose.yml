@@ -40,3 +40,5 @@ corenlp_server:
   environment:
     RELEASE: "stanford-corenlp-full-2015-12-09"
     RELEASE_URL: "http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip"
+  mem_limit: "2g"
+  memswap_limit: "2g"
