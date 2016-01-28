@@ -1,0 +1,65 @@
+\documentclass[tikz]{article}
+\usepackage{fullpage, pgfgantt, forloop}
+
+\begin{document}
+  \title{Extraction \& Classification of Points in Discursive Texts\\ Project Plan}
+  \author{Charlie Egan \\ \texttt{c.egan.12@aberdeen.ac.uk}}
+
+  \maketitle
+
+  \section{Introduction}
+    This project will investigate the task of 'point extraction'. Point extraction involves using natural language processing techniques to identify phrases representative of ideas covered in a discussion. This is of interest because as it could allow a large volume of text to be summarized by a number of key ideas or points. This would be of general use in the task of automated summarization, and - if developed further into an accessible tool - to journalists and or those working in politics. Being able to automatically extract such information from consistently from online discussions is obviously very powerful.
+
+    The project will start by continuing work on an existing project in the department \textbf{(perhaps info on who, when, name etc). References to further reading on the matter, what has been done before etc.}
+
+  \section{Goals}
+    Core requirements of the project are as follows:
+    \begin{itemize}
+      \item{Further work on current point extraction tool - likely under a new codebase}
+      \item{Improve tool results for point extraction and linking of contrasting points}
+      \item{Build a package capable of performing such analysis}
+      \item{Build a suitable interface to present the results said analysis}
+    \end{itemize}
+    I would also like to investigate the following tasks should time allow:
+    \begin{itemize}
+      \item{(stretch goal) Look to implement grouping of points often raised together / that are representative of those with a particular stance in the discussion}
+      \item{(stretch goal) Consider looking for supporting claims for points}
+    \end{itemize}
+
+  \section{Methodology}
+      Initially, the approach implemented will be based largely on that of the existing tool. I imagine this being largely an exploratory task. The short comings of the existing tool will guide the project objectives after this.
+
+      Discursive texts will be sourced to test the tool from a number of platforms that facilitate online discussion, Reddit and National Newspapers for example. These will likely require additional processing steps to make the content useful, this will likely require further learning in the field of natural language processing.
+
+      The project will require me to learn relevant techniques in the field and implement them in a suitable language and/or framework. I plan to write automated test cases to exemplify, document and test the tool's capabilities during the development. This way, should the tool need to be re-structured, the behavior can be programmatically tested and kept consistent.
+
+  \section{Resources Required}
+    The project will not require any specialist equipment beyond a UNIX computer. I would like to make use of services for repository hosting, continuous integration and hosting, all of which are freely available to open source projects.
+
+  \section{Risk Assessment}
+    The likeliness of success with regards to the goals outlined above is variable and hard to predict at this early stage, however, it is unlikely that a negative externality could seriously impact the success of the project as a whole. I have yet to receive access to the source code for the old project, the time taken to study this is an unknown and could introduce a delay at the beginning of the project. In this case I may need to implement some of the original functionality myself.
+
+  \section{Timetable}
+
+  \begin{ganttchart}[bar height=0.3,y unit chart=0.5cm]{1}{16}
+    \textbf{
+      \gantttitle{wk 25}{2}
+      \newcounter{weeknumber}
+      \forloop{weeknumber}{26}{\value{weeknumber} < 39}{
+        \gantttitle{\arabic{weeknumber}}{1}
+      }
+      \gantttitle{39}{1} \\
+    }
+
+    \ganttbar{Planning}{1}{2} \\
+    \ganttbar{Corpus Investigation}{1}{2} \\
+    \ganttbar{Literature Review}{3}{5} \\
+    \ganttbar{Implementation}{3}{12} \\
+    \ganttbar{Testing}{3}{12} \\
+    \ganttbar{Documentation}{3}{16} \\
+    \ganttmilestone{Project Due Date}{16}
+  \end{ganttchart}
+
+  \section{References}
+
+\end{document}
