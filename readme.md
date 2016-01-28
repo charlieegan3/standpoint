@@ -4,7 +4,7 @@ Tool to analyze discursive texts with the goal of extracting key points raised a
 
 ## Contributing
 
-I cannot accept contributions to the project before May 2016 as it must be all my own work. 
+I cannot accept contributions to the project before May 2016 as it must be all my own work. Please feel free to fork the project. The project is uses the MIT license.
 
 ## Setup Instructions
 
