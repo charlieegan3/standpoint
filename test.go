@@ -59,10 +59,15 @@ func formatResponse(response string) string {
 	response = re.ReplaceAllString(response, "[\n")
 	re = regexp.MustCompile(`(\n.*){3}\z`)
 	response = re.ReplaceAllString(response, "\n]")
-	re = regexp.MustCompile(`,\s+"length":.*\n`)
+	re = regexp.MustCompile(`,?\s+"length":.*\n`)
 	response = re.ReplaceAllString(response, "\n")
 	re = regexp.MustCompile(`"\d*":`)
 	response = re.ReplaceAllString(response, "")
+	re = regexp.MustCompile(`\n.*"text.*\n.*\n.*,`)
+	response = re.ReplaceAllString(response, "")
+	re = regexp.MustCompile(`"\$\w+": `)
+	response = re.ReplaceAllString(response, "")
+
 	return response
 }
 
@@ -75,17 +80,17 @@ type Point struct {
 func pointForTopic(topic string, sentence string) (Point, error) {
 	patterns := []string{
 		"{}=verb >nsubj {}=subj >dobj {}=obj",
-		"{}=verb >/nmod.*/ {}=subj >dobj {}=obj",
-		"{}=verb >nsubj {}=subj >/nmod.*/ {}=obj",
 		"{}=obj >nsubj {}=subj >cop {}=verb",
 		"{}=verb >nsubj {}=subj >ccomp {}=verb2",
 		"{}=subj >advcl {}=verb",
+		"{}=verb >/nmod.*/ {}=subj >dobj {}=obj",
+		"{}=verb >nsubj {}=subj >/nmod.*/ {}=obj",
 	}
 
 	params := url.Values{}
 	for _, v := range patterns {
 		params.Set("pattern", v)
-		resp, _ := coreNlpPost("http://192.168.99.100:9000", "semgrex", params, sentence)
+		resp, _ := coreNlpPost("http://local.docker:9000", "semgrex", params, sentence)
 		fmt.Println(v)
 		fmt.Println(formatResponse(string(resp)))
 		fmt.Println("-------------------------------------\n")

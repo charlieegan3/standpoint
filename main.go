@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 
@@ -53,8 +55,8 @@ func formatText(text string) string {
 
 func main() {
 	// get some comments
-	commentId := "1667"
-	response, err := http.Get("http://192.168.99.100:3000/comments/" + commentId + ".json?flat=true")
+	commentId := "1"
+	response, err := http.Get("http://local.docker:3000/comments/" + commentId + ".json?flat=true")
 	if err != nil {
 		panic(err)
 	}
@@ -84,7 +86,7 @@ func main() {
 	b, _ := json.Marshal(payload)
 	reqBody := bytes.NewBuffer(b)
 
-	response, err = http.Post("http://192.168.99.100:4567", "text/json", reqBody)
+	response, err = http.Post("http://local.docker:4567", "text/json", reqBody)
 	if err != nil {
 		panic(err)
 	}
@@ -110,6 +112,14 @@ func main() {
 	sentences := tokenizer.Tokenize(allText)
 
 	// scan for matching sentences
+	patterns := []string{
+		"{}=verb >nsubj {}=subj >dobj {}=obj",
+		"{}=obj >nsubj {}=subj >cop {}=verb",
+		"{}=verb >nsubj {}=subj >ccomp {}=verb2",
+		"{}=subj >advcl {}=verb",
+		"{}=verb >/nmod.*/ {}=subj >dobj {}=obj",
+		"{}=verb >nsubj {}=subj >/nmod.*/ {}=obj",
+	}
 	var topics []string
 	for _, s := range sentences {
 		s.Text = strings.TrimSpace(s.Text)
@@ -122,7 +132,34 @@ func main() {
 		if contains(topics, "evolution") {
 			fmt.Println(topics)
 			fmt.Println(s.Text)
-			fmt.Println("-------")
+
+			for _, v := range patterns {
+				fmt.Println(v)
+				payload := struct {
+					Text    string `json:"text"`
+					Pattern string `json:"pattern"`
+				}{
+					s.Text, v,
+				}
+				b, _ := json.Marshal(payload)
+				reqBody := bytes.NewBuffer(b)
+
+				response, err = http.Post("http://local.docker:4568", "text/json", reqBody)
+				if err != nil {
+					panic(err)
+				}
+				body, err = ioutil.ReadAll(response.Body)
+				if len(string(body)) < 10 {
+					continue
+				}
+				var out bytes.Buffer
+				json.Indent(&out, body, "", "    ")
+				fmt.Println(string(out.Bytes()))
+			}
+			reader := bufio.NewReader(os.Stdin)
+			fmt.Print(">")
+			_, _ = reader.ReadString('\n')
+			fmt.Println("-------\n\n")
 		}
 		topics = topics[:0]
 	}

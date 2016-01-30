@@ -38,6 +38,7 @@ type Node struct {
 	parent   *Node
 	text     string
 	index    int
+	pos      string
 	children []*Node
 }
 
@@ -54,9 +55,9 @@ func (n *Node) printTree(indent string) {
 }
 
 func main() {
-	body := strings.NewReader(`being born in the uk isn't the be all and end all of being british`)
+	body := strings.NewReader(`There was a man with a dog. It had big ears`)
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", "http://192.168.99.100:9000/?properties=%7B%22tokenize.whitespace%22:%20%22true%22,%20%22annotators%22:%20%22parse%22,%20%22outputFormat%22:%20%22json%22%7D", body)
+	req, err := http.NewRequest("POST", "http://local.docker:9000/?properties=%7B%22tokenize.whitespace%22:%20%22true%22,%20%22annotators%22:%20%22parse%22,%20%22outputFormat%22:%20%22json%22%7D", body)
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("Failure : ", err)
@@ -67,6 +68,7 @@ func main() {
 		Sentences []Sentence
 	}
 	json.Unmarshal(respBody, &parsedReponse)
+	fmt.Println(parsedReponse.Sentences[0].Parse)
 
 	nodeMap := make(map[int]*Node)
 	var root *Node
