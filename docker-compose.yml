@@ -8,6 +8,19 @@ topic_api:
   volumes:
     - "./topic_api:/app"
 
+match_api:
+  container_name: match_api
+  build: ./match_api
+  environment:
+    PORT: 4567
+    CNLP_PORT: 9000
+  ports:
+    - "4568:4567"
+  links:
+    - corenlp_server:corenlp_server
+  volumes:
+    - "./match_api:/app"
+
 comment_store:
   container_name: comment_store
   build: ./comment_store
