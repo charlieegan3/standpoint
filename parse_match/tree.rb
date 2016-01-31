@@ -4,6 +4,10 @@ require 'json'
 require 'net/http'
 
 class Parser
+  def self.prepare_sentence(sentence)
+    sentence.gsub(/\(|\)/, ',')
+  end
+
   def self.parse_tree(tree)
     tree_syntax = tree.gsub("\n", " ")
       .gsub(/\s+/, ' ')
@@ -35,7 +39,7 @@ class Parser
         end
         child << grand_child
       else
-        child << Tree::TreeNode.new(name, c)
+        child << Tree::TreeNode.new(c, c)
       end
     end
     return child
@@ -50,6 +54,7 @@ class Tree::TreeNode
   end
 
   def index_at_parent
+    return 0 unless self.parent
     self.parent.children.index(self)
   end
 
@@ -57,8 +62,12 @@ class Tree::TreeNode
     self.children.map(&:content)
   end
 
+  def children_match(component)
+    self.children.map { |c| c.match(component) }.reduce(:|)
+  end
+
   def search(component)
-    if match(component)
+    if match(component) && !children_match(component)
       return self
     elsif !self.children.empty?
       self.children.each do |c|
@@ -74,7 +83,7 @@ class Tree::TreeNode
 
   def match(component)
     if component[:regex]
-      component[:regex] =~ self.content
+      !(component[:regex] =~ self.content).nil?
     else
       self.content == component[:string]
     end
@@ -85,9 +94,10 @@ class Tree::TreeNode
       pattern.components.each do |component|
         if result = self.search(component)
           matches << { matcher: component, tree: result }
+          next unless result.parent
           result.parent.remove_range!(0..result.index_at_parent)
         else
-          puts "Failed: \"#{component[:original]}\" missing"
+          puts "Failed: \"#{component}\" missing"
           return false
         end
       end
@@ -120,6 +130,18 @@ class Pattern
   def translation(component)
     regex = {
       "V" => /VB[^A-Z]?/,
+      "v" => /VB[^A-Z]?/,
+      "S-Quote" => /S|V[A-Z]+|NP/,
+      "NP-Dative" => /NP/,
+      "NP-Fulfilling" => /NP/,
+      "PP-Conative" => /PP/,
+      "ADV" => /RB/,
+      "ADV-Middle" => /RB/,
+      "ADVP" => /RB/,
+      "ADVP-Middle" => /RB/,
+      "ADJ" => /JJ/,
+      "ADJ-Middle" => /JJ/,
+      "ADJP" => /JJ/,
     }[component]
     {
       original: component,
