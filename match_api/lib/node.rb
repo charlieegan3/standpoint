@@ -13,6 +13,14 @@ class Tree::TreeNode
     end.compact
   end
 
+  def str
+    leaf_nodes.map(&:name)
+  end
+
+  def node_list
+    each { |n| n }.map { |n| n }
+  end
+
   def contains?(leaf)
     leaf_nodes.map(&:name).include? leaf
   end
@@ -30,19 +38,59 @@ class Tree::TreeNode
     self.children.map { |c| c.match(component) }.reduce(:|)
   end
 
-  def search(component)
-    if match(component) && !children_match(component)
-      return self
-    elsif !self.children.empty?
-      self.children.each do |c|
-        if (child_node = c.search(component)).class == Tree::TreeNode
-          return child_node
+  def scan(pattern)
+    tree_index = node_list
+
+    component_matches = []
+    pattern.components.each do |component|
+      nodes = Hash.new
+      tree_index.each_with_index do |node, index|
+        range = node.leaf_nodes.map { |n| tree_index.index(n) }.sort
+        nodes[range] = node if node.match(component)
+      end
+      component_matches << nodes
+    end
+
+    indexes = component_matches.map(&:keys)
+
+    valid_match_list = []
+
+    indexes.map! do |component_matches|
+      component_matches.map do |match|
+        match.sort
+      end
+    end
+
+    indexes.reduce(:+).combination(indexes.size).to_a.each do |c|
+      next unless c == c.sort_by { |x| x.last }
+      next unless c == c.sort_by { |x| x.first }
+      valid = true
+      indexes.each_with_index do |component_match, index|
+        valid = false unless component_match.include? c[index]
+      end
+      valid_match_list << c if valid
+    end
+
+    full_matches = []
+
+    valid_match_list.each do |match|
+      full_match = []
+      match.each_with_index do |key, index|
+        full_match << component_matches[index][key]
+      end
+      full_matches << full_match
+    end
+
+    full_matches.map! do |match|
+      [].tap do |sub_matches|
+        match.each_with_index do |sub_match, index|
+          sub_matches << {
+            pattern: pattern.components[index], tree: sub_match }
         end
       end
-      return false
-    else
-      return false
     end
+
+    return full_matches
   end
 
   def match(component)
@@ -50,21 +98,6 @@ class Tree::TreeNode
       !(component[:regex] =~ self.content).nil?
     else
       self.content == component[:string]
-    end
-  end
-
-  def scan(pattern)
-    [].tap do |matches|
-      pattern.components.each do |component|
-        if result = self.search(component)
-          matches << { matcher: component, tree: result }
-          next unless result.parent
-          result.parent.remove_range!(0..result.index_at_parent)
-        else
-          puts "Failed: \"#{component}\" missing"
-          return false
-        end
-      end
     end
   end
 end

@@ -32,17 +32,17 @@ def verbs_for_tokens(tokens)
     .compact
 end
 
-def valid_result(result, verb)
-  result.each do |match|
-    if match[:tree].contains?(verb[:text])
+def valid_result(match, verb)
+  match.each do |sub_match|
+    if sub_match[:tree].contains?(verb[:text])
       return true
     end
   end
   return false
 end
 
-def result_string(result)
-  result.map { |match| match[:tree].leaf_nodes.map(&:name) }.flatten.join(" ")
+def match_string(match)
+  match.map { |sub_match| sub_match[:tree].leaf_nodes.map(&:name) }.flatten.join(" ")
 end
 
 post '/' do
@@ -60,10 +60,12 @@ post '/' do
     verb[:frames].each do |frame|
       round_tree = base_tree.dup
 
-      if (result = round_tree.scan(Pattern.new(frame['pattern'])))
-        if valid_result(result, verb)
-          # matches << { string: result_string(result), verb: verb, match: result }
-          matches << { string: result_string(result), verb: verb, match: nil }
+      if (full_matches = round_tree.scan(Pattern.new(frame['pattern'])))
+        full_matches.each do |full_match|
+          if valid_result(full_match, verb)
+            #matches << { string: match_string(full_match), verb: verb, frame: frame,  match: nil }
+            matches << { string: match_string(full_match), frame: frame['pattern'] }
+          end
         end
       end
     end
@@ -73,6 +75,7 @@ post '/' do
     verbs: verbs,
     matches: matches,
     parse: parse,
+    raw_parse: raw_parse,
     tree: base_tree,
   }.to_json
 end
