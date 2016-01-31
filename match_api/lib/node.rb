@@ -5,6 +5,18 @@ class Tree::TreeNode
     end
   end
 
+  def leaf_nodes
+    [].tap do |leaves|
+      each_leaf do |leaf|
+        leaves << leaf if leaf.is_leaf?
+      end
+    end.compact
+  end
+
+  def contains?(leaf)
+    leaf_nodes.map(&:name).include? leaf
+  end
+
   def index_at_parent
     return 0 unless self.parent
     self.parent.children.index(self)

@@ -21,11 +21,28 @@ http = Net::HTTP.new(uri.host, uri.port)
 
 def verbs_for_tokens(tokens)
   tokens.select { |t| t['pos'].include?("VB") }
-    .map { |t| [t['lemma'], t['word'], t['originalText']] }
-    .flatten
-    .uniq
-    .map { |v| { verb: v, frames: VERBS[v] } if !VERBS[v].nil? }
+    .map { |t|
+      {
+        lemma: t['lemma'],
+        word: t['word'],
+        text: t['originalText'],
+      }
+    }
+    .map { |v| v.merge({ frames: [VERBS[v[:lemma]], VERBS[v[:word]]].flatten.compact }) }
     .compact
+end
+
+def valid_result(result, verb)
+  result.each do |match|
+    if match[:tree].contains?(verb[:text])
+      return true
+    end
+  end
+  return false
+end
+
+def result_string(result)
+  result.map { |match| match[:tree].leaf_nodes.map(&:name) }.flatten.join(" ")
 end
 
 post '/' do
@@ -44,7 +61,10 @@ post '/' do
       round_tree = base_tree.dup
 
       if (result = round_tree.scan(Pattern.new(frame['pattern'])))
-        matches << result
+        if valid_result(result, verb)
+          # matches << { string: result_string(result), verb: verb, match: result }
+          matches << { string: result_string(result), verb: verb, match: nil }
+        end
       end
     end
   end
