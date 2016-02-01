@@ -13,12 +13,11 @@
   This project will investigate the task of `point extraction'. Point extraction involves using natural language processing techniques to identify basic propositions representative of ideas covered in a discussion. This is of interest because as it could allow a large volume of text to be summarized by a number of key ideas or points. This would be of general use in the task of automated summarization, and - if developed further into an accessible tool - to journalists and or those working in politics. Being able to automatically extract such information consistently from online discussions is obviously very powerful. It would be good to go beyond extracting points in isolation and also implement a means to group and points into a linked structure, perhaps with argument relations between groups of extracted points. See related references \cite{catsdogs, contradictions, opinion, wyner} related to this topic of argumentation.
 
   \section{Goals}
-    Core requirements of the project are as follows:
+    Core requirements of the project are to design and implement the following tools:
     \begin{itemize}
-      \item{The proof of concept \citep{existing} developed by MA Angrosh (which implemented a naive concept of a `point' as a verb with its subject and object) will be reimplemented to better account for verb subcategorisation information.}
-      \item{Improve on the results of the previous tool for point extraction and linking of contrasting points}
-      \item{Build a package or tool capable of performing such analysis}
-      \item{Build a suitable interface to present the results}
+      \item{A point extractor that takes subcategorisation of verbs into account}
+      \item{A tool capable of linking of contrastive points}
+      \item{An interface to study points made about different topics by participants in online discussions}
     \end{itemize}
     I would also like to investigate the following tasks should time allow:
     \begin{itemize}
@@ -27,7 +26,7 @@
     \end{itemize}
 
   \section{Methodology}
-    Initially, the approach implemented will be based largely on that of the existing tool \citep{existing}. The short comings of the existing tool are the starting point for my project.
+    Initially, the approach implemented will be based largely on that of the existing tool \citep{existing}. This tool used a limited definition for points - a point was a verb, subject and object. It also only detected contrastive points on the presence of `not'. The short comings in this approach are the starting points for my project.
 
       Discursive texts will be sourced to test the tool from a number of platforms that facilitate online discussion, Reddit and National Newspapers for example. These will likely require additional processing steps to make the content useful, which will likely require further learning in the field of natural language processing.
 
