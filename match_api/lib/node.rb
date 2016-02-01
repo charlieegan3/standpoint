@@ -73,6 +73,8 @@ class Tree::TreeNode
 
     full_matches = []
 
+    valid_match_list.reject! { |m| m.uniq != m }
+
     valid_match_list.each do |match|
       full_match = []
       match.each_with_index do |key, index|
