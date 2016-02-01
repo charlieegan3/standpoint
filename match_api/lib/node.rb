@@ -71,10 +71,10 @@ class Tree::TreeNode
       valid_match_list << c if valid
     end
 
-    full_matches = []
-
     valid_match_list.reject! { |m| m.uniq != m }
+    scores = valid_match_list.map { |m| diffs = []; m.each_with_index { |c, i| diffs << m[i+1].first-c.last  if m[i+1] }; 1 / (diffs.reduce(:+).to_f / m.size) }
 
+    full_matches = []
     valid_match_list.each do |match|
       full_match = []
       match.each_with_index do |key, index|
@@ -83,13 +83,13 @@ class Tree::TreeNode
       full_matches << full_match
     end
 
-    full_matches.map! do |match|
-      [].tap do |sub_matches|
-        match.each_with_index do |sub_match, index|
-          sub_matches << {
-            pattern: pattern.components[index], tree: sub_match }
-        end
+    full_matches.each_with_index do |match, index|
+      sub_matches = []
+      match.each_with_index do |sub_match, index|
+        sub_matches << {
+          pattern: pattern.components[index], tree: sub_match }
       end
+      full_matches[index] = { score: scores[index], sub_matches: sub_matches}
     end
 
     return full_matches

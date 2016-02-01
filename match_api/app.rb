@@ -62,16 +62,27 @@ post '/' do
 
       if (full_matches = round_tree.scan(Pattern.new(frame['pattern'])))
         full_matches.each do |full_match|
-          if valid_result(full_match, verb)
-            matches << { string: match_string(full_match), frame: frame, verb: verb, match: full_match }
-            #matches << { string: match_string(full_match), frame: frame['pattern'], verb: "verb placeholder", match: "match placeholder" }
+          if valid_result(full_match[:sub_matches], verb)
+            #matches << { string: match_string(full_match), frame: frame, verb: verb, match: full_match }
+            matches << { string: match_string(full_match[:sub_matches]), score: full_match[:score], frame: frame['pattern'], verb: "verb placeholder", match: "match placeholder" }
           end
         end
       end
     end
   end
 
-  matches = matches.group_by { |m| m[:string] }.map { |k, v| { string: k, verb: v.first[:verb], matched_frames: v.map { |s| s[:frame] }, tree: v.first[:match] } }
+  matches = matches.group_by { |m| m[:string] }
+    .map { |k, v|
+      {
+        string: k,
+        verb: v.first[:verb],
+        matched_frames: v.map { |s| s[:frame] },
+        tree: v.first[:match],
+        scores: v.map { |s| s[:score] }
+      }
+    }
+    .sort_by { |m| m[:scores].max }.reverse
+
 
   {
     verbs: verbs,
