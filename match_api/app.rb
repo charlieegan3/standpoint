@@ -31,19 +31,7 @@ def verbs_for_tokens(tokens)
     }
     .map { |v| v.merge({ frames: [VERBS[v[:lemma]], VERBS[v[:word]]].flatten.compact }) }
     .compact
-end
-
-def valid_result(match, verb)
-  match.each do |sub_match|
-    if sub_match[:tree].contains?(verb[:text])
-      return true
-    end
-  end
-  return false
-end
-
-def match_string(match)
-  match.map { |sub_match| sub_match[:tree].leaf_nodes.map(&:name) }.flatten.join(" ")
+    .reject { |v| v[:frames].empty? }
 end
 
 post '/' do
@@ -53,22 +41,12 @@ post '/' do
 
   raw_parse = sentence['parse']
   parse = Parser.parse_tree(raw_parse)
-  base_tree = Parser.build_tree(parse)
+  tree = Parser.build_tree(parse)
 
   matches = []
   (verbs = verbs_for_tokens(sentence['tokens'])).each do |verb|
-    next unless verb[:frames]
     verb[:frames].each do |frame|
-      round_tree = base_tree.dup
-
-      if (full_matches = round_tree.scan(Pattern.new(frame['pattern'])))
-        full_matches.each do |full_match|
-          if valid_result(full_match[:sub_matches], verb)
-            #matches << { string: match_string(full_match), frame: frame, verb: verb, match: full_match }
-            matches << { string: match_string(full_match[:sub_matches]), score: full_match[:score], frame: frame['pattern'], verb: "verb placeholder", match: "match placeholder" }
-          end
-        end
-      end
+      matches += tree.scan(Pattern.new(frame['pattern']), verb)
     end
   end
 
@@ -92,6 +70,6 @@ post '/' do
     matches: matches,
     parse: parse,
     raw_parse: raw_parse,
-    tree: base_tree,
+    tree: tree,
   }.to_json
 end

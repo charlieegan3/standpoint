@@ -69,11 +69,11 @@ class TestNode < Test::Unit::TestCase
 
   def test_scan_basic_match
     root = build_tree(["root:content", [["c1:c1"],["c2:c2"],["c3:c3"]]])
-    result = root.scan(Pattern.new("c1 c2 c3")).first
+    result = root.scan(Pattern.new("c1 c2 c3"), {text:"c3"}).first
     assert_equal(root.children, result[:component_matches].map { |s| s[:tree] })
-    result = root.scan(Pattern.new("c1 c2")).first
+    result = root.scan(Pattern.new("c1 c2"), {text:"c2"}).first
     assert_equal(root.children[0..1], result[:component_matches].map { |s| s[:tree] })
-    result = root.scan(Pattern.new("c1 c3")).first
+    result = root.scan(Pattern.new("c1 c3"), {text:"c3"}).first
     assert_equal([root.children[0], root.children[2]],
                   result[:component_matches].map { |s| s[:tree] })
   end
@@ -85,9 +85,9 @@ class TestNode < Test::Unit::TestCase
     root << Tree::TreeNode.new("c3", "c3") <<
             (c4 = Tree::TreeNode.new("c4", "c4"))
 
-    result = root.scan(Pattern.new("c1 c2 c4")).first
+    result = root.scan(Pattern.new("c1 c2 c4"), {text:"c2"}).first
     assert_equal([c1, c2, c4], result[:component_matches].map { |s| s[:tree] })
-    result = root.scan(Pattern.new("c1 c4")).first
+    result = root.scan(Pattern.new("c1 c4"), {text:"c4"}).first
     assert_equal([c1, c4], result[:component_matches].map { |s| s[:tree] })
   end
 
@@ -98,7 +98,7 @@ class TestNode < Test::Unit::TestCase
     root << Tree::TreeNode.new("c4", "c4") <<
             (c5 = Tree::TreeNode.new("c5", "c5"))
 
-    result = root.scan(Pattern.new("c2 c3 c5")).first
+    result = root.scan(Pattern.new("c2 c3 c5"), {text:"c3"}).first
     assert_equal([c2, c3, c5], result[:component_matches].map { |s| s[:tree] })
   end
 
@@ -106,10 +106,10 @@ class TestNode < Test::Unit::TestCase
     root = Tree::TreeNode.new("root:content")
     root << Tree::TreeNode.new("c1", "c1") << Tree::TreeNode.new("c2", "c2")
 
-    result = root.scan(Pattern.new("c1 c2")).first
+    result = root.scan(Pattern.new("c1 c2"), {text:"c2"}).first
     assert_equal(nil, result)
 
-    result = root.scan(Pattern.new("c1 c3")).first
+    result = root.scan(Pattern.new("c1 c3"), {text:"c3"}).first
     assert_equal(nil, result)
   end
 
@@ -120,14 +120,24 @@ class TestNode < Test::Unit::TestCase
     root << Tree::TreeNode.new("c3", "vp")
     root << Tree::TreeNode.new("c4", "np")
 
-    result = root.scan(Pattern.new("np np"))
+    result = root.scan(Pattern.new("np np"), {text:"np"})
     assert_equal(1, result.size)
     assert_equal(%w(c1 c4),
                  result.first[:component_matches].map { |m| m[:tree].name })
 
-    result = root.scan(Pattern.new("np vp np"))
+    result = root.scan(Pattern.new("np vp np"), {text:"vp"})
     assert_equal(2, result.size)
     assert_equal([%w(c1 c2 c4), %w(c1 c3 c4)],
                  result.map { |r| r[:component_matches].map { |m| m[:tree].name } })
+  end
+
+  def test_scan_match_string
+    root = Tree::TreeNode.new("root:content")
+    root << Tree::TreeNode.new("c1", "np")
+    root << Tree::TreeNode.new("c2", "vp")
+    root << Tree::TreeNode.new("c3", "vp")
+
+    result = root.scan(Pattern.new("np vp"), {text:"vp"})
+    assert_equal("np vp", result.first[:string])
   end
 end

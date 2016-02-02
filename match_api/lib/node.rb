@@ -14,7 +14,7 @@ class Tree::TreeNode
   end
 
   def str
-    leaf_nodes.map(&:name)
+    leaf_nodes.map(&:content)
   end
 
   def node_list
@@ -42,7 +42,7 @@ class Tree::TreeNode
     end
   end
 
-  def scan(pattern)
+  def scan(pattern, verb)
     component_matches = matches_for_pattern_components(pattern)
     valid_sequences = valid_component_sequences(component_matches)
     matches = sequences_to_matches(component_matches, valid_sequences)
@@ -54,13 +54,27 @@ class Tree::TreeNode
         component_matches << {
           pattern: pattern.components[index], tree: sub_match }
       end
-      { score: scores[index], component_matches: component_matches }
+      {
+        string: match_string(component_matches),
+        frame: pattern.pattern_string,
+        verb: verb,
+        score: scores[index],
+        component_matches: component_matches
+      }
     end
+
+    matches.select! { |m| m[:string].include? verb[:text] }
 
     return matches
   end
 
   private
+
+  def match_string(component_matches)
+    component_matches.map do |component_match|
+      component_match[:tree].str
+    end.flatten.join(" ")
+  end
 
   # array of hashes, keys link indexes to trees
   def matches_for_pattern_components(pattern)
