@@ -4,4 +4,9 @@ gem 'sinatra'
 gem 'rubytree'
 gem 'descriptive_statistics'
 
-gem 'pry'
+group :development do
+  gem 'guard'
+  gem 'guard-minitest'
+  gem 'test-unit'
+  gem 'pry'
+end
