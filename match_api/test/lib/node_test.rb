@@ -1,10 +1,9 @@
-require "test/unit"
+require_relative "../test_helper"
 
 require 'tree'
 
 require_relative "../../lib/node"
 require_relative "../../lib/pattern"
-
 
 def build_tree(tree)
   node = Tree::TreeNode.new(*tree.first.split(":"))

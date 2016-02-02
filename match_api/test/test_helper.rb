@@ -1,3 +1,6 @@
+require "test/unit"
+require "pry"
+
 class Test::Unit::TestCase
   def disrespect_privacy(object_or_class, &block)
     raise ArgumentError, 'Block must be specified' unless block_given?
