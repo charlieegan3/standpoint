@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'tree'
+require 'descriptive_statistics'
 require 'pry'
 
 require 'json'
@@ -75,14 +76,16 @@ post '/' do
     .map { |k, v|
       {
         string: k,
+        score: v.first[:score]
         verb: v.first[:verb],
         matched_frames: v.map { |s| s[:frame] },
         tree: v.first[:match],
-        scores: v.map { |s| s[:score] }
       }
     }
-    .sort_by { |m| m[:scores].max }.reverse
 
+  scores = matches.map { |m| m[:score] }
+  matches.each { |m| m[:score] = scores.percentile_rank(m[:score]) }
+  matches = matches.sort_by { |m| m[:score] }.reverse
 
   {
     verbs: verbs,

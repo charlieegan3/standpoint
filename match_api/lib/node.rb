@@ -72,7 +72,17 @@ class Tree::TreeNode
     end
 
     valid_match_list.reject! { |m| m.uniq != m }
-    scores = valid_match_list.map { |m| diffs = []; m.each_with_index { |c, i| diffs << m[i+1].first-c.last  if m[i+1] }; 1 / (diffs.reduce(:+).to_f / m.size) }
+    leaf_map = each { |n| n }.map { |n| n }.map {|n| n.is_leaf? }
+
+    scores = valid_match_list.map do |m|
+      distances = []
+      m.each_with_index do |c, i|
+        break unless m[i+1]
+        range = c.last+1...m[i+1].first
+        distances << leaf_map[range].count(true)
+      end
+      1 - (distances.reduce(:+).to_f / m.size)
+    end
 
     full_matches = []
     valid_match_list.each do |match|
