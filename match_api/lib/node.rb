@@ -71,7 +71,9 @@ class Tree::TreeNode
       valid_match_list << c if valid
     end
 
-    valid_match_list.reject! { |m| m.uniq != m }
+    valid_match_list.reject! { |m| m.flatten.uniq != m.flatten }
+    valid_match_list.uniq!
+
     leaf_map = each { |n| n }.map { |n| n }.map {|n| n.is_leaf? }
 
     scores = valid_match_list.map do |m|

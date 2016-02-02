@@ -76,7 +76,7 @@ post '/' do
     .map { |k, v|
       {
         string: k,
-        score: v.first[:score]
+        score: v.first[:score],
         verb: v.first[:verb],
         matched_frames: v.map { |s| s[:frame] },
         tree: v.first[:match],
