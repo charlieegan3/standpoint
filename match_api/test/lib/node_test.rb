@@ -70,12 +70,12 @@ class TestNode < Test::Unit::TestCase
   def test_scan_basic_match
     root = build_tree(["root:content", [["c1:c1"],["c2:c2"],["c3:c3"]]])
     result = root.scan(Pattern.new("c1 c2 c3")).first
-    assert_equal(root.children, result[:sub_matches].map { |s| s[:tree] })
+    assert_equal(root.children, result[:component_matches].map { |s| s[:tree] })
     result = root.scan(Pattern.new("c1 c2")).first
-    assert_equal(root.children[0..1], result[:sub_matches].map { |s| s[:tree] })
+    assert_equal(root.children[0..1], result[:component_matches].map { |s| s[:tree] })
     result = root.scan(Pattern.new("c1 c3")).first
     assert_equal([root.children[0], root.children[2]],
-                  result[:sub_matches].map { |s| s[:tree] })
+                  result[:component_matches].map { |s| s[:tree] })
   end
 
   def test_scan_nested_match
@@ -86,9 +86,9 @@ class TestNode < Test::Unit::TestCase
             (c4 = Tree::TreeNode.new("c4", "c4"))
 
     result = root.scan(Pattern.new("c1 c2 c4")).first
-    assert_equal([c1, c2, c4], result[:sub_matches].map { |s| s[:tree] })
+    assert_equal([c1, c2, c4], result[:component_matches].map { |s| s[:tree] })
     result = root.scan(Pattern.new("c1 c4")).first
-    assert_equal([c1, c4], result[:sub_matches].map { |s| s[:tree] })
+    assert_equal([c1, c4], result[:component_matches].map { |s| s[:tree] })
   end
 
   def test_scan_full_nested_match
@@ -99,7 +99,7 @@ class TestNode < Test::Unit::TestCase
             (c5 = Tree::TreeNode.new("c5", "c5"))
 
     result = root.scan(Pattern.new("c2 c3 c5")).first
-    assert_equal([c2, c3, c5], result[:sub_matches].map { |s| s[:tree] })
+    assert_equal([c2, c3, c5], result[:component_matches].map { |s| s[:tree] })
   end
 
   def test_scan_invalid_nested_match
@@ -123,11 +123,11 @@ class TestNode < Test::Unit::TestCase
     result = root.scan(Pattern.new("np np"))
     assert_equal(1, result.size)
     assert_equal(%w(c1 c4),
-                 result.first[:sub_matches].map { |m| m[:tree].name })
+                 result.first[:component_matches].map { |m| m[:tree].name })
 
     result = root.scan(Pattern.new("np vp np"))
     assert_equal(2, result.size)
     assert_equal([%w(c1 c2 c4), %w(c1 c3 c4)],
-                 result.map { |r| r[:sub_matches].map { |m| m[:tree].name } })
+                 result.map { |r| r[:component_matches].map { |m| m[:tree].name } })
   end
 end

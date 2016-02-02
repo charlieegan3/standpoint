@@ -34,49 +34,83 @@ class Tree::TreeNode
     self.children.map(&:content)
   end
 
-  def children_match(component)
-    self.children.map { |c| c.match(component) }.reduce(:|)
+  def match(component)
+    if component[:regex]
+      !(component[:regex] =~ self.content).nil?
+    else
+      self.content == component[:string]
+    end
   end
 
   def scan(pattern)
+    component_matches = matches_for_pattern_components(pattern)
+    valid_sequences = valid_component_sequences(component_matches)
+    matches = sequences_to_matches(component_matches, valid_sequences)
+    scores = scores_sequences(valid_sequences)
+
+    matches = matches.each_with_index.to_a.map do |match, index|
+      component_matches = []
+      match.each_with_index do |sub_match, index|
+        component_matches << {
+          pattern: pattern.components[index], tree: sub_match }
+      end
+      { score: scores[index], component_matches: component_matches }
+    end
+
+    return matches
+  end
+
+  private
+
+  # array of hashes, keys link indexes to trees
+  def matches_for_pattern_components(pattern)
     tree_index = node_list
-
-    component_matches = []
-    pattern.components.each do |component|
-      nodes = Hash.new
-      tree_index.each_with_index do |node, index|
-        range = node.leaf_nodes.map { |n| tree_index.index(n) }.sort
-        nodes[range] = node if node.match(component)
+    [].tap do |component_matches|
+      pattern.components.each do |component|
+        nodes = Hash.new
+        tree_index.each_with_index do |node, index|
+          range = node.leaf_nodes.map { |n| tree_index.index(n) }.sort
+          nodes[range] = node if node.match(component)
+        end
+        component_matches << nodes
       end
-      component_matches << nodes
     end
+  end
 
+  # generates valid sequences of component indexes
+  # additional complexity due to removal of invalid combinations
+  # invalid if: not ordered, not correct type at pattern index
+  def valid_component_sequences(component_matches)
     indexes = component_matches.map(&:keys)
+    all_matches_for_indexes = indexes.reduce(:+).combination(indexes.size).to_a
 
-    valid_match_list = []
+    [].tap do |valid_sequences|
+      all_matches_for_indexes.to_a.each do |c|
+        next unless c == c.sort_by { |x| x.last }
+        next unless c == c.sort_by { |x| x.first }
+        valid = true
+        indexes.each_with_index do |component_match, index|
+          valid = false unless component_match.include? c[index]
+        end
+        valid_sequences << c if valid
+      end
+    end.reject { |m| m.flatten.uniq != m.flatten }.uniq
+  end
 
-    indexes.map! do |component_matches|
-      component_matches.map do |match|
-        match.sort
+  # take sequences and get the components for the index values
+  def sequences_to_matches(components, sequences)
+    sequences.map do |sequence|
+      [].tap do |match|
+        sequence.each_with_index do |key, index|
+          match << components[index][key]
+        end
       end
     end
+  end
 
-    indexes.reduce(:+).combination(indexes.size).to_a.each do |c|
-      next unless c == c.sort_by { |x| x.last }
-      next unless c == c.sort_by { |x| x.first }
-      valid = true
-      indexes.each_with_index do |component_match, index|
-        valid = false unless component_match.include? c[index]
-      end
-      valid_match_list << c if valid
-    end
-
-    valid_match_list.reject! { |m| m.flatten.uniq != m.flatten }
-    valid_match_list.uniq!
-
+  def scores_sequences(sequence_list)
     leaf_map = each { |n| n }.map { |n| n }.map {|n| n.is_leaf? }
-
-    scores = valid_match_list.map do |m|
+    sequence_list.map do |m|
       distances = []
       m.each_with_index do |c, i|
         break unless m[i+1]
@@ -85,33 +119,6 @@ class Tree::TreeNode
       end
       1 - (distances.reduce(:+).to_f / m.size)
     end
-
-    full_matches = []
-    valid_match_list.each do |match|
-      full_match = []
-      match.each_with_index do |key, index|
-        full_match << component_matches[index][key]
-      end
-      full_matches << full_match
-    end
-
-    full_matches.each_with_index do |match, index|
-      sub_matches = []
-      match.each_with_index do |sub_match, index|
-        sub_matches << {
-          pattern: pattern.components[index], tree: sub_match }
-      end
-      full_matches[index] = { score: scores[index], sub_matches: sub_matches}
-    end
-
-    return full_matches
   end
 
-  def match(component)
-    if component[:regex]
-      !(component[:regex] =~ self.content).nil?
-    else
-      self.content == component[:string]
-    end
-  end
 end

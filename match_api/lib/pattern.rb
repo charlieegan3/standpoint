@@ -45,10 +45,13 @@ class Pattern
   end
 
   def tags_for_component(component)
-    component.scan(/(\.|_)((\w|-)+)/).flatten
+    component.scan(/(\.|_|-)((\w|-)+)/)
+	  .flatten
+      .reject { |t| t.length < 2 } || []
   end
 
   def clean_component(component)
-    component.gsub(/(\.|_)(\w|-)+/, '').gsub(/\W+/, '')
+    component.gsub(/(\.|_)((\w|-)+)/, '')
+      .gsub(/\W+/, '')
   end
 end
