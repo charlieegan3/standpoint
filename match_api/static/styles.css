@@ -1,0 +1,16 @@
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
+
+body {
+  font-family: Verdana, sans-serif;
+}
+
+#query {
+  width: 100%;
+}
+
+#submit {
+  width: 50%;
+  margin: 20px auto;
+  display: block;
+  cursor: pointer;
+}

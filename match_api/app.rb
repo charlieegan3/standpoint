@@ -14,6 +14,7 @@ VERBS = JSON.parse(File.open('verbs.json', 'r').read)
 
 set :port, ENV['PORT']
 set :bind, '0.0.0.0'
+set :public_folder, 'static'
 
 params = 'properties={"annotators": "pos,parse,lemma"}'
 uri = URI("http://corenlp_server:#{ENV['CNLP_PORT']}/?" + URI.encode(params))
@@ -35,7 +36,7 @@ def verbs_for_tokens(tokens)
 end
 
 post '/' do
-  req =  Net::HTTP::Post.new(uri)
+  req = Net::HTTP::Post.new(uri)
   req.body = JSON.parse(request.body.read)['sentence']
   sentence = JSON.parse(http.request(req).body)['sentences'].first
 
@@ -56,7 +57,7 @@ post '/' do
         string: k,
         score: v.first[:score],
         verb: v.first[:verb],
-        matched_frames: v.map { |s| s[:frame] },
+        matched_frames: v.map { |s| s[:frame] }.uniq,
         tree: v.first[:match],
       }
     }
@@ -72,4 +73,8 @@ post '/' do
     raw_parse: raw_parse,
     tree: tree,
   }.to_json
+end
+
+get '/' do
+  send_file File.expand_path('index.html', settings.public_folder)
 end
