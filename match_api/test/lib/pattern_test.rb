@@ -4,6 +4,7 @@ require_relative "../../lib/pattern"
 
 Pattern.send(:public, :tags_for_component)
 Pattern.send(:public, :clean_component)
+Pattern.send(:public, :multi_component_substitute)
 
 class TestPattern < Test::Unit::TestCase
   def test_init
@@ -37,6 +38,13 @@ class TestPattern < Test::Unit::TestCase
       assert_equal("NN", @pattern.clean_component("-NN-"))
       assert_equal("NN", @pattern.clean_component("-NN.tag-thing"))
       assert_equal("NN", @pattern.clean_component("-NN.tag.thingthing"))
+    end
+  end
+
+  def test_multi_component_substitute
+    @pattern = Pattern.new("")
+    disrespect_privacy @pattern do |p|
+      assert_equal("VP", @pattern.multi_component_substitute("V NP"))
     end
   end
 end

@@ -10,7 +10,7 @@ class Pattern
 
   def translate(pattern_string)
     [].tap do |components|
-      pattern_string.split.each do |component|
+      multi_component_substitute(pattern_string).split.each do |component|
         if t = translation(component)
           components << t
         else
@@ -53,5 +53,9 @@ class Pattern
   def clean_component(component)
     component.gsub(/(\.|_)((\w|-)+)/, '')
       .gsub(/\W+/, '')
+  end
+
+  def multi_component_substitute(string)
+    string.gsub('V NP', 'VP')
   end
 end
