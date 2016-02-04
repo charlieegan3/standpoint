@@ -1,0 +1,21 @@
+- hosts: all
+  sudo: true
+  remote_user: root
+  vars:
+    - swap_size: "6144"
+  roles:
+    - role: angstwad.docker_ubuntu
+    - role: franklinkim.docker-compose
+    - role: geerlingguy.git
+    - role: novuso.swap
+  tasks:
+    - git: repo=git://github.com/charlieegan3/points-extraction.git
+           dest=~/app
+    - name: Start corenlp server
+      command: docker-compose up -d corenlp_server
+      args:
+        chdir: ~/app
+    - name: Start match api server
+      command: docker-compose up -d match_api
+      args:
+        chdir: ~/app
