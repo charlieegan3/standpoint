@@ -83,7 +83,9 @@ class Tree::TreeNode
       pattern.components.each do |component|
         nodes = Hash.new
         tree_index.each_with_index do |node, index|
-          range = node.leaf_nodes.map { |n| tree_index.index(n) }.sort
+          range = node.leaf_nodes.map do |n|
+            tree_index.map(&:object_id).index(n.object_id)
+          end.sort
           nodes[range] = node if node.match(component)
         end
         component_matches << nodes
