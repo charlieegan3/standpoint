@@ -1,9 +1,9 @@
 class Graph
   attr_accessor :nodes, :edges
 
-  def initialize(tokens, dependancies)
+  def initialize(tokens, dependencies)
     nodes = tokens.map { |t| [t['word'], t['pos'], t['lemma'], t['index'].to_i-1] }
-    edges = dependancies.map {|d| [d['dep'], d['governor'].to_i-1, d['dependent'].to_i-1] }
+    edges = dependencies.map {|d| [d['dep'], d['governor'].to_i-1, d['dependent'].to_i-1] }
 
     blacklist = %w(ROOT)
     edges.reject! { |l,g,d| blacklist.include?(l) }
@@ -13,6 +13,7 @@ class Graph
       e = Edge.new(@nodes[g], @nodes[d], l)
       @nodes[g].outbound << e
       @nodes[d].inbound << e
+      e
     end
   end
 end
