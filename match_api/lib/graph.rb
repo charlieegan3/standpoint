@@ -1,3 +1,5 @@
+require_relative 'node'
+
 class Graph
   attr_accessor :nodes, :edges
 
@@ -10,10 +12,10 @@ class Graph
 
     @nodes = nodes.map { |w,p,l,i| Node.new(w, p, l, i) }
     @edges = edges.map do |l,g,d|
-      e = Edge.new(@nodes[g], @nodes[d], l)
-      @nodes[g].outbound << e
-      @nodes[d].inbound << e
-      e
+      Edge.new(@nodes[g], @nodes[d], l).tap do |edge|
+        @nodes[g].outbound << edge
+        @nodes[d].inbound << edge
+      end
     end
   end
 end

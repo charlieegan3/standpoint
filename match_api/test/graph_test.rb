@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 require_relative '../lib/graph'
 
 class TestGraph < Test::Unit::TestCase
@@ -17,7 +17,7 @@ class TestGraph < Test::Unit::TestCase
     graph = Graph.new(tokens, dependencies)
     assert_equal(%w(word1 word2 word3), graph.nodes.map(&:word))
     assert_equal(%w(relation2 relation3), graph.edges.map(&:label))
-    assert_equal(%w(word1 word3), graph.nodes.last.ancestors.map(&:word))
-    assert_equal(%w(word2 word3 word1), graph.nodes.first.descendants.map(&:word))
+    assert_equal(%w(word2 word3), graph.nodes.first.descendants.map(&:word))
+    assert_equal(['word1'], graph.nodes.last.ancestors.map(&:word))
   end
 end

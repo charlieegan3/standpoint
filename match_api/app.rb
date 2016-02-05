@@ -8,7 +8,8 @@ require './lib/node'
 require './lib/edge'
 
 sentences = [
-  "They went to Paris as well as Berlin.",
+  "They went to paris and berlin",
+  "They went to the shop and bought milk",
 ].each do |sentence|
   client = Client.new("http://corenlp_server:#{ENV['CNLP_PORT']}")
   graph = Graph.new *client.request_parse(sentence)
@@ -20,8 +21,11 @@ sentences = [
   puts "Verbs:"
   graph.nodes.each do |node|
     next unless node.pos.match(/VB/)
-    print "   " + node.word.upcase + ": "
-    puts node.descendants.sort_by(&:index).map(&:word).join(" ")
+    puts "   " + node.word.upcase + ":"
+    node.points.each do |point|
+      print "      "
+      puts point.sort_by(&:index).map(&:word).join(" ")
+    end
   end
 
   puts "-"*50

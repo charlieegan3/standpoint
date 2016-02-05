@@ -8,36 +8,33 @@ class Node
   end
 
   def print
-    inbound.each do |e|
-      e.print
-    end
-    outbound.each do |e|
-      e.print
-    end
+    [inbound, outbound].each(&:each).each(&:print)
   end
 
-  def descendants
-    outbound.map do |e|
-      e.destination.descendants
-    end.flatten << self
+  def matching_edges(pattern, include_inbound, include_outbound)
+    edges = []
+    edges += inbound if include_inbound
+    edges += outbound if include_outbound
+
+    edges.reject { |e| (pattern =~ e.label).nil? }
   end
 
-  def ancestors
-    inbound.map do |e|
-      e.origin.ancestors
-    end.flatten << self
+  def descendants(pattern=//)
+    matching_edges(pattern, false, true).map do |e|
+      [e.destination, e.destination.descendants(pattern)]
+    end.flatten.uniq
   end
 
-  def graph
-    nodes = [self]
-    outbound.map do |e|
-      nodes += e.destination.descendants
-      nodes += e.destination.ancestors
-    end
-    inbound.map do |e|
-      nodes += e.origin.descendants
-      nodes += e.origin.ancestors
-    end
-    return nodes.uniq.sort_by(&:index)
+  def ancestors(pattern=//)
+    matching_edges(pattern, true, false).map do |e|
+      [e.origin, e.origin.ancestors(pattern)]
+    end.flatten.uniq
+  end
+
+  def points
+    [
+      descendants << self,
+      descendants(/^((?!^cc$|^conj:and).)*$/) << self,
+    ].uniq
   end
 end

@@ -11,6 +11,6 @@ class Client
     req.body = sentence
     response = JSON.parse(@http_client.request(req).body)['sentences'].first
 
-    [response['tokens'], response['basic-dependencies']]
+    [response['tokens'], response['collapsed-ccprocessed-dependencies']]
   end
 end
