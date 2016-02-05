@@ -2,7 +2,6 @@ GEM
   remote: https://rubygems.org/
   specs:
     coderay (1.1.0)
-    descriptive_statistics (2.5.1)
     ffi (1.9.10)
     formatador (0.2.5)
     guard (2.13.0)
@@ -18,7 +17,6 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    json (1.8.3)
     listen (3.0.5)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -40,16 +38,12 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rubytree (0.9.7)
-      json (~> 1.8)
-      structured_warnings (~> 0.2)
     shellany (0.0.1)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
     slop (3.6.0)
-    structured_warnings (0.2.0)
     test-unit (3.1.7)
       power_assert
     thor (0.19.1)
@@ -59,11 +53,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  descriptive_statistics
   guard
   guard-minitest
   pry
-  rubytree
   sinatra
   test-unit
 

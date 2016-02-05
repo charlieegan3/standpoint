@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'rubytree'
-gem 'descriptive_statistics'
 
 group :development do
   gem 'guard'
