@@ -21,7 +21,8 @@ graph.nodes.each do |node|
 end
 puts "Verbs:"
 graph.nodes.each do |node|
-  next unless node.pos.match(/VB/)
+  points = node.points
+  next if points.empty?
   puts "   " + node.word.upcase + ":"
   node.points.each do |point|
     print "      "

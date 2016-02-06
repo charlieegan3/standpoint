@@ -63,4 +63,12 @@ class TestNode < Test::Unit::TestCase
 
     assert_equal(['word to nmod1', 'word to nmod2'], points)
   end
+
+  def test_is_copula
+    verb = Node.new("verb", "VBD", "lemma", 0)
+    centre = Node.new("centre", "JJ", "lemma", 1)
+    verb.inbound << Edge.new(centre, verb, "cop")
+
+    assert_true(verb.is_copula?)
+  end
 end
