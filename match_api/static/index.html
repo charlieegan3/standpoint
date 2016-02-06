@@ -3,30 +3,17 @@
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="/main.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
   <body>
     <div class="container">
       <h1>Points Extraction Demo</h1>
       <input id="query" class="form-control" type="text" placeholder="Enter a sentence...">
+      <p class="small">e.g. The movie was great, They went to the shop and bought milk</p>
       <div id="submit" class="btn btn-primary btn-lg" href="#">Go</div>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th></th>
-            <th>String</th>
-            <th>Percentile</th>
-            <th>Frames</th>
-            <th>Lemma</th>
-            <th>Verb</th>
-          </tr>
-        </thead>
-        <tbody id="results">
-        </tbody>
-      </table>
-      <p>
-        Matches are ranked on the number of spaces between the components that make up the match.
-      </p>
-      <div id="raw"></div>
+      <h4>Points</h4>
+      <ul id="results"></ul>
+      <div id="raw" class="prettyprint"></div>
     </div>
   </body>
 </html>

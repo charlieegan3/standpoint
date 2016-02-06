@@ -2,7 +2,7 @@ $(document).ready(function() {
   $.ajax({
     type: "POST",
     url: "/",
-    data: JSON.stringify({sentence: "I like cats, she likes dogs."}),
+    data: JSON.stringify({sentence: "They went to paris and berlin"}),
     success: function(data, status) {
       renderResults(data);
     }
@@ -21,20 +21,15 @@ $(document).ready(function() {
 
   function renderResults(data) {
     var data = JSON.parse(data);
+
     $("#results").html('');
-    $("#raw").html('');
-    for (i = 0; i < data['matches'].length; i++) {
-      $("#results").append('<tr>');
-        appendTextToResults('Match: ' + i);
-        appendTextToResults(data['matches'][i]['string']);
-        appendTextToResults(data['matches'][i]['score']);
-        appendTextToResults(data['matches'][i]['matched_frames']);
-        appendTextToResults(data['matches'][i]['verb']['lemma']);
-        appendTextToResults(data['matches'][i]['verb']['text']);
-      $("#results").append('</tr>');
+    for (i = 0; i < data['points'].length; i++) {
+      $("#results").append('<li>' + data['points'][i] + '</li>');
     }
+
+    $("#raw").html('');
     $("#raw").append('<h4>Raw Response</h4>');
-    $("#raw").append('<pre>'+JSON.stringify(data, null, '  ')+'</pre>');
+    $("#raw").append('<pre>'+JSON.stringify(data, null, '    ')+'</pre>');
   }
 
   function appendTextToResults(string) {
