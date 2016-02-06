@@ -12,4 +12,12 @@ class Edge
       destination.word + "(#{destination.pos})"
     ].join(" -> ")
   end
+
+  def to_hash
+    {
+      label: label,
+      origin: origin.to_hash(include_edges: false),
+      destination: destination.to_hash(include_edges: false),
+    }
+  end
 end

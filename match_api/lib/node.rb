@@ -93,4 +93,13 @@ class Node
       point.sort_by(&:index).map(&:word).join(" ")
     end
   end
+
+  def to_hash(include_edges: false)
+    hash = {
+      word: word, pos: pos, lemma: lemma,
+    }
+    hash.merge!(inbound: inbound.map(&:to_hash)) if include_edges
+    hash.merge!(outbound: outbound.map(&:to_hash)) if include_edges
+    return hash
+  end
 end
