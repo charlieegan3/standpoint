@@ -1,6 +1,5 @@
 require_relative 'test_helper'
 require_relative '../lib/node'
-require_relative '../lib/edge'
 
 class TestNode < Test::Unit::TestCase
   def test_descendants

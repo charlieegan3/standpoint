@@ -9,6 +9,8 @@ require './lib/edge'
 
 sentences = [
   "They went to paris and berlin",
+  "They went to Paris from Berlin",
+  "They went to Paris and then to Berlin",
   "They went to the shop and bought milk",
 ].each do |sentence|
   client = Client.new("http://corenlp_server:#{ENV['CNLP_PORT']}")

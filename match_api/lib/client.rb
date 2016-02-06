@@ -13,4 +13,16 @@ class Client
 
     [response['tokens'], response['collapsed-ccprocessed-dependencies']]
   end
+
+  def write_sentence_fixture(sentence, points)
+    parse = request_parse(sentence)
+    expected = Graph.new(*parse).nodes.map do |node|
+      node.point_strings
+    end.flatten
+
+    filename = sentence.downcase.gsub(/\s+/,'-').gsub(/[^-\w]/, '') + '.json'
+    File.open('test/fixtures/' + filename, 'w') do |f|
+      f.write({ parse: parse, expected: expected }.to_json)
+    end
+  end
 end

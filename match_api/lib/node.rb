@@ -1,3 +1,5 @@
+require_relative 'edge'
+
 class Node
   attr_accessor :word, :pos, :lemma, :index, :inbound, :outbound
 
@@ -68,6 +70,7 @@ class Node
   end
 
   def points
+    return [] unless pos.match(/VB/)
     [].tap do |points|
       points << (descendants << self)
       if nmod_indexes.size == 1
@@ -75,5 +78,11 @@ class Node
       end
       nmod_points.map { |p| points << p }
     end.uniq
+  end
+
+  def point_strings
+    points.map do |point|
+      point.sort_by(&:index).map(&:word).join(" ")
+    end
   end
 end
