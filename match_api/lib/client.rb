@@ -1,6 +1,6 @@
 class Client
   def initialize(host)
-    params = URI.encode('properties={"annotators": "depparse"}')
+    params = URI.encode('properties={"annotators": "lemma,depparse"}')
 
     @uri = URI(host + "/?" + params)
     @http_client = Net::HTTP.new(@uri.host, @uri.port)
