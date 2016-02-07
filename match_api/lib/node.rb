@@ -69,22 +69,14 @@ class Node
     end.reverse
   end
 
-  def is_copula?
-    inbound.select { |e| e.label == 'cop' }.size == 1
-  end
-
   def points
-    return [] unless pos.match(/VB/) || is_copula?
+    return [] unless pos.match(/VB/)
     [].tap do |points|
       points << (descendants << self)
       if nmod_indexes.size == 1
         points << (descendants(/^((?!^cc$|^conj:and).)*$/) << self)
       end
       nmod_points.map { |p| points << p }
-      if is_copula?
-        centre = inbound.select { |e| e.label == 'cop' }.first.origin
-        points << (centre.descendants << centre)
-      end
     end.uniq.reject { |point| point.size < 3 }
   end
 

@@ -16,5 +16,5 @@ require_relative '../lib/edge'
   "The man was a builder",
 ].each do |sentence|
   client = Client.new("http://corenlp_server:#{ENV['CNLP_PORT']}")
-  client.write_sentence_fixture(sentence, [1,2,3])
+  client.write_sentence_fixture(sentence)
 end

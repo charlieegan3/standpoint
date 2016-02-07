@@ -5,7 +5,8 @@ class Graph
 
   def initialize(tokens, dependencies)
     nodes = tokens.map { |t| [t['word'], t['pos'], t['lemma'], t['index'].to_i-1] }
-    edges = dependencies.map {|d| [d['dep'], d['governor'].to_i-1, d['dependent'].to_i-1] }
+    edges = dependencies.uniq.map {|d| [d['dep'], d['governor'].to_i-1, d['dependent'].to_i-1] }
+    edges.reject! { |l, g, d| g == d }
 
     blacklist = %w(ROOT)
     edges.reject! { |l,g,d| blacklist.include?(l) }

@@ -1,6 +1,6 @@
 class Client
   def initialize(host)
-    params = URI.encode('properties={"annotators": "lemma,depparse"}')
+    params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
 
     @uri = URI(host + "/?" + params)
     @http_client = Net::HTTP.new(@uri.host, @uri.port)
@@ -14,7 +14,7 @@ class Client
     [response['tokens'], response['collapsed-ccprocessed-dependencies']]
   end
 
-  def write_sentence_fixture(sentence, points)
+  def write_sentence_fixture(sentence)
     parse = request_parse(sentence)
     expected = Graph.new(*parse).nodes.map do |node|
       node.point_strings
