@@ -52,21 +52,13 @@ class TestFrame < Test::Unit::TestCase
   def test_relations
     f = Frame.new('NP V NP')
     expected = [
-      [/NNP|PRP|NN|NNS|DT|CD|JJR/, /subj/, /VB/],
-      [/VB/, /dobj|iobj/, /NN|NNS|PRP|NNP|JJ/]]
+      [/VB/, /subj/, /NNP|PRP|NN|NNS|DT|CD|JJR/],
+      [/VB/, /dobj|iobj|xcomp/, /NN|NNS|PRP|NNP/]]
     assert_equal(expected, f.relations)
   end
 
   def test_connect
     f = Frame.new('NP V NP')
-    assert_equal([/NNP|PRP|NN|NNS|DT|CD|JJR/, /subj/, /VB/], f.connect("NP", "V"))
-    assert_equal([/VB/, /dobj|iobj/, /NN|NNS|PRP|NNP|JJ/], f.connect("V", "NP"))
-    assert_equal([/VB/, /xcomp|ccomp|advcl/, /VB/], f.connect("V", "S"))
-    assert_equal([/VB/, /xcomp|ccomp|advcl/, /VB/], f.connect("V", "S_ING"))
-    assert_equal([/VB/, /xcomp|ccomp|advcl/, /VB/], f.connect("V", "S_INF"))
-    assert_equal([/VB/, /nmod/, /NN|NNS|NNP|PRP|CD|JJ/], f.connect("V", "PP"))
-    assert_equal([/VB/, /advmod/, /RB|NN/], f.connect("V", "ADV"))
-    assert_equal([/VB/, /advmod/, /RB/], f.connect("V", "ADVP"))
-    assert_equal([/VB/, /ccomp|dep/, /VB/], f.connect("V", "S-Quote"))
+    assert_equal([/VB/, /subj/, /NNP|PRP|NN|NNS|DT|CD|JJR/], f.connect("NP", "V"))
   end
 end

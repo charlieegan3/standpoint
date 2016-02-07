@@ -1,5 +1,5 @@
 class Frame
-  attr_accessor :components, :pattern
+  attr_accessor :components, :pattern_string
   def initialize(pattern_string)
     @pattern_string = pattern_string
     @components = components_for_pattern
@@ -11,15 +11,15 @@ class Frame
 
   def relations
     head_relations(head).map do |relation|
-      connect(relation.first[:pos], relation.last[:pos])
+      relation = connect(relation.first[:pos], relation.last[:pos])
     end
   end
 
   def connect(component1, component2)
     if component1 == "NP"
-      return [/NNP|PRP|NN|NNS|DT|CD|JJR/, /subj/, /VB/] if component2 == "V"
+      return [/VB/, /subj/, /NNP|PRP|NN|NNS|DT|CD|JJR/] if component2 == "V"
     elsif component1 == "V"
-      return [/VB/, /dobj|iobj/, /NN|NNS|PRP|NNP|JJ/] if component2 == "NP"
+      return [/VB/, /dobj|iobj|xcomp/, /NN|NNS|PRP|NNP/] if component2 == "NP"
       return [/VB/, /xcomp|ccomp|advcl/, /VB/] if component2 == "S"
       return [/VB/, /xcomp|ccomp|advcl/, /VB/] if component2 == "S_INF"
       return [/VB/, /xcomp|ccomp|advcl/, /VB/] if component2 == "S_ING"
@@ -27,6 +27,7 @@ class Frame
       return [/VB/, /advmod/, /RB|NN/] if component2 == "ADV"
       return [/VB/, /advmod/, /RB/] if component2 == "ADVP"
       return [/VB/, /ccomp|dep/, /VB/] if component2 == "S-Quote"
+      return [/VB/, /xcomp/, /JJ/] if component2 == "ADJ"
     end
   end
 

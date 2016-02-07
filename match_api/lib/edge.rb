@@ -13,6 +13,12 @@ class Edge
     ].join(" -> ")
   end
 
+  def match_relation?(relation)
+    !(origin.pos.match(relation[0]) &&
+    label.match(relation[1]) &&
+    destination.pos.match(relation[2])).nil?
+  end
+
   def to_hash
     {
       label: label,

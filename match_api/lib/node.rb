@@ -13,6 +13,10 @@ class Node
     [inbound, outbound].each(&:each).each(&:print)
   end
 
+  def is_verb?
+    pos.match(/VB/)
+  end
+
   def matching_edges(pattern, include_inbound, include_outbound)
     edges = []
     edges += inbound if include_inbound
