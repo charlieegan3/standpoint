@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Client
   def initialize(host)
     params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
