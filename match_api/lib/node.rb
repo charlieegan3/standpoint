@@ -81,7 +81,7 @@ class Node
         points << (descendants(/^((?!^cc$|^conj:and).)*$/) << self)
       end
       nmod_points.map { |p| points << p }
-    end.uniq.reject { |point| point.size < 3 }
+    end.uniq.reject { |point| point.size < 2 }
   end
 
   def point_strings
@@ -92,7 +92,7 @@ class Node
 
   def to_hash(include_edges: false)
     hash = {
-      word: word, pos: pos, lemma: lemma,
+      word: word, pos: pos, lemma: lemma, index: index,
     }
     hash.merge!(inbound: inbound.map(&:to_hash)) if include_edges
     hash.merge!(outbound: outbound.map(&:to_hash)) if include_edges

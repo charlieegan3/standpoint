@@ -9,11 +9,20 @@
     <div class="container">
       <h1>Points Extraction Demo</h1>
       <input id="query" class="form-control" type="text" placeholder="Enter a sentence...">
-      <p class="small">e.g. The movie was great, They went to the shop and bought milk</p>
+      <p class="small">e.g. The movie was great, They went to Paris and Berlin</p>
       <div id="submit" class="btn btn-primary btn-lg" href="#">Go</div>
       <h4>Points</h4>
-      <ul id="results"></ul>
-      <div id="raw" class="prettyprint"></div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Point</th>
+            <th>Frames</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody id="results"></tbody>
+      </table>
+      <div id="raw"></div>
     </div>
   </body>
 </html>

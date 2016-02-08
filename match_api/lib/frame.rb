@@ -11,12 +11,17 @@ class Frame
 
   def relations
     head_relations(head).map do |relation|
-      relation = connect(relation.first[:pos], relation.last[:pos])
-    end
+      rel = connect(relation.first[:pos], relation.last[:pos])
+      unless rel
+        puts "Failed:  " + @pattern_string
+        puts "Missing: " + relation.map { |c| c[:string] }.join(" -> ")
+      end
+      rel
+    end.compact
   end
 
   def connect(component1, component2)
-    if component1 == "NP"
+    if component1.match(/NP|PP/)
       return [/VB/, /subj/, /NNP|PRP|NN|NNS|DT|CD|JJR/] if component2 == "V"
     elsif component1 == "V"
       return [/VB/, /dobj|iobj|xcomp/, /NN|NNS|PRP|NNP/] if component2 == "NP"
@@ -57,5 +62,9 @@ class Frame
         end
       end
     end
+  end
+
+  def to_hash
+    { pattern: @pattern_string, components: @components }
   end
 end
