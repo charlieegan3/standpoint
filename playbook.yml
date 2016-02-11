@@ -11,6 +11,10 @@
   tasks:
     - git: repo=git://github.com/charlieegan3/points-extraction.git
            dest=~/app
+    - name: Kill app
+      command: docker-compose kill
+      args:
+        chdir: ~/app
     - name: Start corenlp server
       command: docker-compose up -d corenlp_server
       args:
