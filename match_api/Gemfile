@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'nokokgiri'
+gem 'nokogiri'
 
 group :development do
   gem 'guard'

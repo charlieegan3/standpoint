@@ -1,3 +1,5 @@
+require_relative 'relation'
+
 class Frame
   attr_accessor :components, :pattern_string
   def initialize(pattern_string)
@@ -5,46 +7,19 @@ class Frame
     @components = components_for_pattern
   end
 
-  def head
-    @components.select { |c| c[:string] == "V" }.first || @components.first
-  end
-
-  def relations
-    head_relations(head).map do |relation|
-      rel = connect(relation.first[:pos], relation.last[:pos])
-      unless rel
-        puts "Failed:  " + @pattern_string
-        puts "Missing: " + relation.map { |c| c[:string] }.join(" -> ")
-      end
-      rel
-    end.compact
-  end
-
-  def connect(component1, component2)
-    if component1.match(/NP|PP/)
-      return [/VB/, /subj/, /NNP|PRP|NN|NNS|DT|CD|JJR/] if component2 == "V"
-    elsif component1 == "V"
-      return [/VB/, /dobj|iobj|xcomp/, /NN|NNS|PRP|NNP/] if component2 == "NP"
-      return [/VB/, /xcomp|ccomp|advcl/, /VB/] if component2 == "S"
-      return [/VB/, /xcomp|ccomp|advcl/, /VB/] if component2 == "S_INF"
-      return [/VB/, /xcomp|ccomp|advcl/, /VB/] if component2 == "S_ING"
-      return [/VB/, /nmod/, /NN|NNS|NNP|PRP|CD|JJ/] if component2 == "PP"
-      return [/VB/, /advmod/, /RB|NN/] if component2 == "ADV"
-      return [/VB/, /advmod/, /RB/] if component2 == "ADVP"
-      return [/VB/, /ccomp|dep/, /VB/] if component2 == "S-Quote"
-      return [/VB/, /xcomp/, /JJ/] if component2 == "ADJ"
-    end
+  def pos_pattern_string
+    @components.map { |c| c[:pos] }.join(" ")
   end
 
   def components_for_pattern
     [].tap do |components|
       @pattern_string.split(/\s+/).each_with_index do |subpattern, index|
-        components << component_for_subpattern(subpattern, index)
+        components << build_component(subpattern, index)
       end
     end
   end
 
-  def component_for_subpattern(subpattern, index)
+  def build_component(subpattern, index)
     tags = subpattern.scan(/(?:[A-Z]+)([\.\-_][\w-]+)/).flatten
     pos = subpattern.dup
     tags.each { |t| pos.gsub!(t, '') }
@@ -52,19 +27,63 @@ class Frame
     return { index: index, string: subpattern, pos: pos, tags: tags }
   end
 
-  def head_relations(head)
-    [].tap do |pairs|
-      for i in 0...@components.size
-        for j in i+1...@components.size
-          if (pair = [@components[i], @components[j]]).map { |c| c[:index] }.include? head[:index]
-            pairs << pair
-          end
-        end
-      end
+  def query
+    relations = []
+    frame_relations = Frame.relations(pos_pattern_string)
+    puts "Missing: " + pos_pattern_string if frame_relations.empty?
+    frame_relations.each do |relation|
+      relation.add_origin_tags(@components[relation.origin_index][:tags])
+      relation.add_destination_tags(@components[relation.destination_index][:tags])
+      relations << relation
     end
   end
 
   def to_hash
     { pattern: @pattern_string, components: @components }
+  end
+
+  def self.relations(pos_pattern_string)
+    {
+      'NP VERB NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 2, /VB/, /NN|PRP/, /dobj/),
+      ],
+      'NP VERB NP PREP NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 2, /VB/, /NN|PRP/, /dobj/),
+        Relation.new(1, 4, /VB/, /NN/, /nmod/),
+        Relation.new(4, 3, /NN/, /IN/, /case/),
+      ],
+      'NP VERB PREP NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 3, /VB/, /NN/, /nmod/),
+        Relation.new(3, 2, /VB/, /IN/, /case/),
+      ],
+      'NP VERB' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+      ],
+      'NP VERB NP NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 2, /VB/, /NN|PRP/, /dobj/),
+        Relation.new(1, 3, /VB/, /VB/, /xcomp/),
+      ],
+      'NP VERB PREP NP NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 3, /VB/, /NN/, /nmod/),
+        Relation.new(3, 2, /NN/, /TO/, /case/),
+        Relation.new(1, 4, /VB/, /NN|PRP/, /dobj/),
+      ],
+      'NP VERB ADV' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 2, /VB/, /RB/, /advmod/),
+      ],
+      'NP VERB PREP NP PREP NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 3, /VB/, /PRP/, /nmod/),
+        Relation.new(3, 2, /PRP/, /IN/, /case/),
+        Relation.new(1, 5, /VB/, /NN/, /nmod/),
+        Relation.new(5, 1, /NN/, /IN/, /case/),
+      ],
+    }[pos_pattern_string] || []
   end
 end

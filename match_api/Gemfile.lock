@@ -22,8 +22,11 @@ GEM
       rb-inotify (>= 0.9)
     lumberjack (1.0.10)
     method_source (0.8.2)
+    mini_portile2 (2.0.0)
     minitest (5.8.4)
     nenv (0.2.0)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -55,6 +58,7 @@ PLATFORMS
 DEPENDENCIES
   guard
   guard-minitest
+  nokogiri
   pry
   sinatra
   test-unit

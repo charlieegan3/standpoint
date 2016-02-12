@@ -14,9 +14,10 @@ class Edge
   end
 
   def match_relation?(relation)
-    !(origin.pos.match(relation[0]) &&
-    label.match(relation[1]) &&
-    destination.pos.match(relation[2])).nil?
+    match = origin.pos =~ relation.origin_pos &&
+    label.match(relation.label) &&
+    destination.pos =~ relation.destination_pos
+    return !match.nil?
   end
 
   def to_hash

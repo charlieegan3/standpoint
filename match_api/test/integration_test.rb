@@ -8,8 +8,9 @@ class IntegrationTest < Test::Unit::TestCase
       fixture = JSON.parse(File.read(fixture))
 
       points = Graph.new(*fixture['parse']).nodes.map do |node|
-        node.point_strings
-      end.flatten
+        next unless point = node.point
+        point.sort_by(&:index).map(&:word).join(" ")
+      end.flatten.compact
 
       assert_equal(fixture['expected'], points)
     end

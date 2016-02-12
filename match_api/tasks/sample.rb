@@ -23,24 +23,11 @@ puts "Parse:"
 graph.nodes.each do |node|
   node.outbound.each { |e| print "   "; e.print }
 end
-puts "Verbs:"
-graph.nodes.each do |node|
-  points = node.points
-  next if points.empty?
-  puts "   " + node.word.upcase + ":"
-  node.points.each do |point|
-    print "      "
-    puts point.sort_by(&:index).map(&:word).join(" ")
 
-    verb = point.select { |n| n.is_verb? }.first
-    frames = verbs[verb.lemma].map { |f| Frame.new(f['pattern']) }
-    frames.each do |frame|
-      matched = true
-      frame.relations.each do |rel|
-        matched = verb.outbound.map { |edge| edge.match_relation?(rel) }.reduce(:|)
-        break if matched == false
-      end
-      puts "         " + frame.pattern_string.ljust(20) + " - " + matched.to_s
-    end
-  end
+puts "Points:"
+points = graph.points(verbs)
+
+points.each do |point|
+  point.inspect
+  puts
 end

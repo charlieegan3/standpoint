@@ -37,17 +37,17 @@ class Node
     end.flatten.uniq
   end
 
-  def points
-    return [] unless pos.match(/VB/)
-    [].tap do |points|
-      points << (descendants << self)
-    end
+  def tree
+    (descendants << self)
   end
 
-  def point_strings
-    points.map do |point|
-      point.sort_by(&:index).map(&:word).join(" ")
+  def scan(relation)
+    tree.each do |component|
+      component.outbound.each do |edge|
+        return [component, edge.destination] if edge.match_relation?(relation)
+      end
     end
+    return nil
   end
 
   def to_hash(include_edges: false)
