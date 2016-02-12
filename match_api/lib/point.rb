@@ -3,7 +3,10 @@ class Point
     @nodes = match_data.map { |e| e[:match].tree }.flatten.uniq
     @match_nodes = match_data.map { |e| e[:match] }
     @matches = match_data.map do |e|
-      e.merge(matched_nodes: (e[:match].tree - (@match_nodes - [e[:match]])))
+      e.merge({
+        matched_nodes: (e[:match].children - (@match_nodes - [e[:match]])).map(&:tree).flatten.push(e[:match]).uniq
+      })
+
     end
     @frame = frame
   end

@@ -25,6 +25,12 @@ class Node
     edges.reject { |e| (pattern =~ e.label).nil? }
   end
 
+  def children
+    matching_edges(//, false, true).map do |e|
+      e.destination
+    end.uniq
+  end
+
   def descendants(pattern=//)
     matching_edges(pattern, false, true).map do |e|
       [e.destination, e.destination.descendants(pattern)]

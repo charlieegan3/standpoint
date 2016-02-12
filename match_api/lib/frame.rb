@@ -42,7 +42,7 @@ class Frame
     {
       string: @pattern_string,
       bare_frame: pos_pattern_string,
-      missing: Frame.relations(pos_pattern_string).empty?
+      missing_representation: Frame.relations(pos_pattern_string).empty?
     }
   end
 
