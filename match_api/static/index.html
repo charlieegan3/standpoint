@@ -11,17 +11,23 @@
       <input id="query" class="form-control" type="text" placeholder="Enter a sentence...">
       <p class="small">e.g. The movie was great, They went to Paris and Berlin</p>
       <div id="submit" class="btn btn-primary btn-lg" href="#">Go</div>
-      <h4>Points</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Point</th>
-            <th>Frames</th>
-            <th>Tags</th>
-          </tr>
-        </thead>
-        <tbody id="results"></tbody>
-      </table>
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Points</h4>
+          <p>The parse quite likely will match more than one frame - and generate more than one point. Frames are sorted by the number of components with more complex ones listed first. Most parses will match simple frames like <code>NP VERB</code> since a match is qualified when all of the required relations for the frame are matched.</p>
+          <p>In these cases, for simple frames that the verb contains a larger number of words, this is because they are related to the verb and are not matched by another component in the frame.</p>
+          <div id="results"></div>
+        </div>
+        <div class="col-md-6">
+          <h4>Unmatched Frames</h4>
+          <p>These frames were found for the verbs in the sentence, however based on the relations currently defined, they didn't match the tree.</p>
+          <p>Frames marked 'Missing Representation' have yet to get their relations defined, currently around 95% should be covered however.</p>
+          <p>Clearly not all frames for all verbs in the sentence should match, but there are likely some that ought to that don't currently.</p>
+          <div id="frames"></div>
+        </div>
+      </div>
+      <h4>Raw Response</h4>
+      <p>This is the JSON response for the query. Unmatched frames are listed, these are frames that were found for the verb but a match was not found in the dependency parse. 'missing_relations' explain why the parse didn't match.</p>
       <div id="raw"></div>
     </div>
   </body>

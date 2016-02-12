@@ -48,7 +48,7 @@ class Graph
           ]
         end
         if matched == false || match_data.nil? || match_data.empty?
-          result_frames << frame.to_hash
+          result_frames << frame.to_hash.merge({ verb: node.lemma })
           result_frames.last[:missing_relation ] = missing_relation .to_hash if missing_relation
           next
         end

@@ -23,26 +23,43 @@ $(document).ready(function() {
     var data = JSON.parse(data);
 
     $("#results").html('');
-    for (i = 0; i < data.points.length; i++) {
-      var tr = document.createElement("TR");
-      $(tr).append('<td>' + data.points[i].string + '</td>');
-      var frameString = "";
-      var tagString = "";
-      for (j = 0; j < data.points[i].frames.length; j++) {
-        frameString += '<code>' + data.points[i].frames[j].pattern + "</code>, ";
+    if (data.points.length == 0) {
+      $("#results").append("<p><code>There were no point matches, remember copula verbs are not handled.</code></p>")
+    }
 
-        for (k = 0; k < data.points[i].frames[j].components.length; k++) {
-          tags = data.points[i].frames[j].components[k].tags;
-          if (tags.length > 0) {
-            tagString += '<span class="label label-success">' +
-                         data.points[i].frames[j].components[k].tags +
-                         "</span>, ";
-          }
+    for (var i = 0; i < data.points.length; i++) {
+      var point = data.points[i];
+      var well = document.createElement("div");
+      well.className = "well";
+      $(well).append("<h4>" + point.frame + "</h4>")
+      $(well).append("<p class=\"small\">" + point.bare_frame + "<code>" + point.string + "</code>" + "</p>")
+      var componentString = "<p>";
+      for (var j = 0; j < point.matched_components.length; j++) {
+        var component = point.matched_components[j];
+        if (component.syntax != "/VB/") {
+          componentString += "<span class=\"label label-primary\">" + component.semantics + "</span>";
         }
+        componentString += "<code>" + component.syntax + "</code>";
+        componentString += "<em>" + component.words+ "</em>";
+        componentString += "</p>";
       }
-      $(tr).append('<td>' + frameString.slice(0, -2)+ '</td>');
-      $(tr).append('<td>' + tagString.slice(0, -2) + '</td>');
-      $("#results").append(tr);
+      $(well).append("<p>" + componentString + "</p>")
+      $("#results").append(well);
+    }
+
+    $("#frames").html('');
+    for (var i = 0; i < data.unmatched_frames.length; i++) {
+      var frame = data.unmatched_frames[i];
+      var well = document.createElement("div");
+      well.className = "well";
+      $(well).append("<h4>" + frame.string+ "</h4>")
+      if (frame.missing_representation) {
+        $(well).append("<p><span class=\"label label-danger\">Missing Representation</span></p>")
+      }
+      $(well).append("<p>Verb: " + frame.verb + "</p>")
+      $(well).append("<p>Parse was missing: </p>")
+      $(well).append('<pre>'+JSON.stringify(frame.missing_relation, null, '    ')+'</pre>');
+      $("#frames").append(well);
     }
 
     $("#raw").html('');
