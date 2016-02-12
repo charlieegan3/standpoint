@@ -20,7 +20,7 @@ Dir.glob('verb_frames/*.xml') do |path|
         args: predicate.css('ARG').map { |a| { type: a['type'], value: a['value'] } }
       }
     end
-    { examples: examples, syntax: syntax, semantics: semantics }
+    { examples: examples, syntax: syntax, semantics: semantics, source: path }
   end
 
   members.each do |member|
