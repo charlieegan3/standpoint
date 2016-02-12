@@ -48,9 +48,15 @@ class Node
   end
 
   def scan(relation)
-    tree.each do |component|
-      component.outbound.each do |edge|
-        return [component, edge.destination] if edge.match_relation?(relation)
+    if relation.origin_pos == /VB/
+      outbound.each do |edge|
+        return [self, edge.destination] if edge.match_relation?(relation)
+      end
+    else
+      tree.each do |component|
+        component.outbound.each do |edge|
+          return [component, edge.destination] if edge.match_relation?(relation)
+        end
       end
     end
     return nil

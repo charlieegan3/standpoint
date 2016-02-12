@@ -33,7 +33,7 @@ class Graph
       frames = raw_frames.map { |f| Frame.new(upgrade_frame(f), f, node.lemma) }
       frames = frames.uniq(&:pattern_string).sort_by  { |f| f.components.size }.reverse
 
-      frames.each_with_index do |frame, index|
+      frames.each do |frame|
         matched = true
         missing_relation = nil
         match_data = frame.query.map do |relation|
@@ -49,7 +49,7 @@ class Graph
           ]
         end
         if matched == false || match_data.nil? || match_data.empty?
-          result_frames << frame.to_hash.merge({ verb: node.lemma })
+          result_frames << frame.to_hash
           result_frames.last[:missing_relation ] = missing_relation .to_hash if missing_relation
           next
         end
