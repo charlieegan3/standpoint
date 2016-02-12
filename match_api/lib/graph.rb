@@ -30,7 +30,7 @@ class Graph
     result_frames = []
     verbs.each do |node|
       raw_frames = candidate_verbs[node.lemma]
-      frames = raw_frames.map { |f| Frame.new(upgrade_frame(f)) }
+      frames = raw_frames.map { |f| Frame.new(upgrade_frame(f), f, node.lemma) }
       frames = frames.uniq(&:pattern_string).sort_by  { |f| f.components.size }.reverse
 
       frames.each_with_index do |frame, index|
@@ -49,7 +49,7 @@ class Graph
           ]
         end
         if matched == false || match_data.nil? || match_data.empty?
-          result_frames << frame.to_hash.merge({ verb: node.lemma, example: raw_frames[index]['examples'].first, source: raw_frames[index]['source']})
+          result_frames << frame.to_hash.merge({ verb: node.lemma })
           result_frames.last[:missing_relation ] = missing_relation .to_hash if missing_relation
           next
         end

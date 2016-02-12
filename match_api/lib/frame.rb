@@ -1,10 +1,13 @@
 require_relative 'relation'
 
 class Frame
-  attr_accessor :components, :pattern_string
-  def initialize(pattern_string)
+  attr_accessor :components, :pattern_string, :source, :example, :verb
+  def initialize(pattern_string, raw_frame, verb)
     @pattern_string = pattern_string
     @components = components_for_pattern
+    @source = raw_frame['source']
+    @example = raw_frame['examples'].first
+    @verb = verb
   end
 
   def pos_pattern_string
@@ -42,7 +45,10 @@ class Frame
     {
       string: @pattern_string,
       bare_frame: pos_pattern_string,
-      missing_representation: Frame.relations(pos_pattern_string).empty?
+      missing_representation: Frame.relations(pos_pattern_string).empty?,
+      source: @source,
+      example: @example,
+      verb: @verb,
     }
   end
 

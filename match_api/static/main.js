@@ -33,8 +33,10 @@ $(document).ready(function() {
       var point = data.points[i];
       var well = document.createElement("div");
       well.className = "well";
-      $(well).append("<h4>" + point.frame + "</h4>")
-      $(well).append("<p class=\"small\">" + point.bare_frame + "<code>" + point.string + "</code>" + "</p>")
+      $(well).append("<h4>" + point.frame.string + "</h4>")
+      $(well).append("<p class=\"small\">" + point.frame.bare_frame + "<code>" + point.string + "</code>" + "</p>")
+      $(well).append("<p>Example: " + point.frame.example + "</p>")
+      $(well).append("<p>VerbNet: <code>" + point.frame.source + "</code></p>")
       var componentString = "<p>";
       for (var j = 0; j < point.matched_components.length; j++) {
         var component = point.matched_components[j];

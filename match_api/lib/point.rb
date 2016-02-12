@@ -39,8 +39,7 @@ class Point
 
   def to_hash
     {
-      frame: @frame.pattern_string,
-      bare_frame: @frame.pos_pattern_string,
+      frame: @frame.to_hash,
       string: node_string,
       matched_components: @matches.map { |e|
         {
