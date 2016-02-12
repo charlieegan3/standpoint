@@ -2,6 +2,16 @@
 
 body {
   font-family: Verdana, sans-serif;
+  font-size: 1em;
+}
+
+p {
+  margin: 0px;
+  margin-bottom: 5px;
+}
+
+pre {
+  font-size: 1em;
 }
 
 #query {
@@ -13,4 +23,8 @@ body {
   margin: 20px auto;
   display: block;
   cursor: pointer;
+}
+
+.well {
+  padding: 10px;
 }

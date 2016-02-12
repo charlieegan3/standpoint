@@ -7,6 +7,7 @@ $(document).ready(function() {
       renderResults(data);
     }
   });
+  $("#input").html('They went to the shop and bought milk');
 
   $("#submit").click(function() {
     $.ajax({
@@ -15,6 +16,7 @@ $(document).ready(function() {
       data: JSON.stringify({sentence: $('#query').val()}),
       success: function(data, status) {
         renderResults(data);
+        $("#input").html($('#query').val());
       }
     });
   });
@@ -52,11 +54,13 @@ $(document).ready(function() {
       var frame = data.unmatched_frames[i];
       var well = document.createElement("div");
       well.className = "well";
-      $(well).append("<h4>" + frame.string+ "</h4>")
+      $(well).append("<h6><span class=\"label label-warning\">Verb: " + frame.verb + "</span> " + frame.string + "</h6>")
+      $(well).append("<p><code>" + frame.bare_frame + "</code></p>")
       if (frame.missing_representation) {
         $(well).append("<p><span class=\"label label-danger\">Missing Representation</span></p>")
       }
-      $(well).append("<p>Verb: " + frame.verb + "</p>")
+      $(well).append("<p>Example: " + frame.example + "</p>")
+      $(well).append("<p>VerbNet: <code>" + frame.source + "</code></p>")
       $(well).append("<p>Parse was missing: </p>")
       $(well).append('<pre>'+JSON.stringify(frame.missing_relation, null, '    ')+'</pre>');
       $("#frames").append(well);
