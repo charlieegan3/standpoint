@@ -61,4 +61,12 @@ class Relation
   def print
     puts @origin_pos.to_s + " -> " + @label.to_s + " -> " + @destination_pos.to_s
   end
+
+  def to_hash
+    {
+      origin: @origin_pos.inspect,
+      label: @label.inspect,
+      destination: @destination_pos.inspect,
+    }
+  end
 end

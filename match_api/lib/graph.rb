@@ -30,13 +30,15 @@ class Graph
     result_frames = []
     verbs.each do |node|
       frames = candidate_verbs[node.lemma].map { |f| Frame.new(upgrade_frame(f)) }
+      frames = frames.uniq(&:pattern_string).sort_by  { |f| f.components.size }.reverse
 
       frames.each do |frame|
-        result_frames << { string: frame.pos_pattern_string, missing: Frame.relations(frame.pos_pattern_string).empty? }
         matched = true
+        missing_relation = nil
         match_data = frame.query.map do |relation|
           origin, destination = node.scan(relation)
           if origin.nil? || destination.nil?
+            missing_relation = relation
             matched = false
             break
           end
@@ -45,7 +47,12 @@ class Graph
             { component: relation.destination_attributes, match: destination }
           ]
         end
-        next if matched == false || match_data.nil? || match_data.empty?
+        if matched == false || match_data.nil? || match_data.empty?
+          result_frames << frame.to_hash
+          result_frames.last[:matched] = false
+          result_frames.last[:missing_relation ] = missing_relation .to_hash if missing_relation
+          next
+        end
         match_data = match_data.flatten.uniq { |e| e[:match] }
         result_points << Point.new(frame, match_data)
       end

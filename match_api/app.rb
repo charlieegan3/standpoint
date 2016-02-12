@@ -20,10 +20,10 @@ verbs = JSON.parse(File.open('verbs.json', 'r').read)
 post '/' do
   sentence = JSON.parse(request.body.read)['sentence']
   graph = Graph.new *client.request_parse(sentence)
-  points, frames = graph.points(verbs)
+  points, unmatched_frames = graph.points(verbs)
   {
     points: points.map(&:to_hash),
-    frames: frames,
+    unmatched_frames: unmatched_frames,
     verbs: graph.verbs.map { |v| { verb: v.word, string: v.tree.sort_by(&:index).map(&:word).join(" ") } }
   }.to_json
 end

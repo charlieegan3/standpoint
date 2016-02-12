@@ -2,7 +2,7 @@ require 'json'
 require 'nokogiri'
 require 'pry'
 
-verbs = {}
+verbs = Hash.new([])
 
 Dir.glob('verb_frames/*.xml') do |path|
   doc = Nokogiri::XML(File.open(path).read)
@@ -24,7 +24,7 @@ Dir.glob('verb_frames/*.xml') do |path|
   end
 
   members.each do |member|
-    verbs[member] = frames
+    verbs[member] += frames
   end
 end
 

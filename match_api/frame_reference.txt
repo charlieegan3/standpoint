@@ -1,0 +1,113 @@
+NP VERB NP: 8192
+NP VERB NP PREP NP: 4664
+NP VERB PREP NP: 3315
+NP VERB: 2232
+NP VERB NP NP: 1548
+NP VERB PREP NP NP: 1154
+NP VERB ADV: 1015
+NP VERB PREP NP PREP NP: 540
+NP VERB NP PREP NP PREP NP: 449
+PREP NP VERB NP: 412
+LEX VERB NP PREP NP: 343
+NP VERB NP LEX: 224
+LEX VERB PREP NP NP: 198
+NP LEX VERB NP: 185
+NP VERB ADV PREP NP: 153
+NP VERB ADV LEX: 138
+NP VERB NP LEX NP: 124
+NP VERB LEX: 102
+NP VERB NP NP PREP NP: 90
+NP VERB LEX NP: 87
+NP VERB LEX ADV: 85
+LEX VERB NP: 64
+NP VERB PREP NP ADV: 45
+NP LEX NP VERB: 43
+
+remaining:
+LEX LEX VERB NP: 29
+LEX LEX VERB: 29
+LEX VERB PREP NP: 29
+NP VERB NP LEX LEX NP: 26
+NP VERB LEX NP PREP NP: 26
+PREP NP LEX VERB NP: 18
+NP LEX NP VERB PREP NP: 16
+NP LEX NP VERB NP: 16
+NP VERB NP ADJ: 9
+NP VERB NP ADV: 7
+NP VERB ADJ PREP NP: 5
+NP VERB ADJ: 5
+
+-------------------------------------------------------------------------------
+
+NP VERB NP
+Carmen obtained the spare part.
+NP VERB NP PREP NP
+Carmen obtained the spare part from Diana.
+NP VERB PREP NP
+Her cousin clerked for Judge Davis.
+NP VERB NP NP
+I forced him to come.
+NP VERB PREP NP NP
+He is willing to sacrifice to the arbitrage trader some small profit.
+NP VERB
+Some of the members may donate privately.
+LEX VERB PREP NP NP
+There stood on the corner a statue.
+PREP NP VERB NP
+On the pedestal stood a statue.
+LEX VERB NP PREP NP
+There meanders a river through the valley.
+NP LEX NP VERB
+The price of oil soared.
+NP LEX NP VERB NP
+The price of oil increased ten percent.
+NP LEX NP VERB PREP NP
+The price of oil increased by ten percent.
+NP VERB NP ADJ
+She wanted the meat red.
+NP VERB NP LEX LEX NP
+He felt the choice to be a bad one.
+NP VERB NP LEX NP
+He characterized him as being smart.
+NP VERB ADV PREP NP
+Folk songs alternate well with pop songs.
+NP VERB ADV
+The pieces interconnect easily.
+NP VERB NP LEX
+Herman mixed the eggs and the cream together.
+NP VERB ADV LEX
+Eggs and cream mix well together.
+NP VERB LEX
+The eggs and the cream mixed together.
+NP LEX VERB NP
+The clown's antics amused the children.
+NP VERB PREP NP ADV
+Sugar whips into cream easily.
+NP VERB PREP NP PREP NP
+They agreed with him about whether he should kill the peasants.
+NP VERB LEX ADV
+Those twigs and branches break apart easily.
+NP VERB NP PREP NP PREP NP
+Carla slid the books from one end of the table to the other.
+LEX VERB NP
+There fluttered a flag (over the fort).
+NP VERB NP NP PREP NP
+Paul hit the door open with his foot.
+NP VERB LEX NP
+Paul hit at the window.
+NP VERB LEX NP PREP NP
+Paul hit at the window with an open hand.
+LEX LEX VERB
+It's raining.
+LEX LEX VERB NP
+It's raining cats and dogs.
+LEX VERB PREP NP
+It was pelting with rain.
+NP VERB ADJ
+That pea soup tasted delicious.
+NP VERB ADJ PREP NP
+That pea soup tasted delicious to me.
+NP VERB NP ADV
+I used the money well.
+PREP NP LEX VERB NP
+On his finger there sparkled a magnificent diamond.

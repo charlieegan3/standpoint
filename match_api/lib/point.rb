@@ -30,11 +30,22 @@ class Point
      match[:component][:semantics]
   end
 
+  def match_syntax(match)
+    match[:component][:pos].inspect
+  end
+
   def to_hash
     {
       frame: @frame.pattern_string,
+      bare_frame: @frame.pos_pattern_string,
       string: node_string,
-      matche_components: @matches.map { |e| { semantics: match_semantics(e), words: match_string(e) } }
+      matched_components: @matches.map { |e|
+        {
+          words: match_string(e),
+          semantics: match_semantics(e),
+          syntax: match_syntax(e),
+        }
+      }
     }
   end
 end

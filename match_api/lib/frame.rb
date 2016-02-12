@@ -39,14 +39,18 @@ class Frame
   end
 
   def to_hash
-    { pattern: @pattern_string, components: @components }
+    {
+      string: @pattern_string,
+      bare_frame: pos_pattern_string,
+      missing: Frame.relations(pos_pattern_string).empty?
+    }
   end
 
   def self.relations(pos_pattern_string)
     {
       'NP VERB NP' => [
         Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
-        Relation.new(1, 2, /VB/, /NN|PRP/, /dobj/),
+        Relation.new(1, 2, /VB/, /NN|PRP/, /dobj|nmod/),
       ],
       'NP VERB NP PREP NP' => [
         Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
@@ -57,7 +61,7 @@ class Frame
       'NP VERB PREP NP' => [
         Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
         Relation.new(1, 3, /VB/, /NN/, /nmod/),
-        Relation.new(3, 2, /VB/, /IN/, /case/),
+        Relation.new(3, 2, /NN/, /IN/, /case/),
       ],
       'NP VERB' => [
         Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
@@ -83,6 +87,91 @@ class Frame
         Relation.new(3, 2, /PRP/, /IN/, /case/),
         Relation.new(1, 5, /VB/, /NN/, /nmod/),
         Relation.new(5, 1, /NN/, /IN/, /case/),
+      ],
+      'NP VERB NP PREP NP PREP NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /subj/),
+        Relation.new(1, 2, /VB/, /NN/, /dobj/),
+        Relation.new(1, 4, /VB/, /NN|JJ/, /nmod/),
+        Relation.new(1, 6, /VB/, /NN|JJ/, /nmod/),
+        Relation.new(4, 3, /VB/, /IN/, /case/),
+        Relation.new(6, 5, /VB/, /IN/, /case/),
+      ],
+      'PREP NP VERB NP' => [
+        Relation.new(1, 0, /NN/, /IN/, /case/),
+        Relation.new(2, 1, /VB/, /NN/, /nmod/),
+        Relation.new(2, 3, /VB/, /NN/, /dobj/),
+      ],
+      'LEX VERB NP PREP NP' => [
+        Relation.new(1, 0, /VB/, /EX/, /expl/),
+        Relation.new(1, 2, /VB/, /NN/, /dobj/),
+        Relation.new(1, 4, /VB/, /NN/, /nmod/),
+        Relation.new(4, 3, /NN/, /IN/, /case/),
+      ],
+      'NP VERB NP LEX' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 2, /VB/, /NN/, /dobj/),
+        Relation.new(1, 3, /VB/, /RB/, /advmod/),
+      ],
+      'LEX VERB PREP NP NP' => [
+        Relation.new(1, 0, /VB/, /EX/, /expl/),
+        Relation.new(1, 3, /VB/, /NN/, /nmod/),
+        Relation.new(3, 4, /NN/, /NN/, /dep/),
+      ],
+      'NP LEX VERB NP' => [
+        Relation.new(2, 1, /VB/, /NN/, /nsubj/),
+        Relation.new(2, 3, /VB/, /NN/, /dobj/),
+      ],
+      'NP VERB ADV PREP NP' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 2, /VB/, /RB/, /advmod/),
+        Relation.new(1, 4, /VB/, /NN/, /nmod/),
+        Relation.new(4, 3, /NN/, /IN/, /case/),
+      ],
+      'NP VERB ADV LEX' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 2, /VB/, /RB/, /advmod/),
+        Relation.new(1, 3, /VB/, /RB/, /advmod/),
+      ],
+      'NP VERB NP LEX NP' => [
+        Relation.new(1, 0, /VB/, /NN|PRP/, /nsubj/),
+        Relation.new(1, 2, /VB/, /NN|PRP/, /dobj/),
+        Relation.new(1, 4, /VB/, /NN|JJ/, /advcl/),
+        Relation.new(4, 1, /NN|JJ/, /IN/, /mark/),
+      ],
+      'NP VERB LEX' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 2, /VB/, /RB/, /advmod/),
+      ],
+      'NP VERB NP NP PREP NP' => [ #parses for this frame vary
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 2, /VB/, /NN/, /dobj/),
+        Relation.new(1, 3, /VB/, /NN|RP/, /compound|xcomp|nmod/),
+        Relation.new(1, 5, /VB/, /NN/, /nmod/),
+      ],
+      'NP VERB LEX NP' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 3, /VB/, /NN/, /nmod/),
+        Relation.new(3, 2, /NN/, /IN/, /case/),
+      ],
+      'NP VERB LEX ADV' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 2, /VB/, /RB/, /advmod/),
+        Relation.new(1, 3, /VB/, /RB/, /advmod/),
+      ],
+      'LEX VERB NP' => [
+        Relation.new(1, 0, /VB/, /EX/, /expl/),
+        Relation.new(1, 2, /VB/, /NN/, /dobj/),
+      ],
+      'NP VERB PREP NP ADV' => [
+        Relation.new(1, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(1, 3, /VB/, /NN/, /nmod/),
+        Relation.new(3, 2, /NN/, /IN/, /case/),
+        Relation.new(1, 4, /VB/, /RB/, /advmod/),
+      ],
+      'NP LEX NP VERB' => [
+        Relation.new(3, 0, /VB/, /NN/, /nsubj/),
+        Relation.new(0, 2, /NN/, /NN/, /nmod/),
+        Relation.new(2, 1, /NN/, /IN/, /case/),
       ],
     }[pos_pattern_string] || []
   end
