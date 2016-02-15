@@ -2,30 +2,45 @@ require 'json'
 require 'net/http'
 
 require 'sinatra'
+require 'neo4j'
 require 'pry'
 
-require './lib/client'
-require './lib/graph'
-require './lib/node'
-require './lib/edge'
+require './lib/corenlp_client'
+require './lib/neo4j_client'
 require './lib/frame'
+require './lib/node'
+require './lib/relation'
 
 set :port, ENV['PORT']
 set :bind, '0.0.0.0'
 set :public_folder, 'static'
 
-client = Client.new("http://corenlp_server:#{ENV['CNLP_PORT']}")
+corenlp_client = CoreNlpClient.new("http://corenlp_server:#{ENV['CNLP_PORT']}")
+neo4j_client = Neo4jClient.new("http://neo4j:7474")
+
 verbs = JSON.parse(File.open('verbs.json', 'r').read)
+frame_queries = Hash[*Dir.glob('frame_queries/*.cql').map do |path|
+  [path.scan(/\/(\w+)\./)[0][0].humanize.upcase,
+    File.open(path, 'r').read]
+end.flatten]
 
 post '/' do
   sentence = JSON.parse(request.body.read)['sentence']
-  graph = Graph.new *client.request_parse(sentence)
-  points, unmatched_frames = graph.points(verbs)
-  {
-    points: points.map(&:to_hash),
-    unmatched_frames: unmatched_frames,
-    verbs: graph.verbs.map { |v| { verb: v.word, string: v.tree.sort_by(&:index).map(&:word).join(" ") } }
-  }.to_json
+  tokens, dependencies = corenlp_client.request_parse(sentence)
+  neo4j_client.clear
+  neo4j_client.create(tokens, dependencies)
+
+  points = []
+  neo4j_client.verbs.each do |verb|
+    verbs[verb.lemma].each do |frame|
+      frame = Frame.new(frame, verb.lemma)
+      next unless query = frame_queries[frame.pos_pattern_string]
+      match = neo4j_client.query(verb, query)
+      next if match.to_a.empty?
+      points << match.to_a.first.to_h.map { |k, v| "#{v.word}(#{k})" }.join(" ")
+    end
+  end
+  points.uniq.to_json
 end
 
 get '/' do

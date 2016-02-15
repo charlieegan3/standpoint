@@ -1,8 +1,7 @@
-require 'net/http'
-
-class Client
+class CoreNlpClient
   def initialize(host)
-    params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
+    #params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
+    params = URI.encode('properties={"annotators": "lemma,parse,depparse"}')
 
     @uri = URI(host + "/?" + params)
     @http_client = Net::HTTP.new(@uri.host, @uri.port)

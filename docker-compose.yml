@@ -18,8 +18,17 @@ match_api:
     - "4568:4567"
   links:
     - corenlp_server:corenlp_server
+    - neo4j:neo4j
   volumes:
     - "./match_api:/app"
+
+neo4j:
+  container_name: neo4j
+  image: neo4j
+  environment:
+    NEO4J_AUTH: none
+  ports:
+    - "7474:7474"
 
 comment_store:
   container_name: comment_store
