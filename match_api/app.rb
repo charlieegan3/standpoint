@@ -37,7 +37,7 @@ post '/' do
       next unless query = frame_queries[frame.pos_pattern_string]
       match = neo4j_client.query(verb, query)
       next if match.to_a.empty?
-      points << match.to_a.first.to_h.map { |k, v| "#{v.word}(#{k})" }.join(" ")
+      points << match.zip(frame.components).map { |m, c| { match: m, component: c } }
     end
   end
   points.uniq.to_json

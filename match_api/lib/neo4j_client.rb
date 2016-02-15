@@ -35,6 +35,12 @@ class Neo4jClient
 
   def query(verb, query)
     linked_query = query.gsub('VERB_UUID', verb.uuid)
-    Neo4j::Session.query(linked_query)
+    thing = Neo4j::Session.query(linked_query).to_a.first.to_h.map do |k, v|
+      {
+        tag: k,
+        node: v,
+        descendants: v.children(rel_length: :any).to_a
+      }
+    end
   end
 end
