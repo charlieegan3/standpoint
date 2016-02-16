@@ -37,6 +37,7 @@ post '/' do
       next unless query = frame_queries[frame.pos_pattern_string]
       match = neo4j_client.query(verb, query)
       next if match.to_a.empty?
+      raise "Length Mismatch" + frame.pos_pattern_string unless match.size == frame.components.size
       points << match.zip(frame.components).map { |m, c| { match: m, component: c } }
     end
   end

@@ -39,7 +39,7 @@ class Neo4jClient
       {
         tag: k,
         node: v,
-        descendants: v.children(rel_length: :any).to_a
+        #descendants: v.children(rel_length: :any).to_a
       }
     end
   end
