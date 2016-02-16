@@ -14,6 +14,22 @@ pre {
   font-size: 1em;
 }
 
+table {
+  font-size: 1.1em;
+}
+
+td, th {
+  border-bottom: 1px solid LightGrey;
+}
+
+th {
+  width: 25%;
+}
+
+tr:last-child td {
+  font-style: italic;
+}
+
 #query {
   width: 100%;
 }

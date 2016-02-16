@@ -41,7 +41,7 @@ post '/' do
       points << match.zip(frame.components).map { |m, c| { match: m, component: c } }
     end
   end
-  points.uniq.to_json
+  points.sort_by(&:size).to_json
 end
 
 get '/' do
