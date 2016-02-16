@@ -6,8 +6,13 @@ class Frame
     end.join(" ")
     @components = components_for_pattern
     @source = raw_frame['source']
+    @copula = raw_frame['copula']
     @example = raw_frame['examples'].first
     @verb = verb
+  end
+
+  def is_copula?
+    @copula == true
   end
 
   def pos_pattern_string
@@ -39,5 +44,34 @@ class Frame
       example: @example,
       verb: @verb,
     }
+  end
+
+  def self.copula_frames(copula_verb)
+    [
+      {
+        "examples"=>["He was a builder."], "copula"=>true,
+        "syntax"=> [
+          {"name"=>"NP", "restrictions"=>[]},
+          {"name"=>"VERB", "value"=>"Copula", "restrictions"=>[]},
+          {"name"=>"NP", "restrictions"=>[]}
+        ]
+      },
+      {
+        "examples"=>["He was fat."], "copula"=>true,
+        "syntax"=> [
+          {"name"=>"NP", "restrictions"=>[]},
+          {"name"=>"VERB", "value"=>"Copula", "restrictions"=>[]},
+          {"name"=>"ADJ", "restrictions"=>[]}
+        ]
+      },
+      {
+        "examples"=>["The rope came loose"], "copula"=>true,
+        "syntax"=> [
+          {"name"=>"NP", "restrictions"=>[]},
+          {"name"=>"VERB", "value"=>"Copula", "restrictions"=>[]},
+          {"name"=>"ADV", "restrictions"=>[]}
+        ]
+      }
+    ].map { |f| Frame.new(f, copula_verb) }
   end
 end

@@ -33,24 +33,22 @@ post '/' do
 
   points = []
   neo4j_client.verbs.each do |verb|
-    verbs[verb.lemma].each do |frame|
-      frame = Frame.new(frame, verb.lemma)
-      queries = []
-      if copulae.include?(verb.lemma) && frame.components.size == 3
-        queries += frame_queries.select { |k, _| k.include? '-cop' }.map(&:last)
-      end
-      queries << frame_queries[frame.pos_pattern_string]
-      queries.compact!
-      next if queries.empty?
-      queries.each do |query|
-        match = neo4j_client.query(verb, query)
-        next if match.to_a.empty?
-        raise "Length Mismatch" + frame.pos_pattern_string unless match.size == frame.components.size
-        points << match.zip(frame.components).map { |m, c| { match: m, component: c } }
-      end
+    frames = verbs[verb.lemma].map { |f| Frame.new(f, verb.lemma) }
+    if copulae.include? verb.lemma
+      frames += Frame.copula_frames(verb.lemma)
+    end
+
+    frames.each do |frame|
+      query_name = frame.is_copula? ? frame.pos_pattern_string + '-cop' : frame.pos_pattern_string
+      query = frame_queries[query_name]
+      next unless query
+      match = neo4j_client.query(verb, query)
+      next if match.to_a.empty?
+      raise "Length Mismatch" + frame.pos_pattern_string unless match.size == frame.components.size
+      points << match.zip(frame.components).map { |m, c| { match: m, component: c } }
     end
   end
-  points.sort_by(&:size).to_json
+  points.uniq.sort_by(&:size).to_json
 end
 
 get '/' do
