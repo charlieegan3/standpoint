@@ -15,8 +15,8 @@
       command: docker-compose kill
       args:
         chdir: ~/app
-    - name: Start corenlp server
-      command: docker-compose up -d corenlp_server
+    - name: Build App
+      command: docker-compose build
       args:
         chdir: ~/app
     - name: Start match api server
