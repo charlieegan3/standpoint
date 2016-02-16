@@ -1,3 +1,5 @@
+//NP VERB PREP NP NP
+
 MATCH (verb:Node {uuid: 'VERB_UUID'})
 MATCH (verb)-[rel_subj:REL]->(subj:Node)
 MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
