@@ -21,6 +21,7 @@ match_api:
     - neo4j:neo4j
   volumes:
     - "./match_api:/app"
+  restart: unless-stopped
 
 neo4j:
   container_name: neo4j
