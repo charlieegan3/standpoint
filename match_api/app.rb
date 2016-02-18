@@ -33,6 +33,8 @@ post '/' do
 
   points = []
   neo4j_client.verbs.each do |verb|
+    next if verbs[verb.lemma].nil?
+
     frames = verbs[verb.lemma].map { |f| Frame.new(f, verb.lemma) }
     if copulae.include? verb.lemma
       frames += Frame.copula_frames(verb.lemma)
