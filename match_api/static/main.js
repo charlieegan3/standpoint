@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  $('.progress').hide();
   $.ajax({
     type: "POST",
     url: "/",
@@ -10,6 +11,7 @@ $(document).ready(function() {
   $("#input").html('They went to the shop and bought milk');
 
   $("#submit").click(function() {
+    $('.progress').show();
     $.ajax({
       type: "POST",
       url: "/",
@@ -17,6 +19,10 @@ $(document).ready(function() {
       success: function(data, status) {
         renderResults(data);
         $("#input").html($('#query').val());
+        $('.progress').hide();
+      },
+      error: function(data, status) {
+        $('.progress').hide();
       }
     });
   });
