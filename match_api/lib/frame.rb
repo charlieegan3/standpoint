@@ -46,6 +46,11 @@ class Frame
     }
   end
 
+  def self.universal_frame(verb)
+    { "examples"=>["any verb pattern"],
+      "syntax"=> [{ "name"=>"VERB", "value"=>"Universal" }] }
+  end
+
   def self.copula_frames(copula_verb)
     [
       {

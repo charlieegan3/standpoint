@@ -25,12 +25,17 @@ class Neo4jClient
     end
   end
 
+
   def clear
     Node.delete_all
   end
 
   def verbs
-    Node.where(part_of_speech: /VB.?/)
+    non_aux_verb_query = "MATCH (verb:Node) WHERE verb.part_of_speech =~ 'VB.?'
+                          MATCH p=(verb)--(x)
+                          WHERE NOT ANY (r in relationships(p) WHERE r.label =~ 'aux.*')
+                          RETURN DISTINCT verb;"
+    Neo4j::Session.query(non_aux_verb_query).map { |e| e.verb }
   end
 
   def query(verb, query)
@@ -41,6 +46,6 @@ class Neo4jClient
         node: v,
         #descendants: v.children(rel_length: :any).to_a
       }
-    end
+    end.select { |e| e[:node] }
   end
 end
