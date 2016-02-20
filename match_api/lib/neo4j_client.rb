@@ -25,7 +25,6 @@ class Neo4jClient
     end
   end
 
-
   def clear
     Node.delete_all
   end

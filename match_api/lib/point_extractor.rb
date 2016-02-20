@@ -17,6 +17,7 @@ class PointExtractor
   def generic_point(verb)
     @neo4j_client.query(verb, @frame_queries['VERB-UNIVERSAL'])
       .map { |e| { match: e, component: :generic} }
+      .sort_by { |e| e[:match][:node].index }
   end
 
   def frame_points(verb)
@@ -32,7 +33,9 @@ class PointExtractor
         match = @neo4j_client.query(verb, query)
         unless match.empty?
           frames.each do |frame|
-            points << match.zip(frame.components).map { |m, c| { match: m, component: c } }
+            points << match.zip(frame.components)
+              .map { |m, c| { match: m, component: c } }
+              .sort_by { |e| e[:match][:node].index }
           end
         end
       end
