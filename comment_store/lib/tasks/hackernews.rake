@@ -5,7 +5,8 @@ require_relative '../../config/environment'
 def save_the_children(parent, children)
   children.each do |c|
     next unless c["text"]
-    comment = Comment.create(parent: parent, body: Nokogiri::HTML(c["text"]).text)
+    comment = Comment.create(parent: parent,
+      body: Nokogiri::HTML(c["text"]).css('p').map(&:text).join(" "))
     save_the_children(comment, c["children"])
   end
 end
