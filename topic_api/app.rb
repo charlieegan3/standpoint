@@ -19,7 +19,7 @@ class TopicAnalyzer
   end
 end
 
-blacklist = ["-"]
+blacklist = ["-", "http", "https"]
 
 get "/" do
   "Post to this route with a JSON payload. (text, topic_count, top_word_count)"
