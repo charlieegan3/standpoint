@@ -35,7 +35,7 @@ $(document).ready(function() {
       $("#results").append("<p><code>There were no matches.</code></p>")
     }
     for (var i = 0; i < data.length; i++) {
-      point = data[i];
+      point = data[i]["nodes"];
       var table = document.createElement("table");
       $(table).addClass("table table-bordered table-condensed");
       var frame = document.createElement("tr");
@@ -53,6 +53,7 @@ $(document).ready(function() {
       $(table).append(match);
       $(table).append(lemma);
       $("#results").append("<p>Match " + (i+1).toString() + "</p>");
+      $("#results").append("<p>" + data[i]["string"] + "</p>");
       $("#results").append(table);
     }
 

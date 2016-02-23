@@ -37,13 +37,38 @@ class Neo4jClient
     Neo4j::Session.query(non_aux_verb_query).map { |e| e.verb }
   end
 
+  def permitted_descendants(node, copula)
+    standard_query = %q{match (verb:Node {uuid: "NODE_UUID"})
+                        match p=(verb)-[*]->(related)
+                        where NOT ANY (l IN ['advcl', 'advmod', 'conj.*', 'punct'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                        return verb, related;}
+    copula_query = %q{match (root_verb:Node {uuid: "NODE_UUID"})
+                      match (verb:Node)-[rel_cop:REL]->(root_verb)
+                      match p=(cop)-[*]-(related)
+                      where NOT ANY (l IN ['advcl', 'advmod', 'cc', 'punct'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                      and rel_cop.label = "cop"
+                      return verb, related;}
+    if copula
+      results = []
+      [standard_query, copula_query].each do |query|
+        query.gsub!('NODE_UUID', node.uuid)
+        results << Neo4j::Session.query(query).to_a
+      end
+      return results.max_by(&:size)
+    end
+    Neo4j::Session.query(standard_query.gsub('NODE_UUID', node.uuid))
+  end
+
+  def permitted_descendant_string(node, copula=false)
+    (permitted_descendants(node, copula).to_a.map(&:related).push(node)).uniq.sort_by(&:index).map(&:word).join(" ")
+  end
+
   def query(verb, query)
     linked_query = query.gsub('VERB_UUID', verb.uuid)
     thing = Neo4j::Session.query(linked_query).to_a.first.to_h.map do |k, v|
       {
         tag: k,
         node: v,
-        #descendants: v.children(rel_length: :any).to_a
       }
     end.select { |e| e[:node] }
   end
