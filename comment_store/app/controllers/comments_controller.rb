@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   def index
-    @comments = Comment.where(parent: nil)
+    @comments = Comment.where(parent: nil).order(created_at: :desc)
   end
 
   def show
