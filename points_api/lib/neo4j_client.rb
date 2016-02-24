@@ -40,12 +40,12 @@ class Neo4jClient
   def permitted_descendants(node, copula)
     standard_query = %q{match (verb:Node {uuid: "NODE_UUID"})
                         match p=(verb)-[*]->(related)
-                        where NOT ANY (l IN ['advcl', 'advmod', 'conj.*', 'punct'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                        where NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
                         return verb, related;}
     copula_query = %q{match (root_verb:Node {uuid: "NODE_UUID"})
                       match (verb:Node)-[rel_cop:REL]->(root_verb)
                       match p=(cop)-[*]-(related)
-                      where NOT ANY (l IN ['advcl', 'advmod', 'cc', 'punct'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                      where NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
                       and rel_cop.label = "cop"
                       return verb, related;}
     if copula
