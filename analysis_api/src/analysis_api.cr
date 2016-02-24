@@ -3,9 +3,12 @@ require "json"
 
 require "./analysis_api/*"
 
+LIMIT = 200
+COMMENT = 1536
+
 module AnalysisApi
   def self.run
-    response = HTTP::Client.get "http://comment_store:3000/comments/909.json?flat=1"
+    response = HTTP::Client.get "http://comment_store:3000/comments/#{COMMENT}.json?flat=1"
     blob = JSON.parse(response.body).as_a
       .map { |c| (c as Hash)["body"] as String }[1..-1]
       .map { |c| c.split("\n") }
@@ -29,18 +32,27 @@ module AnalysisApi
 
     sentences.each do |sentence|
       query = { sentence: sentence }.to_json
-      response = HTTP::Client.post("http://points_api:4567/", body: query)
-      next unless response.status_code == 200
-      data = JSON.parse(response.body).as_a
+      begin
+        response = HTTP::Client.post("http://points_api:4567/", body: query)
+        next unless response.status_code == 200
+        data = JSON.parse(response.body).as_a
+      rescue ex
+        puts ex.message
+        sleep 5
+        next
+      end
       data.each do |point|
-        next if (point as Array).size < 2
-        thing = (point as Array).map do |c|
+        nodes = ((point as Hash)["nodes"] as Array)
+        next if nodes.size < 2
+        string = (point as Hash)["string"]
+        point = nodes.map do |c|
           [
             (((((c as Hash)["match"] as Hash)["node"]  as Hash)["node"]) as Hash)["lemma"],
             (((c as Hash)["match"] as Hash)["tag"] as String)
           ].join(".")
         end
-        puts thing.to_json
+        point = { point: point, string: string }
+        puts point.to_json
       end
     end
   end
