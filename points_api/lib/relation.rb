@@ -6,4 +6,8 @@ class Relation
   type 'REL'
 
   property :label
+
+  def self.string_for_create(from, relation, to, sentence_index)
+    "(s#{sentence_index}#{from})-[s#{sentence_index.to_s+from+to}:REL { label : \"#{relation}\" }]->(s#{sentence_index}#{to})"
+  end
 end

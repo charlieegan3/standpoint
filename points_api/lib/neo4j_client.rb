@@ -3,7 +3,7 @@ class Neo4jClient
     Neo4j::Session.open(:server_db, url)
   end
 
-  def create(tokens, dependencies)
+  def sentence_query_components(tokens, dependencies, sentence_index)
     nodes = tokens.map do |t|
       [t['word'], t['pos'], t['lemma'], t['index'].to_i-1]
     end
@@ -13,16 +13,25 @@ class Neo4jClient
     relations.reject! { |l, g, d| g == d || l == 'ROOT'}
 
     nodes.map! do |word, pos, lemma, index|
-      Node.new(word: word, part_of_speech: pos,
-               lemma: lemma, index: index)
+      options = { word: word, part_of_speech: pos, lemma: lemma, index: index }
+      Node.string_for_create(options, sentence_index)
     end
+    query_string = "#{nodes.join(", ")}"
 
-    relations.each do |label, parent_index, child_index|
-      Relation.create(
-        from_node: nodes[parent_index],
-        to_node: nodes[child_index],
-        label: label)
+    relations.map! do |label, parent_index, child_index|
+      Relation.string_for_create("n#{parent_index}", label, "n#{child_index}", sentence_index)
     end
+    query_string += ", #{relations.join(", ")}"
+  end
+
+  def sentences_create_query(sentences)
+    query_string = "CREATE " + sentences.each_with_index.to_a.map do |data, index|
+      sentence_query_components(*data, index)
+    end.join(", ")
+  end
+
+  def execute(query_string)
+    Neo4j::Session.query(query_string)
   end
 
   def clear
