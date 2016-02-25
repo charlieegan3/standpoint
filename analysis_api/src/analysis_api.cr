@@ -3,27 +3,28 @@ require "json"
 
 require "./analysis_api/*"
 
-LIMIT = 200
-COMMENT = 1536
-
 module AnalysisApi
   def self.run
-    response = HTTP::Client.get "http://comment_store:3000/comments/#{COMMENT}.json?flat=1"
-    blob = JSON.parse(response.body).as_a
-      .map { |c| (c as Hash)["body"] as String }[1..-1]
-      .map { |c| c.split("\n") }
-      .flatten
-      .select { |c| /^[A-Za-z]/.match(c) && c.split(" ").size > 4 }
-      .map { |c| c[-1] == '.' ? c : c + "." }
-      .take(LIMIT).join(" ")
+    path = "debates/abortion"
+    blob = [] of String
+    Dir.new(path).each do |f|
+      next unless f.includes? "post"
+      blob << File.read_lines(path+"/"+f).join("\n")
+    end
 
-    response = HTTP::Client.post("http://corenlp_server:9000/?properties=%7B%22annotators%22%3A%20%22tokenize%2Cssplit%22%7D", body: blob)
-    clean = JSON.parse(response.body.gsub(/[^\w\{\}\]\[,:\s"\\']/, ""))
-      .as_h["sentences"] as Array
-    sentences = clean.map { |s| ((s as Hash)["tokens"] as Array).map { |t| (t as Hash)["word"] }.join(" ").gsub(/\s\W/) { |m| m[1] }.gsub(/LRB|RRB/, "") }
+    sentences = [] of String
+    blob.in_groups_of(50).each do |group|
+      group = group.join("\n")
+      response = HTTP::Client.post("http://corenlp_server:9000/?properties=%7B%22annotators%22%3A%20%22tokenize%2Cssplit%22%7D", body: group)
+      clean = JSON.parse(response.body.gsub(/[^\w\{\}\]\[,:\s"\\']/, ""))
+        .as_h["sentences"] as Array
+      sentences += clean.map { |s| ((s as Hash)["tokens"] as Array).map { |t| (t as Hash)["word"] }.join(" ").gsub(/\s\W/) { |m| m[1] }.gsub(/LRB|RRB/, "") }
+    end
     sentences.reject! { |s| s.size < 20 }
 
-    topic_query = { text: blob, topic_count: 8, top_word_count: 8 }.to_json
+    string = sentences[0..sentences.size/20].join("\n")
+
+    topic_query = { text: string, topic_count: 8, top_word_count: 8 }.to_json
     response = HTTP::Client.post("http://topic_api:4567/", body: topic_query)
     topics = JSON.parse(response.body)["topics"].as_a
     puts topics
