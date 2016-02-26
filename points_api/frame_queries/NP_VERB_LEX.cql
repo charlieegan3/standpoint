@@ -1,7 +1,8 @@
 //NP VERB LEX
 //why can't there JUST be an nsubj to the head of the NP?
 
-MATCH (verb:Node {uuid: 'VERB_UUID'})
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
 MATCH path=(subj:Node)-[REL*1..3]->(verb)
 MATCH (np2)-[rel_lex:REL]->(lex:Node)
 

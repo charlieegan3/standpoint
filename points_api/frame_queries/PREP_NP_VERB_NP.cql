@@ -1,6 +1,7 @@
 //PREP NP VERB NP
 
-MATCH (verb:Node {uuid: 'VERB_UUID'})
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
 MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
 MATCH (nmod)-[rel_prep:REL]->(prep:Node)
 MATCH (verb)-[rel_obj:REL]->(obj:Node)

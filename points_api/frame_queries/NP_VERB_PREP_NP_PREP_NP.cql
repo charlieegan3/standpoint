@@ -1,7 +1,8 @@
 //NP VERB PREP NP PREP NP
 //here the NP at the end is really a sentence, the verb is returned
 
-MATCH (verb:Node {uuid: 'VERB_UUID'})
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
 MATCH (verb)-[rel_subj:REL]->(subj:Node)
 MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
 MATCH (nmod)-[rel_prep:REL]->(prep:Node)
