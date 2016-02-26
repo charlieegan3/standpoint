@@ -10,6 +10,7 @@ class Node
   has_many :in, :parents, model_class: :Node, rel_class: :Relation
 
   def self.string_for_create(options, sentence_index)
+    options.merge!(uuid: SecureRandom.uuid)
     attribute_string = options.map do |k,v|
       v = "\"#{v}\"" unless v.is_a? Integer
       "#{k} : #{v}"

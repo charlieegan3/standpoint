@@ -51,12 +51,13 @@ class Neo4jClient
                         match p=(verb)-[*]->(related)
                         where NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
                         return verb, related;}
-    copula_query = %q{match (root_verb:Node {uuid: "NODE_UUID"})
-                      match (verb:Node)-[rel_cop:REL]->(root_verb)
-                      match p=(cop)-[*]-(related)
-                      where NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
-                      and rel_cop.label = "cop"
-                      return verb, related;}
+    copula_query = %q{match (verb:Node {uuid: "NODE_UUID"})
+                      match (cop:Node)-[rel_cop:REL]->(verb)
+                      match p=(cop)-[*]->(related)
+                      where rel_cop.label = "cop"
+                      and NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                      and related <> verb
+                      return verb, cop, related;}
     if copula
       results = []
       [standard_query, copula_query].each do |query|
@@ -69,16 +70,8 @@ class Neo4jClient
   end
 
   def permitted_descendant_string(node, copula=false)
-    (permitted_descendants(node, copula).to_a.map(&:related).push(node)).uniq.sort_by(&:index).map(&:word).join(" ")
-  end
-
-  def query(verb, query)
-    linked_query = query.gsub('VERB_UUID', verb.uuid)
-    thing = Neo4j::Session.query(linked_query).to_a.first.to_h.map do |k, v|
-      {
-        tag: k,
-        node: v,
-      }
-    end.select { |e| e[:node] }
+    permitted_descendants(node, copula).to_a.map do |result|
+      result.to_h.to_a.map(&:last)
+    end.flatten.uniq.sort_by(&:index).map(&:word).join(" ")
   end
 end
