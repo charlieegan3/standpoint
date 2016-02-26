@@ -26,13 +26,17 @@ frame_queries = Hash[*Dir.glob('frame_queries/*.cql').map do |path|
 end.flatten]
 
 post '/' do
-  sentences = corenlp_client.request_parse(request.body.read)
+  data = JSON.parse(request.body.read)
+  sentences = corenlp_client.request_parse(data['text'])
   query_string = neo4j_client.generate_create_query_for_sentences(sentences)
   neo4j_client.clear
   neo4j_client.execute(query_string)
 
   matches = PointsExtraction.matches_for_verbs(neo4j_client, frames, frame_queries)
-  PointsExtraction.points_for_matches(neo4j_client, matches).uniq.sort_by(&:size).to_json
+  PointsExtraction.points_for_matches(neo4j_client, matches, data['keys'])
+    .uniq
+    .sort_by(&:size)
+    .to_json
 end
 
 get '/' do
