@@ -32,6 +32,7 @@ post '/' do
   points = []
   Utils.chunk_text(7000, Utils.clean_text(data["text"])).each do |text|
     sentences = corenlp_client.request_parse(text)
+    sentences.select! { |s| Utils.sentence_contains_topic(s, data['topics']) }
     query_string = neo4j_client.generate_create_query_for_sentences(sentences)
     neo4j_client.clear
     neo4j_client.execute(query_string)

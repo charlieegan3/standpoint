@@ -16,4 +16,12 @@ module Utils
     text.encode(Encoding.find('UTF-8'), { invalid: :replace, undef: :replace, replace: ''})
         .gsub(/[^\w\s\n\.,\(\)\{\}\]\["'\$£;:\-&]/, " ").gsub('"', '')
   end
+
+  def self.sentence_contains_topic(sentence, topics)
+    string = sentence.first.map { |t|t['word'] }.join.downcase
+    topics.each do |t|
+      return true if string.include? t
+    end
+    false
+  end
 end
