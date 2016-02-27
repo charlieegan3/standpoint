@@ -59,24 +59,23 @@ class Neo4jClient
   def permitted_descendants(node, copula)
     standard_query = %q{match (verb:Node {uuid: "NODE_UUID"})
                         match p=(verb)-[*]->(related)
-                        where NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                        where NOT ANY (l IN ['advcl', 'csubj', 'ccomp', 'dep', 'parataxis'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
                         return verb, related;}
     copula_query = %q{match (verb:Node {uuid: "NODE_UUID"})
                       match (cop:Node)-[rel_cop:REL]->(verb)
                       match p=(cop)-[*]->(related)
                       where rel_cop.label = "cop"
-                      and NOT ANY (l IN ['advcl'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                      and NOT ANY (l IN ['advcl', 'csubj', 'ccomp', 'dep', 'parataxis'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
                       and related <> verb
                       return verb, cop, related;}
     if copula
-      results = []
-      [standard_query, copula_query].each do |query|
+      [standard_query, copula_query].map do |query|
         query.gsub!('NODE_UUID', node.uuid)
-        results << Neo4j::Session.query(query).to_a
-      end
-      return results.max_by(&:size)
+        Neo4j::Session.query(query).to_a
+      end.max_by(&:size)
+    else
+      return Neo4j::Session.query(standard_query.gsub('NODE_UUID', node.uuid)).to_a
     end
-    Neo4j::Session.query(standard_query.gsub('NODE_UUID', node.uuid))
   end
 
   def permitted_descendant_string(node, copula=false)
