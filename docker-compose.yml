@@ -41,6 +41,8 @@ neo4j:
     NEO4J_AUTH: none
   ports:
     - "7474:7474"
+  mem_limit: "2g"
+  memswap_limit: "2g"
 
 comment_store:
   container_name: comment_store

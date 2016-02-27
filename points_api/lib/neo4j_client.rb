@@ -12,6 +12,8 @@ class Neo4jClient
     end
     relations.reject! { |l, g, d| g == d || l == 'ROOT'}
 
+    return if relations.empty?
+
     nodes.map! do |word, pos, lemma, index|
       options = { word: word, part_of_speech: pos, lemma: lemma, index: index }
       Node.string_for_create(options, sentence_index)
@@ -27,7 +29,7 @@ class Neo4jClient
   def generate_create_query_for_sentences(sentences)
     query_string = "CREATE " + sentences.each_with_index.to_a.map do |data, index|
       sentence_query_components(*data, index)
-    end.join(", ")
+    end.compact.join(", ")
   end
 
   def execute(query_string)

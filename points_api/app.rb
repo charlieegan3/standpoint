@@ -11,6 +11,7 @@ require './lib/frame'
 require './lib/node'
 require './lib/relation'
 require './lib/points_extraction'
+require './lib/utils'
 
 set :port, ENV['PORT']
 set :bind, '0.0.0.0'
@@ -27,16 +28,21 @@ end.flatten]
 
 post '/' do
   data = JSON.parse(request.body.read)
-  sentences = corenlp_client.request_parse(data['text'])
-  query_string = neo4j_client.generate_create_query_for_sentences(sentences)
-  neo4j_client.clear
-  neo4j_client.execute(query_string)
 
-  matches = PointsExtraction.matches_for_verbs(neo4j_client, frames, frame_queries)
-  PointsExtraction.points_for_matches(neo4j_client, matches, data['keys'])
-    .uniq
-    .sort_by(&:size)
-    .to_json
+  points = []
+  Utils.chunk_text(7000, Utils.clean_text(data["text"])).each do |text|
+    sentences = corenlp_client.request_parse(text)
+    query_string = neo4j_client.generate_create_query_for_sentences(sentences)
+    neo4j_client.clear
+    neo4j_client.execute(query_string)
+
+    matches = PointsExtraction.matches_for_verbs(neo4j_client, frames, frame_queries)
+    points += PointsExtraction.points_for_matches(neo4j_client, matches, data['keys'])
+      .uniq
+      .sort_by(&:size)
+  end
+
+  points.to_json
 end
 
 get '/' do
