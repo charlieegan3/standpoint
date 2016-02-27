@@ -2,10 +2,10 @@
 
 MATCH (verb:Node)
 WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
-MATCH (verb)-[rel_subj:REL]->(subj:Node)
-MATCH (verb)-[rel_obj:REL]->(obj:Node)
-MATCH (obj)-[rel_prep:REL]->(prep:Node)
-WHERE rel_subj.label = "nsubj"
-AND rel_obj.label =~ 'nmod.*'
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (dobj)-[rel_prep:REL]->(prep:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label =~ 'nmod.*'
 AND rel_prep.label = "case"
-RETURN subj, verb, prep, obj;
+RETURN nsubj, verb, prep, dobj;

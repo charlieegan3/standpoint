@@ -2,16 +2,16 @@
 
 MATCH (verb:Node)
 WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
-MATCH (verb)-[rel_subj:REL]->(subj:Node)
-MATCH (verb)-[rel_obj:REL]->(obj:Node)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
 MATCH (verb)-[rel_adv:REL]->(adv:Node)
 MATCH (verb)-[rel_lex:REL]->(lex:Node)
 
-WHERE rel_subj.label = "nsubj"
-AND rel_obj.label = "dobj"
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
 AND rel_adv.label = "advmod"
 AND rel_lex.label = "advmod"
 AND adv.index < lex.index
-RETURN subj, verb, obj, lex
+RETURN nsubj, verb, dobj, lex
 
-ORDER BY subj.index;
+ORDER BY nsubj.index;

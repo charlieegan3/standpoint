@@ -2,8 +2,8 @@
 
 MATCH (verb:Node)
 WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
-MATCH (verb)-[rel_subj:REL]->(subj:Node)
-MATCH (verb)-[rel_obj:REL]->(obj:Node)
-WHERE rel_subj.label = "nsubj"
-AND rel_obj.label = "dobj"
-RETURN subj, verb, obj;
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+RETURN nsubj, verb, dobj;
