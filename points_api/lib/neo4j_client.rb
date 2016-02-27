@@ -41,11 +41,19 @@ class Neo4jClient
   end
 
   def verbs
-    non_aux_verb_query = "MATCH (verb:Node) WHERE verb.part_of_speech =~ 'VB.?'
-                          MATCH p=(verb)--(x)
-                          WHERE NOT ANY (r in relationships(p) WHERE r.label =~ 'aux.*')
-                          RETURN DISTINCT verb;"
-    Neo4j::Session.query(non_aux_verb_query).map { |e| e.verb }
+    expl_verb_query = %q{MATCH (expl_verb:Node) WHERE expl_verb.part_of_speech =~ 'VB.?'
+                         MATCH (expl_verb)-[r:REL]-(expl:Node)
+                         WHERE r.label = "expl"
+                         RETURN DISTINCT expl_verb.uuid as uuid;}
+    expl_verb_uuids = Neo4j::Session.query(expl_verb_query).map(&:uuid)
+
+    non_aux_verb_query = %q{MATCH (verb:Node) WHERE verb.part_of_speech =~ 'VB.?'
+                            MATCH p=(verb)--(x)
+                            WHERE NOT ANY (r in relationships(p) WHERE r.label =~ 'aux.*')
+                            RETURN DISTINCT verb;}
+    Neo4j::Session.query(non_aux_verb_query)
+      .map(&:verb)
+      .reject { |v| expl_verb_uuids.include? v.uuid }
   end
 
   def permitted_descendants(node, copula)
