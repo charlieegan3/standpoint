@@ -12,27 +12,18 @@ module AnalysisApi
       blob << File.read_lines(path+"/"+f).join("\n")
     end
 
-    sentences = [] of String
-    blob.in_groups_of(50).each do |group|
-      group = group.join("\n")
-      response = HTTP::Client.post("http://corenlp_server:9000/?properties=%7B%22annotators%22%3A%20%22tokenize%2Cssplit%22%7D", body: group)
-      clean = JSON.parse(response.body.gsub(/[^\w\{\}\]\[,:\s"\\']/, ""))
-        .as_h["sentences"] as Array
-      sentences += clean.map { |s| ((s as Hash)["tokens"] as Array).map { |t| (t as Hash)["word"] }.join(" ").gsub(/\s\W/) { |m| m[1] }.gsub(/LRB|RRB/, "") }
-    end
-    sentences.reject! { |s| s.size < 20 }
+    blob = blob.join(" ")
 
-    string = sentences[0..sentences.size/20].join("\n")
+    topic_text = blob.gsub(/[^\w']/, " ").gsub(/\s+/, " ").downcase[0..60000]
 
-    topic_query = { text: string, topic_count: 8, top_word_count: 8 }.to_json
+    topic_query = { text: topic_text, topic_count: 8, top_word_count: 8 }.to_json
     response = HTTP::Client.post("http://topic_api:4567/", body: topic_query)
     topics = JSON.parse(response.body)["topics"].as_a
     puts topics
 
-    sentences.select! { |s| topics.map { |t| s.downcase.includes? (t as String) }.includes? true }
-
-    sentences.each do |sentence|
-      query = { sentence: sentence }.to_json
+    count = blob.split("\n").size
+    blob.split("\n").each_with_index do |post, index|
+      query = { text: post, topics: topics, keys: %w(string pattern) }.to_json
       begin
         response = HTTP::Client.post("http://points_api:4567/", body: query)
         next unless response.status_code == 200
@@ -42,19 +33,7 @@ module AnalysisApi
         sleep 5
         next
       end
-      data.each do |point|
-        nodes = ((point as Hash)["nodes"] as Array)
-        next if nodes.size < 2
-        string = (point as Hash)["string"]
-        point = nodes.map do |c|
-          [
-            (((((c as Hash)["match"] as Hash)["node"]  as Hash)["node"]) as Hash)["lemma"],
-            (((c as Hash)["match"] as Hash)["tag"] as String)
-          ].join(".")
-        end
-        point = { point: point, string: string }
-        puts point.to_json
-      end
+      data.map { |p| puts "#{(index.to_f/count) * 100} #{p.to_json}" }
     end
   end
 end
