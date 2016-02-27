@@ -14,6 +14,6 @@ module Utils
 
   def self.clean_text(text)
     text.encode(Encoding.find('UTF-8'), { invalid: :replace, undef: :replace, replace: ''})
-        .gsub(/[^\w\s\n\.,\(\)\{\}\]\["'\$£;:\-&]/, " ")
+        .gsub(/[^\w\s\n\.,\(\)\{\}\]\["'\$£;:\-&]/, " ").gsub('"', '')
   end
 end
