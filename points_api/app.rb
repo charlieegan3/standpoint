@@ -42,7 +42,7 @@ post '/' do
         neo4j_client.execute(query_string)
       end
       matches = PointsExtraction.matches_for_verbs(neo4j_client, frames, frame_queries)
-      points += PointsExtraction.points_for_matches(neo4j_client, matches, data['keys'])
+      points += PointsExtraction.points_for_matches(neo4j_client, matches, data['topics'], data['keys'])
         .uniq
         .sort_by(&:size)
     rescue Exception => ex

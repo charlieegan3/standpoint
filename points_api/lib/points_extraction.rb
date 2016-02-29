@@ -1,15 +1,20 @@
 module PointsExtraction
   COPULAE = %w(act appear be become come end get go grow fall feel keep look prove remain run seem smell sound stay taste turn wax)
 
-  def self.points_for_matches(neo4j_client, matches, keys)
+  def self.points_for_matches(neo4j_client, matches, topics, keys)
     points = matches.map do |verb, results|
       results.reject! { |r| r.first.to_a.compact.size < 2 }
       next if results.empty?
       string = neo4j_client.permitted_descendant_string(verb, PointsExtraction::COPULAE.include?(verb.lemma))
       results.map do |r|
-        next if r.last.map { |f| f[:frames] }.uniq == [:generic] && r.first.to_a.compact.size < 3
-        result = {}
         match = Hash[r.first.to_h.to_a.reject { |e| e.last.nil? }]
+        if r.last.map { |f| f[:frames] }.uniq == [:generic] &&
+             r.first.to_a.compact.size < 3 &&
+             (match.map {|_, v| v.word } & topics).empty? &&
+             (match.map {|_, v| v.word }.map(&:length).reduce(&:+) / match.size) < 5
+          next
+        end
+        result = {}
         result.merge!(string: string) if keys.include? 'string'
         result.merge!(match: match) if keys.include? 'match'
         result.merge!(pattern: match.map { |k, v| "#{v.lemma}.#{k}" }.join(" ")) if keys.include? 'pattern'
