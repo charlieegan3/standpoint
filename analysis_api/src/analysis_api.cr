@@ -21,19 +21,20 @@ module AnalysisApi
     topics = JSON.parse(response.body)["topics"].as_a
     puts topics
 
-    count = blob.split("\n").size
-    blob.split("\n").each_with_index do |post, index|
+    lines = blob.split("\n").reject {|l|l.size < 30}
+    puts lines.size
+    lines.each_with_index do |post, index|
       query = { text: post, topics: topics, keys: %w(string pattern) }.to_json
       begin
         response = HTTP::Client.post("http://points_api:4567/", body: query)
-        next unless response.status_code == 200
+        raise(response.body) unless response.status_code == 200
         data = JSON.parse(response.body).as_a
       rescue ex
         puts ex.message
-        sleep 5
+        gets
         next
       end
-      data.map { |p| puts "#{(index.to_f/count) * 100} #{p.to_json}" }
+      data.map { |p| puts "#{index} #{p.to_json}" }
     end
   end
 end
