@@ -7,6 +7,7 @@ module PointsExtraction
       next if results.empty?
       string = neo4j_client.permitted_descendant_string(verb, PointsExtraction::COPULAE.include?(verb.lemma))
       results.map do |r|
+        next if r.last.map { |f| f[:frames] }.uniq == [:generic] && r.first.to_a.compact.size < 3
         result = {}
         match = Hash[r.first.to_h.to_a.reject { |e| e.last.nil? }]
         result.merge!(string: string) if keys.include? 'string'
