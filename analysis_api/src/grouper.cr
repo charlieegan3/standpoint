@@ -1,15 +1,28 @@
 require "json"
 
 class Point
-  getter :string, :components
+  getter :string, :components, :words, :verb, :relations
   def initialize(string : String, components : Array)
     @components, @string = components, string
+    @components.map!(&.gsub(/cop|pass/, ""))
+    @words = @components.map(&.split(".").first)
+    @relations = @components.map(&.split(".").last)
+    @verb = @components.select { |c| c.includes? ".verb" }.first.split(".").first
   end
 
   def matches?(point : Point)
     return false if point == self
+    return false unless verb == point.verb
+    matches_words(point) || matches_components(point)
+  end
+
+  def matches_components(point : Point)
     (components - point.components).empty? &&
     (point.components - components).empty?
+  end
+
+  def matches_words(point : Point)
+    words == point.words
   end
 
   def verb
@@ -38,6 +51,17 @@ module Grouper
       Point.new(p["string"].to_s, p["pattern"].to_s.split(" "))
     end
 
+    blacklist = %w(it.nsubj that.nsubj this.nsubj which.nsubj what.nsubj)
+    points.reject! { |p| blacklist.includes? p.components.first }
+
+    personlist = %w(I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj)
+    points.map! do |p|
+      if personlist.includes? p.components.first
+        p.components[0] = "PERSON.nsubj"
+      end
+      p
+    end
+
     puts
     puts "GROUPED (auto)"
     puts "="*120
@@ -46,7 +70,7 @@ module Grouper
     groups = [] of Array(Point)
     size = points.size
     points.each_with_index do |point, index|
-      puts (index.to_f / size) * 100 if index % 100 == 0
+      puts (index.to_f / size) * 100 if index % 300 == 0
       next if matched.includes? point
       matched << point
       group = [] of Point
@@ -62,8 +86,8 @@ module Grouper
     end
 
     groups.sort_by(&.size).reverse.each do |g|
-      puts g.first.components.join(", ")
-      g.each do |p|
+      puts g.first.components.join(" ")
+      g.uniq(&.string).each do |p|
         puts "   " + p.string
       end
     end
