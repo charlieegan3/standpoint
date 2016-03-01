@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"regexp"
 	"sort"
 	"strings"
@@ -107,7 +108,7 @@ func (a ByLen) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByLen) Less(i, j int) bool { return len(a[i]) > len(a[j]) }
 
 func main() {
-	b, err := ioutil.ReadFile("points7")
+	b, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
@@ -115,7 +116,7 @@ func main() {
 
 	points := []Point{}
 	for i, v := range contents {
-		if i == 0 || v == "" {
+		if i < 2 || v == "" {
 			continue
 		}
 		line := strings.Split(v, " ")
@@ -126,12 +127,15 @@ func main() {
 	}
 
 	bannedList := strings.Split("it.nsubj that.nsubj this.nsubj which.nsubj what.nsubj", " ")
-	bannedPersonList := strings.Split("object debate speak show stand call refer lose change care hear write disagree read tell start talk explain come live take support guess feel make go get agree find fail feel ask argue try", " ")
+	bannedPersonList := strings.Split("object believe happen leave understand realize debate speak show stand call refer believe lose change care hear write disagree read tell start talk explain come live take support guess feel follow make go get move agree find fail feel ask argue try", " ")
 	for i, v := range bannedPersonList {
 		bannedPersonList[i] = fmt.Sprintf("%v.verb", v)
 	}
 	bannedComponentList := []string{
 		"PERSON.nsubj be.verb correct.dobj",
+		"PERSON.nsubj be.verb able.dobj",
+		"PERSON.nsubj be.verb good.dobj",
+		"PERSON.nsubj be.verb likely.dobj",
 		"PERSON.nsubj be.verb sorry.dobj",
 		"PERSON.nsubj be.verb say.dobj",
 		"PERSON.nsubj be.verb aware.dobj",
@@ -139,13 +143,24 @@ func main() {
 		"PERSON.nsubj be.verb sure.dobj",
 		"PERSON.nsubj be.verb wrong.dobj",
 		"PERSON.nsubj be.verb glad.dobj",
+		"PERSON.nsubj be.verb here.dobj",
 		"PERSON.nsubj be.verb willing.dobj",
+		"PERSON.nsubj be.verb right.dobj",
+		"PERSON.nsubj want.verb have.xcomp",
 		"PERSON.nsubj want.verb what.dobj",
 		"PERSON.nsubj say.verb what.dobj",
-		"PERSON.nsubj want.verb have.xcomp",
-		"PERSON.nsubj be.verb here.dobj",
+		"PERSON.nsubj mean.verb what.dobj",
+		"PERSON.nsubj know.verb what.dobj",
+		"PERSON.nsubj believe.verb what.dobj",
+		"PERSON.nsubj see.verb what.dobj",
+		"PERSON.nsubj have.verb problem.dobj",
 		"PERSON.nsubj tell.verb they.dobj",
 		"debate.nsubj be.verb about.dobj",
+		"question.nsubj be.verb",
+		"make.verb claim.dobj",
+		"ask.verb yourself.dobj",
+		"thing.nsubj happen.verb",
+		"something.nsubj happen.verb",
 	}
 	personList := strings.Split("who.nsubj we.nsubj I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj", " ")
 
@@ -167,7 +182,7 @@ func main() {
 			i--
 		}
 	}
-	fmt.Printf("%v points removed\n", originalSize-len(points))
+	fmt.Printf("%v of %v points disqualified\n", originalSize-len(points), originalSize)
 
 	var groups [][]Point
 	for {
