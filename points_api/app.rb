@@ -30,7 +30,7 @@ post '/' do
   data = JSON.parse(request.body.read)
 
   points = []
-  Utils.chunk_text(70000, Utils.clean_text(data["text"])).each do |text|
+  Utils.chunk_text(35000, Utils.clean_text(data["text"])).each do |text|
     neo4j_client.clear
     sentences = corenlp_client.request_parse(text)
     sentences.select! { |s| Utils.sentence_contains_topic(s, data['topics']) }

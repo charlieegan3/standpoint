@@ -12,7 +12,7 @@ module AnalysisApi
       blob << File.read_lines(path+"/"+f).join("\n")
     end
 
-    blob = blob.join(" ")
+    blob = blob.join("\n")
 
     topic_text = blob.gsub(/[^\w']/, " ").gsub(/\s+/, " ").downcase[0..60000]
 
