@@ -104,7 +104,7 @@ type ByLen [][]Point
 
 func (a ByLen) Len() int           { return len(a) }
 func (a ByLen) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByLen) Less(i, j int) bool { return len(a[i]) < len(a[j]) }
+func (a ByLen) Less(i, j int) bool { return len(a[i]) > len(a[j]) }
 
 func main() {
 	b, err := ioutil.ReadFile("points7")
@@ -112,7 +112,6 @@ func main() {
 		panic(err)
 	}
 	contents := strings.Split(string(b), "\n")
-	contents = contents[:5000]
 
 	points := []Point{}
 	for i, v := range contents {
@@ -127,51 +126,62 @@ func main() {
 	}
 
 	bannedList := strings.Split("it.nsubj that.nsubj this.nsubj which.nsubj what.nsubj", " ")
-	bannedPersonList := strings.Split("object talk explain come live take support guess feel make go get agree find fail feel ask argue try", " ")
+	bannedPersonList := strings.Split("object debate speak show stand call refer lose change care hear write disagree read tell start talk explain come live take support guess feel make go get agree find fail feel ask argue try", " ")
 	for i, v := range bannedPersonList {
 		bannedPersonList[i] = fmt.Sprintf("%v.verb", v)
 	}
-	bannedPersonComponentList := []string{
+	bannedComponentList := []string{
 		"PERSON.nsubj be.verb correct.dobj",
+		"PERSON.nsubj be.verb sorry.dobj",
+		"PERSON.nsubj be.verb say.dobj",
+		"PERSON.nsubj be.verb aware.dobj",
+		"PERSON.nsubj be.verb one.dobj",
 		"PERSON.nsubj be.verb sure.dobj",
 		"PERSON.nsubj be.verb wrong.dobj",
-		"PERSON.nsubj want.verb what.dobj",
 		"PERSON.nsubj be.verb glad.dobj",
 		"PERSON.nsubj be.verb willing.dobj",
+		"PERSON.nsubj want.verb what.dobj",
+		"PERSON.nsubj say.verb what.dobj",
+		"PERSON.nsubj want.verb have.xcomp",
+		"PERSON.nsubj be.verb here.dobj",
+		"PERSON.nsubj tell.verb they.dobj",
 		"debate.nsubj be.verb about.dobj",
 	}
-	personList := strings.Split("we.nsubj I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj", " ")
+	personList := strings.Split("who.nsubj we.nsubj I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj", " ")
 
-	for i, point := range points {
-		if containsStr(bannedList, point.Components[0]) {
-			points = append(points[:i], points[i+1:]...)
-		} else if containsStr(personList, point.Components[0]) {
+	originalSize := len(points)
+
+	for i := 0; i < len(points); i++ {
+		point := points[i]
+		if containsStr(personList, point.Components[0]) {
 			point.Components[0] = "PERSON.nsubj"
 		}
-		if len(point.Components) == 2 && point.Components[0] == "PERSON.nsubj" && containsStr(bannedPersonList, point.Components[1]) {
+		if containsStr(bannedList, point.Components[0]) {
 			points = append(points[:i], points[i+1:]...)
-		} else if containsStr(bannedPersonComponentList, strings.Join(point.Components, " ")) {
+			i--
+		} else if len(point.Components) == 2 && point.Components[0] == "PERSON.nsubj" && containsStr(bannedPersonList, point.Components[1]) {
 			points = append(points[:i], points[i+1:]...)
+			i--
+		} else if containsStr(bannedComponentList, strings.Join(point.Components, " ")) {
+			points = append(points[:i], points[i+1:]...)
+			i--
 		}
 	}
+	fmt.Printf("%v points removed\n", originalSize-len(points))
 
-	var matched []int
 	var groups [][]Point
-	size := len(points)
-	for i, outer := range points {
-		fmt.Printf("%v\n", float32(i)/float32(size))
-		if containsInt(matched, i) {
-			continue
+	for {
+		if len(points) == 0 {
+			break
 		}
-		matched = append(matched, i)
-		var group []Point
-		for j, inner := range points {
-			if containsInt(matched, j) {
-				continue
-			}
-			if outer.matches(inner) {
-				group = append(group, inner)
-				matched = append(matched, j)
+		seed := points[0]
+		points = points[1:]
+		group := []Point{seed}
+		for i := 0; i < len(points); i++ {
+			if seed.matches(points[i]) {
+				group = append(group, points[i])
+				points = append(points[:i], points[i+1:]...)
+				i--
 			}
 		}
 		if len(group) < 5 {
@@ -182,9 +192,15 @@ func main() {
 	sort.Sort(ByLen(groups))
 
 	for _, group := range groups {
-		fmt.Printf("%v : %v\n", len(group), group[0].Components)
+		fmt.Printf("\n%v : %v\n", len(group), group[0].Components)
+		var uniqStrs []string
 		for _, point := range group {
-			fmt.Printf("    %v\n", point.String)
+			if !containsStr(uniqStrs, point.String) {
+				uniqStrs = append(uniqStrs, point.String)
+			}
+		}
+		for _, point := range uniqStrs {
+			fmt.Printf("    %v\n", point)
 		}
 	}
 }
