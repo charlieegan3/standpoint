@@ -7,19 +7,29 @@ def sorted_dup_hash(array)
   sort_by {|_,v| v}.reverse.flatten]
 end
 
-data = JSON.parse(File.open("summary.json").read.downcase).take(20)
+data = JSON.parse(File.open("summary.json").read.downcase).take(30)
 patterns = data.map { |x| x["pattern"].split(" ").map{|x|x.split(".").first }}
 
-words = []
+words, verbs = [], []
 data.each do |point|
   point["count"].times do
-    words += point["pattern"].split(" ").map{|x|x.split(".").first }
+    point["pattern"].split(" ").map{ |x| x.split(".") }.each do |word, rel|
+      words << word
+      verbs << word if rel == "verb"
+    end
   end
 end
+verbs.uniq!
 
-#words = Hash[*sorted_dup_hash(words).map { |k, v| [k, Math::log(v).round(2)] }.flatten]
-words = Hash[*sorted_dup_hash(words).map { |k, v| [k, v] }.flatten]
-nodes = words.map { |k, v| { id: k, value: k, weight: v } }
+words = Hash[*sorted_dup_hash(words).map { |k, v| [k, Math::log(v).round(2) * 50] }.flatten]
+nodes = words.map do |k, v|
+  {
+    id: k,
+    value: k,
+    weight: v,
+    type: verbs.include?(k) ? "verb" : "",
+  }
+end
 
 edges = []
 patterns.each do |pattern|
