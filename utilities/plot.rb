@@ -7,13 +7,18 @@ def sorted_dup_hash(array)
   sort_by {|_,v| v}.reverse.flatten]
 end
 
-data = JSON.parse(File.open("summary.json").read.downcase).take(30)
-patterns = data.map { |x| x["pattern"].split(" ").map{|x|x.split(".").first }}
+data = File.open("summary.txt").readlines.select { |l| l.match(/^[0-9]+ : \[/) }.take(30)
+data.map! do |l|
+  l = l.split(" : ")
+  { count: l.first.to_i, pattern: l.last.gsub(/\[|\]/, "").chomp }
+end
+
+patterns = data.map { |x| x[:pattern].split(" ").map{|x|x.split(".").first }}
 
 words, verbs = [], []
 data.each do |point|
-  point["count"].times do
-    point["pattern"].split(" ").map{ |x| x.split(".") }.each do |word, rel|
+  point[:count].times do
+    point[:pattern].split(" ").map{ |x| x.split(".") }.each do |word, rel|
       words << word
       verbs << word if rel == "verb"
     end
@@ -56,4 +61,7 @@ nodes.select! { |n| in_relationship.include?(n[:id]) }
 
 nodes.map! { |e| { data: e } }
 edges.map! { |e| { data: e } }
-puts Hash[:elements, { nodes: nodes, edges: edges }].to_json[1..-2]
+elements = Hash[:elements, { nodes: nodes, edges: edges }].to_json[1..-2]
+
+template = File.open("graph.html").read
+File.open("output.html", "w").write(template.gsub('"elements":{"nodes":[], "edges":[]}', elements))
