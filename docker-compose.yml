@@ -2,10 +2,8 @@ analysis_api:
   container_name: analysis_api
   build: ./analysis_api
   links:
-    - comment_store:comment_store
     - points_api:points_api
     - topic_api:topic_api
-    - corenlp_server:corenlp_server
   volumes:
     - "./analysis_api:/app"
 
