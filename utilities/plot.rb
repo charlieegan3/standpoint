@@ -9,7 +9,7 @@ end
 
 data = File.open("summary.txt").readlines.select { |l| l.match(/^[0-9]+ : \[/) }.take(30)
 data.map! do |l|
-  l = l.split(" : ")
+  l = l.downcase.split(" : ")
   { count: l.first.to_i, pattern: l.last.gsub(/\[|\]/, "").chomp }
 end
 
