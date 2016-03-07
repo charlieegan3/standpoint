@@ -1,11 +1,12 @@
 require "json"
 require 'net/http'
 
-path = "debates/abortion/*"
+path = "debates/guns/*"
 posts = []
 Dir.glob(path) do |f|
   next unless f.include? "json"
-  posts << JSON.parse(File.open(f).read)
+  post = JSON.parse(File.open(f).read)
+  posts << post if post["content"].length > 30
 end
 
 topic_text = posts.map{ |p| p["content"] }.join("\n").gsub(/[^\w']/, " ").gsub(/\s+/, " ").downcase[0..60000]
@@ -21,15 +22,12 @@ topics = JSON.parse(http.request(req).body)["topics"]
 puts posts.size
 uri = URI('http://points_api:4567/')
 http = Net::HTTP.new(uri.host, uri.port)
+puts "["
 posts.each_with_index do |post, index|
   query = { text: post["content"], topics: topics, keys: %w(string pattern) }.to_json
-  begin
-    req = Net::HTTP::Post.new(uri)
-    req.body = query
-    data = JSON.parse(http.request(req).body)
-  rescue Exception => e
-    puts e.message
-    next
-  end
-  data.map { |p| puts p.merge(post).to_json }
+  req = Net::HTTP::Post.new(uri)
+  req.body = query
+  data = JSON.parse(http.request(req).body)
+  data.map { |p| puts "#{p.merge(post).to_json}," }
 end
+puts "]"
