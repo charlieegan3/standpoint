@@ -5,13 +5,16 @@ folder_paths = %w(abortion  creation  gayRights  god  guns  healthcare).map {|f|
 
 folder_paths.each do |path|
   puts path
-  Dir.glob(path).to_a.each_with_index do |file, index|
+  Dir.glob(path).to_a.each do |file, index|
+    if file.include? "json"
+      `rm #{file}`
+      next
+    end
     content = File.open(file).read
     content = content.chars.select(&:valid_encoding?).join
 
     meta = Hash[*content.scan(/^#.*=.*$/).map { |e| e.delete('#').split("=") }.flatten]
-    meta = meta.inject({}){ |memo,(k,v)| memo[k.to_sym] = v; memo }.merge!(post: index)
-
+    meta = meta.inject({}){ |memo,(k,v)| memo[k.to_sym] = v; memo }.merge!(post: file.gsub(/[^0-9]/, ''))
 
     content = content
       .gsub(/^#.*=.*$/, "")
