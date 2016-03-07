@@ -1,7 +1,12 @@
 require "json"
 require 'net/http'
 
-path = "debates/guns/*"
+unless ARGV[0]
+  puts "missing corpus"
+  exit
+end
+
+path = "debates/#{ARGV[0]}/*"
 posts = []
 Dir.glob(path) do |f|
   next unless f.include? "json"
@@ -19,15 +24,15 @@ req = Net::HTTP::Post.new(uri)
 req.body = topic_query
 topics = JSON.parse(http.request(req).body)["topics"]
 
-puts posts.size
+out_file = File.open("#{ARGV[0]}_points.txt", "w")
+
+out_file.write("#{posts.size}\n")
 uri = URI('http://points_api:4567/')
 http = Net::HTTP.new(uri.host, uri.port)
-puts "["
 posts.each_with_index do |post, index|
   query = { text: post["content"], topics: topics, keys: %w(string pattern) }.to_json
   req = Net::HTTP::Post.new(uri)
   req.body = query
   data = JSON.parse(http.request(req).body)
-  data.map { |p| puts "#{p.merge(post).to_json}," }
+  data.map { |p| out_file.write("#{p.merge(post).to_json},\n") }
 end
-puts "]"
