@@ -11,16 +11,26 @@ import (
 )
 
 type RawPoint struct {
-	String  string
-	Pattern string
+	String             string
+	Pattern            string
+	Stance             string
+	OriginalStanceText string
+	OriginalTopic      string
+	Post               string
+	Content            string
 }
 
 type Point struct {
-	String     string
-	Verb       string
-	Components []string
-	Words      []string
-	Relations  []string
+	String             string
+	Verb               string
+	Stance             string
+	OriginalStanceText string
+	OriginalTopic      string
+	Post               string
+	Content            string `json:"-"`
+	Components         []string
+	Words              []string
+	Relations          []string
 }
 
 func (p *Point) print() {
@@ -78,6 +88,30 @@ func containsInt(s []int, e int) bool {
 	return false
 }
 
+func removeDuplicates(elements []int) []int {
+	encountered := map[int]bool{}
+	result := []int{}
+
+	for v := range elements {
+		if encountered[elements[v]] == true {
+		} else {
+			encountered[elements[v]] = true
+			result = append(result, elements[v])
+		}
+	}
+	return result
+}
+
+func pairs(arr []int) [][]int {
+	var pairs [][]int
+	for i := 0; i < len(arr); i++ {
+		for j := i + 1; j < len(arr); j++ {
+			pairs = append(pairs, []int{arr[i], arr[j]})
+		}
+	}
+	return pairs
+}
+
 func upgradePoint(p RawPoint) Point {
 	pattern := regexp.MustCompile("cop|pass").ReplaceAllString(p.Pattern, "")
 	components := strings.Split(pattern, " ")
@@ -93,11 +127,16 @@ func upgradePoint(p RawPoint) Point {
 		relations = append(relations, parts[1])
 	}
 	return Point{
-		String:     p.String,
-		Verb:       verb,
-		Components: components,
-		Relations:  relations,
-		Words:      words,
+		String:             p.String,
+		Stance:             p.Stance,
+		OriginalStanceText: p.OriginalStanceText,
+		OriginalTopic:      p.OriginalTopic,
+		Post:               p.Post,
+		Content:            p.Content,
+		Verb:               verb,
+		Components:         components,
+		Relations:          relations,
+		Words:              words,
 	}
 }
 
@@ -112,17 +151,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	contents := strings.Split(string(b), "\n")
 
 	points := []Point{}
+	contents := strings.Split(string(b), "\n")
 	for i, v := range contents {
-		if i < 2 || v == "" {
+		if i == 0 || len(v) < 4 {
 			continue
 		}
-		line := strings.Split(v, " ")
-		jsonStr := strings.Join(line[1:len(line)], " ")
-		rawPoint := RawPoint{}
-		json.Unmarshal([]byte(jsonStr), &rawPoint)
+		var rawPoint = RawPoint{}
+		json.Unmarshal([]byte(v[0:len(v)-1]), &rawPoint)
 		points = append(points, upgradePoint(rawPoint))
 	}
 
@@ -155,6 +192,7 @@ func main() {
 		"PERSON.nsubj see.verb what.dobj",
 		"PERSON.nsubj have.verb problem.dobj",
 		"PERSON.nsubj tell.verb they.dobj",
+		"PERSON.nsubj think.verb what.dobj",
 		"debate.nsubj be.verb about.dobj",
 		"question.nsubj be.verb",
 		"make.verb claim.dobj",
@@ -184,7 +222,18 @@ func main() {
 	}
 	fmt.Printf("%v of %v points disqualified\n", originalSize-len(points), originalSize)
 
+	for _, v := range points {
+		b, err := json.Marshal(v)
+		if err != nil {
+			return
+		}
+		fmt.Println(string(b))
+	}
+
+	return
+
 	var groups [][]Point
+	pointsList := points
 	for {
 		if len(points) == 0 {
 			break
@@ -205,6 +254,49 @@ func main() {
 		groups = append(groups, group)
 	}
 	sort.Sort(ByLen(groups))
+
+	pointMap := make(map[string]int)
+	for i, group := range groups {
+		pointMap[strings.ToLower(group[0].componentString())] = i
+	}
+
+	points = pointsList
+	var users [][]Point
+	for {
+		if len(points) == 0 {
+			break
+		}
+		seed := points[0]
+		points = points[1:]
+		group := []Point{seed}
+		for i := 0; i < len(points); i++ {
+			if seed.Post == points[i].Post {
+				group = append(group, points[i])
+				points = append(points[:i], points[i+1:]...)
+				i--
+			}
+		}
+		if len(group) < 2 {
+			continue
+		}
+		users = append(users, group)
+	}
+	sort.Sort(ByLen(users))
+
+	for _, group := range users {
+		indexes := []int{}
+		for _, v := range group {
+			index := pointMap[v.componentString()]
+			if !containsInt(indexes, index) {
+				indexes = append(indexes, index)
+			}
+		}
+		if len(indexes) < 2 {
+			continue
+		}
+		fmt.Printf("%v: %v\n", group[0].Post, indexes)
+	}
+	return
 
 	for _, group := range groups {
 		fmt.Printf("\n%v : %v\n", len(group), group[0].Components)
