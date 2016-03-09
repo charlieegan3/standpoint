@@ -14,11 +14,11 @@ module Utils
 
   def self.clean_text(text)
     text.encode(Encoding.find('UTF-8'), { invalid: :replace, undef: :replace, replace: ''})
-        .gsub(/[^\w\s\n\.,\(\)\{\}\]\["'\$£;:\-&]/, " ").gsub('"', '')
+        .gsub(/[^\w\s\n\.,\(\)\{\}\]\["'\$£;:\-&\?]/, " ").gsub('"', '')
   end
 
   def self.sentence_contains_topic(sentence, topics)
-    string = sentence.first.map { |t|t['word'] }.join.downcase
+    string = sentence.first.map { |t| t['word'] }.join.downcase
     topics.each do |t|
       return true if string.include? t
     end
