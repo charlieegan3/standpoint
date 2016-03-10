@@ -1,60 +1,49 @@
-require 'json'
-require 'pry'
+module Counters
+  def self.counter_points(points)
+    antonyms = JSON.parse(File.open("antonyms.json").read)
+    groups = points.group_by { |p| p["Components"] }
 
-antonyms = JSON.parse(File.open("antonyms.json").read)
-points = File.open(ARGV[0]).readlines[1..-1].map { |x| JSON.parse(x) }
-groups = points.group_by { |p| p["Components"].join(" ") }
+    counters = counters_for_points(points, groups, antonyms)
 
-counter_points = {}
-points.uniq { |p| p["Components"] }.each do |p|
-  options = []
-  p["Components"].map { |c| c.split(".").first }.each do |w|
-    options << (antonyms[w] || [w])
-  end
-
-  next if options.flatten == p["Components"].map { |c| c.split(".").first }
-
-  permutations = options.first.map { |x| [x] }
-  options[1..-1].each do |o|
-    permutations.each do |permutation|
-      new_permutations = []
-      o.each do |w|
-        new_permutations << (permutation + [w])
+    counters.each do |k, v|
+      v.each do |counter|
+        counters.delete(counter) # remove mirrors
       end
-      permutations = new_permutations
+    end
+
+    counters.sort_by { |k, v| groups[k].size + groups[v.first].size }.reverse
+  end
+
+  def self.replacement_options(point, antonyms)
+    [].tap do |options|
+      point["Components"].map { |c| c.split(".").first }.each do |w|
+        options << (antonyms[w] || [w])
+      end
     end
   end
 
-  permutations.map do |permutation|
-    if permutation.zip(p["Relations"]).map { |x| x.join(".") }.join(" ") == p["Components"].join(" ")
-      binding.pry
-    end
-  end
+  def self.counters_for_points(points, groups, antonyms)
+    {}.tap do |counter_points|
+      points.uniq { |p| p["Components"] }.each do |p|
+        options = replacement_options(p, antonyms)
 
-  counter_points[p["Components"].join(" ")] = permutations.map do |permutation|
-    permutation.zip(p["Relations"]).map { |x| x.join(".") }.join(" ")
-  end.select { |p| groups[p] }
-end
+        next if options.flatten == p["Components"].map { |c| c.split(".").first }
 
-counter_points.reject! { |_, v| v.empty? }
-counter_points.each do |k, v|
-  v.each do |counter|
-    counter_points.delete(counter)
-  end
-end
+        permutations = options.first.map { |index| [index] }
+        options[1..-1].each do |o|
+          permutations.each do |permutation|
+            new_permutations = []
+            o.each do |w|
+              new_permutations << (permutation + [w])
+            end
+            permutations = new_permutations
+          end
+        end
 
-counter_points.each do |point, counters|
-  counters.each do |c|
-    point_extracts = groups[point].map { |p| "      " + p["String"] }.uniq.take(20)
-    counter_extracts = groups[c].map { |p| "      " + p["String"] }.uniq.take(20)
-    next if counter_extracts.size < 3 || point_extracts.size < 3
-    puts "========== COUNTER POINT =========="
-    puts "  Point: #{point}"
-    puts "Counter: #{c}"
-    puts "Point Extracts: (max 20 listed)"
-    puts point_extracts
-    puts "Counter Extracts: (max 20 listed)"
-    puts counter_extracts
-    puts
+        counter_points[p["Components"]] = permutations.map do |permutation|
+          permutation.zip(p["Relations"]).map { |x| x.join(".") }
+        end.select { |p| groups[p] }
+      end
+    end.reject! { |_, v| v.empty? }
   end
 end
