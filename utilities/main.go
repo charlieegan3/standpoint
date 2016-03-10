@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
-	"sort"
 	"strings"
 )
 
@@ -186,6 +185,7 @@ func main() {
 		"PERSON.nsubj be.verb true.dobj",
 		"PERSON.nsubj be.verb false.dobj",
 		"PERSON.nsubj be.verb favor.dobj",
+		"PERSON.nsubj be.verb interested.dobj",
 		"PERSON.nsubj want.verb have.xcomp",
 		"PERSON.nsubj want.verb what.dobj",
 		"PERSON.nsubj say.verb what.dobj",
@@ -222,6 +222,9 @@ func main() {
 		} else if containsStr(bannedComponentList, strings.Join(point.Components, " ")) {
 			points = append(points[:i], points[i+1:]...)
 			i--
+		} else if len(point.String) < 10 {
+			points = append(points[:i], points[i+1:]...)
+			i--
 		}
 	}
 	fmt.Printf("%v of %v points disqualified\n", originalSize-len(points), originalSize)
@@ -232,86 +235,5 @@ func main() {
 			return
 		}
 		fmt.Println(string(b))
-	}
-
-	return
-
-	var groups [][]Point
-	pointsList := points
-	for {
-		if len(points) == 0 {
-			break
-		}
-		seed := points[0]
-		points = points[1:]
-		group := []Point{seed}
-		for i := 0; i < len(points); i++ {
-			if seed.matches(points[i]) {
-				group = append(group, points[i])
-				points = append(points[:i], points[i+1:]...)
-				i--
-			}
-		}
-		if len(group) < 5 {
-			continue
-		}
-		groups = append(groups, group)
-	}
-	sort.Sort(ByLen(groups))
-
-	pointMap := make(map[string]int)
-	for i, group := range groups {
-		pointMap[strings.ToLower(group[0].componentString())] = i
-	}
-
-	points = pointsList
-	var users [][]Point
-	for {
-		if len(points) == 0 {
-			break
-		}
-		seed := points[0]
-		points = points[1:]
-		group := []Point{seed}
-		for i := 0; i < len(points); i++ {
-			if seed.Post == points[i].Post {
-				group = append(group, points[i])
-				points = append(points[:i], points[i+1:]...)
-				i--
-			}
-		}
-		if len(group) < 2 {
-			continue
-		}
-		users = append(users, group)
-	}
-	sort.Sort(ByLen(users))
-
-	for _, group := range users {
-		indexes := []int{}
-		for _, v := range group {
-			index := pointMap[v.componentString()]
-			if !containsInt(indexes, index) {
-				indexes = append(indexes, index)
-			}
-		}
-		if len(indexes) < 2 {
-			continue
-		}
-		fmt.Printf("%v: %v\n", group[0].Post, indexes)
-	}
-	return
-
-	for _, group := range groups {
-		fmt.Printf("\n%v : %v\n", len(group), group[0].Components)
-		var uniqStrs []string
-		for _, point := range group {
-			if !containsStr(uniqStrs, point.String) {
-				uniqStrs = append(uniqStrs, point.String)
-			}
-		}
-		for _, point := range uniqStrs {
-			fmt.Printf("    %v\n", point)
-		}
 	}
 }
