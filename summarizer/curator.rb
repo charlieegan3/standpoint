@@ -23,7 +23,6 @@ module Curator
 
     points.uniq! { |p| p["String"] }
 
-
     points.each do |point|
       parse = cnc.request_parse(clean_string(point["String"])).first
       point["Relations"], point["Lemmas"] = relations_and_lemmas_from_parse(parse)
@@ -41,8 +40,9 @@ module Curator
       point["String"].gsub(" ", "").match(/,{2,}/) ||
       point["String"].match(/([A-Z]+ ){2,}/) ||
       point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
-      point["Relations"].count { |r| r.match(/acl/) } > 0 ||
-      point["Relations"].count { |r| r.match(/conj|nmod|acl/) } > 2
+      point["Relations"].count { |r| r.match(/acl|csubj|ccomp/) } > 0 ||
+      point["Relations"].count { |r| r.match(/conj|nmod|acl/) } > 2 ||
+      contains_case_change(point)
     end.sort_by { |p| p["String"].length }.last
   end
 
@@ -69,6 +69,15 @@ module Curator
       .map { |k, v| [k-1, v.map { |r| r["dep"] }] }
       .sort_by { |index, _| index }
       .map(&:last).map { |r| r.join("|") }
-    return relations, parse.first.map { |t| t["lemma"] + ":" + t["originalText"] }
+    return relations, parse.first.map { |t| t["lemma"] + ":" + t["originalText"] + ":" + t["pos"] }
+  end
+
+  def self.contains_case_change(point)
+    return false unless point["String"].match(/\s[A-Z]/)
+    point["Lemmas"].count do |e|
+      next unless e.match(/\w/) && point["Lemmas"].index(e) > 0
+      e = e.split(":")
+      e[1].match(/^[A-Z]/) && !e[2].match(/^NN|^PRP/) && e[1].upcase != e[1]
+    end > 0
   end
 end
