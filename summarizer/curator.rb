@@ -42,7 +42,8 @@ module Curator
       point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
       point["Relations"].count { |r| r.match(/acl|csubj|ccomp/) } > 0 ||
       point["Relations"].count { |r| r.match(/conj|nmod|acl/) } > 2 ||
-      contains_case_change(point)
+      contains_case_change(point) ||
+      contains_bad_it(point)
     end.sort_by { |p| p["String"].length }.last
   end
 
@@ -57,8 +58,12 @@ module Curator
       .gsub("-LSB-", "[").gsub("-RSB-", "]")
       .gsub("[ ", "[").gsub(" ]", "]").strip
       .gsub("` ", "'")
-    string.gsub!(/^(then|than|so|to|when|what|that|if|of|even|about|because)\s/i, "")
-    string = "#{string[0].upcase}#{string[1..-1]}"
+      .gsub(/(\W+\w{0,1})$/, "")
+      .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
+      .gsub(" i ", " I ")
+      .gsub(/[^A-Za-z\)\}\]]+$/, "")
+    string.gsub!(/^(then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
+    string = "#{string[0].upcase}#{string[1..-1]}" rescue binding.pry
     string.gsub!(/[;.]+/, "")
     string.gsub!(/ [:\-]$/, "")
     string.gsub!(" ,", "")
@@ -82,5 +87,12 @@ module Curator
       e = e.split(":")
       e[1].match(/^[A-Z]/) && !e[2].match(/^NN|^PRP/) && e[1].upcase != e[1]
     end > 0
+  end
+
+  def self.contains_bad_it(point)
+    return false unless point["Lemmas"].map { |l| l.split(":").first}.include? "it"
+    clean_text = point["String"].downcase
+    return false if clean_text.include? "act on it"
+    !clean_text.match(/(and|but|whether)\sit\s/)
   end
 end
