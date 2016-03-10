@@ -56,8 +56,11 @@ module Curator
       .gsub("( ", "(").gsub(" )", ")")
       .gsub("-LSB-", "[").gsub("-RSB-", "]")
       .gsub("[ ", "[").gsub(" ]", "]").strip
+      .gsub("` ", "'")
+    string.gsub!(/^(then|than|so|to|when|what|that|if|of|even|about|because)\s/i, "")
     string = "#{string[0].upcase}#{string[1..-1]}"
     string.gsub!(/[;.]+/, "")
+    string.gsub!(/ [:\-]$/, "")
     string.gsub!(" ,", "")
     string = string.strip
     string += "." if string.strip[-1] != "."
