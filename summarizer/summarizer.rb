@@ -22,35 +22,43 @@ used_points = []
 related.reject! { |p| used = p.first.map { |e| used_points.include?(e) }.any?; used_points += p.first unless used; used }
 counters = Counters.counter_points(points)
 
-selected_related = related.take(3).map(&:first)
-selected_counters = counters.take(3).map { |k, v| [k, v.first] }
+selected_related = related.map(&:first)
+selected_counters = counters.map { |k, v| [k, v.first] }
 
-(selected_counters + selected_related).flatten(1).uniq.each do |point|
-  groups.delete(point)
-end
-
-selected_top = groups.keys.take(3)
 
 post_count = points.map { |p| p["Post"] }.uniq.size
 group_count = groups.select { |k, v| v.size > 1 }.size
 puts "Summary based on #{points.size} points from #{post_count} posts. There were #{group_count} groups of equivalent points."
 
+displayed_points = []
+
 puts "The following contrasting points were discussed:"
+count = 0
 selected_counters.each do |point, counter|
-  point = Curator.select_best(reference_groups[point])["String"]
-  counter = Curator.select_best(reference_groups[counter])["String"]
-  puts "  * \"#{c(point)}\" & \"#{c(counter)}\""
+  point = Curator.select_best(reference_groups[point])
+  counter = Curator.select_best(reference_groups[counter])
+  next if [point, counter].map(&:nil?).any?
+  puts "  * \"#{c(point["String"])}\" & \"#{c(counter["String"])}\""
+  displayed_points += [point, counter].map { |p| p["Components"] }
+  break if (count += 1) > 2
 end
 
 puts "These were common pairs of points raised by the same user:"
+count = 0
 selected_related.each do |point, related|
-  point = Curator.select_best(reference_groups[point])["String"]
-  related = Curator.select_best(reference_groups[related])["String"]
-  puts "  * \"#{c(point)}\" & \"#{c(related)}\""
+  point = Curator.select_best(reference_groups[point])
+  related = Curator.select_best(reference_groups[related])
+  next if [point, related].map(&:nil?).any?
+  puts "  * \"#{c(point["String"])}\" & \"#{c(related["String"])}\""
+  displayed_points += [point, related].map { |p| p["Components"] }
+  break if (count += 1) > 2
 end
 
 puts "Other common points made in the discussion were:"
-selected_top.each do |point|
-  point =  Curator.select_best(reference_groups[point])["String"]
-  puts "  * \"#{c(point)}\""
+count = 0
+(groups.keys - displayed_points).each do |point|
+  point =  Curator.select_best(reference_groups[point])
+  next if point.nil?
+  puts "  * \"#{c(point["String"])}\""
+  break if (count += 1) > 2
 end
