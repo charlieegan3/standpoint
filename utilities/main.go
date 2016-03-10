@@ -193,6 +193,7 @@ func main() {
 		"PERSON.nsubj know.verb what.dobj",
 		"PERSON.nsubj believe.verb what.dobj",
 		"PERSON.nsubj see.verb what.dobj",
+		"PERSON.nsubj see.verb argument.dobj",
 		"PERSON.nsubj have.verb problem.dobj",
 		"PERSON.nsubj tell.verb they.dobj",
 		"PERSON.nsubj think.verb what.dobj",
