@@ -19,32 +19,35 @@ module Curator
   end
 
   def self.select_best(points)
+    points = reparse_points(points.uniq { |p| p["String"] })
+    permitted(points).min_by { |p| p["String"].length }
+  end
+
+  def self.reparse_points(points)
     cnc = CoreNLPClient.new("http://local.docker:9000")
-
-    points.uniq! { |p| p["String"] }
-
-    points.each do |point|
+    points.map do |point|
       parse = cnc.request_parse(clean_string(point["String"])).first
       point["Relations"], point["Lemmas"] = relations_and_lemmas_from_parse(parse)
+      point
     end
+  end
 
-    top_point = points.reject do |point|
-      !point["String"].length.between?(25, 100) ||
-      point["String"].include?("this") ||
-      point["String"].include?("And") ||
-      point["String"].scan(/[a-z]+[0-9A-Z]/).size > 0 ||
-      point["Relations"].include?("advcl") ||
-      point["Relations"].include?("dep") ||
-      point["String"].scan(/[LR]RB|[LR]SB/).size.odd? ||
+  def self.permitted(points)
+    points.reject do |point|
+      !point["String"].length.between?(15, 100) ||
+      point["String"].match(/this|And/) ||
       point["String"].match(/^\w+ ?, /) ||
-      point["String"].gsub(" ", "").match(/,{2,}/) ||
+      point["String"].match(/(\s*,){2}/) ||
       point["String"].match(/([A-Z]+ ){2,}/) ||
-      point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
-      point["Relations"].count { |r| r.match(/acl|csubj|ccomp/) } > 0 ||
+      point["String"].scan(/[a-z]+[0-9A-Z]/).any? ||
+      point["String"].scan(/[LR]RB|[LR]SB/).size.odd? ||
+      #point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
+      point["Relations"].count { |r| r.match(/advcl|dep|acl|csubj|ccomp/) } > 0 ||
       point["Relations"].count { |r| r.match(/conj|nmod|acl/) } > 2 ||
       contains_case_change(point) ||
-      contains_bad_it(point)
-    end.sort_by { |p| p["String"].length }.last
+      contains_bad_it(point) ||
+      boring_words(point, 2)
+    end
   end
 
   def self.clean_string(string)
@@ -94,5 +97,13 @@ module Curator
     clean_text = point["String"].downcase
     return false if clean_text.include? "act on it"
     !clean_text.match(/(and|but|whether)\sit\s/)
+  end
+
+  def self.boring_words(point, count)
+    point["Lemmas"].count do |e|
+      next unless e.match(/\w/)
+      e = e.split(":")
+      e[2].match(/^NN|^JJ|RB/)
+    end < count
   end
 end
