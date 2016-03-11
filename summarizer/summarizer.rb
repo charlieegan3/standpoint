@@ -25,7 +25,6 @@ counters = Counters.counter_points(points)
 selected_related = related.map(&:first)
 selected_counters = counters.map { |k, v| [k, v.first] }
 
-
 post_count = points.map { |p| p["Post"] }.uniq.size
 group_count = groups.select { |k, v| v.size > 1 }.size
 puts "Summary based on #{points.size} points from #{post_count} posts. There were #{group_count} groups of equivalent points."
@@ -60,5 +59,16 @@ count = 0
   point =  Curator.select_best(reference_groups[point])
   next if point.nil?
   puts "  * \"#{c(point["String"])}\""
+  break if (count += 1) > 2
+end
+
+puts "Longer points made in the discussion were:"
+count = 0
+listed = []
+(groups.reject { |k, v| k.size < 4 || v.size < 3 }.sort_by { |_, v| 1.0/v.size }.map(&:first) - displayed_points).each do |point|
+  point =  Curator.select_best(reference_groups[point])
+  next if point.nil? || listed.include?(c(point["String"]))
+  listed << c(point["String"])
+  puts "  * \"#{listed.last}\""
   break if (count += 1) > 2
 end

@@ -26,7 +26,7 @@ module Curator
 
   def self.select_best(points)
     points = reparse_points(points.uniq { |p| p["String"] })
-    permitted(points).min_by { |p| p["String"].length }
+    #permitted(points).min_by { |p| p["String"].length }
     points = permitted(points)
 
     group_bigrams = []
@@ -70,8 +70,9 @@ module Curator
       point["String"].match(/([A-Z]+ ){2,}/) ||
       point["String"].scan(/[a-z]+[0-9A-Z]/).any? ||
       point["String"].scan(/[LR]RB|[LR]SB/).size.odd? ||
-      point["Relations"].count { |r| r.match(/advcl|dep|acl|csubj|ccomp/) } > 0 ||
-      point["Relations"].count { |r| r.match(/conj|nmod|acl/) } > 2 ||
+      point["Relations"].count { |r| r.match(/dep|acl|csubj|ccomp/) } > 0 ||
+      point["Relations"].count { |r| r.match(/advcl/) } > 1 ||
+      point["Relations"].count { |r| r.match(/conj|nmod/) } > 2 ||
       contains_case_change(point) ||
       contains_bad_it(point) ||
       boring_words(point, 2)
