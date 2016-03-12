@@ -14,7 +14,9 @@ def c(string)
 end
 
 antonyms = JSON.parse(File.open("antonyms.json").read)
-points = File.open(ARGV[0]).readlines[1..-1].map { |l| JSON.parse(l) }
+lines = File.open(ARGV[0]).readlines
+topics = lines.first.split(",")
+points = lines[2..-1].map { |l| JSON.parse(l) }
 
 groups = Hash[*points.group_by { |p| p["Components"] }.sort_by { |_, v| v.size }.reverse.flatten(1)]
 reference_groups = groups.dup
@@ -75,7 +77,7 @@ listed = []
   break if (count += 1) > 2
 end
 
-puts "\nPoints for top topics"
+puts "\nPoints for commonly discussed topics:"
 top_topics = Curator.sorted_dup_hash(groups.keys.flatten)
                .keys
                .select { |e|
@@ -94,4 +96,18 @@ top_topics.take(3).each do |t|
   Condense.condense_group(strings).sort_by { |s| s.index("{") || 1000 }.take(3).each do |s|
     puts "  * " + s
   end
+end
+
+puts "\nTop points about multiple topics:"
+topic_points = points.sort_by { |p| topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
+used_topic_points = []
+for i in 0..10
+  point = topic_points.delete(Curator.select_best(topic_points))
+  if used_topic_points.include? point["String"]
+    i -= 1
+    next
+  end
+  used_topic_points << point["String"]
+  puts "  * \"#{c(point["String"])}\""
+  break if used_topic_points.size > 5
 end
