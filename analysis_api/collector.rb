@@ -14,7 +14,7 @@ Dir.glob(path) do |f|
   posts << post if post["content"].length > 30
 end
 
-topic_text = posts.map{ |p| p["content"] }.join("\n").gsub(/[^\w']/, " ").gsub(/\s+/, " ").downcase[0..60000]
+topic_text = posts.map { |p| p["content"] }.join("\n").gsub(/[^\w']/, " ").gsub(/\s+/, " ").downcase[0..60000]
 
 uri = URI('http://topic_api:4567/')
 http = Net::HTTP.new(uri.host, uri.port)
@@ -26,7 +26,7 @@ topics = JSON.parse(http.request(req).body)["topics"]
 
 out_file = File.open("#{ARGV[0]}_points.txt", "w")
 
-out_file.write("#{posts.size}\n")
+out_file.write("#{topics.join(",")}\n")
 uri = URI('http://points_api:4567/')
 http = Net::HTTP.new(uri.host, uri.port)
 posts.each_with_index do |post, index|
