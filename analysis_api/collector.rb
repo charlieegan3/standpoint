@@ -7,6 +7,7 @@ unless ARGV[0]
 end
 
 path = "debates/#{ARGV[0]}/*"
+puts "Path: #{path}"
 posts = []
 Dir.glob(path) do |f|
   next unless f.include? "json"
