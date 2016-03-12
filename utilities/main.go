@@ -154,7 +154,10 @@ func main() {
 	points := []Point{}
 	contents := strings.Split(string(b), "\n")
 	for i, v := range contents {
-		if i == 0 || len(v) < 4 {
+		if i == 0 {
+			fmt.Println(v)
+			continue
+		} else if len(v) < 4 {
 			continue
 		}
 		var rawPoint = RawPoint{}
