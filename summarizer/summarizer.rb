@@ -1,11 +1,13 @@
 require 'pry'
 require 'json'
+require 'differ'
 
 require_relative 'utils'
 
 require_relative 'related'
 require_relative 'counters'
 require_relative 'curator'
+require_relative 'condense'
 
 def c(string)
   Curator.clean_string(string)
@@ -31,7 +33,7 @@ puts "Summary based on #{points.size} points from #{post_count} posts. There wer
 
 displayed_points = []
 
-puts "The following contrasting points were discussed:"
+puts "\nThe following contrasting points were discussed:"
 count = 0
 selected_counters.each do |point, counter|
   point = Curator.select_best(reference_groups[point])
@@ -42,7 +44,7 @@ selected_counters.each do |point, counter|
   break if (count += 1) > 2
 end
 
-puts "These were common pairs of points raised by the same user:"
+puts "\nThese were common pairs of points raised by the same user:"
 count = 0
 selected_related.each do |point, related|
   point = Curator.select_best(reference_groups[point])
@@ -53,7 +55,7 @@ selected_related.each do |point, related|
   break if (count += 1) > 2
 end
 
-puts "Other common points made in the discussion were:"
+puts "\nOther common points made in the discussion were:"
 count = 0
 (groups.keys - displayed_points).each do |point|
   point =  Curator.select_best(reference_groups[point])
@@ -62,7 +64,7 @@ count = 0
   break if (count += 1) > 2
 end
 
-puts "Longer points made in the discussion were:"
+puts "\nLonger form points made in the discussion were:"
 count = 0
 listed = []
 (groups.reject { |k, v| k.size < 4 || v.size < 3 }.sort_by { |_, v| 1.0/v.size }.map(&:first) - displayed_points).each do |point|
@@ -71,4 +73,25 @@ listed = []
   listed << c(point["String"])
   puts "  * \"#{listed.last}\""
   break if (count += 1) > 2
+end
+
+puts "\nPoints for top topics"
+top_topics = Curator.sorted_dup_hash(groups.keys.flatten)
+               .keys
+               .select { |e|
+                 e.match(/nsubj|dobj/) &&
+                 !e.match(/PERSON|\.verb|\.prep|it\.|what\.|that\.|one\./)
+               }.map { |e| e.split(".").first }
+               .uniq
+top_topics.take(3).each do |t|
+  puts " -#{t}"
+  strings = groups.select { |k, _| k.join.include? t }.take(5).map do |k, group|
+    point = Curator.select_best(group)
+    next if point.nil?
+    c(point["String"])
+  end.compact
+
+  Condense.condense_group(strings).sort_by { |s| s.index("{") || 1000 }.take(3).each do |s|
+    puts "  * " + s
+  end
 end
