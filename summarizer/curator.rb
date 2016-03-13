@@ -102,7 +102,7 @@ module Curator
       .gsub(" i ", " I ")
       .gsub(/[^A-Za-z\)\}\]]+$/, "")
     unless question
-      string.gsub!(/^(then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
+      string.gsub!(/^(therefor|therefore|then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
     end
     string = "#{string[0].upcase}#{string[1..-1]}" rescue binding.pry
     string.gsub!(/[;.]+/, "")

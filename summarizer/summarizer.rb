@@ -82,7 +82,7 @@ top_topics = Curator.sorted_dup_hash(groups.keys.flatten)
                .keys
                .select { |e|
                  e.match(/nsubj|dobj/) &&
-                 !e.match(/PERSON|\.verb|\.prep|it\.|what\.|that\.|one\./)
+                 !e.match(/PERSON|they|\.verb|\.prep|it\.|what\.|that\.|one\./)
                }.map { |e| e.split(".").first }
                .uniq
 top_topics.take(3).each do |t|
@@ -103,11 +103,12 @@ topic_points = points.sort_by { |p| topics.count { |t| p["String"].downcase.incl
 used_topic_points = []
 for i in 0..10
   point = topic_points.delete(Curator.select_best(topic_points))
-  if used_topic_points.include? point["String"]
+  break unless point
+  if used_topic_points.include? c(point["String"])
     i -= 1
     next
   end
-  used_topic_points << point["String"]
+  used_topic_points << c(point["String"])
   puts "  * \"#{c(point["String"])}\""
   break if used_topic_points.size > 5
 end
