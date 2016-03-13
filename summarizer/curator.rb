@@ -44,6 +44,13 @@ module Curator
     end.last
   end
 
+  def self.select_best_question(points)
+    points.reject! do |p|
+      p["String"].strip[-1] != "?"
+    end
+    points.sort_by {|x|x["String"].length}.first
+  end
+
   def self.bigrams(string)
     words = string.downcase.gsub(/[^\s\w']/, "").split(/\s+/)
     words.each_with_index.to_a[0..-2].map do |e, i|
@@ -79,7 +86,7 @@ module Curator
     end
   end
 
-  def self.clean_string(string)
+  def self.clean_string(string, question=false)
     string = string.strip
       .gsub(/^\W+/, "")
       .gsub(/ ?- ?\.?$/, "")
@@ -94,13 +101,19 @@ module Curator
       .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
       .gsub(" i ", " I ")
       .gsub(/[^A-Za-z\)\}\]]+$/, "")
-    string.gsub!(/^(then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
+    unless question
+      string.gsub!(/^(then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
+    end
     string = "#{string[0].upcase}#{string[1..-1]}" rescue binding.pry
     string.gsub!(/[;.]+/, "")
     string.gsub!(/ [:\-]$/, "")
     string.gsub!(" ,", "")
     string = string.strip
-    string += "." if string.strip[-1] != "."
+    if question
+      string += "?" if string.strip[-1] != "?"
+    else
+      string += "." if string.strip[-1] != "."
+    end
     string
   end
 

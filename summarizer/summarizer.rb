@@ -9,8 +9,8 @@ require_relative 'counters'
 require_relative 'curator'
 require_relative 'condense'
 
-def c(string)
-  Curator.clean_string(string)
+def c(string, question=false)
+  Curator.clean_string(string, question)
 end
 
 antonyms = JSON.parse(File.open("antonyms.json").read)
@@ -110,4 +110,16 @@ for i in 0..10
   used_topic_points << point["String"]
   puts "  * \"#{c(point["String"])}\""
   break if used_topic_points.size > 5
+end
+
+puts "\nPeople ask questions like:"
+question_groups = points.select { |p| p["String"].include? "?" }
+      .uniq {|p| p["String"] }
+      .group_by { |p| p["Components"] }
+      .sort_by { |k, v| v.size }
+      .select { |k, v| v.size > 2 }
+question_groups.each do |pattern, group|
+  top_question = Curator.select_best_question(group)
+  next unless top_question
+  puts "  * \"#{c(top_question["String"], true)}\""
 end
