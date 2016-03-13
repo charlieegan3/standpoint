@@ -1,0 +1,16 @@
+{
+  "name": "summarization",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies" : {
+    "lexrank": "latest",
+    "textrank-node": "latest",
+    "summarizely": "latest"
+  }
+}
