@@ -87,7 +87,7 @@ top_topics = Curator.sorted_dup_hash(groups.keys.flatten.map(&:downcase))
                .uniq
 top_topics.take(3).each do |t|
   puts " -#{t}"
-  strings = groups.select { |k, _| k.join.include? t }.take(5).map do |k, group|
+  strings = groups.select { |k, _| k.join(" ").include? " #{t}." }.take(5).map do |k, group|
     point = Curator.select_best(group)
     next if point.nil?
     c(point["String"])

@@ -6,7 +6,9 @@ module Condense
       s1 = s1.downcase.gsub(/[^\s\w']/, "").strip
       s2 = s2.downcase.gsub(/[^\s\w']/, "").strip
       res = Differ.diff_by_word(s1, s2).to_s.gsub('"', "").gsub(" >> ", "|")
-      if res.match(/\-|\+/) || res.scan(/\{[\w\|\s']+\}/).size > 2
+      change_count = res.scan(/\-|\+/).size
+      group_count = res.scan(/\{[\w\|\s'\+\-]+\}/).size
+      if group_count > 2 || change_count > 1 || change_count != group_count
         new_group += [s1, s2]
       else
         merged += [s1, s2]
