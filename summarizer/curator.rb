@@ -127,6 +127,7 @@ module Curator
 
   def self.contains_case_change(point)
     return false unless point["String"].match(/\s[A-Z]/)
+    return true if point["String"].match(/\?|\.[A-Z]/)
     point["Lemmas"].count do |e|
       next unless e.match(/\w/) && point["Lemmas"].index(e) > 0
       e = e.split(":")
