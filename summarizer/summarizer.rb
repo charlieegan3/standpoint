@@ -13,9 +13,11 @@ def c(string, question=false)
   Curator.clean_string(string, question)
 end
 
+summary_string = ARGV[0].scan(/\/(\w+)_p/).flatten.first.downcase.capitalize
+
 antonyms = JSON.parse(File.open("antonyms.json").read)
 lines = File.open(ARGV[0]).readlines
-topics = lines.first.split(",")
+topics = lines.first.split(",").map(&:strip)
 points = lines[2..-1].map { |l| JSON.parse(l) }
 
 groups = Hash[*points.group_by { |p| p["Components"] }.sort_by { |_, v| v.size }.reverse.flatten(1)]
@@ -31,11 +33,11 @@ selected_counters = counters.map { |k, v| [k, v.first] }
 
 post_count = points.map { |p| p["Post"] }.uniq.size
 group_count = groups.select { |k, v| v.size > 1 }.size
-puts "Summary based on #{points.size} points from #{post_count} posts. There were #{group_count} groups of equivalent points."
+summary_string += "\nSummary based on __#{points.size} points__ from __#{post_count} posts__. There were __#{group_count} groups__ of equivalent points."
 
 displayed_points = []
 
-puts "\nThe following contrasting points were discussed:"
+summary_string += "\nThe following __contrasting points__ were discussed:"
 count = 0
 selected_counters.each do |point, counter|
   point = Curator.select_best(reference_groups[point])
@@ -43,47 +45,47 @@ selected_counters.each do |point, counter|
   next if [point, counter].map(&:nil?).any?
   condensed = Condense.condense_group([point["String"], counter["String"]])
   if condensed.size == 1
-    puts "  * #{condensed.first}"
+    summary_string += "\n  * #{condensed.first}"
   else
-    puts "  * \"#{c(point["String"])}\" & \"#{c(counter["String"])}\""
+    summary_string += "\n  * \"#{c(point["String"])}\" & \"#{c(counter["String"])}\""
   end
 
   displayed_points += [point, counter].map { |p| p["Components"] }
   break if (count += 1) > 2
 end
 
-puts "\nThese were common pairs of points raised by the same user:"
+summary_string += "\nThese were common __pairs of points raised by the same user__:"
 count = 0
 selected_related.each do |point, related|
   point = Curator.select_best(reference_groups[point])
   related = Curator.select_best(reference_groups[related])
   next if [point, related].map(&:nil?).any?
-  puts "  * \"#{c(point["String"])}\" & \"#{c(related["String"])}\""
+  summary_string += "\n  * \"#{c(point["String"])}\" & \"#{c(related["String"])}\""
   displayed_points += [point, related].map { |p| p["Components"] }
   break if (count += 1) > 2
 end
 
-puts "\nOther common points made in the discussion were:"
+summary_string += "\nOther __common points__ made in the discussion were:"
 count = 0
 (groups.keys - displayed_points).each do |point|
   point =  Curator.select_best(reference_groups[point])
   next if point.nil?
-  puts "  * \"#{c(point["String"])}\""
+  summary_string += "\n  * \"#{c(point["String"])}\""
   break if (count += 1) > 2
 end
 
-puts "\nLonger form points made in the discussion were:"
+summary_string += "\n__Longer form__ points made in the discussion were:"
 count = 0
 listed = []
 (groups.reject { |k, v| k.size < 4 || v.size < 3 }.sort_by { |_, v| 1.0/v.size }.map(&:first) - displayed_points).each do |point|
   point =  Curator.select_best(reference_groups[point])
   next if point.nil? || listed.include?(c(point["String"]))
   listed << c(point["String"])
-  puts "  * \"#{listed.last}\""
+  summary_string += "\n  * \"#{listed.last}\""
   break if (count += 1) > 2
 end
 
-puts "\nPoints for commonly discussed topics:"
+summary_string += "\nPoints for __commonly discussed topics__:"
 top_topics = Curator.sorted_dup_hash(groups.keys.flatten.map(&:downcase))
                .keys
                .select { |e|
@@ -92,7 +94,7 @@ top_topics = Curator.sorted_dup_hash(groups.keys.flatten.map(&:downcase))
                }.map { |e| e.split(".").first }
                .uniq
 top_topics.take(3).each do |t|
-  puts " -#{t}"
+  summary_string += "\n-#{t.downcase.capitalize}"
   strings = groups.select { |k, _| k.join(" ").include? " #{t}." }.take(5).map do |k, group|
     point = Curator.select_best(group)
     next if point.nil?
@@ -100,11 +102,11 @@ top_topics.take(3).each do |t|
   end.compact
 
   Condense.condense_group(strings).sort_by { |s| s.index("{") || 1000 }.take(3).each do |s|
-    puts "  * " + s
+    summary_string += "\n  * " + s
   end
 end
 
-puts "\nTop points about multiple topics:"
+summary_string += "\nTop points about __multiple topics__:"
 topic_points = points.sort_by { |p| topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
 used_topic_points = []
 for i in 0..10
@@ -119,10 +121,10 @@ for i in 0..10
 end
 
 Condense.condense_group(used_topic_points).each do |s|
-  puts "  * \"#{s}\""
+  summary_string += "\n  * \"#{s}\""
 end
 
-puts "\nPeople ask questions like:"
+summary_string += "\nPeople ask __questions__ like:"
 question_groups = points.select { |p| p["String"].include? "?" }
       .uniq {|p| p["String"] }
       .group_by { |p| p["Components"] }
@@ -131,5 +133,34 @@ question_groups = points.select { |p| p["String"].include? "?" }
 question_groups.each do |pattern, group|
   top_question = Curator.select_best_question(group)
   next unless top_question
-  puts "  * \"#{c(top_question["String"], true)}\""
+  summary_string += "\n  * \"#{c(top_question["String"], true)}\""
 end
+
+
+summary_string.gsub!("*", ">")
+summary_string.gsub!("__", "**")
+summary_string.gsub!(/^\-/, " * ")
+lines = summary_string.split("\n")
+lines[0] = "# " + lines[0]
+lines << lines.delete_at(1)
+lines.map! do |l|
+  next unless l
+  l = l[0].match(/\w/) ? "\n#{l}" : l
+  if l.length > 80 && l.include?("&")
+    l = l.split(/\s&\s/).join("\n> & \n> ")
+  end
+  l
+end
+lines[-1] = "***\n" + lines[-1]
+
+summary_string = lines.join("\n\n")
+summary_string.gsub!(' & ', " **&** ")
+summary_string.gsub!('{', " **{** ")
+summary_string.gsub!('}', " **}** ")
+summary_string.gsub!('|', " **|** ")
+summary_string.gsub!('"', "")
+summary_string.gsub!('"', "")
+regex = topics.sort_by(&:length).reverse.join("|")
+summary_string.gsub!(/(^.*>.*)(#{regex})/i, '\1`\2`')
+
+puts summary_string
