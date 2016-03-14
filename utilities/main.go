@@ -166,7 +166,7 @@ func main() {
 	}
 
 	bannedList := strings.Split("it.nsubj that.nsubj this.nsubj which.nsubj what.nsubj", " ")
-	bannedPersonList := strings.Split("object continue come go sit open close begin end believe happen leave understand realize debate speak show stand call refer believe lose change care hear write disagree read tell start talk explain come live take support guess feel follow make go get move agree find fail feel ask argue try", " ")
+	bannedPersonList := strings.Split("object continue come go sit open close begin end believe happen leave understand realize debate speak show stand call refer believe lose change care hear write disagree read tell start talk explain come live take support guess feel follow make go get move agree find fail think wonder feel ask argue try", " ")
 	for i, v := range bannedPersonList {
 		bannedPersonList[i] = fmt.Sprintf("%v.verb", v)
 	}
