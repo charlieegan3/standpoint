@@ -78,11 +78,11 @@ listed = []
 end
 
 puts "\nPoints for commonly discussed topics:"
-top_topics = Curator.sorted_dup_hash(groups.keys.flatten)
+top_topics = Curator.sorted_dup_hash(groups.keys.flatten.map(&:downcase))
                .keys
                .select { |e|
                  e.match(/nsubj|dobj/) &&
-                 !e.match(/PERSON|they|\.verb|\.prep|it\.|what\.|that\.|one\./)
+                 !e.match(/person|they|\.verb|\.prep|it\.|what\.|that\.|one\./)
                }.map { |e| e.split(".").first }
                .uniq
 top_topics.take(3).each do |t|
