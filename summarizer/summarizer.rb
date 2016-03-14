@@ -13,7 +13,8 @@ def c(string, question=false)
   Curator.clean_string(string, question)
 end
 
-summary_string = ARGV[0].scan(/\/(\w+)_p/).flatten.first.downcase.capitalize
+summary_string = ARGV[0].scan(/\/(\w+)_p/).flatten.first
+  .gsub(/(.)([A-Z])/,'\1 \2').split(" ").map(&:capitalize).join(" ")
 
 antonyms = JSON.parse(File.open("antonyms.json").read)
 lines = File.open(ARGV[0]).readlines
@@ -102,7 +103,7 @@ top_topics.take(3).each do |t|
   end.compact
 
   Condense.condense_group(strings).sort_by { |s| s.index("{") || 1000 }.take(3).each do |s|
-    summary_string += "\n  * " + s
+    summary_string += "\n    * " + s
   end
 end
 
@@ -161,6 +162,9 @@ summary_string.gsub!('|', " **|** ")
 summary_string.gsub!('"', "")
 summary_string.gsub!('"', "")
 regex = topics.sort_by(&:length).reverse.join("|")
-summary_string.gsub!(/(^.*>.*)(#{regex})/i, '\1`\2`')
+summary_string.gsub!(/(^.*>.*\W)(#{regex})(\W)/i, '\1`\2`\3')
 
 puts summary_string
+
+
+
