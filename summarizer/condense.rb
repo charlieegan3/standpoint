@@ -8,7 +8,8 @@ module Condense
       res = Differ.diff_by_word(s1, s2).to_s.gsub('"', "").gsub(" >> ", "|")
       change_count = res.scan(/\-|\+/).size
       group_count = res.scan(/\{[\w\|\s'\+\-]+\}/).size
-      if group_count > 2 || change_count > 1 || change_count != group_count
+      shared = (s1.split(/\s/) & s2.split(/\s/))
+      if shared.empty? || group_count > 2 || change_count > 1 || change_count + group_count > 2
         new_group += [s1, s2]
       else
         merged += [s1, s2]

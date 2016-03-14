@@ -41,7 +41,13 @@ selected_counters.each do |point, counter|
   point = Curator.select_best(reference_groups[point])
   counter = Curator.select_best(reference_groups[counter])
   next if [point, counter].map(&:nil?).any?
-  puts "  * \"#{c(point["String"])}\" & \"#{c(counter["String"])}\""
+  condensed = Condense.condense_group([point["String"], counter["String"]])
+  if condensed.size == 1
+    puts "  * #{condensed.first}"
+  else
+    puts "  * \"#{c(point["String"])}\" & \"#{c(counter["String"])}\""
+  end
+
   displayed_points += [point, counter].map { |p| p["Components"] }
   break if (count += 1) > 2
 end
@@ -109,8 +115,11 @@ for i in 0..10
     next
   end
   used_topic_points << c(point["String"])
-  puts "  * \"#{c(point["String"])}\""
   break if used_topic_points.size > 5
+end
+
+Condense.condense_group(used_topic_points).each do |s|
+  puts "  * \"#{s}\""
 end
 
 puts "\nPeople ask questions like:"
