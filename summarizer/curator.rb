@@ -82,6 +82,7 @@ module Curator
       point["Relations"].count { |r| r.match(/conj|nmod/) } > 2 ||
       contains_case_change(point) ||
       contains_bad_it(point) ||
+      bad_repeated_word(point) ||
       boring_words(point, 2)
     end
   end
@@ -148,5 +149,11 @@ module Curator
       e = e.split(":")
       e[2].match(/^NN|^JJ|RB/)
     end < count
+  end
+
+  def self.bad_repeated_word(point)
+    point["Lemmas"].reject { |l| l.match(/:{2,}/) }
+      .map { |l| l.split(":").first }
+      .inject { |last, e| break if last == e && e.match(/\w/) && !e.match(/be|have/); last = e }.nil?
   end
 end
