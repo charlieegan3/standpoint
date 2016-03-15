@@ -48,14 +48,14 @@ selected_counters.each do |point, counter|
   if condensed.size == 1
     summary_string += "\n  * #{condensed.first}"
   else
-    summary_string += "\n  * \"#{c(point["String"])}\" & \"#{c(counter["String"])}\""
+    summary_string += "\n  * \"#{c(point["String"])}\" vs. \"#{c(counter["String"])}\""
   end
 
   displayed_points += [point, counter].map { |p| p["Components"] }
   break if (count += 1) > 2
 end
 
-summary_string += "\nThese were common __pairs of points raised by the same user__:"
+summary_string += "\nThese pairs of points were often __raised in conjunction with one another__:"
 count = 0
 selected_related.each do |point, related|
   point = Curator.select_best(reference_groups[point])
@@ -66,7 +66,7 @@ selected_related.each do |point, related|
   break if (count += 1) > 2
 end
 
-summary_string += "\nOther __common points__ made in the discussion were:"
+summary_string += "\nOther __commonly occurring points__ made in the discussion were:"
 count = 0
 (groups.keys - displayed_points).each do |point|
   point =  Curator.select_best(reference_groups[point])
@@ -75,15 +75,18 @@ count = 0
   break if (count += 1) > 2
 end
 
-summary_string += "\n__Longer form__ points made in the discussion were:"
+summary_string += "\nCommon points made in the discussion that __link topics__ were:"
 count = 0
 listed = []
 (groups.reject { |k, v| k.size < 4 || v.size < 3 }.sort_by { |_, v| 1.0/v.size }.map(&:first) - displayed_points).each do |point|
   point =  Curator.select_best(reference_groups[point])
   next if point.nil? || listed.include?(c(point["String"]))
   listed << c(point["String"])
-  summary_string += "\n  * \"#{listed.last}\""
-  break if (count += 1) > 2
+  break if (count += 1) > 5
+end
+
+Condense.condense_group(listed).take(3).each do |string|
+  summary_string += "\n  * \"#{string}\""
 end
 
 summary_string += "\nPoints for __commonly discussed topics__:"
@@ -102,12 +105,12 @@ top_topics.take(3).each do |t|
     c(point["String"])
   end.compact
 
-  Condense.condense_group(strings).sort_by { |s| s.index("{") || 1000 }.take(3).each do |s|
+  Condense.condense_group(strings).take(3).each do |s|
     summary_string += "\n    * " + s
   end
 end
 
-summary_string += "\nTop points about __multiple topics__:"
+summary_string += "\nPoints about __multiple topics__:"
 topic_points = points.sort_by { |p| topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
 used_topic_points = []
 for i in 0..10
@@ -156,9 +159,10 @@ lines[-1] = "***\n" + lines[-1]
 
 summary_string = lines.join("\n\n")
 summary_string.gsub!(' & ', " **&** ")
+summary_string.gsub!(' vs. ', " **vs.** ")
 summary_string.gsub!('{', " **{** ")
 summary_string.gsub!('}', " **}** ")
-summary_string.gsub!('|', " **|** ")
+summary_string.gsub!('|', " **or** ")
 summary_string.gsub!('"', "")
 summary_string.gsub!('"', "")
 regex = topics.sort_by(&:length).reverse.join("|")

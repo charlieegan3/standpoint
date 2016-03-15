@@ -18,7 +18,9 @@ module Condense
         new_group << merge_diff_groups(res)
       end
     end
-    (new_group - merged).uniq.map { |s| present_matched_string(s) }
+    (new_group - merged).uniq
+      .map { |s| present_matched_string(s) }
+      .sort_by { |s| s.index("{") || 1000 }
   end
 
   def self.merge_diff_groups(string)
