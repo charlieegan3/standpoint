@@ -18,12 +18,6 @@ module Curator
     end
   end
 
-  def self.sorted_dup_hash(array)
-    Hash[*array.inject(Hash.new(0)) { |h,e| h[e] += 1; h }.
-    select { |k,v| v > 1 }.inject({}) { |r, e| r[e.first] = e.last; r }.
-    sort_by {|_,v| v}.reverse.flatten(1)]
-  end
-
   def self.select_best(points, return_group=false)
     points = reparse_points(points.uniq { |p| p["String"] })
     #permitted(points).min_by { |p| p["String"].length }
@@ -33,7 +27,7 @@ module Curator
     points.each do |p|
       group_bigrams += bigrams(p["String"])
     end
-    group_bigrams = sorted_dup_hash(group_bigrams)
+    group_bigrams = Utils.sorted_dup_hash(group_bigrams)
     points = points.sort_by do |p|
       clean = p["String"].downcase.gsub(/[^\s\w']/, "").gsub(/\s+/, " ").strip
       score = 0

@@ -104,7 +104,7 @@ Condense.condense_group(listed).take(3).each do |string|
 end
 
 summary_string += "\nPoints for __commonly discussed topics__:"
-top_topics = Curator.sorted_dup_hash(groups.keys.flatten.map(&:downcase))
+top_topics = Utils.sorted_dup_hash(groups.keys.flatten.map(&:downcase))
                .keys
                .select { |e|
                  e.match(/nsubj|dobj/) &&
