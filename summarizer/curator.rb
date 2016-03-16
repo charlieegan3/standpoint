@@ -24,7 +24,7 @@ module Curator
     sort_by {|_,v| v}.reverse.flatten(1)]
   end
 
-  def self.select_best(points)
+  def self.select_best(points, return_group=false)
     points = reparse_points(points.uniq { |p| p["String"] })
     #permitted(points).min_by { |p| p["String"].length }
     points = permitted(points)
@@ -41,7 +41,9 @@ module Curator
         score += v if clean.include? k
       end
       p["Score"] = score.to_f / clean.split(" ").size
-    end.last
+    end
+    return points if return_group
+    return points.last
   end
 
   def self.select_best_question(points)
@@ -80,6 +82,7 @@ module Curator
       point["Relations"].count { |r| r.match(/dep|acl|csubj|ccomp/) } > 0 ||
       point["Relations"].count { |r| r.match(/advcl/) } > 1 ||
       point["Relations"].count { |r| r.match(/conj|nmod/) } > 2 ||
+      point["Relations"].join(" ").match(/amod (punct)?$/) ||
       contains_case_change(point) ||
       contains_bad_it(point) ||
       bad_repeated_word(point) ||
@@ -89,7 +92,7 @@ module Curator
 
   def self.clean_string(string, question=false)
     string = string.strip
-      .gsub(/^\W+/, "")
+      .gsub(/^[^\w\{]+/, "")
       .gsub(/ ?- ?\.?$/, "")
       .gsub(/[\s;\.,]+$/, "")
       .gsub(/\s+(n?[,'\.])/, '\1')
@@ -98,7 +101,8 @@ module Curator
       .gsub("-LSB-", "[").gsub("-RSB-", "]")
       .gsub("[ ", "[").gsub(" ]", "]").strip
       .gsub("` ", "'")
-      .gsub(/(\W+\w{0,1})$/, "")
+      .gsub(/'([^t])/, '\1')
+      .gsub(/([^\w\}]+\w{0,1})$/, "")
       .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
       .gsub(" i ", " I ")
       .gsub(/[^A-Za-z\)\}\]]+$/, "")

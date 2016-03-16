@@ -1,4 +1,5 @@
 module Counters
+  PATTERN = /(\W|^)(n't|no|not|none|no one|nobody|nothing|neither|nowhere|never)(\W|$)/i
   def self.counter_points(points)
     antonyms = JSON.parse(File.open("antonyms.json").read)
     groups = points.group_by { |p| p["Components"] }
@@ -12,6 +13,51 @@ module Counters
     end
 
     counters.sort_by { |k, v| groups[k].size + groups[v.first].size }.reverse
+  end
+
+  def self.negated_points(points)
+    plain, neg = points.group_by { |p| p["String"].downcase.match(PATTERN).nil? }
+      .map(&:last)
+      .map { |g| Curator.reparse_points(Curator.select_best(g, true)) }
+
+    return [] unless plain && neg
+    neg.select! {|p| p["Relations"].include? "neg" }
+    return [] if neg.empty?
+    plain, neg = [plain, neg].map { |g| g.map { |p| c(p["String"]) }.uniq }
+
+    counter_points = []
+    plain.product(neg).each do |s1, s2|
+      s1 = s1.downcase.gsub(/[^\s\w']/, "").strip
+      s2 = s2.downcase.gsub(/[^\s\w']/, "").strip
+      next if Levenshtein.distance(s1, s2) > 20
+      res = Differ.diff_by_word(s1, s2).to_s.gsub('"', "").gsub(" >> ", "|")
+      res = res.gsub("{+s}", "").gsub(/\|s\}/, "}").gsub(/\-|\+/, "")
+      next unless res.include?("{")
+      next if res.match(/\}\w\{/) || res.match(/\w(\{|\})\w/) || res.match(/\w(\{|\})\w/)
+      next if res.chars.count("|") > 1
+      next if (s1.split(" ").size - s2.split(" ").size).abs > 6
+      next if (s1.split(" ") & s2.split(" ")).size < (s1.split(" ") + s2.split(" ")).size.to_f / 4
+      next if res.scan(/\{[^\}]+\}/).size > 2
+      next if res.scan(/\{[^\}]+\}/).join(" ").gsub(/[^\w\s]+/, " ").scan(/\w+ /).size > res.gsub(/[^\w\s]/, " ").scan(/\w+ /).size * 0.75
+      next if res.scan(/\{[^\}]+\}/).map { |s| s.scan(/\w+ /).size }.max > 5
+      counter_points << res
+    end
+
+    counter_point_groups = []
+    counter_points.sort_by(&:length).reverse.each do |cp|
+      allocated = false
+      counter_point_groups.each_with_index do |g, i|
+        g.each do |s|
+          next if Levenshtein.distance(cp, s) > 20
+          allocated = true
+          counter_point_groups[i] << cp
+          break
+        end
+        break if allocated
+      end
+      counter_point_groups << [cp] unless allocated
+    end
+    return counter_point_groups
   end
 
   def self.replacement_options(point, antonyms)

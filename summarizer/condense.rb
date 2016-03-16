@@ -36,6 +36,9 @@ module Condense
       .gsub(/\s*\{\s*/, " {")
       .gsub(/\s+/, " ")
       .gsub(/\+|\-/, "")
+      .gsub(/\s?\|\s?/, "|")
+      .gsub("{'t}", "{can't}") #https://en.wiktionary.org/wiki/Category:English_words_suffixed_with_-n%27t
+      .strip
   end
 
   def self.present_matched_string(string)

@@ -1,6 +1,7 @@
 require 'pry'
 require 'json'
 require 'differ'
+require 'levenshtein'
 
 require_relative 'utils'
 
@@ -53,6 +54,19 @@ selected_counters.each do |point, counter|
 
   displayed_points += [point, counter].map { |p| p["Components"] }
   break if (count += 1) > 2
+end
+
+summary_string += "\nThe following __negated points__ were discussed:"
+count = 0
+groups.each do |k, v|
+  counter_point_groups = Counters.negated_points(v)
+  next if counter_point_groups.empty?
+  best = counter_point_groups.map { |g| g.min_by(&:length) }.min_by { |s| s.scan(/\||\{|\}/).size }
+  next unless best
+  count += 1
+  best = c(Condense.format_match_string(Condense.merge_diff_groups(best)))
+  summary_string += "\n  * #{best}"
+  break if count > 4
 end
 
 summary_string += "\nThese pairs of points were often __raised in conjunction with one another__:"
