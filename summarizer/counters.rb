@@ -12,7 +12,9 @@ module Counters
       end
     end
 
-    counters.sort_by { |k, v| groups[k].size + groups[v.first].size }.reverse
+    counters.sort_by { |k, v| groups[k].size + groups[v.first].size }
+      .reverse
+      .map { |k, v| [k, v.first] }
   end
 
   def self.negated_points(points)
@@ -23,12 +25,13 @@ module Counters
     return [] unless plain && neg
     neg.select! {|p| p["Relations"].include? "neg" }
     return [] if neg.empty?
-    plain, neg = [plain, neg].map { |g| g.map { |p| c(p["String"]) }.uniq }
+
+    plain, neg = [plain, neg].map { |g| g.uniq { |p| Curator.clean_string(p["String"]) }  }
 
     counter_points = []
-    plain.product(neg).each do |s1, s2|
-      s1 = s1.downcase.gsub(/[^\s\w']/, "").strip
-      s2 = s2.downcase.gsub(/[^\s\w']/, "").strip
+    plain.product(neg).each do |p1, p2|
+      s1 = p1["String"].downcase.gsub(/[^\s\w']/, "").strip
+      s2 = p2["String"].downcase.gsub(/[^\s\w']/, "").strip
       next if Levenshtein.distance(s1, s2) > 20
       res = Differ.diff_by_word(s1, s2).to_s.gsub('"', "").gsub(" >> ", "|")
       res = res.gsub("{+s}", "").gsub(/\|s\}/, "}").gsub(/\-|\+/, "")
@@ -40,15 +43,15 @@ module Counters
       next if res.scan(/\{[^\}]+\}/).size > 2
       next if res.scan(/\{[^\}]+\}/).join(" ").gsub(/[^\w\s]+/, " ").scan(/\w+ /).size > res.gsub(/[^\w\s]/, " ").scan(/\w+ /).size * 0.75
       next if res.scan(/\{[^\}]+\}/).map { |s| s.scan(/\w+ /).size }.max > 5
-      counter_points << res
+      counter_points << [res, p1, p2]
     end
 
     counter_point_groups = []
-    counter_points.sort_by(&:length).reverse.each do |cp|
+    counter_points.sort_by { |cp| cp.first.length  }.reverse.each do |cp|
       allocated = false
       counter_point_groups.each_with_index do |g, i|
         g.each do |s|
-          next if Levenshtein.distance(cp, s) > 20
+          next if Levenshtein.distance(cp.first, s.first) > 20
           allocated = true
           counter_point_groups[i] << cp
           break

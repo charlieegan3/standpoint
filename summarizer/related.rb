@@ -24,6 +24,6 @@ module Related
         next
       end
       [points.map { |p| p["Components"] }, count]
-    end.compact
+    end.compact.map(&:first)
   end
 end
