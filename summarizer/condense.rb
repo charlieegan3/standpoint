@@ -42,6 +42,7 @@ module Condense
   end
 
   def self.present_matched_string(string)
+    string.gsub!(" '", "'")
     string[0].upcase + string[1..-1] + "."
   end
 end

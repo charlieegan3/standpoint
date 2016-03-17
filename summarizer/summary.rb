@@ -70,7 +70,7 @@ class Summary
     count = 0
     top_topics.map do |t|
       next if count >= @point_count
-      points = @groups.select { |k, _| k.join(" ").include? " #{t}." }.take(5).map do |k, group|
+      points = @groups.select { |k, _| k.join(" ").include? " #{t}." }.take(@point_count).map do |k, group|
         point = Curator.select_best(group)
       end.compact
       count += 1
@@ -102,6 +102,14 @@ class Summary
       count += 1
       Curator.select_best_question(group)
     end.compact
+  end
+
+  def metadata
+    {
+      points: @points.size,
+      groups: @groups.size,
+      posts: @points.group_by { |p| p["Post"] }.size,
+    }
   end
 
   private

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @title %></title>
+    <link rel="stylesheet" href="https://stackedit.io/res-min/themes/base.css">
+    <style type="text/css">
+      h1 {
+        margin: 0.5em 0;
+      }
+      p {
+        margin: 1.5em 0 0.5em 0;
+      }
+      blockquote {
+        margin: 0 0 1px 0;
+        padding: 5px;
+      }
+      blockquote p {
+        margin: 0;
+      }
+      li p {
+        margin: 3px 0;
+      }
+      ul {
+        margin-bottom: 0;
+      }
+      code {
+        font-family: "Source Sans Pro", sans-serif;
+        font-size: 1em;
+        line-height: 1.45;
+        background-color: transparent;
+        padding: 0px;
+        color: SeaGreen;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1><%= @title %></h1>
+
+      <p>The following <strong>contrasting points</strong> were discussed:</p>
+      <% summary.counter_points.each do |point, counter| %>
+        <% point = Condense.condense_group([point["String"], counter["String"]]) %>
+        <% if point.size == 2 %>
+          <blockquote>
+            <p><%= point.first + " vs. " + point.last %></p>
+          </blockquote>
+        <% else %>
+          <blockquote><p><%= point.first %></p></blockquote>
+        <% end %>
+      <% end %>
+
+      <p>These were common <strong>pairs of points raised by the same user</strong>:</p>
+      <% summary.related_points.each do |point, related| %>
+        <blockquote>
+          <p><%= point["String"]+ " & " + related["String"] %></p>
+        </blockquote>
+      <% end %>
+
+      <p>The following <strong>negated points</strong> were discussed:</p>
+      <% summary.negated_points.each do |string, _, _| %>
+        <blockquote>
+          <p><%= string %></p>
+        </blockquote>
+      <% end %>
+
+      <p>Other <strong>commonly occurring points</strong> made in the discussion were:</p>
+      <% summary.common_points.each do |point| %>
+        <blockquote>
+          <p><%= point["String"] %></p>
+        </blockquote>
+      <% end %>
+
+      <p>Common points made in the discussion that <strong>link concepts</strong> were:</p>
+      <% summary.longer_points.each do |point| %>
+        <blockquote>
+          <p><%= point["String"] %></p>
+        </blockquote>
+      <% end %>
+
+      <p>Points for <strong>commonly discussed topics</strong>:</p>
+      <ul>
+        <% summary.commonly_discussed_topic_points.each do |topic, points| %>
+          <li>
+            <p><%= topic %>
+            <% points.each do |point| %>
+              <blockquote>
+                <p><%= point["String"] %></p>
+              </blockquote>
+            <% end%>
+          </li>
+        <% end %>
+      </ul>
+
+      <p>Points about <strong>multiple topics</strong>:</p>
+      <% summary.multiple_topic_points.each do |point| %>
+        <blockquote>
+          <p><%= point["String"] %></p>
+        </blockquote>
+      <% end %>
+
+      <hr/>
+      <% meta = summary.metadata %>
+      <p>
+        Summary based on
+        <strong><%= meta[:points] %>points</strong> from
+        <strong><%= meta[:posts] %>posts</strong>. There were
+        <strong><%= meta[:groups]%> groups</strong> of equivalent points.
+      </p>
+
+    </div>
+  </body>
+</html>

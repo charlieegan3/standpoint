@@ -2,6 +2,7 @@ require 'pry'
 require 'json'
 require 'differ'
 require 'levenshtein'
+require 'erb'
 
 require_relative 'summary'
 
@@ -17,4 +18,10 @@ title = ARGV[0].scan(/\/(\w+)_p/).flatten.first
 lines = File.open(ARGV[0]).readlines
 topics = lines.first.split(",").map(&:strip)
 points = lines[2..-1].map { |l| JSON.parse(l) }
-summary = Summary.new(title, points, topics)
+summary = Summary.new(title, points, topics, 3)
+
+@title = title
+@summary = summary
+erb = ERB.new(File.open("template.html.erb").read, 0, '>')
+html = erb.result binding
+File.open("output.html", "w").write(html)
