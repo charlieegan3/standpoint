@@ -12,6 +12,7 @@ require_relative 'related'
 require_relative 'counters'
 require_relative 'curator'
 require_relative 'condense'
+require_relative 'presenter'
 
 title = ARGV[0].scan(/\/(\w+)_p/).flatten.first
   .gsub(/(.)([A-Z])/,'\1 \2').split(" ").map(&:capitalize).join(" ")
