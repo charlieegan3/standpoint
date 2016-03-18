@@ -36,10 +36,11 @@ module Presenter
   end
 
   def self.highlight(string, topics)
-    topic_regex = topics.sort_by(&:length).reverse.join("|")
-    string.gsub("|", "<strong> or </strong>")
+    string = string.gsub("|", "<strong> or </strong>")
       .gsub("{", "<strong> (</strong>")
       .gsub("}", "<strong>) </strong>")
-      .gsub(/(^|\W)(#{topic_regex})(^|\W)/i, '\1<code>\2</code>\3')
+    topic_regex = topics.sort_by(&:length).reverse.join("|")
+    string.scan(/#{topic_regex}/i).each { |match| string.gsub!(/(^|\W)#{match}(\W)/, '\1' + "<code>#{match}</code>" + '\2') }
+    string.strip
   end
 end
