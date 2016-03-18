@@ -20,6 +20,7 @@ lines = File.open(ARGV[0]).readlines
 topics = lines.first.split(",").map(&:strip)
 points = lines[2..-1].map { |l| JSON.parse(l) }
 summary = Summary.new(title, points, topics, 3)
+summary.build
 
 @title = title
 @summary = summary

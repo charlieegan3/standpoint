@@ -1,5 +1,7 @@
 class Summary
-  attr_accessor :topics
+  attr_accessor :topics, :counter_points, :related_points, :negated_points,
+    :common_points, :longer_points, :commonly_discussed_topic_points,
+    :multiple_topic_points, :question_points
 
   def initialize(title, points, topics, point_count)
     @title, @points, @topics, @point_count = title, points, topics, point_count
@@ -7,7 +9,18 @@ class Summary
     @used_points = []
   end
 
-  def counter_points
+  def build
+    @counter_points = generate_counter_points; print "."
+    @related_points = generate_related_points; print "."
+    @negated_points = generate_negated_points; print "."
+    @common_points = generate_common_points; print "."
+    @longer_points = generate_longer_points; print "."
+    @commonly_discussed_topic_points = generate_commonly_discussed_topic_points; print "."
+    @multiple_topic_points = generate_multiple_topic_points; print "."
+    @question_points = generate_question_points; print ".\n"
+  end
+
+  def generate_counter_points
     count = 0
     Counters.counter_points(available_points).map do |point, counter|
       next if count >= @point_count
@@ -20,7 +33,7 @@ class Summary
     end.compact
   end
 
-  def related_points
+  def generate_related_points
     count = 0
     Related.related_points(available_points).map do |point, related|
       next if count >= @point_count
@@ -34,7 +47,7 @@ class Summary
     end.compact
   end
 
-  def negated_points
+  def generate_negated_points
     count = 0
     @groups.map do |_, group|
       next if count >= @point_count
@@ -49,7 +62,7 @@ class Summary
     end.compact
   end
 
-  def common_points
+  def generate_common_points
     count = 0
     @groups.map do |k, g|
       next if count >= @point_count
@@ -60,7 +73,7 @@ class Summary
     end.compact
   end
 
-  def longer_points
+  def generate_longer_points
     count = 0
     used_topics = []
     [].tap do |points|
@@ -78,7 +91,7 @@ class Summary
     end
   end
 
-  def commonly_discussed_topic_points
+  def generate_commonly_discussed_topic_points
     count = 0
     top_topics.map do |t|
       next if count >= @point_count
@@ -90,7 +103,7 @@ class Summary
     end.compact
   end
 
-  def multiple_topic_points
+  def generate_multiple_topic_points
     topic_points = @points.sort_by { |p| @topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
     topic_points.uniq! { |p| p["String"] }
     selected_points = []
@@ -101,7 +114,7 @@ class Summary
     selected_points
   end
 
-  def question_points
+  def generate_question_points
     count = 0
     question_groups = @points.select { |p| p["String"].include? "?" }
           .uniq {|p| p["String"] }
