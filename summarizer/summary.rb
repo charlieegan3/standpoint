@@ -50,7 +50,6 @@ class Summary
   end
 
   def common_points
-    # needs condensing
     count = 0
     @groups.map do |k, g|
       next if count >= @point_count
@@ -62,21 +61,24 @@ class Summary
   end
 
   def longer_points
-    # needs condensing
     count = 0
+    used_topics = []
     [].tap do |points|
       @groups.reject { |k, v| k.size < 4 || v.size < 3 }.sort_by { |_, v| v.size }.reverse.map do |k, g|
         next if count >= @point_count
         best = Curator.select_best(available_points(g))
+        next unless best
+        topics = @topics.select { |t| best["String"].downcase.include?(t) || best["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.include?(t) }
+        next if topics.empty? || (used_topics & topics).size > 1
         next if points.map { |p| p["String"] }.include? best["String"]
         count += 1
+        used_topics += topics
         points << best
       end
     end
   end
 
   def commonly_discussed_topic_points
-    # needs condensing
     count = 0
     top_topics.map do |t|
       next if count >= @point_count
@@ -89,7 +91,6 @@ class Summary
   end
 
   def multiple_topic_points
-    # needs condensing
     topic_points = @points.sort_by { |p| @topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
     topic_points.uniq! { |p| p["String"] }
     selected_points = []
