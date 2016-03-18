@@ -1,4 +1,5 @@
 class Summary
+  attr_accessor :topics
   def initialize(title, points, topics, point_count)
     @title, @points, @topics, @point_count = title, points, topics, point_count
     @groups = Hash[*points.group_by { |p| p["Components"] }.sort_by { |_, v| v.size }.reverse.flatten(1)]

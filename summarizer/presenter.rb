@@ -1,6 +1,6 @@
 module Presenter
-  def self.format(string, question=false)
-    highlight(clean(string, question))
+  def self.format(string, topics, question=false)
+    highlight(clean(string, question), topics)
   end
 
   def self.clean(string, question=false)
@@ -35,9 +35,11 @@ module Presenter
     string
   end
 
-  def self.highlight(string)
+  def self.highlight(string, topics)
+    topic_regex = topics.sort_by(&:length).reverse.join("|")
     string.gsub("|", "<strong> or </strong>")
       .gsub("{", "<strong> (</strong>")
       .gsub("}", "<strong>) </strong>")
+      .gsub(/(^|\W)(#{topic_regex})(^|\W)/i, '\1<code>\2</code>\3')
   end
 end

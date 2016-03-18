@@ -46,45 +46,45 @@
         <% if point.size == 2 %>
           <blockquote>
             <p>
-              <%= Presenter.format(point.first) %>
+              <%= Presenter.format(point.first, summary.topics) %>
               <strong> vs. </strong>
-              <%= Presenter.format(point.last) %>
+              <%= Presenter.format(point.last, summary.topics) %>
             </p>
           </blockquote>
         <% else %>
-          <blockquote><p><%= Presenter.format(point.first) %></p></blockquote>
+          <blockquote><p><%= Presenter.format(point.first, summary.topics) %></p></blockquote>
         <% end %>
-      <% end %>
-
-      <p>These were common <strong>pairs of points raised by the same user</strong>:</p>
-      <% summary.related_points.each do |point, related| %>
-        <blockquote>
-          <p>
-            <%= Presenter.format(point["String"]) %>
-            <strong> & </strong>
-            <%= Presenter.format(related["String"]) %>
-          </p>
-        </blockquote>
       <% end %>
 
       <p>The following <strong>negated points</strong> were discussed:</p>
       <% summary.negated_points.each do |string, _, _| %>
         <blockquote>
-          <p><%= Presenter.format(string) %></p>
+          <p><%= Presenter.format(string, summary.topics) %></p>
+        </blockquote>
+      <% end %>
+
+      <p>These are examples of common <strong>pairs of points raised by the same user</strong>:</p>
+      <% summary.related_points.each do |point, related| %>
+        <blockquote>
+          <p>
+            <%= Presenter.format(point["String"], summary.topics) %>
+            <strong> & </strong>
+            <%= Presenter.format(related["String"], summary.topics) %>
+          </p>
         </blockquote>
       <% end %>
 
       <p>Other <strong>commonly occurring points</strong> made in the discussion were:</p>
       <% summary.common_points.each do |point| %>
         <blockquote>
-          <p><%= Presenter.format(point["String"]) %></p>
+          <p><%= Presenter.format(point["String"], summary.topics) %></p>
         </blockquote>
       <% end %>
 
       <p>Common points made in the discussion that <strong>link concepts</strong> were:</p>
       <% summary.longer_points.each do |point| %>
         <blockquote>
-          <p><%= Presenter.format(point["String"]) %></p>
+          <p><%= Presenter.format(point["String"], summary.topics) %></p>
         </blockquote>
       <% end %>
 
@@ -95,7 +95,7 @@
             <p><%= topic.capitalize %>
             <% points.each do |point| %>
               <blockquote>
-                <p><%= Presenter.format(point["String"]) %></p>
+                <p><%= Presenter.format(point["String"], summary.topics) %></p>
               </blockquote>
             <% end%>
           </li>
@@ -105,14 +105,14 @@
       <p>Points about <strong>multiple topics</strong>:</p>
       <% summary.multiple_topic_points.each do |point| %>
         <blockquote>
-          <p><%= Presenter.format(point["String"]) %></p>
+          <p><%= Presenter.format(point["String"], summary.topics) %></p>
         </blockquote>
       <% end %>
 
       <p>People ask <strong>questions</strong> like:</p>
       <% summary.question_points.each do |point| %>
         <blockquote>
-          <p><%= Presenter.format(point["String"], true) %></p>
+          <p><%= Presenter.format(point["String"], summary.topics, true) %></p>
         </blockquote>
       <% end %>
 
