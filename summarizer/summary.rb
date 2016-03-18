@@ -40,7 +40,6 @@ class Summary
       point = Curator.select_best(@groups[point])
       related = Curator.select_best(@groups[related])
       next if [point, related].map(&:nil?).any?
-      next unless (available_points & [point, related]).size == 2
       count += 1
       use_point(point); use_point(related)
       [point, related]
