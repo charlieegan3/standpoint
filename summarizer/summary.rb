@@ -97,11 +97,13 @@ class Summary
     count = 0
     top_topics.map do |t|
       next if count >= @point_count
-      points = @groups.select { |k, _| k.join(" ").include? " #{t}." }.take(@point_count).map do |k, group|
-        point = Curator.select_best(group)
-      end.compact
+      topic_points = []
+      @groups.select { |k, _| k.join(" ").include? " #{t}." }.each do |k, group|
+        next if topic_points.compact.size >= @point_count
+        topic_points << Curator.select_best(group)
+      end
       count += 1
-      [t, points]
+      [t, topic_points.compact]
     end.compact
   end
 

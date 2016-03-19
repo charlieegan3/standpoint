@@ -55,7 +55,7 @@ module Curator
   end
 
   def self.reparse_points(points)
-    cnc = CoreNLPClient.new("http://local.docker:9000")
+    cnc = CoreNLPClient.new("http://localhost:9000")
     points.map do |point|
       parse = cnc.request_parse(clean_string(point["String"])).first
       point["Relations"], point["Lemmas"] = relations_and_lemmas_from_parse(parse)
