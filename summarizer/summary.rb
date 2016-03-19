@@ -51,7 +51,7 @@ class Summary
 
   def generate_negated_points
     count = 0
-    @groups.map do |_, group|
+    points = @groups.map do |_, group|
       next if count >= @point_count * 2
       counter_point_groups = Counters.negated_points(available_points(group))
       next if counter_point_groups.empty?
@@ -61,7 +61,12 @@ class Summary
       use_point(best[1]); use_point(best[2])
       best[0] = Curator.clean_string(Condense.format_match_string(Condense.merge_diff_groups(best.first)))
       best
-    end.compact.sort_by { |best, _, _| best.scan(/\{|\}|\|/).size }.take(@point_count)
+    end.compact.sort_by! { |best, _, _| best.scan(/\{|\}|\|/).size }
+    points.reverse.take(@point_count).each do |_, p1, p2|
+      return_point(p1)
+      return_point(p2)
+    end
+    points.take(@point_count)
   end
 
   def generate_common_points
@@ -162,6 +167,11 @@ class Summary
 
   def use_point(point)
     @used_points += point_id_strings(point)
+    point
+  end
+
+  def return_point(point)
+    @used_points -= point_id_strings(point)
     point
   end
 
