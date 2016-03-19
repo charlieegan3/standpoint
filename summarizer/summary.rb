@@ -35,12 +35,15 @@ class Summary
 
   def generate_related_points
     count = 0
+    used_related_points = []
     Related.related_points(available_points).map do |point, related|
       next if count >= @point_count
       point = Curator.select_best(@groups[point])
       related = Curator.select_best(@groups[related])
       next if [point, related].map(&:nil?).any?
+      next unless (used_related_points & [point, related]).empty?
       count += 1
+      used_related_points << point << related
       use_point(point); use_point(related)
       [point, related]
     end.compact
