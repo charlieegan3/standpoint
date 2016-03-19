@@ -93,9 +93,9 @@
         <% summary.commonly_discussed_topic_points.each do |topic, points| %>
           <li>
             <p><%= topic.capitalize %>
-            <% points.each do |point| %>
+            <% Condense.condense_group(points.map { |p| Presenter.clean(p["String"]) }).each do |point| %>
               <blockquote>
-                <p><%= Presenter.format(point["String"], summary.topics) %></p>
+                <p><%= Presenter.format(point, summary.topics) %></p>
               </blockquote>
             <% end%>
           </li>
