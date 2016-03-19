@@ -1,4 +1,5 @@
 *.class
 node/node_modules/
 !java/Classifier4J-0.6.jar
-nlp_course/abortion*
+nlp_course/*.txt
+nlp_course/debates/

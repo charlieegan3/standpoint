@@ -25,6 +25,14 @@ def getProbabilities(sentences, pWord):
     for word in freq.keys():
         pWord[word] = (freq[word] / float(allWordsTot) )
 
+def cleanSentence(sentence):
+    sentence = re.sub('^\W+', '', sentence)
+    sentence = re.sub('[^\w\.\?]+$', '', sentence)
+    sentence = re.sub('\/>?', '', sentence)
+    sentence = re.sub('\.+', '.', sentence)
+    sentence = re.sub('\s+', ' ', sentence)
+    return sentence.capitalize()
+
 #----------------------------------------------------------
 
 def scoreSentences(sentences, pWord, maxLength):
@@ -34,7 +42,6 @@ def scoreSentences(sentences, pWord, maxLength):
     lengths = {}
 
     summaryLength=0
-    #main loop
     iters=0;
     while summaryLength<=maxLength and iters<50:
         iters += 1
@@ -55,26 +62,29 @@ def scoreSentences(sentences, pWord, maxLength):
         #generate summary by including best sentences and updating probabilities
         s = max(scores, key=scores.get)
 
-        if summaryLength  <=maxLength: #keep to word limit
-            if summaryLength + lengths[s]<=maxLength:
-                print (s) # print sentence
+        if summaryLength <= maxLength: #keep to word limit
+            if summaryLength + lengths[s]<= maxLength:
+                print (cleanSentence(s))
                 summaryLength += lengths[s] #increment summary length
             wordList = re.findall(r"[\w']+", s)
             for word in wordList: #iterate over words and reduce probabilities
                 pWord[word] *= pWord[word]
 
-    print (summaryLength, " words")
+    print (str(summaryLength) + " words")
 
 #-----------------------------------------------------------
 
-sentencesPos={};
-file1 = "abortion.txt"
+files = ["abortion", "creation", "guns", "gayRights", "healthcare", "god"]
+for f in files:
+    print (f.capitalize())
+    f = open(f + ".txt", 'r')
+    text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '')
 
-F = open(file1, 'r')
-text = F.read().replace('#stance=stance1', '').replace('#stance=stance2', '')
-sentencesPos = re.split(r'\n', text)
+    sentencesPos={};
+    sentencesPos = re.split(r'\n', text)
 
-pWordPos={}    # p(W)
-getProbabilities(sentencesPos,  pWordPos)
+    pWordPos={}
+    getProbabilities(sentencesPos,  pWordPos)
 
-scoreSentences(sentencesPos, pWordPos, 200)
+    scoreSentences(sentencesPos, pWordPos, 200)
+    print("------------------------------------------------------------")
