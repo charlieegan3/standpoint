@@ -141,6 +141,19 @@ class Summary
     }
   end
 
+  def to_h
+    {
+      counter_points: @counter_points,
+      related_points: @related_points,
+      negated_points: @negated_points,
+      common_points: @common_points,
+      longer_points: @longer_points,
+      commonly_discussed_topic_points: @commonly_discussed_topic_points,
+      multiple_topic_points: @multiple_topic_points,
+      question_points: @question_points,
+    }
+  end
+
   private
 
   def available_points(points=@points)
