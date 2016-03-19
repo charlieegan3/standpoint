@@ -26,6 +26,6 @@ summary.build
 @summary = summary
 erb = ERB.new(File.open("template.html.erb").read, 0, '>')
 html = erb.result binding
-File.open(title.downcase + "_summary.html", "w").write(html)
+File.open(title.downcase.gsub(/\W+/, "_") + "_summary.html", "w").write(html)
 
-File.open(title.downcase + "_summary.json", "w").write(summary.to_h.to_json)
+File.open(title.downcase.gsub(/\W+/, "_") + "_summary.json", "w").write(summary.to_h.to_json)
