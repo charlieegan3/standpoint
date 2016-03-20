@@ -86,5 +86,5 @@ for f in files:
     pWordPos={}
     getProbabilities(sentencesPos,  pWordPos)
 
-    scoreSentences(sentencesPos, pWordPos, 200)
+    scoreSentences(sentencesPos, pWordPos, 230)
     print("------------------------------------------------------------")
