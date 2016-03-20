@@ -22,6 +22,7 @@ module Curator
     points = reparse_points(points.uniq { |p| p["String"] })
     #permitted(points).min_by { |p| p["String"].length }
     points = permitted(points)
+    #original_points = points
 
     group_bigrams = []
     points.each do |p|
@@ -37,6 +38,15 @@ module Curator
       p["Score"] = score.to_f / clean.split(" ").size
     end
     return points if return_group
+    #return nil unless points.last
+    #if original_points.size.between?(4, 8) && points.last["Components"].size > 2 && points.map { |p| p["Components"] }.uniq.size == 1
+      #p original_points.first["Components"]
+      #puts original_points.map {|p| Presenter.clean(p["String"]) }.uniq
+      #print " > "
+      #puts Presenter.clean(points.last["String"])
+      #puts "------"
+      #exit
+    #end
     return points.last
   end
 
