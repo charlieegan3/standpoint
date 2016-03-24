@@ -53,7 +53,8 @@
 
       <p>The following <strong>contrasting points</strong> were discussed:</p>
       <% summary.counter_points.each do |point, counter| %>
-        <% point = Condense.condense_group([point["String"], counter["String"]]) %>
+        <% #point = Condense.condense_group([point["String"], counter["String"]]) %>
+        <% point = [point["String"], counter["String"]] %>
         <% if point.size == 2 %>
           <blockquote>
             <p>
@@ -68,9 +69,9 @@
       <% end %>
 
       <p>The following <strong>negated points</strong> were discussed:</p>
-      <% summary.negated_points.each do |string, _, _| %>
+      <% summary.negated_points.each do |_, first, _| %>
         <blockquote>
-          <p><%= Presenter.format(string, summary.topics) %></p>
+          <p><%= Presenter.format(first["String"], summary.topics) %></p>
         </blockquote>
       <% end %>
 
@@ -104,7 +105,8 @@
         <% summary.commonly_discussed_topic_points.each do |topic, points| %>
           <li>
             <p><%= topic.capitalize %>
-            <% Condense.condense_group(points.map { |p| Presenter.clean(p["String"]) }).each do |point| %>
+            <% #Condense.condense_group(points.map { |p| Presenter.clean(p["String"]) }).each do |point| %>
+            <% points.map { |p| Presenter.clean(p["String"]) }.take(@summary.point_count).each do |point| %>
               <blockquote>
                 <p><%= Presenter.format(point, summary.topics) %></p>
               </blockquote>

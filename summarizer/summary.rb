@@ -1,7 +1,7 @@
 class Summary
   attr_accessor :topics, :counter_points, :related_points, :negated_points,
     :common_points, :longer_points, :commonly_discussed_topic_points,
-    :multiple_topic_points, :question_points
+    :multiple_topic_points, :question_points, :point_count
 
   def initialize(title, points, topics, point_count)
     @title, @points, @topics, @point_count = title, points, topics, point_count
