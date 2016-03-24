@@ -1,6 +1,8 @@
 module Presenter
   def self.format(string, topics, question=false)
-    highlight(clean(string, question), topics)
+    return clean(string, question)
+    # highlighting is disabled
+    # highlight(clean(string, question), topics)
   end
 
   def self.clean(string, question=false)

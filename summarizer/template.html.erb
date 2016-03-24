@@ -4,20 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= @title %></title>
-    <link rel="stylesheet" href="https://stackedit.io/res-min/themes/base.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <style type="text/css">
       h1 {
         margin: 0.5em 0;
       }
       p {
         margin: 1.5em 0 0.5em 0;
+        font-weight: 300;
       }
       blockquote {
-        margin: 0 0 1px 0;
+        margin: 0px 0px 1px 10px;
         padding: 5px;
+        background: none;
+        border-left: none;
       }
       blockquote p {
         margin: 0;
+        font-size: 14px;
       }
       li p {
         margin: 3px 0;
@@ -33,6 +37,13 @@
         padding: 0px;
         color: SeaGreen;
         font-weight: bold;
+      }
+      strong {
+        font-weight: 300;
+      }
+      ul
+      {
+        list-style-type: none;
       }
     </style>
   </head>
@@ -116,14 +127,16 @@
         </blockquote>
       <% end %>
 
-      <hr/>
-      <% meta = summary.metadata %>
-      <p>
-        Summary based on
-        <strong><%= meta[:points] %> points</strong> from
-        <strong><%= meta[:posts] %> posts</strong>. There were
-        <strong><%= meta[:groups]%> groups</strong> of equivalent points.
-      </p>
+      <% if false %>
+        <hr/>
+        <% meta = summary.metadata %>
+        <p>
+          Summary based on
+          <strong><%= meta[:points] %> points</strong> from
+          <strong><%= meta[:posts] %> posts</strong>. There were
+          <strong><%= meta[:groups]%> groups</strong> of equivalent points.
+        </p>
+      <% end %>
 
     </div>
   </body>
