@@ -27,6 +27,7 @@ summary.build
 @summary = summary
 @stock_summary = ""
 
+# generate layout summary
 erb = ERB.new(File.open("template.html.erb").read, 0, '>')
 html = erb.result binding
 word_count = Nokogiri::HTML(html).text.split(/\s+/).size
@@ -38,3 +39,9 @@ file_name = file_name[0].downcase + file_name[1..-1]
 html = erb.result binding
 File.open(title.downcase.gsub(/\W+/, "_") + "_summary_layout.html", "w") { |file| file.write(html) }
 File.open(title.downcase.gsub(/\W+/, "_") + "_summary.json", "w") { |file| file.write(summary.to_h.to_json) }
+
+# generate formatted summary
+erb = ERB.new(File.open("template_formatted.html.erb").read, 0, '>')
+html = erb.result binding
+
+File.open(title.downcase.gsub(/\W+/, "_") + "_summary_formatted.html", "w") { |file| file.write(html) }
