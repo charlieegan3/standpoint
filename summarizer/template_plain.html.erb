@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= @title %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style type="text/css">
+      h1 {
+        margin: 0.5em 0;
+      }
+      p {
+        margin: 0.5em 0 0.1em 0;
+        font-weight: 300;
+      }
+      blockquote {
+        margin: 0px 0px 1px 20px;
+        padding: 0px;
+        background: none;
+        border-left: none;
+      }
+      blockquote p {
+        margin: 0;
+        font-size: 14px;
+      }
+      li p {
+        margin: 3px 0;
+      }
+      ul {
+        margin-bottom: 0;
+      }
+      code {
+        font-family: "Source Sans Pro", sans-serif;
+        font-size: 1em;
+        line-height: 1.45;
+        background-color: transparent;
+        padding: 0px;
+        color: SeaGreen;
+        font-weight: bold;
+      }
+      strong {
+        font-weight: 300;
+      }
+      ul
+      {
+        list-style-type: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1><%= @title %> A</h1>
+          <% @summary.split("\n").each do |line| %>
+            <p><%= line %></p>
+          <% end %>
+        </div>
+
+        <div class="col-md-6">
+          <h1><%= @title %> B</h1>
+          <% @stock_summary.split("\n").each do |line| %>
+            <p><%= line %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

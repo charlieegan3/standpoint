@@ -1,23 +1,16 @@
 require "json"
 require "pry"
 require "differ"
+require "erb"
 
 require_relative 'presenter'
 require_relative 'condense'
-
 
 def generate_paragraph(data)
   paragraph = ""
   data["counter_points"].each_with_index do |points, index|
     p, c = points
-    result = Condense.condense_group([p["String"], c["String"]])
-    if result.size == 2
-      paragraph += '"' + Presenter.clean(p["String"])[0..-2] + '"'
-      paragraph += ", "
-      paragraph += '"' + Presenter.clean(c["String"])[0..-2] + '"'
-    else
-      paragraph += '"' + result.first[0..-2] + '"'
-    end
+    paragraph += '"' + Presenter.clean(p["String"])[0..-2] + '"'
     paragraph += ", " if index < data["counter_points"].size-1
   end
 
@@ -35,7 +28,7 @@ def generate_paragraph(data)
   paragraph += "\n"
 
   data["negated_points"].each_with_index do |point, index|
-    paragraph += '"' + Presenter.clean(point.first) + '"'
+    paragraph += '"' + Presenter.clean(point[1]["String"]) + '"'
 
     paragraph += ", " if index < data["negated_points"].size-1
   end
@@ -63,7 +56,6 @@ def generate_paragraph(data)
 
   data["commonly_discussed_topic_points"].each_with_index do |topic, index|
     topic, points = topic
-    paragraph += " " + topic.capitalize + ": "
     points.each_with_index do |p, index|
       paragraph += '"' + Presenter.clean(p["String"]) + '"'
       paragraph += ", " if index < data["commonly_discussed_topic_points"].size-1
@@ -83,10 +75,17 @@ end
 
 ["abortion", "creation", "guns", "gay_rights", "healthcare", "god"].each do |d|
   data = JSON.parse(File.open(d + '_summary.json').read)
-  paragraph = generate_paragraph(data)
-  puts d.capitalize
-  puts paragraph
-  puts paragraph.scan(/\s+/).size.to_s + " words"
-  puts "-" * 50
-end
+  @summary = generate_paragraph(data)
+  word_count = @summary.split(/\s+/).size
 
+  file_name = d.split("_").map(&:capitalize).join
+  file_name = file_name[0].downcase + file_name[1..-1]
+  @stock_summary = `python ../stock_summarizers/nlp_course/summarizer_topic.py #{file_name} #{word_count}`
+
+  @title = d.split("_").map(&:capitalize).join(" ")
+
+  erb = ERB.new(File.open("template_plain.html.erb").read, 0, '>')
+  html = erb.result binding
+
+  File.open(d + "_summary_plain.html", "w") { |file| file.write(html) }
+end
