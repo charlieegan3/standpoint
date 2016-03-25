@@ -5,6 +5,10 @@ module Presenter
     # highlight(clean(string, question), topics)
   end
 
+  def self.full_format(string, topics, question=false)
+    highlight(clean(string, question), topics)
+  end
+
   def self.clean(string, question=false)
     string = string.strip
       .gsub(/^[^\w\{]+/, "")
