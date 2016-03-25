@@ -1,181 +1,70 @@
-<div class="row">
-  <div class="col-md-6 layout">
-    <h3><%= @title %> A</h3>
-    <p>The people disagree on these points:</p>
-    <% summary.counter_points.each do |point, counter| %>
-      <% #point = Condense.condense_group([point["String"], counter["String"]]) %>
-      <% point = [point["String"], counter["String"]] %>
-      <% if point.size == 2 %>
+<p>The people <strong>disagree</strong> on these points:</p>
+<% @summary.counter_points.each do |point, counter| %>
+  <% point = [point["String"], counter["String"]] %>
+  <% if point.size == 2 %>
+    <blockquote>
+      <p><%= Presenter.format(point.first, @summary.topics) %></p>
+    </blockquote>
+  <% else %>
+    <blockquote><p><%= Presenter.format(point.first, @summary.topics) %></p></blockquote>
+  <% end %>
+<% end %>
+
+<% @summary.negated_points.each do |_, first, _| %>
+  <blockquote>
+    <p><%= Presenter.format(first["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p>These are examples of common <strong>pairs of points raised by the same user</strong>:</p>
+<% @summary.related_points.each do |point, related| %>
+  <blockquote>
+    <p>
+      <%= Presenter.format(point["String"], @summary.topics) %>
+      <strong> &amp; </strong>
+      <%= Presenter.format(related["String"], @summary.topics) %>
+    </p>
+  </blockquote>
+<% end %>
+
+<p>Other <strong>commonly occurring points</strong> made in the discussion were:</p>
+<% @summary.common_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p>Common points made in the discussion that <strong>link concepts</strong> were:</p>
+<% @summary.longer_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p>Points for <strong>commonly discussed topics</strong>:</p>
+<ul>
+  <% @summary.commonly_discussed_topic_points.each do |topic, points| %>
+    <li>
+      <p><%= topic.capitalize %>
+      <% points.map { |p| Presenter.clean(p["String"]) }.take(@summary.point_count).each do |point| %>
         <blockquote>
-          <p>
-            <%= Presenter.clean(point.first, false) %>
-            <!-- <strong> vs. </strong> -->
-            <% # Presenter.clean(point.last, summary.topics) %>
-          </p>
+          <p><%= Presenter.format(point, @summary.topics) %></p>
         </blockquote>
-      <% else %>
-        <blockquote><p><%= Presenter.clean(point.first, false) %></p></blockquote>
-      <% end %>
-    <% end %>
+      <% end%>
+    </li>
+  <% end %>
+</ul>
 
-    <!-- <p>The following <strong>negated points</strong> were discussed:</p> -->
-    <% summary.negated_points.each do |_, first, _| %>
-      <blockquote>
-        <p><%= Presenter.clean(first["String"], false) %></p>
-      </blockquote>
-    <% end %>
+<p>Points about <strong>multiple topics</strong>:</p>
+<% @summary.multiple_topic_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
 
-    <p>These are examples of common <strong>pairs of points raised by the same user</strong>:</p>
-    <% summary.related_points.each do |point, related| %>
-      <blockquote>
-        <p>
-          <%= Presenter.clean(point["String"], false) %>
-          <strong> & </strong>
-          <%= Presenter.clean(related["String"], false) %>
-        </p>
-      </blockquote>
-    <% end %>
-
-    <p>Other <strong>commonly occurring points</strong> made in the discussion were:</p>
-    <% summary.common_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.clean(point["String"], false) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>Common points made in the discussion that <strong>link concepts</strong> were:</p>
-    <% summary.longer_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.clean(point["String"], false) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>Points for <strong>commonly discussed topics</strong>:</p>
-    <ul>
-      <% summary.commonly_discussed_topic_points.each do |topic, points| %>
-        <li>
-          <p><%= topic.capitalize %>
-          <% #Condense.condense_group(points.map { |p| Presenter.clean(p["String"]) }).each do |point| %>
-          <% points.map { |p| Presenter.clean(p["String"]) }.take(@summary.point_count).each do |point| %>
-            <blockquote>
-              <p><%= Presenter.clean(point, false) %></p>
-            </blockquote>
-          <% end%>
-        </li>
-      <% end %>
-    </ul>
-
-    <p>Points about <strong>multiple topics</strong>:</p>
-    <% summary.multiple_topic_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.clean(point["String"], false) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>People ask <strong>questions</strong> like:</p>
-    <% summary.question_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.clean(point["String"], true) %></p>
-      </blockquote>
-    <% end %>
-
-    <% if false %>
-      <hr/>
-      <% meta = summary.metadata %>
-      <p>
-        Summary based on
-        <strong><%= meta[:points] %> points</strong> from
-        <strong><%= meta[:posts] %> posts</strong>. There were
-        <strong><%= meta[:groups]%> groups</strong> of equivalent points.
-      </p>
-    <% end %>
-  </div>
-
-  <div class="col-md-6 formatted">
-    <h3><%= @title %> B</h3>
-    <p>The people <strong>disagree</strong> on these points:</p>
-    <% summary.counter_points.each do |point, counter| %>
-      <% point = [point["String"], counter["String"]] %>
-      <% if point.size == 2 %>
-        <blockquote>
-          <p>
-            <%= Presenter.full_format(point.first, summary.topics) %>
-          </p>
-        </blockquote>
-      <% else %>
-        <blockquote><p><%= Presenter.full_format(point.first, summary.topics) %></p></blockquote>
-      <% end %>
-    <% end %>
-
-    <!-- <p>The following <strong>negated points</strong> were discussed:</p> -->
-    <% summary.negated_points.each do |_, first, _| %>
-      <blockquote>
-        <p><%= Presenter.full_format(first["String"], summary.topics) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>These are examples of common <strong>pairs of points raised by the same user</strong>:</p>
-    <% summary.related_points.each do |point, related| %>
-      <blockquote>
-        <p>
-          <%= Presenter.full_format(point["String"], summary.topics) %>
-          <strong> & </strong>
-          <%= Presenter.full_format(related["String"], summary.topics) %>
-        </p>
-      </blockquote>
-    <% end %>
-
-    <p>Other <strong>commonly occurring points</strong> made in the discussion were:</p>
-    <% summary.common_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.full_format(point["String"], summary.topics) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>Common points made in the discussion that <strong>link concepts</strong> were:</p>
-    <% summary.longer_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.full_format(point["String"], summary.topics) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>Points for <strong>commonly discussed topics</strong>:</p>
-    <ul>
-      <% summary.commonly_discussed_topic_points.each do |topic, points| %>
-        <li>
-          <p><%= topic.capitalize %>
-          <% points.map { |p| Presenter.clean(p["String"]) }.take(@summary.point_count).each do |point| %>
-            <blockquote>
-              <p><%= Presenter.full_format(point, summary.topics) %></p>
-            </blockquote>
-          <% end%>
-        </li>
-      <% end %>
-    </ul>
-
-    <p>Points about <strong>multiple topics</strong>:</p>
-    <% summary.multiple_topic_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.full_format(point["String"], summary.topics) %></p>
-      </blockquote>
-    <% end %>
-
-    <p>People ask <strong>questions</strong> like:</p>
-    <% summary.question_points.each do |point| %>
-      <blockquote>
-        <p><%= Presenter.full_format(point["String"], summary.topics, true) %></p>
-      </blockquote>
-    <% end %>
-
-    <% if false %>
-      <hr/>
-      <% meta = summary.metadata %>
-      <p>
-        Summary based on
-        <strong><%= meta[:points] %> points</strong> from
-        <strong><%= meta[:posts] %> posts</strong>. There were
-        <strong><%= meta[:groups]%> groups</strong> of equivalent points.
-      </p>
-    <% end %>
-  </div>
-</div>
+<p>People ask <strong>questions</strong> like:</p>
+<% @summary.question_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics, true) %></p>
+  </blockquote>
+<% end %>
