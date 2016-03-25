@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-6 layout">
-    <h1><%= @title if @stock_summary != "" %> A</h1>
+    <h3><%= @title if @stock_summary != "" %> A</h3>
     <p>The people disagree on these points:</p>
     <% summary.counter_points.each do |point, counter| %>
       <% #point = Condense.condense_group([point["String"], counter["String"]]) %>
@@ -90,7 +90,7 @@
   </div>
 
   <div class="col-md-6 plain">
-    <h1><%= @title if @stock_summary != "" %> B</h1>
+    <h3><%= @title if @stock_summary != "" %> B</h3>
     <% @stock_summary.split("\n").each do |line| %>
       <p><%= line %></p>
     <% end %>

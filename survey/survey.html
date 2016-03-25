@@ -13,10 +13,11 @@
       margin: 0.5em 0 0.1em 0;
       font-weight: 300;
     }
-    .plain blockquote {
+    .plain blockquote, .layout blockquote {
       background: none;
       border-left: none;
       padding: 0px;
+      margin: 0px 0px 1px 20px;
     }
     blockquote p {
       margin: 0;
@@ -37,14 +38,14 @@
       color: SeaGreen;
       font-weight: bold;
     }
-    .plain strong {
+    .plain strong, .layout strong {
       font-weight: 300;
     }
     .plain ul
     {
       list-style-type: none;
     }
-    blockquote {
+    .formatted blockquote {
       margin: 0px 0px 1px 20px;
       padding: 2px 5px;
       background: #FAFAFA;
@@ -54,7 +55,7 @@
     var DOMReady = function(a,b,c){b=document,c='addEventListener';b[c]?b[c]('DOMContentLoaded',a):window.attachEvent('onload',a)}
 
     function setPage(topic, type, page) {
-      summaryIndex = "https://rawgit.com/charlieegan3/b262268f93ca918860d0/raw/593c8cf430cdb7dfb9770160cbf880966c8a490d/"
+      summaryIndex = "https://rawgit.com/charlieegan3/b262268f93ca918860d0/raw/37e8a71a7df25708cfc8a797110fe988a4ca2604/"
       summaryUrl = summaryIndex + topic + "_summary_" + type + ".html"
 
 
@@ -106,9 +107,25 @@
 </head>
 <body>
   <div class="container">
+    <div class="row">
+      <h1>Debate Summarization Evaluation</h1>
+      <div class="well">Introduction, consent and explanation</div>
+    </div>
     <div id="q1"></div>
+    <div class="row">
+      <div class="well">Question 1</div>
+    </div>
     <div id="q2"></div>
+    <div class="row">
+      <div class="well">Question 2</div>
+    </div>
     <div id="q3"></div>
+    <div class="row">
+      <div class="well">Question 3</div>
+    </div>
+    <div class="row">
+      <div class="well">Questions on value of different summary sections</div>
+    </div>
   </div>
 </body>
 </html>
