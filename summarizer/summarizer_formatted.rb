@@ -29,4 +29,4 @@ summary.build
 erb = ERB.new(File.open("template_formatted.html.erb").read, 0, '>')
 html = erb.result binding
 
-File.open(title.downcase.gsub(/\W+/, "_") + "_formatted_summary.html", "w") { |file| file.write(html) }
+File.open(title.downcase.gsub(/\W+/, "_") + "_summary_formatted.html", "w") { |file| file.write(html) }

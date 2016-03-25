@@ -36,5 +36,5 @@ file_name = file_name[0].downcase + file_name[1..-1]
 @stock_summary = `python ../stock_summarizers/nlp_course/summarizer_topic.py #{file_name} #{word_count}`
 
 html = erb.result binding
-File.open(title.downcase.gsub(/\W+/, "_") + "_summary.html", "w") { |file| file.write(html) }
+File.open(title.downcase.gsub(/\W+/, "_") + "_summary_layout.html", "w") { |file| file.write(html) }
 File.open(title.downcase.gsub(/\W+/, "_") + "_summary.json", "w") { |file| file.write(summary.to_h.to_json) }
