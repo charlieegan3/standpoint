@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Survey</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <style type="text/css">
+    h1 {
+      margin: 0.5em 0;
+    }
+    p {
+      margin: 0.5em 0 0.1em 0;
+      font-weight: 300;
+    }
+    .plain blockquote {
+      background: none;
+      border-left: none;
+      padding: 0px;
+    }
+    blockquote p {
+      margin: 0;
+      font-size: 14px;
+    }
+    .plain li p {
+      margin: 3px 0;
+    }
+    .plain ul {
+      margin-bottom: 0;
+    }
+    code {
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: 1em;
+      line-height: 1.45;
+      background-color: transparent;
+      padding: 0px;
+      color: SeaGreen;
+      font-weight: bold;
+    }
+    .plain strong {
+      font-weight: 300;
+    }
+    .plain ul
+    {
+      list-style-type: none;
+    }
+    blockquote {
+      margin: 0px 0px 1px 20px;
+      padding: 2px 5px;
+      background: #FAFAFA;
+    }
+  </style>
+  <script>
+    var DOMReady = function(a,b,c){b=document,c='addEventListener';b[c]?b[c]('DOMContentLoaded',a):window.attachEvent('onload',a)}
+
+    function setPage(topic, type, page) {
+      summaryIndex = "https://rawgit.com/charlieegan3/b262268f93ca918860d0/raw/593c8cf430cdb7dfb9770160cbf880966c8a490d/"
+      summaryUrl = summaryIndex + topic + "_summary_" + type + ".html"
+
+
+      var request = new XMLHttpRequest();
+      request.open('GET', summaryUrl, true);
+
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          var html = request.responseText;
+          document.getElementById(page).innerHTML = html;
+        } else {
+
+        }
+      };
+
+      request.onerror = function() {
+      };
+
+      request.send();
+    }
+
+    var combinations = [
+      ["abortion", "creation"],
+      ["abortion", "guns"],
+      ["abortion", "gay_rights"],
+      ["abortion", "healthcare"],
+      ["abortion", "god"],
+      ["creation", "guns"],
+      ["creation", "gay_rights"],
+      ["creation", "healthcare"],
+      ["creation", "god"],
+      ["guns", "gay_rights"],
+      ["guns", "healthcare"],
+      ["guns", "god"],
+      ["gay_rights", "healthcare"],
+      ["gay_rights", "god"],
+      ["healthcare", "god"]
+    ]
+    selected =combinations[Math.floor(Math.random()*combinations.length)];
+    topic_a = selected[0];
+    topic_b = selected[1];
+
+    DOMReady(function () {
+      setPage(topic_a, "plain", "q1");
+      setPage(topic_b, "layout", "q2");
+      setPage(topic_b, "formatted", "q3");
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div id="q1"></div>
+    <div id="q2"></div>
+    <div id="q3"></div>
+  </div>
+</body>
+</html>
