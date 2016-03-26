@@ -31,42 +31,41 @@ def cleanSentence(sentence):
     sentence = re.sub('\s+', ' ', sentence)
     return sentence.capitalize()
 
+def wordList(sentence):
+    return re.findall(r"[\w']+", sentence)
+
+def wordCount(sentence):
+    return len(wordList(sentence))
+
 #----------------------------------------------------------
 
 def scoreSentences(sentences, pWord, maxLength):
-    freq = {} # {} initialises a dictionary [hash function]
-    allWordsTot = 0
-    scores = {}
-    lengths = {}
-
-    summaryLength=0
-    iters=0;
-    while summaryLength<=maxLength and iters<50:
+    summaryLength = 0
+    iters = 0
+    while summaryLength <= maxLength and iters < 1000:
+        scores = {}
         iters += 1
-        #recalculate scores each time
-        for sentence in sentences:
-            wordList = re.findall(r"[\w']+", sentence)
-            length=1
-            score=0
-            for word in wordList: #iterate over words
-                length += 1
-                score += pWord[word]
 
-            scores[sentence] = score / length #calculate sentence score
-            if length <= 3: #ignore short sentences
-                scores[sentence] = 0
-            lengths[sentence] = length #calculate sentence length
+        sentences = [s for s in sentences if (len(s) < (maxLength * 1.05) - summaryLength)]
+        sentences = [s for s in sentences if (wordCount(s) > 3)]
+        if len(sentences) == 0:
+            break
 
-        #generate summary by including best sentences and updating probabilities
+        for s in sentences:
+            words = wordList(s)
+            count = len(words)
+            score = 0
+            for w in words:
+                score += pWord[w]
+            scores[s] = score / count
+
         s = max(scores, key=scores.get)
 
-        if summaryLength <= maxLength: #keep to word limit
-            if summaryLength + lengths[s]<= maxLength:
-                print (cleanSentence(s))
-                summaryLength += lengths[s] #increment summary length
-            wordList = re.findall(r"[\w']+", s)
-            for word in wordList: #iterate over words and reduce probabilities
-                pWord[word] *= pWord[word]
+        if summaryLength <= (maxLength * 1.05):
+            print (cleanSentence(s) + ".")
+            summaryLength += wordCount(s)
+        for word in wordList(s): #iterate over words and reduce probabilities
+            pWord[word] *= pWord[word]
 
 #-----------------------------------------------------------
 
