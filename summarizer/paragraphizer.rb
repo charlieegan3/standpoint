@@ -1,67 +1,43 @@
 module Paragraphizer
   def self.generate_paragraph(data)
     paragraph = ""
+
     data[:counter_points].each_with_index do |points, index|
       p, c = points
-      paragraph += '"' + Presenter.clean(p["String"])[0..-2] + '"'
-      paragraph += ", " if index < data[:counter_points].size-1
-    end    
-
-    paragraph += "\n"    
+      paragraph += Presenter.clean(p["String"])[0..-2] + "\n"
+    end
 
     data[:related_points].each_with_index do |points, index|
       p, r = points
-      paragraph += '"' + Presenter.clean(p["String"])[0..-2] + '"'
-      paragraph += ", "
-      paragraph += '"' + Presenter.clean(r["String"])[0..-2] + '"'    
-
-      paragraph += ", " if index < data[:related_points].size-1
-    end    
-
-    paragraph += "\n"    
+      paragraph += Presenter.clean(p["String"])[0..-2] + "\n"
+      paragraph += Presenter.clean(r["String"])[0..-2] + "\n"
+    end
 
     data[:negated_points].each_with_index do |point, index|
-      paragraph += '"' + Presenter.clean(point[1]["String"]) + '"'    
-
-      paragraph += ", " if index < data[:negated_points].size-1
-    end    
-
-    paragraph += "\n"    
+      paragraph += Presenter.clean(point[1]["String"]) + "\n"
+    end
 
     data[:common_points].each_with_index do |p, index|
-      paragraph += '"' + Presenter.clean(p["String"]) + '"'    
-
-      paragraph += ", " if index < data[:common_points].size-1
-    end    
-
-    paragraph += "\n"    
+      paragraph += Presenter.clean(p["String"]) + "\n"
+    end
 
     data[:longer_points].each do |p|
-      paragraph += '"' + Presenter.clean(p["String"]) + '"'
-      paragraph += ", "
+      paragraph += Presenter.clean(p["String"]) + "\n"
     end
     data[:multiple_topic_points].each_with_index do |p, index|
-      paragraph += '"' + Presenter.clean(p["String"]) + '"'    
-
-      paragraph += ", " if index < data[:multiple_topic_points].size-1
+      paragraph += Presenter.clean(p["String"]) + "\n"
     end
-    paragraph += "\n"    
 
     data[:commonly_discussed_topic_points].each_with_index do |topic, index|
       topic, points = topic
       points.each_with_index do |p, index|
-        paragraph += '"' + Presenter.clean(p["String"]) + '"'
-        paragraph += ", " if index < data[:commonly_discussed_topic_points].size-1
+        paragraph += Presenter.clean(p["String"]) + "\n"
       end
-      paragraph += "\n" unless index == data[:commonly_discussed_topic_points].size-1
-    end    
-
-    paragraph += "\n"    
+    end
 
     data[:question_points].each_with_index do |p, index|
-      paragraph += '"' + Presenter.clean(p["String"], true) + '"'
-      paragraph += ", " if index < data[:question_points].size-1
-    end    
+      paragraph += Presenter.clean(p["String"], true) + "\n"
+    end
 
     return paragraph
   end
