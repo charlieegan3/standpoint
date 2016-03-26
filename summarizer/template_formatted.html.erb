@@ -16,6 +16,14 @@
   </blockquote>
 <% end %>
 
+<p><strong>Commonly occurring points</strong> made in the discussion were:</p>
+<p>Bear in mind that these are made up from the left overs of the related section that follows. This order doesn't feel quite right to me (Adam)</p>
+<% @summary.common_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
 <p>These are examples of common <strong>pairs of points raised by the same user</strong>:</p>
 <% @summary.related_points.each do |point, related| %>
   <blockquote>
@@ -24,13 +32,6 @@
       <strong> &amp; </strong>
       <%= Presenter.format(related["String"], @summary.topics) %>
     </p>
-  </blockquote>
-<% end %>
-
-<p>Other <strong>commonly occurring points</strong> made in the discussion were:</p>
-<% @summary.common_points.each do |point| %>
-  <blockquote>
-    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
   </blockquote>
 <% end %>
 
