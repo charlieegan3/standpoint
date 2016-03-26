@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Survey</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style type="text/css">
+      h1 {
+        margin: 0.5em 0;
+      }
+      p {
+        margin: 2px 0px 0px 0px;
+        font-weight: 300;
+      }
+      .plain blockquote, .layout blockquote {
+        background: none;
+        border-left: none;
+        padding: 0px;
+        margin: 0px 0px 1px 20px;
+      }
+      blockquote p {
+        margin: 0;
+        font-size: 14px;
+      }
+      .plain li p {
+        margin: 3px 0;
+      }
+      .plain ul {
+        margin-bottom: 0;
+      }
+      code {
+        font-family: "Source Sans Pro", sans-serif;
+        font-size: 1em;
+        line-height: 1.45;
+        background-color: transparent;
+        padding: 0px;
+        color: SeaGreen;
+        font-weight: bold;
+      }
+      .plain strong, .layout strong {
+        font-weight: 300;
+      }
+      .plain ul
+      {
+        list-style-type: none;
+      }
+      .formatted blockquote {
+        margin: 0px 0px 1px 20px;
+        padding: 2px 5px;
+        background: #FAFAFA;
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h1>Debate Summarization Evaluation</h1>
+      <div>
+        <p>This survey is part of an evaluation for a computer science research project. We are investigating how to automatically summarize social media debates and are trying to evaluate how readers perceive different automatically generated summaries.</p>
+        <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> should you have any queries before starting the survey.</p>
+      </div>
+      <h3>Consent Form</h3>
+      <div class="well">
+        <p>Please read the statements below and tick the final box to confirm you have read and understood the statements and upon doing so agree to participate in the project.</p>
+        <p>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</p>
+        <p>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</p>
+        <p>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</p>
+        <p>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</p>
+        <p>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</p>
+        <p>By participating in the <strong>Debate Summarization Tool Evaluation</strong>, I confirm that I have read and understood the above statements.</p>
+        <label class="checkbox-inline"><input type="checkbox" name="consent" value="consent_given">I agree</label>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div class="row">
+      <h3>Instructions</h3>
+      <div class="well">
+        In the following sections you will be asked to compare summaries on the following factors:
+        <ul>
+          <li><strong>Content Interest / Informativeness</strong> Extracts give you a good feel for the summarized discussion</li>
+          <li><strong>Readability</strong> Extracts make sense; work without context; aren't repetitive and are easy to read.</li>
+          <li><strong>Punctuation and Presentation</strong> Extracts are correctly formatted as sentences, punctuation, capital letters and have sentence case.</li>
+          <li><strong>Overall</strong> aggregating your scores from those listed above - and any other factors you deem relevant - select your preferred summary.</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr/>
+
+    <h2>Section 1</h2>
+    <p>Please read the following summaries:</p>
+    <% s1, s2 = [['plain', summaries[debate2+"_plain"]], ['stock', summaries[debate2+"_stock_short"]]] %>
+    <% s1, s2 = [s1, s2].reverse if index.odd? %>
+    <div class="row">
+      <div class="col-md-6 <%= s1.first%>">
+        <h4><%= debate1 %> A</h4>
+        <%= s1.last %>
+      </div>
+      <div class="col-md-6 <%= s2.first%>">
+        <h4><%= debate1 %> B</h4>
+        <%= s2.last %>
+      </div>
+    </div>
+    <div class="well">
+      <p>1. Content Interest / Informativeness</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_content" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_content" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_content" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_content" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_content" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>2. Readability</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_readability" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_readability" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_readability" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_readability" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_readability" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>3. Punctuation and Presentation (hows this Adam? as a replacement for Grammatical Correctness)</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_punctuation" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_punctuation" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_punctuation" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_punctuation" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_punctuation" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>4. Overall</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_overall" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_overall" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_overall" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_overall" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_plain_v_stock_overall" value="<%= s2.first %>_much_better">B is much better</label>
+    </div>
+
+    <hr/>
+
+    <h2>Section 2</h2>
+    <p>Please read the following summaries:</p>
+    <% s1, s2 = [['layout', summaries[debate2+"_layout"]], ['stock', summaries[debate2+"_stock_long"]]] %>
+    <% s1, s2 = [s1, s2].reverse if index.even? %>
+    <div class="row">
+      <div class="col-md-6 <%= s1.first%>">
+        <h4><%= debate2 %> A</h4>
+        <%= s1.last %>
+      </div>
+      <div class="col-md-6 <%= s2.first%>">
+        <h4><%= debate2 %> B</h4>
+        <%= s2.last %>
+      </div>
+    </div>
+    <div class="well">
+      <p>5. Content Interest / Informativeness</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_content" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_content" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_content" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_content" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_content" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>6. Readability</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_readability" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_readability" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_readability" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_readability" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_readability" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>7. Punctuation and Presentation (hows this Adam? as a replacement for Grammatical Correctness)</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_punctuation" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_punctuation" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_punctuation" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_punctuation" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_punctuation" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>8. Overall</p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_overall" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_overall" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_overall" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_overall" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_stock_overall" value="<%= s2.first %>_much_better">B is much better</label>
+    </div>
+
+    <hr/>
+
+    <h2>Section 3</h2>
+    <p>Please review the following summaries considering the presentation, note that you have already read this summary in the previous question.</p>
+    <% s1, s2 = [['layout', summaries[debate2+"_layout"]], ['formatted', summaries[debate2+"_formatted"]]] %>
+    <% s1, s2 = [s1, s2].reverse if index.odd? %>
+    <div class="row">
+      <div class="col-md-6 <%= s1.first%>">
+        <h4><%= debate2 %> A</h4>
+        <%= s1.last %>
+      </div>
+      <div class="col-md-6 <%= s2.first%>">
+        <h4><%= debate2 %> B</h4>
+        <%= s2.last %>
+      </div>
+    </div>
+    <div class="well">
+      <p>9. Which presentation do you prefer?<p>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_formatted" value="<%= s1.first %>_much_better">A is much better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_formatted" value="<%= s1.first %>_better">A is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_formatted" value="same">A and B are about the same</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_formatted" value="<%= s2.first %>_better">B is better</label>
+      <label class="radio-inline"><input type="radio" name="<%= debate1 %>_layout_v_formatted" value="<%= s2.first %>_much_better">B is much better</label>
+      <p>10. Please justify your answer to Q9:</p>
+      <textarea class="form-control" rows="5" id="comment"></textarea>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
