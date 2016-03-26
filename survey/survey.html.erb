@@ -57,18 +57,19 @@
     <div class="row">
       <h1>Debate Summarization Evaluation</h1>
       <div>
-        <p>This survey is part of an evaluation for a computer science research project. We are investigating how to automatically summarize social media debates and are trying to evaluate how readers perceive different automatically generated summaries.</p>
-        <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> should you have any queries before starting the survey.</p>
+        <p>Please read the statements below and tick the final box to confirm you have understood them and agree to take part in the evaluation.</p>
+        <p>Contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> should you have any queries before starting the survey.</p>
       </div>
       <h3>Consent Form</h3>
       <div class="well">
         <p>Please read the statements below and tick the final box to confirm you have read and understood the statements and upon doing so agree to participate in the project.</p>
-        <p>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</p>
-        <p>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</p>
-        <p>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</p>
-        <p>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</p>
-        <p>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</p>
-        <p>By participating in the <strong>Debate Summarization Tool Evaluation</strong>, I confirm that I have read and understood the above statements.</p>
+        <ul>
+          <li>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</li>
+          <li>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</li>
+          <li>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</li>
+          <li>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</li>
+          <li>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</li>
+        </ul>
         <label class="checkbox-inline"><input type="checkbox" name="consent" value="consent_given">I agree</label>
       </div>
     </div>
@@ -78,11 +79,12 @@
     <div class="row">
       <h3>Instructions</h3>
       <div class="well">
-        In the following sections you will be asked to compare summaries on the following factors:
+        <p>We do not present the (lengthy) source text from the online discussions from which the follow summaries were generated. This evaluation just about comparing different summaries on the same topic and of the same source text.</p>
+        <p>In the following sections you will be asked to compare summaries on the following factors:</p>
         <ul>
-          <li><strong>Content Interest / Informativeness</strong> Extracts give you a good feel for the summarized discussion</li>
-          <li><strong>Readability</strong> Extracts make sense; work without context; aren't repetitive and are easy to read.</li>
-          <li><strong>Punctuation and Presentation</strong> Extracts are correctly formatted as sentences, punctuation, capital letters and have sentence case.</li>
+          <li><strong>Content Interest / Informativeness</strong> the summary presents varied and interesting content.</li>
+          <li><strong>Readability</strong> the summary contents make sense; work without context; aren't repetitive; and are easy to read.</li>
+          <li><strong>Punctuation and Presentation</strong> the summary contents are correctly formatted as sentences, punctuation, capital letters and have sentence case.</li>
           <li><strong>Overall</strong> aggregating your scores from those listed above - and any other factors you deem relevant - select your preferred summary.</li>
         </ul>
       </div>
@@ -178,7 +180,7 @@
 
     <h2>Section 3</h2>
     <p>Please review the following summaries considering the presentation, note that you have already read this summary in the previous question.</p>
-    <p>In the formatted summary, keywords in explanations are in bold; topic words are in green bold and extracts have a grey background.</p>
+    <p>In the formatted summary, keywords in explanations are in bold; topic words are in green bold and summary content has a grey background.</p>
     <% s1, s2 = [['layout', summaries[debate2+"_layout"]], ['formatted', summaries[debate2+"_formatted"]]] %>
     <% s1, s2 = [s1, s2].reverse if index.odd? %>
     <div class="row">

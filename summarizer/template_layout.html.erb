@@ -24,12 +24,13 @@
   </blockquote>
 <% end %>
 
-<p>These are examples of common pairs of points raised by the same user:</p>
+<p>Users that talk about A often talk about B</p>.
 <% @summary.related_points.each do |point, related| %>
   <blockquote>
     <p>
+      (A)
       <%= Presenter.clean(point["String"]) %>
-      &amp;
+      (B)
       <%= Presenter.clean(related["String"]) %>
     </p>
   </blockquote>
