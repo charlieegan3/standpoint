@@ -62,7 +62,7 @@ def scoreSentences(sentences, pWord, maxLength):
         s = max(scores, key=scores.get)
 
         if summaryLength <= (maxLength * 1.05):
-            print (cleanSentence(s) + ".")
+            print (cleanSentence(s))
             summaryLength += wordCount(s)
         for word in wordList(s): #iterate over words and reduce probabilities
             pWord[word] *= pWord[word]
