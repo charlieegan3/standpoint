@@ -17,7 +17,6 @@
 <% end %>
 
 <p>Commonly occurring points made in the discussion were:</p>
-<p>Bear in mind that these are made up from the left overs of the related section that follows. This order doesn't feel quite right to me (Adam)</p>
 <% @summary.common_points.each do |point| %>
   <blockquote>
     <p><%= Presenter.clean(point["String"]) %></p>
