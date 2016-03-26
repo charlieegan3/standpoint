@@ -73,7 +73,7 @@ f = sys.argv[1]
 f = open("../stock_summarizers/nlp_course/" + f + ".txt", 'r')
 
 text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '')
-text = text.decode('utf-8', 'ignore')
+text = ''.join([i if ord(i) < 128 else '' for i in text])
 #text = text.replace('.', '. ')
 
 #sentences = re.split(r'\n|\. ', text)
