@@ -64,6 +64,11 @@
 <% end %>
 
 <p>People ask questions like:</p>
+<% if @summary.questions.empty? %>
+  <blockquote>
+    <p>There were no repeated questions</p>
+  </blockquote>
+<% end %>
 <% @summary.question_points.each do |point| %>
   <blockquote>
     <p><%= Presenter.clean(point["String"], true) %></p>
