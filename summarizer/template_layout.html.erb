@@ -24,7 +24,7 @@
   </blockquote>
 <% end %>
 
-<p>Users that talk about A often talk about B</p>.
+<p>Users that talk about A often talk about B.</p>
 <% @summary.related_points.each do |point, related| %>
   <blockquote>
     <p>
@@ -65,7 +65,7 @@
 <% end %>
 
 <p>People ask questions like:</p>
-<% if @summary.questions.empty? %>
+<% if @summary.question_points.empty? %>
   <blockquote>
     <p>There were no repeated questions</p>
   </blockquote>
