@@ -72,9 +72,12 @@ def scoreSentences(sentences, pWord, maxLength):
 f = sys.argv[1]
 f = open("../stock_summarizers/nlp_course/" + f + ".txt", 'r')
 
-text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '').replace('.', '. ')
+text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '')
+text = text.decode('utf-8', 'ignore')
+#text = text.replace('.', '. ')
 
-sentences = re.split(r'\n|\. ', text)
+#sentences = re.split(r'\n|\. ', text)
+sentences = re.split(r'\n', text)
 
 pWord={}
 getProbabilities(sentences,  pWord)
