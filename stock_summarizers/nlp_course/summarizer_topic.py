@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import re, random, math, collections, itertools, sys, os
 
-PRINT_ERRORS=0
-
 #------------- Function Definitions ---------------------
 
 #calculates p(W)
@@ -74,12 +72,12 @@ def scoreSentences(sentences, pWord, maxLength):
 
 f = sys.argv[1]
 f = open("../stock_summarizers/nlp_course/" + f + ".txt", 'r')
-text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '')
 
-sentencesPos={};
-sentencesPos = re.split(r'\n', text)
+text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '').replace('.', '. ')
 
-pWordPos={}
-getProbabilities(sentencesPos,  pWordPos)
+sentences = re.split(r'\n|\. ', text)
 
-scoreSentences(sentencesPos, pWordPos, int(sys.argv[2]))
+pWord={}
+getProbabilities(sentences,  pWord)
+
+scoreSentences(sentences, pWord, int(sys.argv[2]))
