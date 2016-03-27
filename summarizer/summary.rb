@@ -128,11 +128,11 @@ class Summary
     topic_points = @points.sort_by { |p| @topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
     topic_points.uniq! { |p| p["String"] }
     selected_points = []
-    for i in 0..10
+    for i in 0..15
       selected_points << topic_points.delete(Curator.select_best(topic_points))
-      break if selected_points.size >= @point_count
+      break if selected_points.compact.size >= @point_count
     end
-    selected_points
+    selected_points.compact
   end
 
   def generate_question_points
