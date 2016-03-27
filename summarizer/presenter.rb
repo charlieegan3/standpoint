@@ -14,7 +14,7 @@ module Presenter
       .gsub("-LSB-", "[").gsub("-RSB-", "]")
       .gsub("[ ", "[").gsub(" ]", "]").strip
       .gsub("` ", "'")
-      .gsub(/'([^tm])/, '\1')
+      .gsub(/'([^tmlsrvd])/, '\1')
       .gsub(/([^\w\}]+\w{0,1})$/, "")
       .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
       .gsub(" i ", " I ")
