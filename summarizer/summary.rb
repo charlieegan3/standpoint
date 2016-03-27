@@ -185,12 +185,12 @@ class Summary
 
   def point_id_strings(point)
     if point["Lemmas"]
-      lemma_string = point["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.join(" ").downcase
+      lemma_string = point["Lemmas"].select { |l| l.match(/[a-z]/) }.reject { |l| l.match(/IN|DT|MD/) }.map { |l| l.split(":").first }.join(" ").downcase
     end
     [
-      point["String"].gsub(/[^\w\s]+/, "").gsub(/\s+/, " ").strip.downcase,
-      point["Components"].join(" "),
-      Presenter.format(point["String"], @topics),
+      point["String"].gsub(/[^\w\s]+/, "").gsub(/\s+/, " ").strip.downcase.gsub(/\s(at|from)\s/, " "),
+      point["Components"].select { |c| c.match(/\.\w*(verb|subj|obj)/) }.map { |c| c.split(".").first }.join(" "),
+      Presenter.clean(point["String"]),
       lemma_string
     ].compact
   end
