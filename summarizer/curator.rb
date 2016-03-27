@@ -79,6 +79,7 @@ module Curator
     points.reject do |point|
       !point["String"].length.between?(15, 100) ||
       #point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
+      point["String"].match(/is\W+$/) ||
       point["String"].match(/this|And/) ||
       point["String"].match(/^\w+ ?, /) ||
       point["String"].match(/(\s*,){2}/) ||
