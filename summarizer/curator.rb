@@ -20,9 +20,11 @@ module Curator
 
   def self.select_best(points, return_group=false)
     points = reparse_points(points.uniq { |p| p["String"] })
-    #permitted(points).min_by { |p| p["String"].length }
     points = permitted(points)
-    #original_points = points
+    # return_group ? return points : return points.sample
+    if points.empty?
+      return_group ? (return []) : (return nil)
+    end
 
     group_bigrams = []
     points.each do |p|
