@@ -133,16 +133,16 @@ class Summary
   end
 
   def generate_question_points
-    count = 0
-    question_groups = @points.select { |p| p["String"].include? "?" }
+    question_groups = @points.select { |p| p["String"].strip[-1] == "?" }
           .uniq {|p| p["String"] }
           .group_by { |p| p["Components"] }
           .sort_by { |k, v| v.size }
           .select { |k, v| v.size > 2 }
+    count = 0
     question_groups.map do |_, group|
       next if count >= @point_count
       count += 1
-      Curator.select_best_question(group)
+      group.sort_by { |p| p["String"].length }.first
     end.compact
   end
 

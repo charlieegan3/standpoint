@@ -56,13 +56,6 @@ module Curator
     return points.last
   end
 
-  def self.select_best_question(points)
-    points.reject! do |p|
-      p["String"].strip[-1] != "?"
-    end
-    points.sort_by {|x|x["String"].length}.first
-  end
-
   def self.bigrams(string)
     words = string.downcase.gsub(/[^\s\w']/, "").split(/\s+/)
     words.each_with_index.to_a[0..-2].map do |e, i|
@@ -84,6 +77,7 @@ module Curator
       !point["String"].length.between?(15, 100) ||
       #point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
       point["String"].downcase.match(/^\W*(who|what|when|where|why|which|how)/) ||
+      point["String"].include?("?") ||
       point["String"].match(/is\W+$/) ||
       point["String"].match(/this|And/) ||
       point["String"].match(/^\w+ ?, /) ||
