@@ -30,6 +30,9 @@
   .plain ul {
     margin-bottom: 0;
   }
+  .plain p, .layout p, .stock p {
+    border-bottom: 1px solid #eee;
+  }
   code {
     font-family: "Source Sans Pro", sans-serif;
     font-size: 1em;
@@ -57,7 +60,7 @@
   <div class="row">
     <h1>Debate Summarization Evaluation</h1>
     <div>
-      <p>This survey is part of an evaluation for a computer science research project. We are investigating how to automatically summarize social media debates and are trying to evaluate how readers perceive different automatically generated summaries.</p>
+      <p>The online world is full of debate and discussion - could these online debates be summarized automatically? We are investigating this question for an undergraduate research project and are asking people to compare different summaries. Making an effort to remain indifferent to the topics, please complete the form below to let us know what you think.</p>
       <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> if you have any queries before starting the survey.</p>
     </div>
     <h3>Consent Form</h3>
@@ -78,8 +81,8 @@
 
   <div class="row">
     <h3>Instructions</h3>
-    <div class="well">
-      <p>We do not present the source text from the online discussions from which the following summaries were generated. This evaluation just about comparing different summaries on the same topic created from the same source text.</p>
+    <div>
+      <p>We will ask you to compare two summaries of the same online debate, given side-by-side. The task is just about the comparison of summaries at face value since reading the long source text would take too long. Please remember that this is a student research project and that summaries are not intended to give preference to a particular viewpoint, nor should you allow your personal stance on a topic influence your decision.</p>
       <p>In the following sections you will be asked to compare summaries on the following factors:</p>
       <ul>
         <li><strong>Content Interest / Informativeness</strong> the summary presents varied and interesting content.</li>
@@ -176,7 +179,7 @@
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="same">A and B are about the same</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s2.first %>-better">B is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s2.first %>-much_better">B is much better</label>
-    <p>2.5. Please justify your answer to Q9:</p>
+    <p>2.5. Please justify your answer to 2.4:</p>
     <textarea class="form-control" rows="5" name="<%= debate2 %>-layout_v_stock-comment"></textarea>
   </div>
 
