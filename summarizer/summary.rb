@@ -83,21 +83,24 @@ class Summary
   end
 
   def generate_longer_points
-    count = 0
     used_topics = []
-    [].tap do |points|
-      @groups.reject { |k, v| k.size < 4 || v.size < 3 }.sort_by { |_, v| v.size }.reverse.map do |k, g|
-        next if count >= @point_count
-        best = Curator.select_best(available_points(g))
-        next unless best
-        topics = @topics.select { |t| best["String"].downcase.include?(t) || best["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.include?(t) }
-        next if topics.empty? || (used_topics & topics).size > 1
-        next if points.map { |p| p["String"] }.include? best["String"]
-        count += 1
-        used_topics += topics
-        points << best
-      end
+    points = []
+    @groups.reject { |k, v| k.size < 4 || v.uniq { |p| p["String"] }.size < 2 }.sort_by { |_, v| v.size }.reverse.map do |k, g|
+      g.uniq! { |p| p["String"] }
+      best = Curator.select_best(available_points(g))
+      next unless best
+      topics = @topics.select { |t| best["String"].downcase.include?(t) || best["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.include?(t) }
+      next if (used_topics & topics).size > 1
+      next if points.map { |p| p["String"] }.include? best["String"]
+      used_topics += topics
+      points << best
     end
+    points.sort_by do |point|
+      @topics.select do |t|
+        point["String"].downcase.include?(t) ||
+        point["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.include?(t)
+      end.size
+    end.reverse.take(@point_count)
   end
 
   def generate_commonly_discussed_topic_points
