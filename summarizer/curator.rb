@@ -20,8 +20,12 @@ module Curator
 
   def self.select_best(points, return_group=false)
     points = reparse_points(points.uniq { |p| p["String"] })
+    #if return_group
+      #return points
+    #else
+      #return points.sample
+    #end
     points = permitted(points)
-    # return_group ? return points : return points.sample
     if points.empty?
       return_group ? (return []) : (return nil)
     end
