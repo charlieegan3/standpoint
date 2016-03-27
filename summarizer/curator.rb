@@ -76,7 +76,7 @@ module Curator
     points.reject do |point|
       !point["String"].length.between?(15, 100) ||
       #point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
-      point["String"].downcase.match(/^\W*(who|what|when|where|why|which|how)/) ||
+      point["String"].downcase.match(/^\W*(who|what|when|where|why|which|how|whether)/) ||
       point["String"].include?("?") ||
       point["String"].match(/is\W+$/) ||
       point["String"].match(/this|And/) ||
@@ -89,6 +89,7 @@ module Curator
       point["Relations"].count { |r| r.match(/advcl/) } > 1 ||
       point["Relations"].count { |r| r.match(/conj|nmod/) } > 2 ||
       point["Relations"].join(" ").match(/amod (punct)?$/) ||
+      (!point["Lemmas"].join("").match(/VB/) && point["String"].length <= 20) ||
       contains_case_change(point) ||
       contains_bad_it(point) ||
       bad_repeated_word(point) ||
@@ -107,6 +108,7 @@ module Curator
       .gsub("-LSB-", "[").gsub("-RSB-", "]")
       .gsub("[ ", "[").gsub(" ]", "]").strip
       .gsub("` ", "'")
+      .gsub(" '", "'")
       .gsub(/'([^t])/, '\1')
       .gsub(/([^\w\}]+\w{0,1})$/, "")
       .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
