@@ -210,7 +210,7 @@ func main() {
 		"thing.nsubj happen.verb",
 		"something.nsubj happen.verb",
 	}
-	personList := strings.Split("who.nsubj we.nsubj I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj person.nsubj people.nsubj", " ")
+	personList := strings.Split("I.nsubj i.nsubj who.nsubj we.nsubj I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj person.nsubj people.nsubj", " ")
 
 	originalSize := len(points)
 

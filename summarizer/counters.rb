@@ -12,6 +12,8 @@ module Counters
       end
     end
 
+    counters.reject! { |k, _| k.size == 2 && k.join(" ").match(/(go|come)\.verb(\s|$)/) }
+
     counters.sort_by { |k, v| groups[k].size + groups[v.first].size }
       .reverse
       .map { |k, v| [k, v.first] }

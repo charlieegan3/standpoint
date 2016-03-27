@@ -108,13 +108,16 @@ class Summary
     top_topics.map do |t|
       next if count >= @point_count
       topic_points = []
+      used_components = []
       @groups.select { |k, _| k.join(" ").include? " #{t}." }.each do |k, group|
-        best = Curator.select_best(group)
+        best = Curator.select_best(available_points(group))
         next unless best
+        next if (best["Components"] - used_components).size < 1
         size = Condense.condense_group(topic_points.compact.map { |p| Presenter.clean(p["String"]) }).size
         next_size = Condense.condense_group(topic_points.compact.map { |p| Presenter.clean(p["String"]) } + [Presenter.clean(best["String"])]).size
         next if size >= @point_count || next_size == size
-        topic_points << Curator.select_best(group)
+        topic_points << best
+        used_components += best["Components"]
       end
       count += 1
       [t, topic_points.compact]
