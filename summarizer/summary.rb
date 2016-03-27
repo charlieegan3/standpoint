@@ -190,11 +190,15 @@ class Summary
     if point["Lemmas"]
       lemma_string = point["Lemmas"].select { |l| l.match(/[a-z]/) }.reject { |l| l.match(/IN|DT|MD/) }.map { |l| l.split(":").first }.join(" ").downcase
     end
+    clean_string = point["String"].gsub(/[^\w\s]+/, "").gsub(/\s+/, " ").strip.downcase.gsub(/\s(at|from)\s/, " ")
+    formatted_string = Presenter.clean(point["String"])
     [
-      point["String"].gsub(/[^\w\s]+/, "").gsub(/\s+/, " ").strip.downcase.gsub(/\s(at|from)\s/, " "),
-      point["Components"].select { |c| c.match(/\.\w*(verb|subj|obj)/) }.map { |c| c.split(".").first }.join(" "),
-      Presenter.clean(point["String"]),
-      lemma_string
+      lemma_string,
+      clean_string,
+      clean_string.gsub(" ", ""),
+      formatted_string,
+      formatted_string.gsub(" ", ""),
+      point["Components"].select { |c| c.match(/\.\w*(verb|subj|obj)/) }.map { |c| c.split(".").first }.join(" ")
     ].compact
   end
 
