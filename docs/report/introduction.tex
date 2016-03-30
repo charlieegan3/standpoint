@@ -6,7 +6,18 @@
   This project explores an approach for summarization of such information. At the core of the approach is the notion of a `point' - a short refined statement. Points are extracted from text and grouped into summaries. We test our implementation's performance by running an evaluation using testing summaries generated for various social media debates.
 
   \section{Motivation}
-    todo
+    (some other papers seem to have a definition here.)``A summary can be loosely defined as a text that is produced from one or more texts, that conveys important information in the original text(s), and that is no longer than half of the original text(s) and usually significantly less than that.'' \cite{radev2002introduction}
+
+    Summarization has been a long-running task in the field of Natural Language Processing. Summarization sub-tasks such as extraction and compression, where text is selected and removed to arrive at a summary is an accepted approach. (cite: some uses of extractive summarization)
+
+    Argumentation Mining, a newer area of study, has the aim of detecting argumentative discourse structure in text. Argumentation Mining has been successfully used in the processing of formal texts such as parliamentary records \cite{palau2009argumentation} and legal documents (cite: Semantic Processing of Legal Texts) where arguments are often stated more explicitly. However, Argumentation Mining has also more recently been applied to more informal text \cite{park2015conditional}. Such applications, coupled with the goal of summarization encapsulates much of the idea for this project.
+
+    The project was based on the idea that informal argumentative discourse could be used to build a high-level summary of an online discussion. News article comment sections; forum threads; film \& product reviews and even extended email conversations were all candidate applications for such a tool.
+
+    (perhaps a mention of the point concept here?)
+
+    The following objectives set the foundations for the development of the tool.
+
   \section{Objectives}
     The core objectives of the project were to investigate and implement the following functionality:
     \begin{itemize}
@@ -14,7 +25,7 @@
       \item{A program capable of linking of contrastive points.}
       \item{An interface to study points made about different topics by participants in online discussions.}
     \end{itemize}
-    We also set the following secondary goals to be investigated should there have been the opportunity.
+    We also set the following secondary goals to be investigated should there have been the opportunity. These were additional (potential) features that are more closely linked to the area of argumentation mining than information extraction.
     \begin{itemize}
       \item{Implement a feature capable of linking points representative of a particular stance.}
       \item{Implement a means of linking points and the related supporting points in a discussion.}
