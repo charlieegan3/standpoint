@@ -23,13 +23,13 @@
   </blockquote>
 <% end %>
 
-<p>Users that talk about <strong>A often talk about B</strong>.</p>
+<p>Users that talk about <strong><em>X</em> often talk about <em>Y</em></strong>.</p>
 <% @summary.related_points.each do |point, related| %>
   <blockquote>
     <p>
-      <strong>(A)</strong>
+    <strong>(<em>X</em>)</strong>
       <%= Presenter.format(point["String"], @summary.topics) %>
-      <strong>(B)</strong>
+      <strong>(<em>Y</em>)</strong>
       <%= Presenter.format(related["String"], @summary.topics) %>
     </p>
   </blockquote>
