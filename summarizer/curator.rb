@@ -19,6 +19,7 @@ module Curator
   end
 
   def self.select_best(points, return_group=false)
+    #original_points = points.dup
     points = reparse_points(points.uniq { |p| p["String"] })
     #if return_group
       #return points
@@ -43,16 +44,15 @@ module Curator
       end
       p["Score"] = score.to_f / clean.split(" ").size
     end
+ #   if original_points.map {|p| Presenter.clean(p["String"]) }.uniq.size.between?(12, 17) && points.last["Components"].size > 2 && points.map { |p| p["Components"] }.uniq.size == 1
+ #     p original_points.first["Components"]
+ #     puts original_points.map {|p| Presenter.clean(p["String"]) }.uniq
+ #     print " > "
+ #     puts Presenter.clean(points.last["String"])
+ #     puts "------"
+ #     exit
+ #   end
     return points if return_group
-    #return nil unless points.last
-    #if original_points.size.between?(4, 8) && points.last["Components"].size > 2 && points.map { |p| p["Components"] }.uniq.size == 1
-      #p original_points.first["Components"]
-      #puts original_points.map {|p| Presenter.clean(p["String"]) }.uniq
-      #print " > "
-      #puts Presenter.clean(points.last["String"])
-      #puts "------"
-      #exit
-    #end
     return points.last
   end
 
