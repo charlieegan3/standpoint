@@ -1,0 +1,108 @@
+.["PERSON.nsubj", "be.verb", "abortion.dobj"]
+Who are against abortion but sorry to the ones that are for abortion.
+Your are for abortion.
+You are for abortion at least inform yourself and watch the video silent screamand make an educated call about abortion.
+Who are against abortion.
+You are against abortion.
+I am not against all abortions.
+I am against human abortions.
+They're about abortion.
+Who is for abortion.
+They are for abortion.
+Who are so strongly against abortion.
+I'm against abortion with the exception of rape and ABSOLUTE emergencies.
+You're only for abortion.
+Seriously : I am against all abortion.
+I'm against abortion.
+I am against abortions being banned.
+ > Seriously : I am against all abortion.
+------
+.["evolution.nsubj", "be.verb", "theory.dobj"]
+Why evolution is only theory and not a proven fact.
+Evolution (as Darwin and today's proponents describe it) is as solid a theory as gravity.
+Evolution is a scientific theory.
+Evolution is a theory that is supported at the micro level.
+Wrong - evolution is probably the most supported theory in biology - it's withstood considerable scrutiny for the past 150 years and is as strong as ever.
+Along the lines of : Evolution is just a theory.
+Evolution is a theory that has not been proven and I think probably never will be.
+Evolution is simply a scientific theory and there is no reason why the counterarguments to Evolution shouldn't be scientific.
+Evolution is just a theory, ID believers.
+Anyway, evolution is the only theory.
+Yes evolution is a theory which is more.
+Evolution is just a theory, though one with a great deal of evidence backing it up.
+Evolution is a theory without mechanism.
+Evolution is not a theory saying.
+Evolution is a fake theory.
+Evolution is a theory with a good argument, but it is a theory.
+Evolution is merely a theory at best, and has more holes than swiss cheese -RRB.
+ > Evolution is a theory without mechanism.
+------
+..["PERSON.nsubj", "kill.verb", "people.dobj"]
+Who killed people at her school.
+Just people kill people.
+People kill people, but guns make it a heck of a lot easier.
+Who kill people.
+Guns dont kill people, people kill people.
+People sometimes kill other people innocently.
+People kill people.
+PEOPLE KILL PEOPLE.
+Guns dont kill people, people kill people, from a gunsdont kill people I do corperation.
+More than 20,000 gun laws nation wide and bad people are still killing innocent people.
+They can kill more people.
+People will always kill other people.
+People people kill people.
+Although some people have killed people with guns.
+ > People kill people.
+------
+..["PERSON.nsubj", "believe.verb", "god.dobj"]
+Who simply didn't believe in any god.
+Who doesn't believe in a god.
+Whether they believe in god or not.
+Who do believe in a creator but not necessarily some creator who wants anything from them a god that is more of a passive uninvolved observer, than a ruler.
+I believe in gods but not a absolute god such as Jesus christ or Allah that created inclusive us human beings.
+I too believe in god but its just r imagination or it is just in d minds of people who can't actually do anything without d concern of others, & as it is quite insulting to ask someone every time about everything they do.
+I don't believe in a god.
+You can believe in a god and be for the good of all humanity or you can't believe in god and be for the good of all humanity.
+You can't believe in god.
+I don't believe in those 1,000 gods.
+I don't believe in god (s) - at the same time.
+Who doesn't believe in any god whatsoever.
+I believe in god, but I don't believe in man.
+I don't believe in any god or gods.
+I do however believe in many gods and goddesses but they are NOT benevolent.
+I don't believe in god as a god like the bible.
+You don't believe in the god of Abraham from the old testament who created an earth with water and grass and trees and night and day.
+ > I don't believe in a god.
+------
+["homosexuality.nsubj", "be.verb", "wrong.dobj"]
+Homosexuality is wrong.
+Homosexuality is wrong into a murderer.
+Why homosexuality is wrong.
+It is that homosexuality is wrong.
+The real question should be Is homosexuality morally wrong.
+Homosexuality is not morally wrong.
+Eve, therefore homosexuality is wrong.
+Without the presupposition that homosexuality is wrong.
+No remorse as a proof text that homosexuality is wrong.
+Is homosexuality morally wrong.
+Homosexuality is morally wrong.
+Homosexuality is wrong but I believe.
+ > Homosexuality is wrong.
+------
+.["PERSON.nsubj", "have.verb", "pay.xcomp"]
+Why should she have to pay it back.
+He has to pay more for extensive treatment and becomes more impoverished.
+They don't have to pay it back with interest.
+Somehow, we will have to pay for it by our taxes or insurance.
+You should have to pay insurance for police, and, the police wouldn't have to help you.
+We now have to pay for the NIG.
+I shouldn't have to pay for other people's health expenses, especially.
+A person not have to pay that money back.
+That they have to pay it back.
+We'll have to pay a lot more.
+They will have to pay an 8 penalty.
+You should either have to pay it.
+They should either have to pay it back, or work for it or something.
+A person will have to pay ridiculous amounts of money.
+ > We now have to pay for the NIG.
+------
