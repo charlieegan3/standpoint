@@ -210,29 +210,4 @@
     <p>3.2. Please justify your answer to 3.1:</p>
     <textarea class="form-control" rows="5" name="<%= debate2 %>-layout_v_formatted-comment"></textarea>
   </div>
-
-  <h2>Section 4</h2>
-  <p>Please review the following summaries and rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
-  <% s1, s2 = [['layout', summaries[debate3 + "_layout"]], ['random_layout', summaries['random_' + debate3 + "_layout"]]] %>
-  <% s1, s2 = [s1, s2].reverse if index.odd? %>
-  <div class="row">
-    <div class="col-md-6 <%= s1.first.split("_").join(" ") %>">
-      <h4><%= debate3 %> A</h4>
-      <%= s1.last %>
-    </div>
-    <div class="col-md-6 <%= s2.first.split("_").join(" ") %>">
-      <h4><%= debate3 %> B</h4>
-      <%= s2.last %>
-    </div>
-  </div>
-  <div class="well">
-    <p>4.1. Comparing the summary on how well, on average, the points make sense and their succinctness, give a relative rating:</p>
-    <label class="radio-inline"><input type="radio" name="<%= debate3 %>-layout_v_layout_random" value="<%= s1.first %>-much_better">A is much better</label>
-    <label class="radio-inline"><input type="radio" name="<%= debate3 %>-layout_v_layout_random" value="<%= s1.first %>-better">A is better</label>
-    <label class="radio-inline"><input type="radio" name="<%= debate3 %>-layout_v_layout_random" value="same">A and B are about the same</label>
-    <label class="radio-inline"><input type="radio" name="<%= debate3 %>-layout_v_layout_random" value="<%= s2.first %>-better">B is better</label>
-    <label class="radio-inline"><input type="radio" name="<%= debate3 %>-layout_v_layout_random" value="<%= s2.first %>-much_better">B is much better</label>
-    <p>4.2. Please justify your answer to 4.1:</p>
-    <textarea class="form-control" rows="5" name="<%= debate3 %>-layout_v_layout_random-comment"></textarea>
-  </div>
 </div>

@@ -97,11 +97,12 @@
 
   <hr/>
 
+  <h2>Section 1</h2>
   <div class="row">
     <% extracts.each_with_index do |e, i| %>
       <% i += 1 %>
       <div class="well">
-        <p><%= "#{i}. #{e}" %></p>
+        <p>1.<%= "#{i}. #{e}" %></p>
         <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="1">1/5</label>
         <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="2">2/5</label>
         <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="3">3/5</label>
@@ -109,5 +110,29 @@
         <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="5">5/5</label>
       </div>
     <% end %>
+  </div>
+
+  <h2>Section 2</h2>
+  <p>Please review the following summaries and rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
+  <% s1, s2 = [['layout', summaries[topic + "_layout"]], ['random_layout', summaries['random_' + topic + "_layout"]]] %>
+  <div class="row">
+    <div class="col-md-6 <%= s1.first.split("_").join(" ") %>">
+      <h4><%= topic %> A</h4>
+      <%= s1.last %>
+    </div>
+    <div class="col-md-6 <%= s2.first.split("_").join(" ") %>">
+      <h4><%= topic %> B</h4>
+      <%= s2.last %>
+    </div>
+  </div>
+  <div class="well">
+    <p>2.1. Comparing the summary on how well, on average, the points make sense and their succinctness, give a relative rating:</p>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.2. Please justify your answer to 2.1:</p>
+    <textarea class="form-control" rows="5" name="<%= topic %>-layout_v_layout_random-comment"></textarea>
   </div>
 </div>

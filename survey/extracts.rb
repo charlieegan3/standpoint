@@ -1,6 +1,13 @@
 require 'pry'
 require 'erb'
 
+summaries = {}
+Dir.glob('summaries/*') do |file|
+  name = file.split(/\W/)[1]
+  contents = File.open(file).read
+  summaries[name] = contents
+end
+
 topics = %w(abortion creation guns god gay_rights healthcare)
 contents = File.open('extracts.txt').read
 groups = contents.split("------").map { |e| e.split("\n").select { |l| l.match(/^\w/) } }
