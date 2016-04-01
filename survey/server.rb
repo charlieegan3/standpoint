@@ -3,7 +3,7 @@ require 'sinatra'
 set :bind, '0.0.0.0'
 
 get '/' do
-  html = File.open("#{rand(0..4)}.html").read
+  html = File.open(Dir.glob('*.html').sample).read
   "<form action=\"/\" method=\"post\">" + html + "<input type=\"submit\" value=\"Submit\">"
 end
 
