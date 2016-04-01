@@ -8,11 +8,11 @@ Dir.glob('summaries/*') do |file|
   summaries[name] = contents
 end
 
-pairs = [%w(abortion creation), %w(creation abortion), %w(god guns),
-  %w(guns god), %w(gay_rights healthcare), %w(healthcare gay_rights)]
+sets = [%w(abortion creation god), %w(creation abortion guns), %w(god guns gay_rights),
+  %w(guns god healthcare), %w(gay_rights healthcare abortion), %w(healthcare gay_rights creation)]
 
-pairs.each_with_index do |pair, index|
-  debate1, debate2 = pair
+sets.each_with_index do |set, index|
+  debate1, debate2, debate3 = set
   erb = ERB.new(File.open("survey.html.erb").read, 0, '>')
   File.open("#{index}.html", "w") { |file| file.write(erb.result(binding)) }
 end
