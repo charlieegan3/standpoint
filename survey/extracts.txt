@@ -1,22 +1,23 @@
-.["PERSON.nsubj", "be.verb", "abortion.dobj"]
-Who are against abortion but sorry to the ones that are for abortion.
-Your are for abortion.
-You are for abortion at least inform yourself and watch the video silent screamand make an educated call about abortion.
-Who are against abortion.
-You are against abortion.
-I am not against all abortions.
-I am against human abortions.
-They're about abortion.
-Who is for abortion.
-They are for abortion.
-Who are so strongly against abortion.
-I'm against abortion with the exception of rape and ABSOLUTE emergencies.
-You're only for abortion.
-Seriously : I am against all abortion.
-I'm against abortion.
-I am against abortions being banned.
- > Seriously : I am against all abortion.
-------
+..["woman.nsubj", "have.verb", "right.dobj"]
+The woman has a right to self-defense.
+A woman should have the right to choose.
+A woman should have the right to decide.
+The woman has a right to unplug.
+Women have the right to choose, period.
+Does a man or a woman have the right to force his involvement on his child.
+A woman has the right to a partial birth abortion.
+A women would still have the right to choose a late term abortion.
+A woman has the right to decide, but that is.
+A woman has the right to decide.
+A woman has a right to her body and to choice.
+A woman has the sole right to decide to seek an abortion.
+The woman has the right to her womb.
+Women have the right to choose from that.
+Every woman should have the right to decide.
+The pregnant woman has a right to abort.
+That, before that time, the woman has a right to choose to terminate her pregnancy.
+ > The woman has the right to her womb.
+ ------
 .["evolution.nsubj", "be.verb", "theory.dobj"]
 Why evolution is only theory and not a proven fact.
 Evolution (as Darwin and today's proponents describe it) is as solid a theory as gravity.

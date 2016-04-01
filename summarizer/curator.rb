@@ -44,14 +44,21 @@ module Curator
       end
       p["Score"] = score.to_f / clean.split(" ").size
     end
- #   if original_points.map {|p| Presenter.clean(p["String"]) }.uniq.size.between?(12, 17) && points.last["Components"].size > 2 && points.map { |p| p["Components"] }.uniq.size == 1
- #     p original_points.first["Components"]
- #     puts original_points.map {|p| Presenter.clean(p["String"]) }.uniq
- #     print " > "
- #     puts Presenter.clean(points.last["String"])
- #     puts "------"
- #     exit
- #   end
+#   banned = [
+#     ["PERSON.nsubj", "be.verb", "abortion.dobj"],
+#     ["PERSON.nsubj", "be.verb", "pregnant.dobj"]
+#   ]
+#   if original_points.map {|p| Presenter.clean(p["String"]) }.uniq.size.between?(12, 17) &&
+#     points.last["Components"].size > 2 &&
+#     points.map { |p| p["Components"] }.uniq.size == 1 &&
+#     !banned.include?(original_points.first["Components"])
+#       p original_points.first["Components"]
+#       puts original_points.map {|p| Presenter.clean(p["String"]) }.uniq
+#       print " > "
+#       puts Presenter.clean(points.last["String"])
+#       puts "------"
+#       exit
+#   end
     return points if return_group
     return points.last
   end
