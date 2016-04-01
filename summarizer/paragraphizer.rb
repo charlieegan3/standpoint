@@ -4,17 +4,17 @@ module Paragraphizer
 
     data[:counter_points].each_with_index do |points, index|
       p, c = points
-      paragraph += Presenter.clean(p["String"])[0..-2] + "\n"
-    end
-
-    data[:related_points].each_with_index do |points, index|
-      p, r = points
-      paragraph += Presenter.clean(p["String"])[0..-2] + "\n"
-      paragraph += Presenter.clean(r["String"])[0..-2] + "\n"
+      paragraph += Presenter.clean(p["String"]) + "\n"
     end
 
     data[:negated_points].each_with_index do |point, index|
       paragraph += Presenter.clean(point[1]["String"]) + "\n"
+    end
+
+    data[:related_points].each_with_index do |points, index|
+      p, r = points
+      paragraph += Presenter.clean(p["String"]) + "\n"
+      paragraph += Presenter.clean(r["String"]) + "\n"
     end
 
     data[:common_points].each_with_index do |p, index|
