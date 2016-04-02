@@ -1,34 +1,28 @@
 \chapter{Introduction\label{chap:introduction}}
-  More people are online than ever before. Online comment threads and forums allow us to participate as contributors - rather than just consumers - in our spare time. From the latest blockbuster title to yesterday's celebrity misdemeanor there's an online conversation already well underway.
+  More people are online than ever before. Comment threads and forums allow us to spend our spare time participating as contributors - rather than just consumers consumers. From the latest blockbuster title to yesterday's celebrity misdemeanor there's an online conversation already well underway.
 
-  These discussions, where statements are encoded in natural language, represent a large untapped resource of ideas and opinions. A higher level view of this living dataset would be of interest in a number of fields ranging from politics \& marketing to research.
+  These discussions, where statements are encoded in natural language, represent a large untapped resource of ideas and opinions. A higher level view of this ever-evolving `dataset' would be of interest to many working the social sciences as well as the participants of online discussions.
 
-  This project explores an approach for summarization of such information. At the core of the approach is the notion of a `point' - a short refined statement. Points are extracted from text and grouped into summaries. We test our implementation's performance by running an evaluation using testing summaries generated for various social media debates.
+  This project explores an approach for summarization of such information. At the core of the approach is the notion of a `point' - a short refined argument statement. An argument is made up of a number of points and we are going to use these as our content units in our summarization task. Points are extracted from text and grouped to give a summary of the discussion. We test our implementation's performance by running an evaluation using summaries generated from various political debates sourced from online discussions \cite{walker2012corpus}.
 
   \section{Motivation}
-    (some other papers seem to have a definition here.)``A summary can be loosely defined as a text that is produced from one or more texts, that conveys important information in the original text(s), and that is no longer than half of the original text(s) and usually significantly less than that.'' \cite{radev2002introduction}
+    ``A summary can be loosely defined as a text that is produced from one or more texts, that conveys important information in the original text(s), and that is no longer than half of the original text(s) and usually significantly less than that.'' \cite{radev2002introduction}
 
-    Summarization has been a long-running task in the field of Natural Language Processing. Summarization sub-tasks such as extraction and compression, where text is selected and removed to arrive at a summary is an accepted approach. (cite: some uses of extractive summarization)
+    Summarization has been a long-running task in the field of Natural Language Processing. Summarization sub-tasks such as extraction and compression, where text is selected and removed to arrive at a summary, have become commonplace due to the complexities introduced by abstractive methods. Extractive methods for this have become largely statistical using Naive-Bayes \cite{kupiec1995trainable} approaches and, more recently, Neural Networks \cite{svore2007enhancing}.
 
-    Argumentation Mining, a newer area of study, has the aim of detecting argumentative discourse structure in text. Argumentation Mining has been successfully used in the processing of formal texts such as parliamentary records \cite{palau2009argumentation} and legal documents (cite: Semantic Processing of Legal Texts) where arguments are often stated more explicitly. However, Argumentation Mining has also more recently been applied to more informal text \cite{park2015conditional}. Such applications, coupled with the goal of summarization encapsulates much of the idea for this project.
+    Argumentation Mining, a newer area of study, has the aim of detecting argumentative discourse structure in text. Argumentation Mining has been successfully used in the processing of formal texts such as parliamentary records \cite{palau2009argumentation} and legal documents (cite: Semantic Processing of Legal Texts) where arguments are often stated more explicitly. However, Argumentation Mining has also more recently been applied to more informal text \cite{park2015conditional}. Such applications, coupled with summarization, encapsulates much of the idea for this project.
 
-    The project was based on the idea that informal argumentative discourse could be used to build a high-level summary of an online discussion. News article comment sections; forum threads; film \& product reviews and even extended email conversations were all candidate applications for such a tool.
+    The points idea was adopted from a previous project from the department that used points in a system for stance classification. This had point identification, however, the tool was not capable of extracting units of text smaller than sentences. The tool was capable of linking contrasting points, but could only make matches based on the present of negation terms.
 
-    (perhaps a mention of the point concept and in the sorts of ways they'll be grouped, even how evaluated)
-
-    Need in here: that the previous uncompleted project was basis. It developed the notion of points and we wanted go beyond that. Mention that the goal of that project was stance classification.
-
-    Angrosh improvements: not only negation, more complete points based on the text from the original sentences. We group people, look for more than just contrasting points. Explore related and by topic.
-
-    Also need to mention that sentences aren't good enough for these kinds of discussions, repitition occurs from components of sentences and whole sentences are not specific enough. They also reference other parts. Need to get to the core ideas.
+    The project was based on the concept of a point as well as the idea that informal argumentative discourse could be used to build a high-level summary of an online discussion. News article comment sections; forum threads; film \& product reviews and even extended email conversations are all candidate applications for such a tool.
 
   \section{Objectives}
     Starting with the definition for a point: a verb and it's dependents, we set the following objectives for the project.
 
-    Leading on from a related project investigating stance classification (cite: Angrosh), we wanted to improve on the extraction of points from text. This meant ensuring a complete list of a verbs dependents was maintains for presentation for a given point.
+    Leading on from the stance classification project (cite Angrosh?), we wanted to improve on the extraction of points from text. This meant ensuring a complete list of a verb's dependents was maintained for presentation for a given point - rather than just using the containing sentence.
 
-    Another goal was to investigate relationships between points such as contrastive or co-occurring points. As secondary objective, we wanted to investigate supporting points. These were points that not only commonly co-occured in posts but also had a place in an argument structure.
+    Another goal was to investigate relationships between points such as contrastive or co-occurring points - this involved expanding the ways in which related points could be matched, beyond negation. As secondary objective, we wanted to investigate supporting points. These were points that not only commonly co-occured in posts but also had a place in an argument structure.
 
-    The task of stance classification was also discussed. Another secondary objective was to investigate if certain points were representative for a given known stance.
+    The task of stance classification was also discussed. Another secondary objective was to investigate if certain points were representative for a given known stance. Stance was annotated on some of the corpus debates.
 
-    Finally there was a plan to present this information in in a way that was easy to interpret.
+    Finally we set out to present this information in in a way that was easy to interpret. This `presentation form' evolved into our debate summaries.
