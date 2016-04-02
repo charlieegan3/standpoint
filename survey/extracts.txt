@@ -90,20 +90,19 @@ Homosexuality is morally wrong.
 Homosexuality is wrong but I believe.
  > Homosexuality is wrong.
 ------
-.["PERSON.nsubj", "have.verb", "pay.xcomp"]
-Why should she have to pay it back.
-He has to pay more for extensive treatment and becomes more impoverished.
-They don't have to pay it back with interest.
-Somehow, we will have to pay for it by our taxes or insurance.
-You should have to pay insurance for police, and, the police wouldn't have to help you.
-We now have to pay for the NIG.
-I shouldn't have to pay for other people's health expenses, especially.
-A person not have to pay that money back.
-That they have to pay it back.
-We'll have to pay a lot more.
-They will have to pay an 8 penalty.
-You should either have to pay it.
-They should either have to pay it back, or work for it or something.
-A person will have to pay ridiculous amounts of money.
- > We now have to pay for the NIG.
-------
+...["PERSON.nsubj", "pay.verb", "tax.dobj"]
+Also, you pay more in taxes than most billionaires.
+In the example given, she has been paying taxes in to the system for the past 12 years.
+You pay taxes in Canada.
+Onto what you pay in taxes.
+As they pay income taxes.
+In Canada we pay more taxes than California but we have the same GDP GSP and same population.
+Some people can't pay taxes.
+People pay with their taxes It is a myth.
+People pay through their taxes instead of in direct payments to their health insurance providers.
+They pay their taxes.
+I paid my taxes I want to be assured.
+Who were not paying taxes.
+You pay a tax.
+ > Some people can't pay taxes.
+ ------

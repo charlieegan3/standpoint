@@ -47,6 +47,8 @@ module Curator
 #   banned = [
 #     ["PERSON.nsubj", "be.verb", "abortion.dobj"],
 #     ["PERSON.nsubj", "be.verb", "pregnant.dobj"]
+#     ["PERSON.nsubj", "have.verb", "pay.xcomp"],
+#     ["PERSON.nsubj", "have.verb", "care.dobj"]
 #   ]
 #   if original_points.map {|p| Presenter.clean(p["String"]) }.uniq.size.between?(12, 17) &&
 #     points.last["Components"].size > 2 &&
