@@ -33,9 +33,20 @@
 
         Automated methods are used primarily at the Document Understanding Conference when many summaries must be evaluated for a given task. Ideally however summaries could be manually evaluated. This would allow extrinsic attributes such as the utility of a summary for a particular task to also be accounted for. (reference to SUMMAC?, automated http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.489)
 
-    \subsection{Argument Mining}
-      Argumentation Mining is a task that involves identifying components of arguments within text such as premises and the conclusion. Part of the task often involves fitting these into a template or known pattern to enable some level of reasoning.
+    \subsection{Argumentation Mining}
+      Argumentation Mining is a task that involves the identification components of arguments within text such as premises and the conclusion. The task also often involves fitting these components into a template or known pattern to enable some form of reasoning. \cite{palau2009argumentation}
+
+      A relatively new research area - combining ideas from natural language processing, information extraction and argumentation theory - argumentation mining is based largely on discourse  theory. While argumentation mining can be applied to structured text (source?), ultimately mining of free text is the goal. This means that argumentation tools often need to model concepts from linguistic research such as rhetoric structure theory \cite{mann1988rhetorical} and local coherence centering \cite{weinstein21centering}.
+
       \subsubsection{Identifying Argumentative Structures in Text}
+        First must classify phrases in text as being part of the arg
+        done statistically using naive bayes
+        next need to separate argumentation components, often make use of document structure or some other analysis such as the presence of words clusters with other argumentation phrases.
+
+        once grouped it's also possible to classify components into conclusions premises etc.
+
+        Inter-argument links can come from a rule based approach or HMMs.
+
       \subsubsection{Argument Relationships}
     \subsection{Dependency: Topic Modeling}
     \subsection{Dependency: Probabilistic Parsers}
