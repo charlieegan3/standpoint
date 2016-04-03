@@ -16,9 +16,16 @@
 
         More recently, MEAD, a centroid-based, multi-document summarization tool has been able to produce good summaries without abstraction and generation \cite{radev2000centroid}. Compared to previous abstractive systems such as SUMMONS that relied on templates \cite{mckeown1995generating}, MEAD was more generally applicable.
 
-        Most work on the summarization of multi-document sources has focused on news articles. While there are parallels between this and the summarization of online discussion, fundamentally they are different tasks. More closely related to this project is the summarization of discussion and opinion mining. Related work is discussed in the following section.
+        Most work on the summarization of multi-document sources has focused on news articles. While there are parallels between this and the summarization of online discussion, fundamentally they are different tasks. More closely related to this project is opinion mining.
 
-      \subsubsection{Sentence Compression}
+        Opinion mining or sentiment analysis is an approach often applied to user reviews, documents discussing a product or service. Early work in the area focused on the problem as a classification task, categorizing documents based on their sentiment bearing terms \cite{turney2002thumbs}. More recently there as been a greater focus on aspect-based approaches that attempt isolate sentiment terminology to specific topics such as product features \cite{hu2004mining}.
+
+      \subsubsection{Sentence Compression \& Content Unit Size}
+        While sentences are often the default `content unit' used in extractive summarization, often smaller units are more desirable. Sentences found in real documents and discussions can make a number of statements each of which can be useful when creating a summary. Sentences may also include surplus information. In this case sentences can be compressed statistically, in a similar way to documents are in extractive summarization.
+
+        Both noisy channel and decision based models have used on parsed sentences for this task \cite{knight2000statistics}. Our approach for compression where points are extracted around a verb, does not seem to have been previously documented.
+
+
       \subsubsection{Evaluation of Summaries}
 
     \subsection{Argument Mining}
