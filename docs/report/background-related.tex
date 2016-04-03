@@ -2,7 +2,7 @@
   \section{Background}
     This project is built on existing technologies and research. This section gives an overview of the key foundations.
 
-    \subsection{Summarization}
+    \subsection{Automatic Summarization}
       ``A summary can be loosely defined as a text that is produced from one or more texts, that conveys important information in the original text(s), and that is no longer than half of the original text(s) and usually significantly less than that.'' \cite{radev2002introduction}
 
       Approaches to summarization could be grouped loosely into two groups, extractive and abstractive. Extractive summaries are constructed using content found in the source text. Abstractive summaries generate the summary content by performing some form of analysis on the source text. One might also group summarization tasks based on the nature of the source text. Approaches tend to summarize either single or multiple documents.
@@ -10,6 +10,12 @@
       This project is more closely related to the summarization of multiple documents, however, it applies both elements of extraction and abstraction.
 
       \subsubsection{Multi-document Summarization}
+        Summarizing text made up of documents from different authors poses an interesting challenge. Using multiple documents introduces repetition and contradictions - this makes selection tasks such as extraction and compression more complex.
+
+        Earlier work on multi-document summarization suggested the task was going to require an abstractive approach \cite{McKeown1999TMS315149315355}. The justification being that extraction techniques used for single document summaries, not being able to connect information between documents, would lead to incoherent and repetitive summaries. An alternative approach clustered paragraphs on the same topic from multiple documents and then use natural language generation techniques to combine phrases from paragraphs into a coherent summary \cite{McKeown1999TMS315149315355}. A similar approach creates clusters by parsing sentences and using predicate-argument structures to link phrases \cite{barzilay1999information} (comment about being similar to our points extraction and grouping?). Interestingly, while both rely methods rely on natural language generation, neither use a semantic representation.
+
+        More recently, MEAD, a centroid-based, multi-document summarization tool has been able to produce good summaries without abstraction and generation \cite{radev2000centroid}. Compared to previous abstractive systems such as SUMMONS that relied on templates \cite{mckeown1995generating}, MEAD was more generally applicable.
+
       \subsubsection{Sentence Compression}
       \subsubsection{Evaluation of Summaries}
 
