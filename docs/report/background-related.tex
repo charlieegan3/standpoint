@@ -33,6 +33,8 @@
 
         Automated methods are used primarily at the Document Understanding Conference when many summaries must be evaluated for a given task. Ideally however summaries could be manually evaluated. This would allow extrinsic attributes such as the utility of a summary for a particular task to also be accounted for. (reference to SUMMAC?, automated http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.489)
 
+        In this project we compare our summaries against those generated using the approach outlined here \cite{nenkova2006compositional} as a baseline.
+
     \subsection{Argumentation Mining}
       Argumentation Mining is a task that involves the identification components of arguments within text such as premises and the conclusion. The task also often involves fitting these components into a template or known pattern to enable some form of reasoning. \cite{palau2009argumentation}
 
@@ -57,10 +59,17 @@
         To make use of the dependency parse a means of querying the graph is required. \textit{Semgrex} is one such approach, this defines a regular expression style syntax for expressing queries on nodes and relations in a dependency graphs \cite{Chambers2007}. More generally however, the task about querying nodes and edges in a directional graph. For this project we opted to use \textit{Cypher}\footnote{http://neo4j.com/docs/stable/cypher-introduction.html}, the graph query language implemented by the \textit{Neo4j}\footnote{http://neo4j.com/} graph database. This was chosen for the querying of dependency parses because it allowed many separate graphs to be queried in parallel for the same pattern using a more familiar declarative syntax.
 
   \section{Related Work}
-    Overview of related work on the topic that's also related to my project
-    \subsection{Opinion Mining and Summarization of Discussions}
-    \subsection{Multi-document Summarization}
-    \subsection{Informal Argumentation}
-    \subsection{Stance Classification}
+    Having covered the technologies and areas of research that underpin this project I will now discuss similar work that come closer to combining these different areas, as this this project does.
+
+    Summarizing discussions, email and meetings
+
+    Summarizing online and archived discussions
+
+    Summarizing opinions on online discussions
+
+    Argumentation in online discussions
+
+    Argumentation driven summaries not been covered. (Result of the review of related work is that:  there does not appear to have been any work that approaches the summarization of discussion from an argumentation mining perspective.)
+
   \section{Motivation}
     Round up why our project is different and interesting
