@@ -39,15 +39,14 @@
       A relatively new research area - combining ideas from natural language processing, information extraction and argumentation theory - argumentation mining is based largely on discourse  theory. While argumentation mining can be applied to structured text (source?), ultimately mining of free text is the goal. This means that argumentation tools often need to model concepts from linguistic research such as rhetoric structure theory \cite{mann1988rhetorical} and local coherence centering \cite{weinstein21centering}.
 
       \subsubsection{Identifying Argumentative Structures in Text}
-        First must classify phrases in text as being part of the arg
-        done statistically using naive bayes
-        next need to separate argumentation components, often make use of document structure or some other analysis such as the presence of words clusters with other argumentation phrases.
+        When identifying argumentative structures in text the first step is often to classify phrases that are part of an argument being made. One of option is to define rules for argumentative sentences or clauses. This can also be approached as a classification task, statistical methods such naive-bayes have also been used \cite{palau2009argumentation}. The result of this stage is a collection of unrelated clauses potentially spanning many arguments present in the source text.
 
-        once grouped it's also possible to classify components into conclusions premises etc.
+        The next stage in the analysis is to group identified units together into separate arguments. While sometimes the document's structure (chapters and sections) can be used to inform the grouping task this is hard to make generally applicable. Documents are rarely consistently formatted and arguments will often span many sections. Other options include grouping based on the similarity of the unit contents - presence of certain words etc. \cite{palau2009argumentation}
 
-        Inter-argument links can come from a rule based approach or HMMs.
+        Once identified units have been grouped into different arguments it becomes possible to start looking into the argument's structure. Different units need to be classified as either premises or conclusions - this can again be approached as a classification task \cite{palau2009argumentation}. Once such as structure for the units has been established it's possible to do analysis this connected structure such as identifying supporting claims for conclusions.
 
-      \subsubsection{Argument Relationships}
+        A further task is relating arguments within the document to one another, this is a far more challenging task. Fitting the argument structure to allowed patterns defined by a context-free grammar is one proposed approach \cite{palau2009argumentation}.
+
     \subsection{Dependency: Topic Modeling}
     \subsection{Dependency: Probabilistic Parsers}
     \subsection{Dependency: Graph Traversal}
