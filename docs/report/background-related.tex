@@ -47,10 +47,14 @@
 
         A further task is relating arguments within the document to one another, this is a far more challenging task. Fitting the argument structure to allowed patterns defined by a context-free grammar is one proposed approach \cite{palau2009argumentation}.
 
-    \subsection{Dependency: Topic Modeling}
-    \subsection{Dependency: Probabilistic Parsers}
-    \subsection{Dependency: Graph Traversal}
-
+    \subsection{Dependencies}
+      The approach implemented as part of this project relies on the products of research in the following areas.
+      \subsubsection{Topic Modeling}
+        Topic modeling covers a set statistical modeling techniques used to identify and group `topics' in text. Fundamentally, this involves looking for words that are relatively more common on one document vs a more general corpus. Documents often contain multiple topic words that need to be grouped into more conceptual topics. One approach to this is is Latent Dirichlet Allocation (LDA), this implements a "three-level hierarchical Bayesian model" \cite{blei2003latent} and is the approach used for topic modeling in this project.
+      \subsubsection{Dependency Parsers}
+        Parsing text for dependencies involves building upon a phrasal parse to extract relations between tokens in text. Dependencies are identified using rules applied to phrase structure trees. Various dependency parsers exist, this project makes use of the dependency parser included as part of the Stanford CoreNLP framework \cite{de2006generating} which is based on their probabilistic context-free grammar phrasal parser \cite{klein2003accurate}. The rules used in the Stanford dependency parser based on ``Universal Stanford Dependencies" \cite{de2014universal}.
+      \subsubsection{Querying Dependency Parses}
+        To make use of the dependency parse a means of querying the graph is required. \textit{Semgrex} is one such approach, this defines a regular expression style syntax for expressing queries on nodes and relations in a dependency graphs \cite{Chambers2007}. More generally however, the task about querying nodes and edges in a directional graph. For this project we opted to use \textit{Cypher}\footnote{http://neo4j.com/docs/stable/cypher-introduction.html}, the graph query language implemented by the \textit{Neo4j}\footnote{http://neo4j.com/} graph database. This was chosen for the querying of dependency parses because it allowed many separate graphs to be queried in parallel for the same pattern using a more familiar declarative syntax.
 
   \section{Related Work}
     Overview of related work on the topic that's also related to my project
