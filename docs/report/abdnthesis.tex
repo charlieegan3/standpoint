@@ -27,6 +27,10 @@
 % my packages
 \usepackage{csquotes}
 
+% my commands
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
 \title{An argumentation-based approach to summarizing discussions}
 \author{Charlie Egan}
 % IMO this is a bit silly, but some like to include these. To remove,

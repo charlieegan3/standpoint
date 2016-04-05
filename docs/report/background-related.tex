@@ -2,7 +2,7 @@
   \section{Background}
     This project is built on existing technologies and research. This section gives an overview of the key foundations.
 
-    \subsection{Automatic Summarization}
+    \tocless\subsection{Automatic Summarization}
       \blockquote{A summary can be loosely defined as a text that is produced from one or more texts, that conveys important information in the original text(s), and that is no longer than half of the original text(s) and usually significantly less than that.} \cite{radev2002introduction}
 
       Approaches to summarization could be grouped loosely into two groups, extractive and abstractive. Extractive summaries are constructed using content found in the source text. Abstractive summaries are created by performing some form of analysis on the source text before generating new content for the summary. One might also group summarization tasks based on the nature of the source text - approaches tend to summarize either single or multiple documents. This project is more closely related to the summarization of multiple documents, however, it applies both elements of extraction and abstraction.
@@ -28,7 +28,7 @@
 
         In this project we compare summaries against those generated using the approach outlined here \cite{nenkova2006compositional} as a baseline. Summaries are scored by human judges.
 
-    \subsection{Argumentation Mining}
+    \tocless\subsection{Argumentation Mining}
       Argumentation Mining is a task that involves the identification of argument components within text such as premises and conclusions. The task also often involves fitting these components into a template or known pattern to enable some form of reasoning. \cite{palau2009argumentation}
 
       A relatively new research area - combining ideas from natural language processing, information extraction and argumentation theory - Argumentation Mining is based largely on discourse theory. While Argumentation Mining can be applied to structured text (source?), ultimately mining of free text is the goal. This means that argumentation tools often need to model concepts from linguistic research such as rhetoric structure theory \cite{mann1988rhetorical} and local coherence centering \cite{weinstein21centering} to identify structure.
@@ -42,7 +42,7 @@
 
         A further task is relating arguments within the document to one another, this is a far more challenging task. Fitting the argument structure to allowed patterns defined by a context-free grammar is one proposed approach \cite{palau2009argumentation}.
 
-    \subsection{Dependencies}
+    \tocless\subsection{Dependencies}
       The approach implemented as part of this project relies on the products of research in the following areas.
       \subsubsection{Topic Modeling}
         Topic modeling covers a set statistical modeling techniques used to identify and group topics in text. Fundamentally, this involves looking for words that are relatively more common on one document vs a collection of documents. Documents often contain multiple topic words that need to be grouped into more conceptual topics. One approach to this is is \textit{Latent Dirichlet Allocation} (LDA), this implements a ``three-level hierarchical Bayesian model" \cite{blei2003latent} and is the approach used for topic modeling in this project.

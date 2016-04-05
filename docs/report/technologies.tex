@@ -1,7 +1,7 @@
 \chapter{Technologies\label{chap:technologies}}
   The project relies on a number of software dependencies, these are act as a foundation to the natural language processing services in the tool. We also use the CoreNLP framework, this just of the use of this is discussed in the Point Extraction section (ref: chapter).
 
-  \section{Cypher and Neo4j}
+  \tocless\section{Cypher and Neo4j}
     \blockquote{Neo4j is a highly scalable native graph database that leverages data relationships as first-class entities, helping enterprises build intelligent applications to meet today's evolving data challenges.} \footnote{http://neo4j.com/}
 
     We use Neo4j to store parse information. Sentences are parsed using the CoreNLP dependency parser and the resulting graph structure is saved into a Neo4j graph database instance. Words are represented as nodes and dependencies as edges. Nodes are are used to store the word in plaintext; the lemma, part-of-speech tag and it's index in the source sentence. Edges are directional and run from governor to dependent tokens. Edges have a string label, this is their only attribute.
@@ -10,18 +10,18 @@
 
     Cypher is used to query dependency parses currently stored in the Neo4j database. After parsing the sentences from a user's post all the dependency parses are saved. At this point a series of cypher queries are executed to filter for allowed point patterns. These patterns, derived from verbnet frame information, are represented in the Cypher syntax. Using Neo4j and Cypher allow points to be extracted from many sentences at once. This was key to completing the analysis of large debates in reasonable time.
 
-  \section{ERB}
+  \tocless\section{ERB}
     \blockquote{ERB provides an easy to use but powerful templating system for Ruby} \footnote{http://apidock.com/ruby/ERB}
 
     We use ERB to generate HTML summaries from the summarized point data. ERB templates were defined for each summary style evaluated. The evaluation forms destruct distributed on Mechanical Turk were also generated using ERB templates. This allowed sets of summaries and surveys to be consistently re-generated as we iterated on the functionality of the summarization module and format of the surveys.
 
-  \section{Ruby \& Go}
+  \tocless\section{Ruby \& Go}
     Almost all of the functionality of the tool is implemented in the Ruby programming language. Ruby was selected for familiarity as well as it's suitability in connecting multiple services together. Once points had been extracted using a Ruby service, making use of CoreNLP and Neo4j, points are curated and refined using a small program written in Go, this task required fast iterations and the Go implementation allowed the results of changes to the point curation to be reviewed in a faster feedback cycle. The logic encoded in this program could likely be written into the points extraction module.
 
-  \section{Docker}
+  \tocless\section{Docker}
     \blockquote{Docker allows you to package an application with all of its dependencies into a standardized unit for software development.} \footnote{https://www.docker.com/what-docker}
 
     Docker is used to isolate the different environments of each service. CoreNLP and Neo4j are both run as containers using standard images. Our modules are run under the same system. All modules in communicate using JSON requests. Docker Compose is used to codify the system's configuration and start services when they are required for use in development.
 
-  \section{git}
+  \tocless\section{git}
     All work for the project, including documentation and this report, was tracked in version control using git. Changes were synced with a remote repository on GitHub and other remotes as a means of backup and transfer between machines.
