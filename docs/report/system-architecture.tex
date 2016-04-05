@@ -1,13 +1,16 @@
-\tikzstyle{service} = [rectangle, minimum width=2cm, text width=1.9cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{service} = [rectangle, minimum width=2cm, minimum height=1cm, text centered, draw=black, fill=white]
 \tikzstyle{extservice} = [rectangle, minimum width=2cm, text width=1.9cm, minimum height=1cm, text centered, draw=black, fill=gray!50]
 \tikzstyle{flow} = [thick,->,>=stealth]
 \tikzstyle{depends} = [thick,-,>=stealth]
 
 \chapter{System Architecture\label{chap:system-architecture}}
+  This chapter is intended to give a technical overview of the system and give context to the analyses detailed in the following chapters. The system has been implemented as a series of isolated services that operate in a processing pipeline. The architecture is the product of the experimental development process, features were implemented before being wrapped in a interface for reuse by future components. Data is transformed at three stages in what could be described as an analysis pipeline. Each stage takes significant time to complete so the output is written to disk in shared format between stages.
+
   \begin{figure}[!h]
     \centering
     \begin{tikzpicture}[node distance=3.5cm]
       \node (agg) [service] {Aggregator};
+      \node (top) [service, left of=agg] {Topic Analyzer};
       \node (ext) [service, above of=agg, yshift=-1.5cm] {Extractor};
       \node (cur) [service, right of=agg] {Curator};
       \node (sum) [service, right of=cur] {Summarizer};
@@ -20,6 +23,18 @@
       \draw[dotted] [depends] (ext) -- (neo);
       \draw[dotted] [depends] (ext) -- (cor);
       \draw[dotted] [depends] (sum) -- (cor);
+      \draw[dotted] [depends] (top) -- (agg);
     \end{tikzpicture}
     \caption{\\Architecture Diagram. Arrows represent the pipeline; dotted lines represent dependencies.}
+    \label{fig:arch-dia}
   \end{figure}
+
+  Figure \ref{fig:arch-dia} shows a high-level overview of the various modules and how these build up the analysis pipeline. Points for the source text are gathered by the \textit{Aggregator}, these are filtered and cleaned by the \textit{Curator}. Finally curated points are used to generate a summary by the \textit{Summarizer}.
+
+  Before source text can be analyzed it must be cleaned for invalid characters. Posts in a discussion start as single text files, these are loaded and transformed into JSON files that preserve their index and valid UTF-8 content. The Aggregator loads these JSON post files to extract the points made in the discussion.
+
+  The Aggregator loads all the JSON posts for the selected discussion. Before extracting points for each in turn it uses the text from the posts to get a list of topic words from the \textit{Topic Analyzer}. Topic words are included when making requests for post points, only sentences containing topic words are analyzed. For each post in turn the text and topics are submitted to the \textit{Extractor}. This service carries out the point extraction process using both the CoreNLP dependency parser and Neo4j datastore - this is described in detail in the following chapter. All extracted points for all posts are saved to disk. A modern, mid-range computer can complete 150,000 words spread across 2300 posts in around 10 minutes, this is the slowest stage in the pipeline.
+
+  While points must have come from a sentence containing a topic word, at this stage points are unfiltered. The \textit{Curator}, a short program to filter and re-format points is the next stage. This stage makes a series of transformations on points such as merging pronouns under a single \texttt{person} label. Patterns for low-quality points are also encoded at this stage, for example:\texttt{PERSON.nsubj be.verb sure.adj} comes from \textit{I'm sure\dots}. These transformations and rejections are applied to the points list and a new refined version is saved for the next stage.
+
+
