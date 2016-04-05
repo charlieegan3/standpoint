@@ -1,8 +1,18 @@
 \chapter{Technologies\label{chap:technologies}}
+  The project relies on a number of software dependencies, these are act as a foundation to the natural language processing services in the tool. We also use the CoreNLP framework, this just of the use of this is discussed in the Point Extraction section (ref: chapter).
+
+  \section{Cypher and Neo4j}
+    \blockquote{Neo4j is a highly scalable native graph database that leverages data relationships as first-class entities, helping enterprises build intelligent applications to meet today's evolving data challenges.} \footnote{http://neo4j.com/}
+
+    We use Neo4j to store parse information. Sentences are parsed using the CoreNLP dependency parser and the resulting graph structure is saved into a Neo4j graph database instance. Words are represented as nodes and dependencies as edges. Nodes are are used to store the word in plaintext; the lemma, part-of-speech tag and it's index in the source sentence. Edges are directional and run from governor to dependent tokens. Edges have a string label, this is their only attribute.
+
+    \blockquote{Cypher is a declarative graph query language that allows for expressive and efficient querying and updating of the graph store.} \footnote{http://neo4j.com/docs/stable/cypher-introduction.html}
+
+    Cypher is used to query dependency parses currently stored in the Neo4j database. After parsing the sentences from a user's post all the dependency parses are saved. At this point a series of cypher queries are executed to filter for allowed point patterns. These patterns, derived from verbnet frame information, are represented in the Cypher syntax. Using Neo4j and Cypher allow points to be extracted from many sentences at once. This was key to completing the analysis of large debates in reasonable time.
+
   \begin{itemize}
-    \item{CoreNLP}
-    \item{Neo4j}
     \item{differ}
+    \item{erb templating}
     \item{Ruby \& Go}
     \item{docker \& services}
   \end{itemize}
