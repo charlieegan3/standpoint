@@ -40,8 +40,34 @@
       Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
 
     \subsection{The Generic Frame}
+      Originally our intent had been to use only FrameNet frames to define allowed patterns for points. However there were verbs that were missing frames for \textit{all} possible patterns of interest. Usually this meant that there was a simple frame for the verb but it failed to adequately capture the context. Take the following example:
+
+      \blockquote{These images reflect the reality of abortions}
+
+      This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts more variable which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the generic frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the generic frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
+
     \subsection{Copula Verbs}
-    \subsection{Semantic Representation}
+      Copula verbs are not the head of the sentence in output from the CoreNLP dependency parser. Take the following example:
+      \begin{multicols}{2}
+        \raggedcolumns
+        \begin{itemize}[label={}]
+          \item{\blockquote{A woman has rights.}}
+          \item{\texttt{det(woman, a)}}
+          \item{\texttt{nsubj(has, woman)}}
+          \item{\texttt{dobj(has, rights)}}
+        \end{itemize}
+        \columnbreak
+        \begin{itemize}[label={}]
+          \item{\blockquote{A fetus is a person.}}
+          \item{\texttt{det(fetus, a)}}
+          \item{\texttt{nsubj(person, fetus)}}
+          \item{\texttt{cop(person, is)}}
+          \item{\texttt{det(person, a)}}
+        \end{itemize}
+      \end{multicols}
+
+      Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The result is still much the same, the example above becomes \texttt{fetus.nsubj be.verb person.dobj} so it still matches ``points where people are the object''.
+
   \section{Minimum Requirements}
     \section{Generic Match Requirements}
   \section{Point Extracts}
