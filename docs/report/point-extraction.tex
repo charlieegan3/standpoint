@@ -44,7 +44,7 @@
 
       \blockquote{These images reflect the reality of abortions}
 
-      This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts more variable which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the generic frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the generic frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
+      This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts more variable which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the Generic Frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
 
     \subsection{Copula Verbs}
       Copula verbs are not the head of the sentence in output from the CoreNLP dependency parser. Take the following example:
@@ -69,6 +69,20 @@
       Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The result is still much the same, the example above becomes \texttt{fetus.nsubj be.verb person.dobj} so it still matches ``points where people are the object''.
 
   \section{Minimum Requirements}
-    \section{Generic Match Requirements}
+    The `curation' of points is discussed in the following chapter. This is a product of the development process, ideally all poor quality points would be filtered out at this stage. However, given the time taken to perform the analysis the decision was made to remove and format points as a separate task. Some basic restrictions are applied at this stage in the pipeline though these are only applied to the points matched by the Generic Frame. These points must:
+
+    \begin{itemize}
+      \item{Have a subject and object}
+      \item{Contain a topic word}
+      \item{Have an average word length of 5 or characters}
+    \end{itemize}
+
+    These three, rather opinionated, requirements balance the benefit and problems of matching more patterns.
   \section{Point Extracts}
+    We had a goal of summarization from quite an early stage. This meant that our extracted text needed to be as succinct in getting the information across as possible. Natural Language Generation was out of scope, though it would be an interesting option for further work. Patterns like \texttt{person.nsubj have.verb right.dobj} without the context are not natural to read. We have implemented a means of extracting the relevant words from the source sentence, again using information in the dependency parse.
+
+    When a pattern is identified as matching a frame a further query is run on the graph to extract it's context. Nodes in the graph that are related to the verb or any of it's descendants are returned as part of the context for the point. To keep points succinct the following relations cannot extend the context tree: \textit{adverbial clause modifiers, clausal subjects, clausal complement, generic dependent and parataxis}.
+
+    The effect of this is similar to that of sentence compression. The results are not so different from those reported by Knight and Marcu \cite{knight2000statistics}, though the approaches are fundamentally different. As they appear to do, we also strip trailing punctuation and capitalize where required. This is done at the summary generation stage in our approach.
+
   \section{Extraction Process}
