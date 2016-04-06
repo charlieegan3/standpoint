@@ -1,6 +1,22 @@
 \chapter{Point Extraction\label{chap:point-extraction}}
   \section{Point Concept Overview and Examples}
-  \section{Point Definition}
+    Points are a concept that we created to describe the minimal content unit in our summarization task. We originally defined a point as being a verb and it's required arguments. Points represent a statement made in a discussion in the simplest possible form. Using this representation enables grouping and comparisons, this is used when generating summaries. Take the following two statements as an example:
+
+    \blockquote{\textit{Abortion is always wrong}}, \blockquote{\textit{Abortion is wrong in every way}}
+
+    We wanted to count these as as equivalent and using points as a representation enables this. The core data structure for a point (transferred as a JSON object) is as follows:
+
+    \begin{itemize}
+      \item{Verb}
+      \item{Source Information (Discussion \& Post Identifier, Stance)}
+      \item{\textbf{Components}}
+      \item{Extract String}
+    \end{itemize}
+
+    The \textit{Components} attribute consists of a list of strings. Each element represents a dependency of the verb and the relation of that dependency. For example, if \textit{fetus} were to be the subject of the point, then the component would be \texttt{fetus.nsubj}. Relations are defined using universal dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Using the example from above, the point component representation for both statements would be \texttt{abortion.nsubj be.verb wrong.dobj}. This common pattern makes it possible to reliably group statements that express the same idea - even when the phrasing differs.
+
+    At the summarization stage this structure is extended on to include additional attributes useful when grouping points.
+
     \subsection{Verbnet Frames}
     \subsection{The Generic Frame}
     \subsection{Copula Verbs}
