@@ -9,15 +9,36 @@
     \begin{itemize}
       \item{Verb}
       \item{Source Information (Discussion \& Post Identifier, Stance)}
-      \item{\textbf{Components}}
+      \item{\textbf{Components} / Pattern}
       \item{Extract String}
     \end{itemize}
 
-    The \textit{Components} attribute consists of a list of strings. Each element represents a dependency of the verb and the relation of that dependency. For example, if \textit{fetus} were to be the subject of the point, then the component would be \texttt{fetus.nsubj}. Relations are defined using universal dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Using the example from above, the point component representation for both statements would be \texttt{abortion.nsubj be.verb wrong.dobj}. This common pattern makes it possible to reliably group statements that express the same idea - even when the phrasing differs.
+    The \textit{Components} attribute consists of a list of strings - a \textit{Pattern}. Each element represents a dependency of the verb and the relation of that dependency. For example, if \textit{fetus} were to be the subject of the point, then the component would be \texttt{fetus.nsubj}. Relations are defined using universal dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Using the example from above, the point component representation for both statements would be \texttt{abortion.nsubj be.verb wrong.dobj}. This common pattern makes it possible to reliably group statements that express the same idea - even when the phrasing differs.
 
-    At the summarization stage this structure is extended on to include additional attributes useful when grouping points.
 
-    \subsection{Verbnet Frames}
+  \section{Defining Points with Verb Frames}
+    In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivity that listed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query to match patterns not present in frames.
+    \subsection{VerbNet and FrameNet}
+      VerbNet is a XML, verb lexicon that lists classes of verbs and accompanying FrameNet \cite{fillmore2002framenet} frames \cite{schuler2005verbnet}. Represented in VerbNet's 274 classes are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `Murder' is given below.
+
+      \lstset{language=XML}
+      \begin{lstlisting}
+          <FRAME>
+              <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
+              <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
+              <SYNTAX>
+                  <NP value="Agent"><SYNRESTRS/></NP>
+                  <VERB/>
+                  <NP value="Patient"><SYNRESTRS/></NP>
+              </SYNTAX>
+              <SEMANTICS>...</SEMANTICS>
+          </FRAME>
+      \end{lstlisting}
+
+      We experimented using the information in the \texttt{primary} attribute. This information is did not always match what was annotated in the \texttt{SYNTAX} attribute. We switched to using the \texttt{SYNTAX} attribute content instead. To create the verb index described above we parsed the VerbNet catalogue into a key value structure. Each verb was a key, and list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all it's classes.
+
+      Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
+
     \subsection{The Generic Frame}
     \subsection{Copula Verbs}
     \subsection{Semantic Representation}

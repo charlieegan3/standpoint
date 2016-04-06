@@ -36,7 +36,30 @@
 \hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black}
 
 \usepackage{enumitem}
-\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist{noitemsep}
+
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\lstset{
+  basicstyle=\ttfamily\tiny,
+  columns=fullflexible,
+  showstringspaces=false,
+}
+\lstdefinelanguage{XML} {
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={primary,secondry,value}
+  breaklines=true
+}
+
 
 % my commands
 \newcommand{\nocontentsline}[3]{}
@@ -118,6 +141,6 @@
 \appendix
 \include{proof}
 
-\bibliography{introduction,background,related}
+\bibliography{general,introduction,background,related}
 
 \end{document}
