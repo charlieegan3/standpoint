@@ -1,7 +1,16 @@
 \chapter{Point Curation\label{chap:point-curation}}
-  Overview
+  For the points extracted at the first stage in the pipeline to be useful in the summarization module there are a number of selections and refinements that must be made. These refinements focus on removing points generated from common phrases such as `I'm sure' and `Ask yourself\dots'.
+
   \section{Blacklists}
+    To complete this selection, a number of `blacklists' were established. These defined patterns and components that should be removed before proceeding.
     \subsection{Nominal Subjects}
+      First points with pronoun or determiner nominal subjects were rejected. Points such as \texttt{it.nsubj have.verb rights.dobj} are ambiguous as the surrounding sentences may be required to resolve the anaphor \textit{it}. One possible resolution was to merge such points with the most common pattern with a noun or proper noun nominal subject. However, since groups of points were already of additional size we opted to remove these points instead to help keep results verifiable.
+
+      Currently the following subjects are grounds for rejection: \textit{it(PRP), that(DT), this(DT), which(WDT), what(WDT)}. Other words of the same tag such as \textit{they} or \textit{his/her} have not yet been excluded as they have yet to be the basis for an ambiguous point.
+
     \subsection{PERSON Verb Combinations}
+      There are a series of verbs that are not allowed to form points when they have a \texttt{PERSON} subject. Certain phrases are very common across all our sample discussions and while these are important for comprehension, they do not make adequate points. \textit{object understand, realize, debate, speak, stand, refer, explain, support, feel} are just some examples of `actions' that participants write about that do not generate points suitable for use in summaries.
+
     \subsection{Patterns}
+      Common phrases used in discussion create another common class of poor quality points. Phrases such as \textit{`I'm correct [in saying]', `Something happened [to/that]', `[opposition] make the claim'} were common in all debates. They could not be used to add useful content to the summary and are removed. Rather than looking to define these with a general rule, point patterns are only added to this blacklist when they occur often enough.
   \section{Person Nominal Subject Amalgamation}
