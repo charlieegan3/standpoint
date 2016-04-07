@@ -84,8 +84,8 @@
   <div class="row">
     <h3>Instructions</h3>
     <div>
-      <p>We have built a tool to extract points made in a discussion on <%= topic.gsub("_", " ") %>.</p>
-      <p>Given the following set of similar points, rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
+      <p>We have built a tool to extract points made in a discussion on <strong><%= topic.gsub("_", " ") %></strong>.</p>
+      <p>Given the following sets of similar points, rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
       <br/>
       <ul>
         <li>Example of a <strong>good</strong> extract: <em>The bill was approved.</em></li>
@@ -99,17 +99,20 @@
 
   <hr/>
 
-  <h2>Section 1</h2>
   <div class="row">
-    <% extracts.each_with_index do |e, i| %>
-      <% i += 1 %>
+    <h2>Section 1</h2>
+    <% sets.each_with_index do |set, set_index| %>
+      <h4>Set <%= set_index + 1 %></h4>
       <div class="well">
-        <p>1.<%= "#{i}. #{e}" %></p>
-        <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="1">1/5</label>
-        <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="2">2/5</label>
-        <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="3">3/5</label>
-        <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="4">4/5</label>
-        <label class="radio-inline"><input type="radio" name="<%= topic %>-extract<%= i %>" value="5">5/5</label>
+      <% set.each_with_index do |e, i| %>
+        <% i += 1 %>
+        <p><strong>1.<%= set_index + 1 %>.<%= "#{i}." %></strong>  <%= e %></p>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="5">5/5</label>
+      <% end %>
       </div>
     <% end %>
   </div>

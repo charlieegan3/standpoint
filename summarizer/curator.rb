@@ -46,20 +46,22 @@ module Curator
     end
 #   banned = [
 #     ["PERSON.nsubj", "be.verb", "abortion.dobj"],
-#     ["PERSON.nsubj", "be.verb", "pregnant.dobj"]
+#     ["PERSON.nsubj", "be.verb", "pregnant.dobj"],
 #     ["PERSON.nsubj", "have.verb", "pay.xcomp"],
-#     ["PERSON.nsubj", "have.verb", "care.dobj"]
+#     ["PERSON.nsubj", "have.verb", "care.dobj"],
+#     ["abortion.nsubj", "be.verb", "legal.dobj"]
 #   ]
-#   if original_points.map {|p| Presenter.clean(p["String"]) }.uniq.size.between?(12, 17) &&
-#     points.last["Components"].size > 2 &&
+#   if points.last["Components"].size > 2 &&
 #     points.map { |p| p["Components"] }.uniq.size == 1 &&
 #     !banned.include?(original_points.first["Components"])
-#       p original_points.first["Components"]
-#       puts original_points.map {|p| Presenter.clean(p["String"]) }.uniq
-#       print " > "
-#       puts Presenter.clean(points.last["String"])
-#       puts "------"
-#       exit
+#       list = (original_points.map { |p| Presenter.clean(p["String"]) } - [Presenter.clean(points.last["String"])]).uniq.take(9)
+#       if list.size > 7
+#         p points.last["Components"]
+#         puts list.map { |p| Presenter.clean(p) }.uniq + [Presenter.clean(points.last["String"])]
+#         print " > "
+#         puts Presenter.clean(points.last["String"])
+#         puts "------"
+#       end
 #   end
     return points if return_group
     return points.last

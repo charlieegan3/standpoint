@@ -9,11 +9,17 @@ Dir.glob('summaries/*') do |file|
 end
 
 topics = %w(abortion creation guns god gay_rights healthcare)
-contents = File.open('extracts.txt').read
-groups = contents.split("------").map { |e| e.split("\n").select { |l| l.match(/^\w/) } }
+
+
+
+
+groups = topics.map do |t|
+  sets = File.open("extracts_#{t}.txt").read.split("------")
+  sets.map { |s| s.split("\n").select { |l| l.length > 0 && l[0].match(/\w/) }.shuffle }
+end
 
 index = 0
-topics.zip(groups.reject(&:empty?)).each do |topic, extracts|
+topics.zip(groups).each do |topic, sets|
   erb = ERB.new(File.open("survey_extract.html.erb").read, 0, '>')
   File.open("#{topic}.html", "w") { |file| file.write(erb.result(binding)) }
   index += 1
