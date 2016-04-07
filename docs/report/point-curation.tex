@@ -1,6 +1,29 @@
 \chapter{Point Curation\label{chap:point-curation}}
   For the points extracted at the first stage in the pipeline to be useful in the summarization module there are a number of selections and refinements that must be made. These refinements focus on removing points generated from common phrases such as `I'm sure' and `Ask yourself\dots'.
 
+  These adjustments \textit{could} be made as points are extracted, however this is was implemented as a separate task during our implementation. Rejecting and editing point content is also conceptually different from identifying them in source text.
+
+  \section{Minimum Requirements}
+    Some basic restrictions are applied to points matched by the Generic Frame, these matches must:
+
+    \begin{itemize}
+      \item{Have a subject and object}
+      \item{Contain a topic word}
+      \item{Have an average word length of 5 or characters}
+    \end{itemize}
+
+    These three (opinionated) requirements balance the benefit and problem of matching more patterns a greater number of patterns using the Generic Frame. This does mean that shorter points, or points without a topic word can be returned, however, they must be matched by a FrameNet frame.
+
+  \section{Person Nominal Subjects}
+    In an effort to better group extracted points into distinct statements used in the discussion, we opted to merge pronouns under a single \texttt{PERSON} subject. Points with these patterns are very common but also commonly segregated by different pronouns. Take the following point patterns:
+    \begin{itemize}
+      \item{\texttt{people.nsubj kill.verb people.dobj}}
+      \item{\texttt{he.nsubj kill.verb people.dobj}}
+      \item{\texttt{they.nsubj kill.verb people.dobj}}
+    \end{itemize}
+
+    While there is a semantic difference between these points, we made the decision to amalgamate them under patterns like \texttt{PERSON.nsubj kill.verb people.dobj}. This means groups for points are not dispersed among many pronouns. Reducing repetition between groups means we can continue to rely on group size as a measure of salience in the summarization task.
+
   \section{Blacklists}
     To complete this selection, a number of `blacklists' were established. These defined patterns and components that should be removed before proceeding.
     \subsection{Nominal Subjects}
@@ -8,9 +31,10 @@
 
       Currently the following subjects are grounds for rejection: \textit{it(PRP), that(DT), this(DT), which(WDT), what(WDT)}. Other words of the same tag such as \textit{they} or \textit{his/her} have not yet been excluded as they have yet to be the basis for an ambiguous point.
 
-    \subsection{PERSON Verb Combinations}
-      There are a series of verbs that are not allowed to form points when they have a \texttt{PERSON} subject. Certain phrases are very common across all our sample discussions and while these are important for comprehension, they do not make adequate points. \textit{object understand, realize, debate, speak, stand, refer, explain, support, feel} are just some examples of `actions' that participants write about that do not generate points suitable for use in summaries.
+    \subsection{Person Verb Combinations}
+      There are a series of verbs that are not allowed to form points when they have a \texttt{PERSON} subject. Certain phrases are very common across all our sample discussions and while these are important for comprehension, they do not make adequate points. \textit{object, understand, realize, debate, speak, stand, refer, explain, support, feel} are just some examples of `actions' that participants write about that do not generate points suitable for use in summaries.
+
+      These restrictions are only applied to points that consist of two components, a verb and \texttt{PERSON} subject. This means that \texttt{PERSON.nsubj understand.verb issue.dobj} is a valid point, whereas \texttt{PERSON.nsubj understand.verb} is not.
 
     \subsection{Patterns}
       Common phrases used in discussion create another common class of poor quality points. Phrases such as \textit{`I'm correct [in saying]', `Something happened [to/that]', `[opposition] make the claim'} were common in all debates. They could not be used to add useful content to the summary and are removed. Rather than looking to define these with a general rule, point patterns are only added to this blacklist when they occur often enough.
-  \section{Person Nominal Subject Amalgamation}
