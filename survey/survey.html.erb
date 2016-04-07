@@ -66,15 +66,15 @@
   function remaining() {
     var names = [];
     var completed = 0;
-    $.each($("input"), function( index, value ) {
+    $.each($("#myForm input"), function( index, value ) {
       names.push(value.name);
       if (value.checked) {
         completed += 1
       }
     });
-    $.each($("textarea"), function( index, value ) {
+    $.each($("#myform textarea"), function( index, value ) {
       names.push(value.name);
-      if (value.value != "") {
+      if (value.value.length > 1) {
         completed += 1
       }
     });
@@ -86,23 +86,27 @@
   function setCompleteStatus() {
     var rem = remaining();
     $("#completed").text("Questions Remaining: " + rem.toString());
-    console.log(rem);
     if (rem === 0) {
       $("#completed").hide();
+    } else {
+      $("#completed").show();
     }
   }
 
   $( document ).ready(function() {
-    $( "input, textarea" ).change(function() {
+    $( "#myForm input, #myForm textarea" ).change(function() {
       setCompleteStatus();
     });
-    $( "textarea" ).keypress(function() {
+    $( "#myForm textarea" ).on('input', function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).focusout(function() {
       setCompleteStatus();
     });
   });
 </script>
 
-<div class="container">
+<div id="myForm" class="container">
   <div class="row">
     <h1>Debate Summarization Evaluation</h1>
     <p>Please do not complete this task, <strong>Summary Comparison <%= index + 1 %></strong>, more than once.</p>
