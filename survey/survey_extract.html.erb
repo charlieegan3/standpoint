@@ -59,13 +59,15 @@
 <div class="container">
   <div class="row">
     <h1>Debate Summarization Evaluation</h1>
+    <p>Please do not complete this task, <strong>Extracts <%= index + 1 %></strong>, more than once.</p>
+    <br/>
     <div>
       <p>The online world is full of debate and discussion - could these online debates be summarized automatically? We are investigating this question for an undergraduate research project and are comparing some extracts from debates for use in summaries. Complete the form below to let us know what you think.</p>
       <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> if you have any queries before starting the survey.</p>
     </div>
     <h3>Consent Form</h3>
     <div class="well">
-      <p>Please read the statements below and tick the final box to confirm you have read and understood the statements and upon doing so agree to participate in the project.</p>
+      <p>Please read the statements below</p>
       <ul>
         <li>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</li>
         <li>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</li>
@@ -73,7 +75,7 @@
         <li>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</li>
         <li>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</li>
       </ul>
-      <label class="checkbox-inline"><input type="checkbox" name="consent" value="consent_given">I agree</label>
+      <p><strong>By continuing this questionnaire you agree to the above statements.</strong></p>
     </div>
   </div>
 
@@ -113,7 +115,7 @@
   </div>
 
   <h2>Section 2</h2>
-  <p>Please review the following summaries and rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
+  <p>Please review the following summaries and rate them accounting for their <strong>informativeness</strong> and the extent to which they <strong>make sense</strong>.</p>
   <% s1, s2 = [['layout', summaries[topic + "_layout"]], ['random_layout', summaries['random_' + topic + "_layout"]]] %>
   <div class="row">
     <div class="col-md-6 <%= s1.first.split("_").join(" ") %>">
@@ -126,7 +128,7 @@
     </div>
   </div>
   <div class="well">
-    <p>2.1. Comparing the summary on how well, on average, the points make sense and their succinctness, give a relative rating:</p>
+    <p>2.1. Comparing the summary on how well, on average, the points make sense and their informativeness, give a relative rating:</p>
     <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s1.first %>-much_better">A is much better</label>
     <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s1.first %>-better">A is better</label>
     <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="same">A and B are about the same</label>
