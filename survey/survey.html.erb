@@ -1,5 +1,7 @@
+<!-- <%= index + 1 %> -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <style type="text/css">
   h1 {
@@ -54,7 +56,51 @@
     padding: 2px 5px;
     background: #FAFAFA;
   }
+  #completed {
+    font-size: 1.5em;
+    color: red;
+    font-weight: bold;
+  }
 </style>
+<script type="text/javascript">
+  function remaining() {
+    var names = [];
+    var completed = 0;
+    $.each($("input"), function( index, value ) {
+      names.push(value.name);
+      if (value.checked) {
+        completed += 1
+      }
+    });
+    $.each($("textarea"), function( index, value ) {
+      names.push(value.name);
+      if (value.value != "") {
+        completed += 1
+      }
+    });
+
+    var total = jQuery.unique( names ).length;
+    return total - completed;
+  }
+
+  function setCompleteStatus() {
+    var rem = remaining();
+    $("#completed").text("Questions Remaining: " + rem.toString());
+    console.log(rem);
+    if (rem === 0) {
+      $("#completed").hide();
+    }
+  }
+
+  $( document ).ready(function() {
+    $( "input, textarea" ).change(function() {
+      setCompleteStatus();
+    });
+    $( "textarea" ).keypress(function() {
+      setCompleteStatus();
+    });
+  });
+</script>
 
 <div class="container">
   <div class="row">
@@ -212,4 +258,5 @@
     <p>3.2. Please justify your answer to 3.1:</p>
     <textarea class="form-control" rows="5" name="<%= debate2 %>-layout_v_formatted-comment"></textarea>
   </div>
+  <p id="completed">Please answer all the questions.</p>
 </div>
