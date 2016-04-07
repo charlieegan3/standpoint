@@ -1,0 +1,38 @@
+["homosexuality.nsubj", "be.verb", "wrong.dobj"]
+Homosexuality is wrong into a murderer.
+Why homosexuality is wrong.
+It is that homosexuality is wrong.
+The real question should be Is homosexuality morally wrong.
+Homosexuality is not morally wrong.
+Eve, therefore homosexuality is wrong.
+Without the presupposition that homosexuality is wrong.
+No remorse as a proof text that homosexuality is wrong.
+Is homosexuality morally wrong.
+Homosexuality is wrong.
+> Homosexuality is wrong.
+------
+["marriage.nsubj", "be.verb", "legal.dobj"]
+Gay marriage should not be legal.
+Weather same sex marriage should be legal or not in those states.
+Gay marriage were legal.
+Since same-sex marriage is legal.
+LRB- same-sex marriage is legal.
+5 years ago, homosexual marriage was legal.
+With whether or not same-sex marriage should be legal.
+Should marriage for same-sex couples be legal.
+Whether gay marriage should be legal, not about religious views on gay marriage.
+Same-sex marriages should be legal.
+> Same-sex marriages should be legal.
+------
+["PERSON.nsubj", "be.verb", "parent.dobj"]
+Those people are no longer parents.
+They are not parents.
+These people are all parents regardless of the fact.
+The only person that has authority over a child is the biological parent.
+For whether or not they will be good parents, or sexual abuse their kids.
+LRB- or what they're parents.
+They are less than in EVERTY way, as parents, Christians, community members, called pedeophiles, perverts, sinners and many other ugly names.
+By the way, I am no longer a parent.
+They will be bad parents, but this can't cause the state to ban these individuals.
+They'd be good parents.
+ > They'd be good parents.

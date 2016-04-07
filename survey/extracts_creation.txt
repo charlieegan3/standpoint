@@ -1,0 +1,32 @@
+["evolution.nsubj", "be.verb", "theory.dobj"]
+Why evolution is only theory and not a proven fact.
+Evolution (as Darwin and today's proponents describe it) is as solid a theory as gravity.
+Evolution is a scientific theory.
+Evolution is a theory that is supported at the micro level.
+Wrong - evolution is probably the most supported theory in biology - it's withstood considerable scrutiny for the past 150 years and is as strong as ever.
+Along the lines of : Evolution is just a theory.
+Evolution is a theory that has not been proven and I think probably never will be.
+Evolution is simply a scientific theory and there is no reason why the counterarguments to Evolution shouldn't be scientific.
+Evolution is just a theory, ID believers.
+Evolution is a theory without mechanism.
+> Evolution is a theory without mechanism.
+------
+["world.nsubj", "create.verb", "day.dobj"]
+How the world was created in six days.
+The world was created in six days.
+The world was created in exactly 6 days.
+The world was created by God in seven days.
+Is there that the world could have been created in six days.
+But, was the world created in six days.
+The world was created in 6 days.
+> The world was created in 6 days.
+------
+["evolution.nsubj", "be.verb", "fact.dobj"]
+Evolution is fact.
+Evolution is fact, Creationism is so ludicrous and moronic.
+Biological evolution is a fact.
+Evolution is an observable fact.
+Evolution is both a fact and a theory.
+Evolution, strictly speaking, is fact.
+Evolution is a fact.
+> Evolution is a fact.
