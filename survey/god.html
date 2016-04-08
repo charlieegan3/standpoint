@@ -1,0 +1,602 @@
+<!-- 4 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style type="text/css">
+  h1 {
+    margin: 0.5em 0;
+  }
+  p {
+    margin: 2px 0px 0px 0px;
+    font-weight: 300;
+  }
+  .well {
+    margin-top: 10px;
+  }
+  .plain blockquote, .layout blockquote {
+    background: none;
+    border-left: none;
+    padding: 0px;
+    margin: 0px 0px 1px 20px;
+  }
+  blockquote p {
+    margin: 0;
+    font-size: 14px;
+    font-style: normal;
+    font-family: "Source Sans Pro", sans-serif;
+  }
+  .plain li p {
+    margin: 3px 0;
+  }
+  .plain ul {
+    margin-bottom: 0;
+  }
+  .plain p, .layout p, .stock p {
+    border-bottom: 1px solid #eee;
+  }
+  code {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 1em;
+    line-height: 1.45;
+    background-color: transparent;
+    padding: 0px;
+    color: SeaGreen;
+    font-weight: bold;
+  }
+  .plain strong, .layout strong {
+    font-weight: 300;
+  }
+  .plain ul
+  {
+    list-style-type: none;
+  }
+  .formatted blockquote {
+    margin: 0px 0px 1px 20px;
+    padding: 2px 5px;
+    background: #FAFAFA;
+  }
+  #completed {
+    font-size: 1.5em;
+    color: red;
+    font-weight: bold;
+  }
+</style>
+<script type="text/javascript">
+  function remaining() {
+    var names = [];
+    var completed = 0;
+    $.each($("#myForm input"), function( index, value ) {
+      names.push(value.name);
+      if (value.checked) {
+        completed += 1
+      }
+    });
+    $.each($("#myform textarea"), function( index, value ) {
+      names.push(value.name);
+      if (value.value.length > 1) {
+        completed += 1
+      }
+    });
+
+    var total = jQuery.unique( names ).length;
+    return total - completed;
+  }
+
+  function setCompleteStatus() {
+    var rem = remaining();
+    $("#completed").text("Questions Remaining: " + rem.toString());
+    if (rem === 0) {
+      $("#completed").hide();
+    } else {
+      $("#completed").show();
+    }
+  }
+
+  $( document ).ready(function() {
+    $( "#myForm input, #myForm textarea" ).change(function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).on('input', function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).focusout(function() {
+      setCompleteStatus();
+    });
+  });
+</script>
+
+<div id="myForm" class="container">
+  <div class="row">
+    <h1>Debate Summarization Evaluation</h1>
+    <p>Please do not complete this task, <strong>Extracts 4</strong>, more than once.</p>
+    <br/>
+    <div>
+      <p>The online world is full of debate and discussion - could these online debates be summarized automatically? We are investigating this question for an undergraduate research project and are comparing some extracts from debates for use in summaries. Complete the form below to let us know what you think.</p>
+      <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> if you have any queries before starting the survey.</p>
+    </div>
+    <h3>Consent Form</h3>
+    <div class="well">
+      <p>Please read the statements below</p>
+      <ul>
+        <li>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</li>
+        <li>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</li>
+        <li>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</li>
+        <li>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</li>
+        <li>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</li>
+      </ul>
+      <p><strong>By continuing this questionnaire you agree to the above statements.</strong></p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h3>Instructions</h3>
+    <div>
+      <p>We have built a tool to extract points made in a discussion on <strong>god</strong>.</p>
+      <p>Given the following sets of similar points, rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
+      <br/>
+      <ul>
+        <li>Example of a <strong>good</strong> extract: <em>The bill was approved.</em></li>
+        <li>Example of a <strong>worse</strong> extract: <em>Similarly, the bill was approved.</em></li>
+        <li>Example of a <strong>bad</strong> extract: <em>The bill was approved as the.</em></li>
+      </ul>
+    </div>
+
+    Higher scores like 5/5 are better than lower ones like 1/5 or 2/5.
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h2>Section 1</h2>
+          <h4>Set 1</h4>
+      <div class="well">
+                      <p><strong>1.1.1.</strong>  You have faith in God.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract1" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract1" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract1" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract1" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract1" value="5">5/5</label>
+                      <p><strong>1.1.2.</strong>  Else who has faith and hope by the grace of God that He doesn't exist.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract2" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract2" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract2" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract2" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract2" value="5">5/5</label>
+                      <p><strong>1.1.3.</strong>  You have a faith or not, but, it should be.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract3" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract3" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract3" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract3" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract3" value="5">5/5</label>
+                      <p><strong>1.1.4.</strong>  Why do you have faith.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract4" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract4" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract4" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract4" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract4" value="5">5/5</label>
+                      <p><strong>1.1.5.</strong>  You have faith in some thing much bigger than your own existence.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract5" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract5" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract5" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract5" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract5" value="5">5/5</label>
+                      <p><strong>1.1.6.</strong>  I have faith in my bank  and they trust me with a check book.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract6" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract6" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract6" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract6" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract6" value="5">5/5</label>
+                      <p><strong>1.1.7.</strong>  You still have faith in the Supreme.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract7" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract7" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract7" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract7" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract7" value="5">5/5</label>
+                      <p><strong>1.1.8.</strong>  I have a strong faith in Him.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract8" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract8" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract8" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract8" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract8" value="5">5/5</label>
+                      <p><strong>1.1.9.</strong>  Who don't have enough faith to believe.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract9" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract9" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract9" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract9" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract9" value="5">5/5</label>
+                      <p><strong>1.1.10.</strong>  Just because you have faith and believe in miracles you believe in god.</p>
+        <label class="radio-inline"><input type="radio" name="god-set1extract10" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract10" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract10" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract10" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set1extract10" value="5">5/5</label>
+            </div>
+          <h4>Set 2</h4>
+      <div class="well">
+                      <p><strong>1.2.1.</strong>  They don't believe in God.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract1" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract1" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract1" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract1" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract1" value="5">5/5</label>
+                      <p><strong>1.2.2.</strong>  I believe in God, but I also pride my ability to reason.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract2" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract2" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract2" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract2" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract2" value="5">5/5</label>
+                      <p><strong>1.2.3.</strong>  You believe in God.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract3" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract3" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract3" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract3" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract3" value="5">5/5</label>
+                      <p><strong>1.2.4.</strong>  I don't believe in God of course.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract4" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract4" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract4" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract4" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract4" value="5">5/5</label>
+                      <p><strong>1.2.5.</strong>  You don't believe in God.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract5" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract5" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract5" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract5" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract5" value="5">5/5</label>
+                      <p><strong>1.2.6.</strong>  Who believe in God (s) not on those who don't believe.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract6" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract6" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract6" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract6" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract6" value="5">5/5</label>
+                      <p><strong>1.2.7.</strong>  Who believes in God.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract7" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract7" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract7" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract7" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract7" value="5">5/5</label>
+                      <p><strong>1.2.8.</strong>  In God I believe in logic, not religion it makes all the more sense to believe in logic than religion.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract8" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract8" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract8" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract8" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract8" value="5">5/5</label>
+                      <p><strong>1.2.9.</strong>  You can't believe in God just in case.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract9" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract9" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract9" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract9" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract9" value="5">5/5</label>
+                      <p><strong>1.2.10.</strong>  You believe in the wrong God.</p>
+        <label class="radio-inline"><input type="radio" name="god-set2extract10" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract10" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract10" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract10" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set2extract10" value="5">5/5</label>
+            </div>
+          <h4>Set 3</h4>
+      <div class="well">
+                      <p><strong>1.3.1.</strong>  People don't need a god.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract1" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract1" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract1" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract1" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract1" value="5">5/5</label>
+                      <p><strong>1.3.2.</strong>  They need a god.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract2" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract2" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract2" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract2" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract2" value="5">5/5</label>
+                      <p><strong>1.3.3.</strong>  People never have needed a god or hope of eternal life or fear of eternal damnation.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract3" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract3" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract3" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract3" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract3" value="5">5/5</label>
+                      <p><strong>1.3.4.</strong>  You need god to know.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract4" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract4" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract4" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract4" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract4" value="5">5/5</label>
+                      <p><strong>1.3.5.</strong>  I don't need a god to tell me.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract5" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract5" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract5" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract5" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract5" value="5">5/5</label>
+                      <p><strong>1.3.6.</strong>  And I didn't need god to tell me Or maybe.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract6" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract6" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract6" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract6" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract6" value="5">5/5</label>
+                      <p><strong>1.3.7.</strong>  You don't need a god to have the ability to be a responsible, loving, and caring person.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract7" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract7" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract7" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract7" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract7" value="5">5/5</label>
+                      <p><strong>1.3.8.</strong>  We NEED GOD to be.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract8" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract8" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract8" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract8" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract8" value="5">5/5</label>
+                      <p><strong>1.3.9.</strong>  LRB- in which we don't need god.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract9" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract9" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract9" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract9" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract9" value="5">5/5</label>
+                      <p><strong>1.3.10.</strong>  Who need a god.</p>
+        <label class="radio-inline"><input type="radio" name="god-set3extract10" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract10" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract10" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract10" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="god-set3extract10" value="5">5/5</label>
+            </div>
+      </div>
+
+  <h2>Section 2</h2>
+  <p>Please review the following summaries and rate them accounting for their <strong>informativeness</strong> and the extent to which they <strong>make sense</strong>.</p>
+    <div class="row">
+    <div class="col-md-6 layout">
+      <h4>god A</h4>
+      <p>People disagree on these points:</p>
+        <blockquote>
+      <p>People are capable to figure things out on their own.</p>
+    </blockquote>
+          <blockquote>
+      <p>Things are bad just because of some intuition about god.</p>
+    </blockquote>
+          <blockquote>
+      <p>We are rich in many other ways.</p>
+    </blockquote>
+  
+  <blockquote>
+    <p>God were real.</p>
+  </blockquote>
+  <blockquote>
+    <p>I believe in a different god.</p>
+  </blockquote>
+  <blockquote>
+    <p>Believe in God with confidence.</p>
+  </blockquote>
+
+<p>Commonly occurring points made in the discussion were:</p>
+  <blockquote>
+    <p>You don't believe in God.</p>
+  </blockquote>
+  <blockquote>
+    <p>A god exists or not.</p>
+  </blockquote>
+  <blockquote>
+    <p>He is the one true God.</p>
+  </blockquote>
+
+<p>Users that talk about X often talk about Y.</p>
+  <blockquote>
+    <p>
+      (X)
+      God doesn't exist.      (Y)
+      Wager then, without hesitation, that He exists.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      Science doesn't provide us with truth.      (Y)
+      More about how the world works.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      Science doesn't provide us with truth.      (Y)
+      The explanation doesn't have to be true to be useful, just consistent with most of the evidence.    </p>
+  </blockquote>
+
+<p>Common points made in the discussion that link terms were:</p>
+  <blockquote>
+    <p>Religious people don't base their morality on evidence.</p>
+  </blockquote>
+  <blockquote>
+    <p>We'll be arguing about religions and not God.</p>
+  </blockquote>
+  <blockquote>
+    <p>Bad things happen to innocent people.</p>
+  </blockquote>
+
+<p>Points for commonly discussed topics:</p>
+<ul>
+      <li>
+      <p>God              <blockquote>
+          <p>Not believe in god.</p>
+        </blockquote>
+              <blockquote>
+          <p>People don't need a god.</p>
+        </blockquote>
+              <blockquote>
+          <p>He is the christian god.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Religion              <blockquote>
+          <p>You first brought up religion.</p>
+        </blockquote>
+              <blockquote>
+          <p>Difference with theists is they follow their religion.</p>
+        </blockquote>
+              <blockquote>
+          <p>Back into many ancient religions a flood was caused by the Gods.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Science              <blockquote>
+          <p>By using reason and science.</p>
+        </blockquote>
+              <blockquote>
+          <p>A god doesn't disprove science and vice-versa.</p>
+        </blockquote>
+              <blockquote>
+          <p>Some things can't be explained by science.</p>
+        </blockquote>
+          </li>
+  </ul>
+
+<p>Points about multiple topics:</p>
+  <blockquote>
+    <p>Many can testify of the existence of God.</p>
+  </blockquote>
+  <blockquote>
+    <p>God created the world in six days.</p>
+  </blockquote>
+  <blockquote>
+    <p>People don't need God or religion to do good things for others.</p>
+  </blockquote>
+
+<p>People ask questions like:</p>
+  <blockquote>
+    <p>What is the point?</p>
+  </blockquote>
+  <blockquote>
+    <p>He does exist?</p>
+  </blockquote>
+    </div>
+    <div class="col-md-6 random layout">
+      <h4>god B</h4>
+      <p>People disagree on these points:</p>
+        <blockquote>
+      <p>We are only capable.</p>
+    </blockquote>
+          <blockquote>
+      <p>People are different.</p>
+    </blockquote>
+          <blockquote>
+      <p>Who is more superior than our selves.</p>
+    </blockquote>
+  
+  <blockquote>
+    <p>I believe in a god.</p>
+  </blockquote>
+  <blockquote>
+    <p>Believe in God.</p>
+  </blockquote>
+  <blockquote>
+    <p>God exist.</p>
+  </blockquote>
+
+<p>Commonly occurring points made in the discussion were:</p>
+  <blockquote>
+    <p>Who believes in God.</p>
+  </blockquote>
+  <blockquote>
+    <p>That, he is a personal God.</p>
+  </blockquote>
+  <blockquote>
+    <p>You die still asking questions.</p>
+  </blockquote>
+
+<p>Users that talk about X often talk about Y.</p>
+  <blockquote>
+    <p>
+      (X)
+      Whether God exists.      (Y)
+      He exists.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      The evidence suggests.      (Y)
+      Who doesn't even exist.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      You to have faith in God's word.      (Y)
+      God do exist.    </p>
+  </blockquote>
+
+<p>Common points made in the discussion that link terms were:</p>
+  <blockquote>
+    <p>While non-religious people base their morality on actual evidence on whether something is harmful to myself or to my neighbor.</p>
+  </blockquote>
+  <blockquote>
+    <p>I ask God for help like getting a good grade, the next several days I get a good grade.</p>
+  </blockquote>
+  <blockquote>
+    <p>You agree with God or to have faith in God's word.</p>
+  </blockquote>
+
+<p>Points for commonly discussed topics:</p>
+<ul>
+      <li>
+      <p>God              <blockquote>
+          <p>LRB- in which we don't need god.</p>
+        </blockquote>
+              <blockquote>
+          <p>They are god.</p>
+        </blockquote>
+              <blockquote>
+          <p>Without a god you have no moral fiber.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Religion              <blockquote>
+          <p>Did I bring up a particular religion or religion at all (apart from the fact.</p>
+        </blockquote>
+              <blockquote>
+          <p>People can either then follow established religions or create personal guidelines and rules of their own, and this becomes their religion.</p>
+        </blockquote>
+              <blockquote>
+          <p>A cult in the ancient world was simply a religion devoted to the worship of one deity or deities from a broader pantheon.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Science              <blockquote>
+          <p>Using science as a method to answer.</p>
+        </blockquote>
+              <blockquote>
+          <p>We call Science.</p>
+        </blockquote>
+              <blockquote>
+          <p>I was made by SCIENCE.</p>
+        </blockquote>
+          </li>
+  </ul>
+
+<p>Points about multiple topics:</p>
+  <blockquote>
+    <p>Evidence would turn faith into science, and would reduce God to an analyzable PART of the natural world.</p>
+  </blockquote>
+  <blockquote>
+    <p>Is the point of allowing humans to find cures for diseases that god created.</p>
+  </blockquote>
+  <blockquote>
+    <p>Today, the catch-all term, God and the Bible, are used to erase any memory of man's true history and origins.</p>
+  </blockquote>
+
+<p>People ask questions like:</p>
+  <blockquote>
+    <p>What is the point?</p>
+  </blockquote>
+  <blockquote>
+    <p>He does exist?</p>
+  </blockquote>
+    </div>
+  </div>
+  <div class="well">
+    <p>2.1. Comparing the summary on how well, on average, the points make sense and their informativeness, give a relative rating:</p>
+    <label class="radio-inline"><input type="radio" name="god-layout_v_layout_random" value="layout-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="god-layout_v_layout_random" value="layout-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="god-layout_v_layout_random" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="god-layout_v_layout_random" value="random_layout-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="god-layout_v_layout_random" value="random_layout-much_better">B is much better</label>
+    <p>2.2. Please justify your answer to 2.1:</p>
+    <textarea class="form-control" rows="5" name="god-layout_v_layout_random-comment"></textarea>
+  </div>
+  <p id="completed">Please answer all the questions.</p>
+</div>

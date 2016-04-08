@@ -1,0 +1,557 @@
+<!-- 2 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style type="text/css">
+  h1 {
+    margin: 0.5em 0;
+  }
+  p {
+    margin: 2px 0px 0px 0px;
+    font-weight: 300;
+  }
+  .well {
+    margin-top: 10px;
+  }
+  .plain blockquote, .layout blockquote {
+    background: none;
+    border-left: none;
+    padding: 0px;
+    margin: 0px 0px 1px 20px;
+  }
+  blockquote p {
+    margin: 0;
+    font-size: 14px;
+    font-style: normal;
+    font-family: "Source Sans Pro", sans-serif;
+  }
+  .plain li p {
+    margin: 3px 0;
+  }
+  .plain ul {
+    margin-bottom: 0;
+  }
+  .plain p, .layout p, .stock p {
+    border-bottom: 1px solid #eee;
+  }
+  code {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 1em;
+    line-height: 1.45;
+    background-color: transparent;
+    padding: 0px;
+    color: SeaGreen;
+    font-weight: bold;
+  }
+  .plain strong, .layout strong {
+    font-weight: 300;
+  }
+  .plain ul
+  {
+    list-style-type: none;
+  }
+  .formatted blockquote {
+    margin: 0px 0px 1px 20px;
+    padding: 2px 5px;
+    background: #FAFAFA;
+  }
+  #completed {
+    font-size: 1.5em;
+    color: red;
+    font-weight: bold;
+  }
+</style>
+<script type="text/javascript">
+  function remaining() {
+    var names = [];
+    var completed = 0;
+    $.each($("#myForm input"), function( index, value ) {
+      names.push(value.name);
+      if (value.checked) {
+        completed += 1
+      }
+    });
+    $.each($("#myform textarea"), function( index, value ) {
+      names.push(value.name);
+      if (value.value.length > 1) {
+        completed += 1
+      }
+    });
+
+    var total = jQuery.unique( names ).length;
+    return total - completed;
+  }
+
+  function setCompleteStatus() {
+    var rem = remaining();
+    $("#completed").text("Questions Remaining: " + rem.toString());
+    if (rem === 0) {
+      $("#completed").hide();
+    } else {
+      $("#completed").show();
+    }
+  }
+
+  $( document ).ready(function() {
+    $( "#myForm input, #myForm textarea" ).change(function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).on('input', function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).focusout(function() {
+      setCompleteStatus();
+    });
+  });
+</script>
+
+<div id="myForm" class="container">
+  <div class="row">
+    <h1>Debate Summarization Evaluation</h1>
+    <p>Please do not complete this task, <strong>Extracts 2</strong>, more than once.</p>
+    <br/>
+    <div>
+      <p>The online world is full of debate and discussion - could these online debates be summarized automatically? We are investigating this question for an undergraduate research project and are comparing some extracts from debates for use in summaries. Complete the form below to let us know what you think.</p>
+      <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> if you have any queries before starting the survey.</p>
+    </div>
+    <h3>Consent Form</h3>
+    <div class="well">
+      <p>Please read the statements below</p>
+      <ul>
+        <li>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</li>
+        <li>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</li>
+        <li>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</li>
+        <li>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</li>
+        <li>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</li>
+      </ul>
+      <p><strong>By continuing this questionnaire you agree to the above statements.</strong></p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h3>Instructions</h3>
+    <div>
+      <p>We have built a tool to extract points made in a discussion on <strong>creation</strong>.</p>
+      <p>Given the following sets of similar points, rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
+      <br/>
+      <ul>
+        <li>Example of a <strong>good</strong> extract: <em>The bill was approved.</em></li>
+        <li>Example of a <strong>worse</strong> extract: <em>Similarly, the bill was approved.</em></li>
+        <li>Example of a <strong>bad</strong> extract: <em>The bill was approved as the.</em></li>
+      </ul>
+    </div>
+
+    Higher scores like 5/5 are better than lower ones like 1/5 or 2/5.
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h2>Section 1</h2>
+          <h4>Set 1</h4>
+      <div class="well">
+                      <p><strong>1.1.1.</strong>  Evolution is simply a scientific theory and there is no reason why the counterarguments to Evolution shouldn't be scientific.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract1" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract1" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract1" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract1" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract1" value="5">5/5</label>
+                      <p><strong>1.1.2.</strong>  Evolution is a theory that is supported at the micro level.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract2" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract2" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract2" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract2" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract2" value="5">5/5</label>
+                      <p><strong>1.1.3.</strong>  Evolution is a theory that has not been proven and I think probably never will be.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract3" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract3" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract3" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract3" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract3" value="5">5/5</label>
+                      <p><strong>1.1.4.</strong>  Evolution is a theory without mechanism.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract4" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract4" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract4" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract4" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract4" value="5">5/5</label>
+                      <p><strong>1.1.5.</strong>  Evolution (as Darwin and today's proponents describe it) is as solid a theory as gravity.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract5" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract5" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract5" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract5" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract5" value="5">5/5</label>
+                      <p><strong>1.1.6.</strong>  Evolution is a scientific theory.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract6" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract6" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract6" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract6" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract6" value="5">5/5</label>
+                      <p><strong>1.1.7.</strong>  Along the lines of : Evolution is just a theory.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract7" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract7" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract7" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract7" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract7" value="5">5/5</label>
+                      <p><strong>1.1.8.</strong>  Wrong - evolution is probably the most supported theory in biology - it's withstood considerable scrutiny for the past 150 years and is as strong as ever.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract8" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract8" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract8" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract8" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract8" value="5">5/5</label>
+                      <p><strong>1.1.9.</strong>  Why evolution is only theory and not a proven fact.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract9" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract9" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract9" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract9" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract9" value="5">5/5</label>
+                      <p><strong>1.1.10.</strong>  Evolution is just a theory, ID believers.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract10" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract10" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract10" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract10" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set1extract10" value="5">5/5</label>
+            </div>
+          <h4>Set 2</h4>
+      <div class="well">
+                      <p><strong>1.2.1.</strong>  The world was created in six days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract1" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract1" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract1" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract1" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract1" value="5">5/5</label>
+                      <p><strong>1.2.2.</strong>  The world was created in exactly 6 days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract2" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract2" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract2" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract2" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract2" value="5">5/5</label>
+                      <p><strong>1.2.3.</strong>  Is there that the world could have been created in six days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract3" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract3" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract3" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract3" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract3" value="5">5/5</label>
+                      <p><strong>1.2.4.</strong>  The world was created by God in seven days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract4" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract4" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract4" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract4" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract4" value="5">5/5</label>
+                      <p><strong>1.2.5.</strong>  The world was created in 6 days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract5" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract5" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract5" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract5" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract5" value="5">5/5</label>
+                      <p><strong>1.2.6.</strong>  But, was the world created in six days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract6" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract6" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract6" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract6" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract6" value="5">5/5</label>
+                      <p><strong>1.2.7.</strong>  How the world was created in six days.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract7" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract7" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract7" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract7" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set2extract7" value="5">5/5</label>
+            </div>
+          <h4>Set 3</h4>
+      <div class="well">
+                      <p><strong>1.3.1.</strong>  Evolution is fact, Creationism is so ludicrous and moronic.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract1" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract1" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract1" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract1" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract1" value="5">5/5</label>
+                      <p><strong>1.3.2.</strong>  Biological evolution is a fact.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract2" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract2" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract2" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract2" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract2" value="5">5/5</label>
+                      <p><strong>1.3.3.</strong>  Evolution is a fact.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract3" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract3" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract3" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract3" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract3" value="5">5/5</label>
+                      <p><strong>1.3.4.</strong>  Evolution is both a fact and a theory.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract4" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract4" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract4" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract4" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract4" value="5">5/5</label>
+                      <p><strong>1.3.5.</strong>  Evolution is fact.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract5" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract5" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract5" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract5" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract5" value="5">5/5</label>
+                      <p><strong>1.3.6.</strong>  Evolution, strictly speaking, is fact.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract6" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract6" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract6" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract6" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract6" value="5">5/5</label>
+                      <p><strong>1.3.7.</strong>  Evolution is an observable fact.</p>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract7" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract7" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract7" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract7" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="creation-set3extract7" value="5">5/5</label>
+            </div>
+      </div>
+
+  <h2>Section 2</h2>
+  <p>Please review the following summaries and rate them accounting for their <strong>informativeness</strong> and the extent to which they <strong>make sense</strong>.</p>
+    <div class="row">
+    <div class="col-md-6 layout">
+      <h4>creation A</h4>
+      <p>People disagree on these points:</p>
+        <blockquote>
+      <p>The designer itself is supernatural.</p>
+    </blockquote>
+          <blockquote>
+      <p>Design inferences are reliable.</p>
+    </blockquote>
+          <blockquote>
+      <p>The theory of evolution is wrong.</p>
+    </blockquote>
+  
+  <blockquote>
+    <p>The world was created in six days.</p>
+  </blockquote>
+  <blockquote>
+    <p>Evolution has basically been proven.</p>
+  </blockquote>
+  <blockquote>
+    <p>Intelligent design have merit.</p>
+  </blockquote>
+
+<p>Commonly occurring points made in the discussion were:</p>
+  <blockquote>
+    <p>We evolved from apes and space.</p>
+  </blockquote>
+  <blockquote>
+    <p>The LORD God made the earth and the heavens.</p>
+  </blockquote>
+  <blockquote>
+    <p>Evolution is wrong.</p>
+  </blockquote>
+
+<p>Users that talk about X often talk about Y.</p>
+  <blockquote>
+    <p>
+      (X)
+      ID best explain.      (Y)
+      Science can't explain x.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      Evolution is a theory without mechanism.      (Y)
+      Be taught in schools as fact.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      Are not, he was never castigated.      (Y)
+      Those molecular machines are designed.    </p>
+  </blockquote>
+
+<p>Common points made in the discussion that link terms were:</p>
+  <blockquote>
+    <p>God made the heavens and earth in six days.</p>
+  </blockquote>
+  <blockquote>
+    <p>You're looking for reliable evidence.</p>
+  </blockquote>
+  <blockquote>
+    <p>ID not just remains without scientific content but also.</p>
+  </blockquote>
+
+<p>Points for commonly discussed topics:</p>
+<ul>
+      <li>
+      <p>Id              <blockquote>
+          <p>Systematically replaced with the phrase ID.</p>
+        </blockquote>
+              <blockquote>
+          <p>An atheist is stuck with no ID.</p>
+        </blockquote>
+              <blockquote>
+          <p>But as a science ID simply provides no solution.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>God              <blockquote>
+          <p>You can't believe in god and evolution.</p>
+        </blockquote>
+              <blockquote>
+          <p>AS the designer isn't god.</p>
+        </blockquote>
+              <blockquote>
+          <p>Although I have never seen god.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Science              <blockquote>
+          <p>ID is science.</p>
+        </blockquote>
+              <blockquote>
+          <p>Whether intelligent design is science.</p>
+        </blockquote>
+              <blockquote>
+          <p>Using evolutionary science.</p>
+        </blockquote>
+          </li>
+  </ul>
+
+<p>Points about multiple topics:</p>
+  <blockquote>
+    <p>Intelligent Design is inferred from the evidence.</p>
+  </blockquote>
+  <blockquote>
+    <p>God and or the intelligent designer would be natural according to science.</p>
+  </blockquote>
+
+<p>People ask questions like:</p>
+  <blockquote>
+    <p>There were no repeated questions</p>
+  </blockquote>
+    </div>
+    <div class="col-md-6 random layout">
+      <h4>creation B</h4>
+      <p>People disagree on these points:</p>
+        <blockquote>
+      <p>Whether the designer is supernatural or human.</p>
+    </blockquote>
+          <blockquote>
+      <p>Design inferences are not reliable.</p>
+    </blockquote>
+          <blockquote>
+      <p>How Darwin's theory of evolution is wrong.</p>
+    </blockquote>
+  
+  <blockquote>
+    <p>I believe in evolution.</p>
+  </blockquote>
+  <blockquote>
+    <p>The world was created in six days.</p>
+  </blockquote>
+  <blockquote>
+    <p>For which we have some independent evidence.</p>
+  </blockquote>
+
+<p>Commonly occurring points made in the discussion were:</p>
+  <blockquote>
+    <p>Along the lines of : Evolution is just a theory.</p>
+  </blockquote>
+  <blockquote>
+    <p>We have evolved from apes.</p>
+  </blockquote>
+  <blockquote>
+    <p>God made us.</p>
+  </blockquote>
+
+<p>Users that talk about X often talk about Y.</p>
+  <blockquote>
+    <p>
+      (X)
+      How ID explains the bacterial flagellum.      (Y)
+      Science explain.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      Predictions can be made using the theory of ID.      (Y)
+      Using self-verification theory.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+      (X)
+      I know design.      (Y)
+      I see it as usual.    </p>
+  </blockquote>
+
+<p>Common points made in the discussion that link terms were:</p>
+  <blockquote>
+    <p>The various forms of life began abruptly through the agency of an intelligent creator with their distinctive features already intact.</p>
+  </blockquote>
+  <blockquote>
+    <p>Science doesn't look for things outside of nature it makes.</p>
+  </blockquote>
+  <blockquote>
+    <p>A God created us in without content.</p>
+  </blockquote>
+
+<p>Points for commonly discussed topics:</p>
+<ul>
+      <li>
+      <p>Id              <blockquote>
+          <p>The burden of proof is on ID to show.</p>
+        </blockquote>
+              <blockquote>
+          <p>They believe ID to be unconstitutional.</p>
+        </blockquote>
+              <blockquote>
+          <p>Systematically replaced with the phrase ID.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>God              <blockquote>
+          <p>You can't believe in god and evolution.</p>
+        </blockquote>
+              <blockquote>
+          <p>How the First Designer, be it god, an advanced alien species, or matter itself (his example.</p>
+        </blockquote>
+              <blockquote>
+          <p>The creator was specifically god or anything supernatural, something the DI is already emphasizing on this site.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Science              <blockquote>
+          <p>ID is science.</p>
+        </blockquote>
+              <blockquote>
+          <p>ID is just creation science in disguise.</p>
+        </blockquote>
+              <blockquote>
+          <p>Since intelligent design is not actually science.</p>
+        </blockquote>
+          </li>
+  </ul>
+
+<p>Points about multiple topics:</p>
+  <blockquote>
+    <p>Resurrection?There is clear evidence for a universe and Earth billions of years old and for the evolution of life and thus good reason to deny a literal reading of the Genesis creation stories.</p>
+  </blockquote>
+  <blockquote>
+    <p>That nothing, that could be construed as an Intelligent Designer, can be identified by science.</p>
+  </blockquote>
+  <blockquote>
+    <p>Clear, scientific evidence against it are either ignorant to the theory of evolution or stupid.</p>
+  </blockquote>
+
+<p>People ask questions like:</p>
+  <blockquote>
+    <p>There were no repeated questions</p>
+  </blockquote>
+    </div>
+  </div>
+  <div class="well">
+    <p>2.1. Comparing the summary on how well, on average, the points make sense and their informativeness, give a relative rating:</p>
+    <label class="radio-inline"><input type="radio" name="creation-layout_v_layout_random" value="layout-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="creation-layout_v_layout_random" value="layout-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="creation-layout_v_layout_random" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="creation-layout_v_layout_random" value="random_layout-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="creation-layout_v_layout_random" value="random_layout-much_better">B is much better</label>
+    <p>2.2. Please justify your answer to 2.1:</p>
+    <textarea class="form-control" rows="5" name="creation-layout_v_layout_random-comment"></textarea>
+  </div>
+  <p id="completed">Please answer all the questions.</p>
+</div>
