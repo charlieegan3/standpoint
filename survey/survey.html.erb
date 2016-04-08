@@ -142,9 +142,10 @@
         <li><strong>Content Interest / Informativeness</strong> the summary presents varied and interesting content.</li>
         <li><strong>Readability</strong> the summary contents make sense; work without context; aren't repetitive; and are easy to read.</li>
         <li><strong>Punctuation and Presentation</strong> the summary contents are correctly formatted as sentences, punctuation, capital letters and have sentence case.</li>
+        <li><strong>Organization</strong> related points occur near one and other.</li>
         <li><strong>Overall</strong> aggregating your scores from those listed above - <strong>and any other factors you deem relevant</strong> - select your preferred summary.</li>
       </ul>
-      <p>Please also note that lines in summaries are to be read independently.</p>
+      <p>Please also note that lines in summaries are to be read independently (they are not paragraphs).</p>
       <p>A summary is <strong>not</strong> intended to present a structured argument on the topic but rather <strong>give you a feel</strong> for what people talk about.</p>
     </div>
   </div>
@@ -184,13 +185,19 @@
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="same">A and B are about the same</label>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="<%= s2.first %>-better">B is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="<%= s2.first %>-much_better">B is much better</label>
-    <p>1.4. Overall</p>
+    <p>1.4. Organization</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>1.5. Overall</p>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s1.first %>-much_better">A is much better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s1.first %>-better">A is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="same">A and B are about the same</label>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s2.first %>-better">B is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s2.first %>-much_better">B is much better</label>
-    <p>1.5. Please justify your answer to Question 1.4:</p>
+    <p>1.6. Please justify your answer to Question 1.5:</p>
     <textarea class="form-control" rows="5" name="<%= debate1 %>-plain_v_stock-comment"></textarea>
   </div>
 
@@ -229,13 +236,19 @@
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="same">A and B are about the same</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="<%= s2.first %>-better">B is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="<%= s2.first %>-much_better">B is much better</label>
-    <p>2.4. Overall</p>
+    <p>2.4. Organization</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.5. Overall</p>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s1.first %>-much_better">A is much better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s1.first %>-better">A is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="same">A and B are about the same</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s2.first %>-better">B is better</label>
     <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s2.first %>-much_better">B is much better</label>
-    <p>2.5. Please justify your answer to 2.4:</p>
+    <p>2.6. Please justify your answer to 2.5:</p>
     <textarea class="form-control" rows="5" name="<%= debate2 %>-layout_v_stock-comment"></textarea>
   </div>
 
