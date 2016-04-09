@@ -52,14 +52,14 @@ end
 
 [["plain", "stock"], ["layout", "stock"], ["layout", "formatted"]].each do |pair|
   puts pair.join(" vs ").upcase
-  ["overall", "content", "punctuation", "readability", "organization"].each do |topic|
+  ["overall", "content", "punctuation", "readability", "organization"].each do |factor|
     counts = answers.map { |a| a[1..-1] }
-      .select { |r| r[0..1] == pair && r[2] == topic }
+      .select { |r| r[0..1] == pair && r[2] == factor}
       .group_by { |x| x.last }
       .map { |k, v| [k, v.size] }
       .sort_by { |k, v| v }
     next if counts.empty?
-    puts "  " + topic
+    puts "  " + factor
     sum = counts.map(&:last).reduce(:+)
     counts.each do  |k, v|
       puts "    #{k}: #{((v.to_f/sum) * 100).round(1)}%"
