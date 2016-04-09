@@ -27,19 +27,35 @@ Dir.glob('./extracts/ext*') do |path|
   sets = contents.split("------").map { |g| g.split("\n").reject { |l| l == "" } }.map do |g|
     extracts = g[1..-2]
     extracts[extracts.index(g[-1][2..-1])] = "(SELECTED) " + g[-1][2..-1]
-    (1..extracts.size).zip(extracts)
+    extracts
   end
   topic = path.match(/\/extracts_(\w+)\.txt/)[1]
   topic_sets << [topic, sets]
 end
 
+scored_sentences = []
 topic_sets.each do |topic, sets|
   sets.each_with_index do |set, set_index|
     set.each_with_index do |extract, extract_index|
       key = "#{topic}set#{set_index + 1}extract#{extract_index + 1}"
       scores = answers.select { |k, _| k == key }.map(&:last)
-
-      puts "#{(scores.reduce(:+).to_f / scores.size).round(1)} #{extract.last}"
+      score = (scores.reduce(:+).to_f / scores.size)
+      scored_sentences << [extract, score]
     end
   end
 end
+
+
+print "All Extracts: "
+p mean = scored_sentences.map(&:last).reduce(:+) / scored_sentences.size
+
+print "Selected Extracts: "
+selected = scored_sentences.select { |s| s.first.include? "SELECTED" }
+puts selected_mean = selected.map(&:last).reduce(:+) / selected.size
+
+print "Other Extracts: "
+rejected = scored_sentences - selected
+puts rejected_mean = rejected.map(&:last).reduce(:+) / rejected.size
+
+selected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(1)} - #{e}" }
+rejected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(1)} - #{e}" }
