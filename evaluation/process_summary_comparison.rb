@@ -52,6 +52,10 @@ end
 
 [["plain", "stock"], ["layout", "stock"], ["layout", "formatted"]].each do |pair|
   puts pair.join(" vs ").upcase
+  [pair.first+"-much_better", pair.first+"-better", "same", pair.last+"-better", pair.last+"-much_better"].each do |answer|
+    print answer + ", "
+  end
+  puts
   ["overall", "content", "punctuation", "readability", "organization"].each do |factor|
     counts = answers.map { |a| a[1..-1] }
       .select { |r| r[0..1] == pair && r[2] == factor}
@@ -59,11 +63,13 @@ end
       .map { |k, v| [k, v.size] }
       .sort_by { |k, v| v }
     next if counts.empty?
-    puts "  " + factor
+    print factor + ", "
     sum = counts.map(&:last).reduce(:+)
-    counts.each do  |k, v|
-      puts "    #{k}: #{((v.to_f/sum) * 100).round(1)}%"
+    counts = Hash[*counts.flatten]
+    [pair.first+"-much_better", pair.first+"-better", "same", pair.last+"-better", pair.last+"-much_better"].each do |answer|
+      print "#{((counts[answer].to_f/sum) * 100).round(1)}, "
     end
+    puts
   end
   puts "-" * 50
 end
