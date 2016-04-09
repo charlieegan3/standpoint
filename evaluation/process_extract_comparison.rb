@@ -12,12 +12,22 @@ Dir.glob('./extract_comparison/ext*') do |path|
 end
 
 answers = []
+
+bigram_v_rand_answers = []
+comments = []
+
 responses.each do |r|
-  r.select { |k, _| k.include? "Answer" }.each do |q, a|
+  r.select { |k, _| k.include? "Answer" }.sort_by { |_, v| v.length }.each do |q, a|
     topic, id =  q.gsub("Answer.", "").split("-")
-    next unless id.match(/set[123]extract[0-9]+/)
-    a = a.gsub(",", ";").gsub(/\s+/, " ").to_i
-    answers << [topic + id, a]
+    if id.match(/set[123]extract[0-9]+/)
+      a = a.gsub(",", ";").gsub(/\s+/, " ").to_i
+      answers << [topic + id, a]
+    elsif a.match(/^\w+\-\w+$|^same$/)
+      bigram_v_rand_answers << a
+    else
+      last_response = r.select { |k, v| k.include? id }.first.last
+      comments << { topic: topic, comment: a, last_response: last_response }
+    end
   end
 end
 
@@ -59,3 +69,23 @@ puts rejected_mean = rejected.map(&:last).reduce(:+) / rejected.size
 
 selected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(1)} - #{e}" }
 rejected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(1)} - #{e}" }
+
+puts "\nComments\n"
+comments.each do |comment|
+  puts [
+    comment[:topic].upcase,
+    "A was bigram, B was random",
+    "rating given: " + comment[:last_response].gsub(/^layout/, "bigram_layout")
+  ].join(", ")
+  text = comment[:comment]
+  text.gsub!(/(^|\W)A\W/, " [BIGRAM] ")
+  text.gsub!(/(^|\W)B\W/, " [RANDOM] ")
+  puts text.strip
+  puts "-"*100
+end
+
+puts "\nRatings:"
+bigram_v_rand_answers.uniq.sort.each do |a|
+  print a + ": "
+  puts (bigram_v_rand_answers.count(a).to_f * 100 / bigram_v_rand_answers.size).round(2).to_s + "%"
+end

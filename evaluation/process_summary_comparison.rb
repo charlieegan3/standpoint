@@ -1,6 +1,27 @@
 require 'pry'
 require 'csv'
 
+ab_index = {
+  ["abortion", ["layout", "formatted"]] => ["B", "A"],
+  ["abortion", ["layout", "stock"]] => ["A", "B"],
+  ["abortion", ["plain", "stock"]] => ["A", "B"],
+  ["creation", ["layout", "formatted"]] => ["A", "B"],
+  ["creation", ["layout", "stock"]] => ["B", "A"],
+  ["creation", ["plain", "stock"]] => ["B", "A"],
+  ["god", ["layout", "formatted"]] => ["B", "A"],
+  ["god", ["layout", "stock"]] => ["A", "B"],
+  ["god", ["plain", "stock"]] => ["A", "B"],
+  ["guns", ["layout", "formatted"]] => ["A", "B"],
+  ["guns", ["layout", "stock"]] => ["B", "A"],
+  ["guns", ["plain", "stock"]] => ["B", "A"],
+  ["gay_rights", ["layout", "formatted"]] => ["B", "A"],
+  ["gay_rights", ["layout", "stock"]] => ["A", "B"],
+  ["gay_rights", ["plain", "stock"]] => ["A", "B"],
+  ["healthcare", ["layout", "formatted"]] => ["A", "B"],
+  ["healthcare", ["layout", "stock"]] => ["B", "A"],
+  ["healthcare", ["plain", "stock"]] => ["B", "A"]
+}
+
 responses = []
 Dir.glob('./summary_comparison/sum*') do |path|
   rows = []
@@ -12,12 +33,20 @@ Dir.glob('./summary_comparison/sum*') do |path|
 end
 
 answers = []
+comments = []
 responses.each do |r|
-  r.select { |k, _| k.include? "Answer" }.each do |q, a|
+  r.select { |k, _| k.include? "Answer" }.sort_by { |_, v| v.size }.each do |q, a|
     topic, comparing, type =  q.gsub("Answer.", "").split("-")
     a = a.gsub(",", ";").gsub(/\s+/, " ")
-    next unless a.match(/^\w+\-\w+$|^same$/)
-    answers << [topic, *comparing.split("_v_"), type, a]
+    if a.match(/^\w+\-\w+$|^same$/)
+      answers << [topic, *comparing.split("_v_"), type, a]
+      last = answers.last
+    else
+      last_response = r.select { |k, v| k.include?(comparing + "-overall") }.first.last
+      orientation = ab_index[[topic, comparing.split("_v_")]]
+      translation = Hash[*orientation.zip(comparing.split("_v_")).flatten]
+      comments << { topic: topic, translation: translation, comment: a, last_response: last_response }
+    end
   end
 end
 
@@ -37,4 +66,22 @@ end
     end
   end
   puts "-" * 50
+end
+
+comments.group_by { |c| c[:translation].values.sort }.each do |k, comments|
+  puts k.join(" vs. ")
+  comments.each do |comment|
+    puts [
+      comment[:topic].upcase,
+      comment[:translation].map { |k, v| "#{v} was #{k}" }.join(", "),
+      "rating given: " + comment[:last_response]
+    ].join(", ")
+    text = comment[:comment]
+    comment[:translation].each do |from, to|
+      text.gsub!(/(^|\W)#{from}\W/, " [#{to.upcase}] ")
+    end
+    puts text.strip
+    puts "-"*75
+  end
+  puts ["*"*100, "*"*100, "\n"].join("\n")
 end
