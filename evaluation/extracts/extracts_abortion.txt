@@ -1,0 +1,38 @@
+["abortion.nsubj", "be.verb", "illegal.dobj"]
+In this case, abortion must be illegal in ALL cases.
+Abortion is illegal.
+Abortion being illegal.
+In Nicaragua abortions are always illegal.
+Abortion was illegal.
+Abortion is illegal after the third trimester except in extreme circumstancesNot.
+Abortion should be illegal.
+A human, abortion should be illegal.
+Abortion should be illegal in all cases.
+Abortion is illegal after the third trimester except in extreme circumstances.
+> Abortion should be illegal.
+------
+["woman.nsubj", "have.verb", "right.dobj"]
+The woman has the right to her womb.
+Whether women should have a right to abort a fetus or not.
+Does a man or a woman have the right to force his involvement on his child.
+The woman has a right to self-defense.
+A woman should have the right to decide.
+Women have the right to choose, period.
+A woman should have the right to choose.
+A woman has the right to a partial birth abortion.
+The woman has a right to unplug.
+However, a woman doesn't have the right to terminate a life, regardless of whether it is inside her body or not.
+> The woman has the right to her womb.
+------
+["fetus.nsubj", "be.verb", "being.dobj"]
+An embryo or fetus isn't a human being.
+A fetus is a potential human being, not an actual human being.
+Fetuses are not human beings.
+A fetus is not a human being, is not murder.
+The fetus is not a human being.
+The fetus is a human being, a person, from the moment of conception.
+The fetus is not a human being and future Americans can never say its a human being.
+A fetus is a human being.
+In other words, a fetus and an embryo are both living beings.
+Fetuses are human beings at a early stage of development.
+> The fetus is not a human being.

@@ -1,0 +1,37 @@
+["PERSON.nsubj", "kill.verb", "people.dobj"]
+Who killed people at her school.
+PEOPLE KILL PEOPLE.
+People sometimes kill other people innocently.
+People kill people, but guns make it a heck of a lot easier.
+Just people kill people.
+Guns dont kill people, people kill people.
+People kill people.
+More than 20,000 gun laws nation wide and bad people are still killing innocent people.
+Who kill people.
+Guns dont kill people, people kill people, from a gunsdont kill people I do corperation.
+> People kill people.
+------
+["PERSON.nsubj", "be.verb", "responsible.dobj"]
+The person was responsible.
+People will be less responsible in National Parks.
+People are automatically responsible.
+We are so responsible.
+People were more responsible, but they aren.
+Who is responsible enough to go to a shooting range.
+We are not responsible for this - which is of our own creation.
+Not all people are responsible enough to keep their hands to themselves.
+Why, people, individually, are responsible.
+People are responsible.
+> People are automatically responsible.
+------
+["gun.nsubj", "be.verb", "illegal.dobj"]
+Guns used in street crimes, especially from gangs, are typically illegal.
+Guns were illegal.
+Where guns are illegal.
+Guns are illegal.
+Guns were illegal in the US.
+Guns are illegal in Chicago.
+Guns were illegal in the first place.
+Guns should be completely illegal.
+Guns shouldn't be illegal.
+> Guns were illegal.

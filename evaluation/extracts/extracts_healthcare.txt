@@ -1,0 +1,38 @@
+["PERSON.nsubj", "have.verb", "insurance.dobj"]
+You don't have insurance.
+I have insurance from the company I retired from.
+I don't have insurance, and you know.
+Who don't have insurance.
+Who have insurance but can barely afford.
+I did not have insurance.
+Have you ever not had insurance.
+You didn't have insurance.
+You don't have insurance and you have to go to the hospital for any type of surgery or more than a doctor visitation the cost really hurts those who don't have a lot of money.
+You don't have adequate health insurance.
+> You don't have insurance.
+------
+["PERSON.nsubj", "get.verb", "care.dobj"]
+They all get the same quality care.
+Them get the care that they need.
+In France you only get health care.
+Oh, I'll get health care somehow, but you will pay for it with higher insurance premiums etc.
+They can't get health care.
+They can't get prompt care.
+Shouldn't they, then they can get health care too.
+You'd get better care at a veterinarian in the US.
+They get quality care.
+They don't get preventative care, timely diagnoses, or specialist treatments.
+> They can't get health care.
+------
+["PERSON.nsubj", "pay.verb", "tax.dobj"]
+They pay their taxes.
+In Canada we pay more taxes than California but we have the same GDP GSP and same population.
+You pay taxes in Canada.
+Also, you pay more in taxes than most billionaires.
+As they pay income taxes.
+Onto what you pay in taxes.
+People pay through their taxes instead of in direct payments to their health insurance providers.
+In the example given, she has been paying taxes in to the system for the past 12 years.
+I paid my taxes I want to be assured.
+People pay with their taxes It is a myth.
+> As they pay income taxes.
