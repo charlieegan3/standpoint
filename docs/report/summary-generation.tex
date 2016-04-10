@@ -1,7 +1,23 @@
 \chapter{Summary Generation\label{chap:summary-generation}}
-  Overview
-  \section{Survey Design}
+  A process to extract and refine a list of points could be used in a number of ways. From this foundation, we investigate a potential use for points in a summarization task. Extracted points are short and have a `pattern' that allows for new comparisons not possible with plain text extracts. This chapter first explains a number of shared components used in building each summary section, then goes on to describe each section in detail.
+
   \section{Extract Selection}
+    Points are manipulated in groups where members share a common pattern, for example, there might be a group where each point had the pattern \texttt{woman.nsubj make.verb choice.dobj}. This group would contain all the points with this pattern and in turn all the extracts that could be used in a summary to express this point. Even after refining the list of points input to this component of the pipeline there is much variation in the quality of the extracts available for selection. Take this example group of extracts for point about the Genesis creation narrative:
+
+    \begin{itemize}[label={}]
+      \item{\blockquote{The world was created in six days.}}
+      \item{\blockquote{The world was created in exactly 6 days.}}
+      \item{\blockquote{Is there that the world could have been created in six days.}}
+      \item{\blockquote{The world was created by God in seven days.}}
+      \item{\blockquote{The world was created in 6 days.}}
+      \item{\blockquote{But, was the world created in six days.}}
+      \item{\blockquote{How the world was created in six days.}}
+    \end{itemize}
+
+    The task here is to select the best extract to represent the group. In this instance our approach selected the fifth point, \blockquote{The world was created in 6 days.}. This selection is made whenever a group has been selected for the summary and an extract to represent it is needed.
+
+    This is done using a bag of words, bigram model on the extract words, weighted by length...
+
   \section{Extract Presentation \& Formatting}
     \subsection{Negation Shorthand}
   \section{Avoiding Repetition}
