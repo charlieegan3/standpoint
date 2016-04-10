@@ -80,6 +80,19 @@ module Counters
 
         next if options.flatten == p["Components"].map { |c| c.split(".").first }
 
+        # note that the assumption of first in l17 also needs to change
+        #permutations = []
+        #options.each_with_index do |set, index|
+          #set.each do |replacement|
+            #new = p["Components"].dup
+            #new[index] = "#{replacement}.#{p["Components"][index].split(".").last}"
+            #next if new == p["Components"]
+            #permutations << new
+          #end
+        #end
+
+        #counter_points[p["Components"]] = permutations.select { |p| groups[p] }
+
         permutations = options.first.map { |index| [index] }
         options[1..-1].each do |o|
           permutations.each do |permutation|
