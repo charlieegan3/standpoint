@@ -15,7 +15,7 @@ require_relative 'presenter'
 require_relative 'paragraphizer'
 
 def stock_summary(debate, words)
-  `python ../stock_summarizers/nlp_course/summarizer_topic.py #{debate} #{words}`
+  `python ../stock_summarizers/summarizer_topic.py #{debate} #{words}`
 end
 
 title = ARGV[0].scan(/\/(\w+)_p/).flatten.first

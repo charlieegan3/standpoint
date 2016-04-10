@@ -1,4 +1,0 @@
-APIs
-====
-https://market.mashape.com/textanalysis/text-summarization
-https://algorithmia.com/algorithms/nlp/Summarizer
