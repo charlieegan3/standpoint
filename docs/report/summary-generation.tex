@@ -1,8 +1,19 @@
 \chapter{Summary Generation\label{chap:summary-generation}}
   A process to extract and refine a list of points could be used in a number of ways. From this foundation, we investigate a potential use for points in a summarization task. Extracted points are short and have a `pattern' that allows for new comparisons not possible with plain text extracts. This chapter first explains a number of shared components used in building each summary section, then goes on to describe each section in detail.
 
+  \section{Permitted Extracts}
+    In a cluster of points with the same patter there are a range of different extracts that could be selected. There is much variation in quality caused by additional words, bad parses and poor punctuation. Removing points with extracts that matched heuristics for poor quality would significantly reduce the information available to determine a cluster's salience. Such points are useful in aggregation but not for presentation.
+
+    Instead we implemented a set of rules that prevent a point's extract from being used in the summary, even while the point itself remains in the cluster to aid aggregation and sorting tasks.
+
+    Predominantly exclusions are made based on the presence of certain substrings using regular expressions. Exclusion patterns include: starts with a wh-question word or contains a question mark; has two or more consecutive words in block capitals or contains a mid-word case change. Since these patterns can be applied very quickly extracts are tested using these first.
+
+    Following on from these, there are other more complex exclusion patterns based on the dependencies from re-parsing the extract using CoreNLP. Extracts with clausal or generic dependencies are excluded, such dependencies are characteristic of long points or erroneous parses. An extract may also be excluded if it contains more than two conjunctive relations or nominal dependencies.
+
+    Finally some additional restrictions, that are not based on the dependencies or the strings, are applied. For example, an `it' must be preceded by \{on, and, but, whether\} and words are not allowed to be repeated.
+
   \section{Extract Selection}
-    Points are manipulated in groups where members share a common pattern, for example, there might be a group where each point had the pattern \texttt{woman.nsubj make.verb choice.dobj}. This group would contain all the points with this pattern and in turn all the extracts that could be used in a summary to express this point. Even after refining the list of points input to this component of the pipeline there is much variation in the quality of the extracts available for selection. Take this example group of extracts for point about the Genesis creation narrative:
+    Points are manipulated in clusters where members share a common pattern, for example, there might be a cluster where each point had the pattern \texttt{woman.nsubj make.verb choice.dobj}. This cluster would contain all the points with this pattern and in turn all the extracts that could be used in a summary to express this point. Even after refining the list of points input to this component of the pipeline there is much variation in the quality of the extracts available for selection. Take this example cluster of extracts for points about the Genesis creation narrative:
 
     \begin{itemize}[label={}]
       \item{\blockquote{The world was created in six days.}}
@@ -14,9 +25,9 @@
       \item{\blockquote{How the world was created in six days.}}
     \end{itemize}
 
-    The task here is to select the best extract to represent the group. In this instance our approach selected the fifth point, \blockquote{The world was created in 6 days.}. This selection is made whenever a group has been selected for the summary and an extract to represent it is needed.
+    All of these passed the `Permitted Extracts' stage. The task is to select the best extract to represent the cluster. In this instance our approach selected the fifth point, \blockquote{The world was created in 6 days.}. This selection is made every time a cluster has been selected for use in a summary as an extract to represent it is required. This is done using a bag-of-words, length-weighted, bigram model of the extract words in the cluster. The goal was to select the most succinct extract that was most representative of the pattern cluster.
 
-    This is done using a bag of words, bigram model on the extract words, weighted by length...
+    Extracts are iterated and the bigrams for each collected. Bigrams are given a value equal to the number of times they occur in the cluster. Each extract is then given a value equal to the sum of the values for the bigrams it contains. This extract value is then divided by the number of words in the extract to determine a final score. The extract with the highest score is selected for use in the summary.
 
   \section{Extract Presentation \& Formatting}
     \subsection{Negation Shorthand}
