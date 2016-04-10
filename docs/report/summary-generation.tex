@@ -52,13 +52,27 @@
     \tocless\subsection{Negation Shorthand}
       As part of the counter point analysis discussed in the following section, a condensed point representation was developed for expressing points that shared many of the same words. For example, to include both \blockquote{A fetus is a human} as well as \blockquote{A fetus is \textbf{not} a human} is a highly repetitive presentation. Such a presentation does not make for good reading and uses words that could be used to express additional information from another point.
 
-      Based largely on a string diffing library\footnote{https://rubygems.org/gems/differ}, we developed an alternative, more condensed presentation for such pairs of points. Under this, the above examples could be written as \blockquote{A fetus is \textbf{\{}not\textbf{\}} a human}, saving five repeated words. However, more complex examples also occurred such as \blockquote{Abortion \textbf{\{}is not\textbf{|}should be\textbf{\}} legal \textbf{\{}after 12 weeks\textbf{\}}} (\blockquote{Abortion should be legal} and \blockquote{abortion is not legal after 12 weeks}). While there are adjustments that can be made to improve this like requiring the two extracts to have a similar number of words complex examples still surfaced and the formatting was not used.
+      Based largely on a string diffing library\footnote{https://rubygems.org/gems/differ}, we developed an alternative, more condensed presentation for such pairs of points. Under this, the above examples could be written as \blockquote{A fetus is \textbf{\{}not\textbf{\}} a human}, saving five repeated words. However, more complex examples also occurred such as \blockquote{Abortion \textbf{\{}is not\textbf{|}should be\textbf{\}} legal \textbf{\{}after 12 weeks\textbf{\}}} (\blockquote{Abortion should be legal} and \blockquote{abortion is not legal after 12 weeks}). While there are adjustments that can be made to improve this, such as requiring the two extracts to have a similar number of words, complex examples still surfaced and the formatting was not used.
 
       The diffing functionality is still used in the identification of counter points.
 
   \section{Summary Sections}
     \subsection{Counter Points}
+      The identification of counter points were a goal for the project from the start. Counter points are matched on one of two possible criteria, either the presence of negation terminology or a antonym for a work that is part of the point's pattern.
+
+      Potential, antonym-derived counter points, for a given point, are generated using it's pattern. Taking the pattern \texttt{treatment.nsubj be.verb private.dobj} as an example, this generates the counter point \texttt{treatment.nsubj be.verb \textbf{public}.dobj}. These substitutions can be applied to any component that has an antonym, including verbs (\texttt{sperm.nsubj have.verbs rights.dobj} vs \texttt{sperm.nsubj \textbf{lack.verb} rights.dobj}). If there are many words in the pattern with antonym matches then multiple potential counter points are generated for a single point.
+
+      Once a list of potential point vs. counter point patterns has been generated these are filtered to make sure that both the generated counter point pattern exists in the list of points and that the there are no duplicate pairs. A point/counter point pair cannot also appear in in reverse as part of another pair.
+
+      Counter points are selected for display based on the average size of the clusters for the point and counter point. This is intended to represent ``the most common pairs of contradictory points''. In the summary text only the extract for the point is displayed, not the counter. The section is introduced as ``points that people disagree on'' so stating either point presents it as a point that is contested. Previously the `negation shorthand' was used to present points and counter points but variation in extracts often led to complex examples.
+
     \subsection{Negated Points}
+      Negated points are displayed in the same summary section, `points that people disagree on'', however they are identified differently. Negated points are selected from the largest unused clusters. Negation terminology is not commonly part of the cluster pattern, for example, the \texttt{woman.nsubj have.verb right.dobj} cluster could include both \blockquote{A woman has the right} and \blockquote{The woman does not have the right} as extracts. Identifying these negated forms within clusters is how negation-derived counter points are collected.
+
+      First the cluster is split into two groups, extracts with negation terminology and those without. The Cartesian product of these two groups gives all pairs of negated and non-negated extracts. For each of these pairs; a string difference is computed\footnote{https://rubygems.org/gems/differ}, the complexity of this difference pattern is used to identify a clean match. For example \blockquote{\{+that \}a fetus is \{-not \}a person\{- under the law of the eu\}} is not as clean as \blockquote{that a fetus is\{n't \}a person}. By counting elements in the difference pattern we are able to select shorter and cleaner examples where they exist.
+
+      However, similarly to antonym-derived counter points, clean examples do not always exist. Negated points are represented as the positive side extract of the pair and listed under the ``points that people disagree on'' section.
+
     \subsection{Co-occurring Points}
     \subsection{Commonly Occurring Points}
     \subsection{Longer Pattern Points}
