@@ -30,8 +30,32 @@
     Extracts are iterated and the bigrams for each collected. Bigrams are given a value equal to the number of times they occur in the cluster. Each extract is then given a value equal to the sum of the values for the bigrams it contains. This extract value is then divided by the number of words in the extract to determine a final score. The extract with the highest score is selected for use in the summary.
 
   \section{Extract Presentation \& Formatting}
+    Our points extraction approach works by selecting the relevant components in a string for a given point, using the dependency parse graph. While this has a key advantage in creating shorter content units, it also means that extracts are often poorly formatted for presentation in isolation. To overcome this we needed to implement a means of correcting extracts for presentation, below are two examples that illustrate the problem with poor punctuation and style.
+
+    \blockquote{that Scientifically , human life begins at this stage}
+    and
+    \blockquote{.that a fetus is a person ,}
+
+    To overcome this we have a short function to ensure the extract meets the following properties: extract is capitalized; ends in a period; commas are not preceded by a space; contractions are applied where possible and consecutive punctuation marks condensed or removed. Certain determiners, adverbs and conjunctions (because, that, therefore) are also removed removed from \textit{the start} of extracts. The two extracts above are translated into the following cleaner versions:
+
+    \blockquote{Scientifically, human life begins at this stage.}
+    and
+    \blockquote{A fetus is a person.}
+
+    This particular feature still requires work. The task of correctly formatting a string has only been touched on here and is a candidate for further work on the project.
+
+  \section{Avoiding Repetition in Summaries}
+    A cluster's inclusion in a particular summary section is a function of the number of points in the cluster. This is based on the idea that larger clusters are have greater importance and should the highest priority to include in the summary. To avoid large clusters being repeatedly selected at each summary section, a list of used patterns and extracts is maintained.
+
+    When an extract is used in a summary section it is `spent', and added to a list of used extracts. The extract pattern, string, lemmas and subject-verb-object triple are added to this list. Any point that matches anything in this list of used identifiers cannot be used. The same extract may be included in many clusters under different point patterns. For example, \blockquote{Life begins at conception.} is matched by both the \texttt{life.nsubj begins.verb} and \texttt{life.nsubj begins.verb at.prep conception.dobj} patterns. This means that when checking is an extract is suitable it must be checked against the text \textit{and} patterns of those already used.
+
     \subsection{Negation Shorthand}
-  \section{Avoiding Repetition}
+      As part of the counter point analysis discussed in the following section, a condensed point representation was developed for expressing points that shared many of the same words. For example, to include both \blockquote{A fetus is a human} as well as \blockquote{A fetus is \textbf{not} a human} is a highly repetitive presentation. Such a presentation does not make for good reading and uses words that could be used to express additional information from another point.
+
+      Based largely on a string diffing library\footnote{https://rubygems.org/gems/differ}, we developed an alternative, more condensed presentation for such pairs of points. Under this, the above examples could be written as \blockquote{A fetus is \textbf{\{}not\textbf{\}} a human}, saving five repeated words. However, more complex examples also occurred such as \blockquote{Abortion \textbf{\{}is not\textbf{|}should be\textbf{\}} legal \textbf{\{}after 12 weeks\textbf{\}}} (\blockquote{Abortion should be legal} and \blockquote{abortion is not legal after 12 weeks}). While there are adjustments that can be made to improve this like requiring the two extracts to have a similar number of words complex examples still surfaced and the formatting was not used.
+
+      The diffing functionality is still used in the identification of counter points.
+
   \section{Summary Sections}
     \subsection{Counter Points}
     \subsection{Negated Points}
