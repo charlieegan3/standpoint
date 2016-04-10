@@ -18,7 +18,7 @@
 
   \section{Defining Points with Verb Frames}
     In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivity that listed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query to match patterns not present in frames.
-    \subsection{VerbNet and FrameNet}
+    \tocless\subsection{VerbNet and FrameNet}
       VerbNet is a XML, verb lexicon that lists classes of verbs and accompanying FrameNet \cite{fillmore2002framenet} frames \cite{schuler2005verbnet}. Represented in VerbNet's 274 classes are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `Murder' is given below.
 
       \lstset{language=XML}
@@ -39,14 +39,14 @@
 
       Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
 
-    \subsection{The Generic Frame}
+    \tocless\subsection{The Generic Frame}
       Originally our intent had been to use only FrameNet frames to define allowed patterns for points. However there were verbs that were missing frames for \textit{all} possible patterns of interest. Usually this meant that there was a simple frame for the verb but it failed to adequately capture the context. Take the following example:
 
       \blockquote{These images reflect the reality of abortions}
 
       This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts more variable which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the Generic Frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
 
-    \subsection{Copula Verbs}
+    \tocless\subsection{Copula Verbs}
       Copula verbs are not the head of the sentence in output from the CoreNLP dependency parser. Take the following example:
       \begin{multicols}{2}
         \raggedcolumns
