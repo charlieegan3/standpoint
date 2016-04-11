@@ -1,0 +1,18 @@
+\begin{appendices}
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+  \makeatletter
+  \addtocontents{toc}{%
+    \begingroup
+    \let\protect\l@chapter\protect\l@section
+    \let\protect\l@section\protect\l@subsection
+  }
+  \makeatother
+  \chapter{First appendix}
+    \section{First section}
+    \section{Second section}
+
+  \chapter{Second appendix}
+    \section{First section}
+    \section{Second section}
+  \addtocontents{toc}{\endgroup}
+\end{appendices}
