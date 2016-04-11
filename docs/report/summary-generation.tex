@@ -56,6 +56,9 @@
 
       The diffing functionality is still used in the identification of counter points.
 
+  \section{Summary Topics}
+    Topic words are used in the point extraction stage but are also passed along to the summarization stage. Topic words are used in some sections to avoid repetition. They are also used to highlight topic words in extracts in the formatted summary presentation.
+
   \section{Summary Sections}
     \subsection{Counter Points}
       The identification of counter points were a goal for the project from the start. Counter points are matched on one of two possible criteria, either the presence of negation terminology or a antonym for a work that is part of the point's pattern.
@@ -74,8 +77,30 @@
       However, similarly to antonym-derived counter points, clean examples do not always exist. Negated points are represented as the positive side extract of the pair and listed under the ``points that people disagree on'' section.
 
     \subsection{Co-occurring Points}
+      As well as opposing counter points we were also interested to present points that were commonly made by the same participant. Our corpus did not annotate participant's identity so the assumption was made that each post was from a unique participant. Adjusting the tool to work on discussion threads with hierarchical structure and participant identity would enable presentations such as `x is commonly said when responding to y''.
+
+      To identify co-occurring points each post in the discussion was fire represented as a list of points it made. Taking all combinations of the points made in a post, for all posts, generates a list of all co-occurring points. Using the point patterns, these pairs can sorted based on the number of times they occur.
+
+      Co-occurring pairs are rejected if they are too similar, patterns must differ by more than one component. For example, \texttt{woman.nsubj have.verb choice.dobj} could not be displayed as related to \texttt{woman.nsubj have.verb rights.dobj} but could be with \texttt{fetus.nsubj have.verb rights.dobj}.
+
+      Pairs displayed in the summary can only use available points remaining after the counter point analysis. They must also have a suitable quality extract to display, if not the next most common pair may be used instead.
     \subsection{Commonly Occurring Points}
-    \subsection{Longer Pattern Points}
+      Before selecting the points for the final sections of the summary, a number of the remaining most common points are listed. There are no restrictions on points from this section other than that they must not have been used by the previous sections. The intention is to present common points that are important to the discussion that have no counter or co-occurring point.
+
     \subsection{Topic Points}
+      There was also an opportunity to display points broken down by topic. To determine the salient topics the subjects and objects for all clusters were tallied, this gave a ranking of topic words. This information is not available in the flat list of topics returned from the topic model.
+
+      Using these common topics, points containing them can be selected and displayed under a section for that topic. Extracts for a given topic is selected based on the size of the cluster and but also minimizing repetition with the extracts already selected for that topic. Similarly, only points not used in the previous sections can be used.
+
+    \subsection{Longer Pattern Points}
+      Not all patterns are three components long. While patterns of three components represent most of the largest clusters, less common, longer form points also offer interesting extracts. Example extracts from longer form patterns include: \blockquote{The human life cycle begins at conception.} and \blockquote{I must not care about the mother.}. The patterns for these points also include the prepositional phrases which expand on the idea being discussed.
+
+      Longer points are selected based on the size of the pattern, such a point must have more than three components. To avoid repetition, when longer form points are being listed, each consecutive point added to the section must introduce at least one new topic word. This requirement avoids common points differing only in the prepositional phrase being listed in this section.
+
     \subsection{Topic Linking Points}
-    \subsection{Questions}
+      An alternative to selecting points points with a longer patter is to instead select points that mention more than one topic word. This allows less common extracts, that are still highly relevant based on their topic words, to be displayed.
+
+      This section is based entirely on the point extracts, not the pattern clusters. Extracts are sorted on the number of topic words they include, the top 100 extracts are taken to form a cluster. From this cluster, the `Extract Selection' process is applied to repeatedly select the most presentable and representative extract. This is done until three `Topic Linking Points' are extracted for the section.
+
+    \subsection{Common Questions Points}
+      As a final idea for an informative summary section we opted to include a list of questions that had been asked a number of times. Interestingly repeated questions were far less common. To gather a list of common questions first the points with extracts containing a `?' were selected. These qualifying question extracts were then clustered using their patterns, extracts from up to the top three repeated questions were displayed. However, it was uncommon for there to be this many repeats.
