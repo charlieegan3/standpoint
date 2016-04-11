@@ -159,6 +159,8 @@ func main() {
 			continue
 		} else if len(v) < 4 {
 			continue
+		} else if v[0] != '{' {
+			continue
 		}
 		var rawPoint = RawPoint{}
 		json.Unmarshal([]byte(v[0:len(v)-1]), &rawPoint)

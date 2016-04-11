@@ -1,7 +1,7 @@
 require 'pry'
 require 'json'
 
-folder_paths = %w(yes no).map { |f| "../analysis_api/tweets/#{f}/*" }
+folder_paths = %w(yes_day no_day yes_after no_after).map { |f| "../analysis_api/tweets/#{f}/*" }
 
 folder_paths.each do |path|
   puts path
