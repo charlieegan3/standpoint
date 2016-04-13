@@ -64,18 +64,32 @@
 
       Regarding the results of the layout / formatted summary comparison, more than half of respondents preferred the formatted version of the summary. This is significantly lower than the improvements of layout vs stock (89\%) or even plain vs stock (69\%).
 
-      These findings are based on the 55 responses from 6 different questionnaires, the target population being people interested in online discussions. To conclude, the results show a preference for points based summaries. This can further be improved by introducing sections, and by a less decisive margin, highlighting keywords.
+      These findings are based on the 55 responses from 6 different questionnaires giving 165 summary comparisons, the target population being people interested in online discussions.
 
-      Talk about rejecting the hyps
+      To test the significance of these results we use one-sided Sign test for matched pairs. Neutral responses were excluded, better \& much better responses were amalgamated. When comparing plain against stock, 38 successes in 45 trials, we found the probability for success is not equal with $p << 0.01$ (\textbf{H1}). Comparing layout and stock summaries, 49/53, we found that success is also not equal, $p << 0.01$. However, when comparing the layout and formatted summaries, 29/41, we found $p = 0.16$ and thus unsuitable to reject the null hypothesis at this level. These results are based on all responses across the different topics.
+
+      (need to show that the layout improves on the plain vs stock, not sure how adjust my data to a Friedman Rank Sum Test)
+
+      To conclude, the results show a preference for points based summaries. This can further be improved by introducing sections (if I can show statistical significance?). However we cannot say decisively that our formatted summaries improve on our layout versions.
 
     \subsection{Study 2: Extract Comparison}
       Our second study also gave a clear result. Extracts selected by our tool for display were scored above the user's mean score 74\% of the time. Selected extracts scored 3.94/5 on average while extracts not selected scored 3.11/5.
 
-      (insert test results once I've worked out the variance issue)
+      (Results of a Mann-Whitney U test, or some other means of comparing the selected vs not extracts regarding the values from the likert scale scores. This is quite hard\dots)
+
+      Currently results of a MWU test would read (where A is selected and B is not selected by the tool): The medians of Group A and Group B were 5 and 3, respectively. We ran a Mann-Whitney's U test to evaluate the difference in the responses of our 5-Likert scale question. We found a significant effect of Group (The mean ranks of Group A and Group B were 1026 and 767, respectively; U = *155681*, Z = *7.045*, p= 1.851 * 10\^-12, r = 0.0.17).
+
+      \begin{figure}[h]
+        \caption{\textcolor{red}{SAMPLE PLOT, machine z scores vs z scores of \textit{mean} human ratings}}
+        \centering
+        \includegraphics[width=0.8\textwidth]{extract_z_scores}
+      \end{figure}
 
       One selected extract \blockquote{As they pay income taxes} scored particularly poorly with a score of mean score of 2.2/5. Generally ratings correlate well with the extract quality. These results are based on 1587 responses for 18 different clusters of extracts from six topics. The target population of this sample is all clusters of extracts selected for display in summaries.
 
-      Regarding the results of the bigram / random summary comparison, there was a preference for the bigram summary. 43\% of participants preferred the bigram summary, 20\% scored them the same and 34\% preferred the randomly generated summaries. Breaking this down by topic, the abortion bigram scored more than 5 times the random summary; for creation and healthcare both summaries scored equally. Interestingly, the random god summary scored higher than the accompanying bigram one.
+      Regarding the results of the bigram vs. random summary comparison, there appeared was a preference for the bigram summary. 43\% of participants preferred the bigram summary, 20\% scored them the same and 34\% preferred the randomly generated summaries. Breaking this down by topic, the abortion bigram summary scored more than 5 times the random summary; for creation and healthcare both summaries scored equally. Interestingly, the random god summary scored higher than the accompanying bigram one.
+
+      To test these results against \textbf{H3} we again used a one-sided Sign test. Excluding neutral ratings, the bigram model was successful 24/44 times. Based on this result we are unable to reject \textbf{H4}.
 
     \subsection{\textcolor{red}{TBD: Study 3: Section Comparison}}
 
