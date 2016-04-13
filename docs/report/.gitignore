@@ -1,0 +1,13 @@
+*
+
+!.gitignore
+
+!*.tex
+!*.bib
+!*.cls
+!abdnshield.pdf
+!build.sh
+!questions
+
+!images
+!images/*
