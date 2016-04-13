@@ -58,29 +58,29 @@
 
       When comparing layout summaries against equal length stock summaries participant preference only became clearer. 89\% of participants rated layout as better or much better than stock. Organization saw the greatest change, with a 30\% increase in favor of layout summaries. The average increase across all factors was 19\%. The ratio of `better' to `much better' also shifted, `much better' ratings increased by 15\% while `better' ones decreased by 5\%.
 
-      There was also variation between summaries of different discussions. The gay rights layout summary saw an increase of 45\% in better/much better scores while the guns layout summary saw no improvement. When comparing plain and stock summaries on guns and healthcare all participants rated plain as being the same or better. When comparing the healthcare layout and stock summaries all participants marked the layout summary as being much more readable. The plain vs stock creation summary was the most divided, 42\% of responses were marked as same or stock better.
+      There was also variation between summaries of different discussions. The gay rights layout summary saw an increase of 45\% in better/much better scores while the guns layout summary saw no improvement. When comparing plain and stock summaries on guns and healthcare all participants rated plain as being the same or better. When comparing the healthcare layout and stock summaries all participants marked the layout summary as being much more readable. The plain vs. stock creation summary was the most divided, 42\% of responses were marked as same or stock better.
 
       Despite the points used in the layout and plain summaries being the same, the `Content' factor saw an increase of 14\% in better/much better scores. Punctuation was also saw a 13\% increase, despite also being the same.
 
-      Regarding the results of the layout / formatted summary comparison, more than half of respondents preferred the formatted version of the summary. This is significantly lower than the improvements of layout vs stock (89\%) or even plain vs stock (69\%).
+      Regarding the results of the layout / formatted summary comparison, more than half of respondents preferred the formatted version of the summary. This is significantly lower than the improvements of layout vs. stock (89\%) or even plain vs. stock (69\%).
 
       These findings are based on the 55 responses from 6 different questionnaires giving 165 summary comparisons, the target population being people interested in online discussions.
 
       To test the significance of these results we use one-sided Sign test for matched pairs. Neutral responses were excluded, better \& much better responses were amalgamated. When comparing plain against stock, 38 successes in 45 trials, we found the probability for success is not equal with $p << 0.01$ (\textbf{H1}). Comparing layout and stock summaries, 49/53, we found that success is also not equal, $p << 0.01$. However, when comparing the layout and formatted summaries, 29/41, we found $p = 0.16$ and thus unsuitable to reject the null hypothesis at this level. These results are based on all responses across the different topics.
 
-      (need to show that the layout improves on the plain vs stock, not sure how adjust my data to a Friedman Rank Sum Test)
+      (need to show that the layout improves on the plain vs. stock, not sure how adjust my data to a Friedman Rank Sum Test)
 
       To conclude, the results show a preference for points based summaries. This can further be improved by introducing sections (if I can show statistical significance?). However we cannot say decisively that our formatted summaries improve on our layout versions.
 
     \subsection{Study 2: Extract Comparison}
       Our second study also gave a clear result. Extracts selected by our tool for display were scored above the user's mean score 74\% of the time. Selected extracts scored 3.94/5 on average while extracts not selected scored 3.11/5.
 
-      (Results of a Mann-Whitney U test, or some other means of comparing the selected vs not extracts regarding the values from the likert scale scores. This is quite hard\dots)
+      (Results of a Mann-Whitney U test, or some other means of comparing the selected vs. not extracts regarding the values from the likert scale scores. This is quite hard\dots)
 
       Currently results of a MWU test would read (where A is selected and B is not selected by the tool): The medians of Group A and Group B were 5 and 3, respectively. We ran a Mann-Whitney's U test to evaluate the difference in the responses of our 5-Likert scale question. We found a significant effect of Group (The mean ranks of Group A and Group B were 1026 and 767, respectively; U = *155681*, Z = *7.045*, p= 1.851 * 10\^-12, r = 0.0.17).
 
       \begin{figure}[h]
-        \caption{\textcolor{red}{SAMPLE PLOT, machine z scores vs z scores of \textit{mean} human ratings}}
+        \caption{\textcolor{red}{SAMPLE PLOT, machine z scores vs. z scores of \textit{mean} human ratings}}
         \centering
         \includegraphics[width=0.8\textwidth]{extract_z_scores}
       \end{figure}
@@ -103,18 +103,34 @@
   \section{Discussion}
     From our results it is clear that both plain \& layout, point-extract based summaries were significantly preferred overall. However, it is not possible to state with any certainty that formatted are preferred over layout summaries. We are also unable to conclude that the bigram model for extract selection is better than random selection.
 
-    \subsection{Plain vs Stock}
+    \subsection{Plain vs. Stock}
       In the first study, plain summaries were significantly preferred over stock summaries. Participants comments made reference the comparison factors and comments align with score allocated for these. Comparisons that were not captured by the factor ratings were also interesting. Multiple comments made reference to the following comparisons: plain summaries have fewer questions, less surplus information and more content. Comments also made reference to plain summaries being well written with \blockquote{proper English} and \blockquote{complete sentences}. This is particularly interesting considering the point extraction process.
 
       There were also five comments that suggest the participant believed the summaries to have been written by a human. For example: \blockquote{As I read [STOCK] I felt that I knew the opinion of the writer. With [PLAIN] I could not tell.} and \blockquote{\dots clearer where the author is coming from}. References were also made to higher level properties of the summaries such as \blockquote{logical flow}, \blockquote{relies on fallacy}, \blockquote{explains the reasoning} as well as factual correctness.
 
       In summary, based on their comments, participants acknowledge succinctness, variety and informativeness even without the explanations and structure of the layout summaries.
 
-    ------
+    \subsection{Layout vs. Stock}
+      Similarly, layout summaries were significantly preferred over stock summaries. References to organisation doubled in the comments justifying scores allocating scores for this comparison. Readability and the idea of assimilating information was also a common factor cited in justifications for choosing layout summaries. Interestingly there was also an increase in the number of references to points.
 
-    Based on on comments left as justification, some found the colors distracting and unnecessary as well as making the summary noisy and hard to read.
-    Also need some samples of the comments that highlight interesting things
+      Only one comment made a direct reference to `categories' (sections) of the summary. There was one comment that suggested the related points where distracting. We expected there to be more references to summary sections. There were fewer comments that suggested the participants believed the summaries to be written by a human when comparing layout and stock. This is perhaps because the sections hint at a more structured and mechanized approach.
 
-    On average, extracts scored well, showing pre-filtering is good at it's job.
+    \subsection{Layout vs. Formatted}
+      This comparison was more divisive. Based on our results we cannot state, for our factors, that the formatted summary style is significantly better. The highlighting of topics and keywords gets varied comments. Those who like the formatting suggest it is easier to read quickly while those that disliked it claim it was distracting and unnecessary. Positive comments such as \blockquote{Highlighting important words makes the text easier to follow; more aesthetically pleasing; and simpler to read.} and \blockquote{Having keywords highlighted allows me to be able to quickly identify and distinguish between the aspects of the topic.} suggest that the participants were able to make use of the formatting. However, comments like: \blockquote{The keywords are bold too often and become a distraction to the reader.} and \blockquote{I don't think it is necessary to make the keywords and topic words bold.} give reasons to remove the additional formatting.
 
-    "Side [RANDOM] uses the scientific method and doesn't involve a fake diety at all in the science section." why god rand was better (also sentences made more sense)
+      Interestingly, there were also multiple comments that suggested participants did not notice that \textit{only} formatting changed, despite this being communicated in the task. Also of note is the multiple times participants state that their comment is their opinion, this is not common in comments of other comparisons.
+
+      From these results learn that reactions to changes in formatting are more varied and more subjective.
+
+    \subsection{Bigram vs. Random}
+      There were references to the two making the same points/reasoning/arguments. This is interesting as it means participants noticed the same points being made, even under different extracts. Participants that preferred the bigram summary suggested that it was more concise while the random summary contained too much information. Longer extracts, often providing additional information, are made less likely by the length weighting in the bigram model. Participants that preferred the random summary cited that explanations were more complete and that the bigram summary was too basic.
+
+      As with previous comparisons, some comments gave the suggestion that the participants sometimes believed the summary to be written by a human. For example, \blockquote{Side [RANDOM] uses the scientific method and doesn't involve a fake deity at all in the science section.} and \blockquote{[BIGRAM] is definitely college level.}. Such comments suggest that expectation for summary quality is quit high.
+
+      In summary, the results and comments from this comparison appear to suggest that the detail in longer points is valuable if the point is well formed. This makes a case for reducing the effect of the length weighting and including a readability factor when selecting extracts.
+
+    \subsection{Extract Comparison}
+      TBC, when the stats tests are finalized
+    \subsection{\textcolor{red}{TBD: summary sections}}
+      TBD: when we have run this experiment
+
