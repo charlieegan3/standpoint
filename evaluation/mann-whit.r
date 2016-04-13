@@ -26,7 +26,10 @@ mean((split(data, data$g))$GroupB$r)
 
 median(GroupA)
 median(GroupB)
+length(GroupA)
+length(GroupB)
 
 abs(statistic(wt)) / sqrt(length(GroupA) + length(GroupB))
 pvalue(wt)
 wt_old$statistic
+wt
