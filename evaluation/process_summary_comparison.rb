@@ -70,6 +70,10 @@ end
       print "#{((counts[answer].to_f/sum) * 100).round(1)}, "
     end
     puts
+    [pair.first+"-much_better", pair.first+"-better", "same", pair.last+"-better", pair.last+"-much_better"].each do |answer|
+      print "#{counts[answer]}, "
+    end
+    puts
   end
   puts "-" * 50
 end
