@@ -1,7 +1,5 @@
 \chapter{Point Curation\label{chap:point-curation}}
-  For the points extracted at the first stage in the pipeline to be useful in the summarization module there are a number of selections and refinements that must be made. These refinements focus on removing points generated from common phrases such as `I'm sure' and `Ask yourself\dots'.
-
-  These adjustments \textit{could} be made as points are extracted, however this is was implemented as a separate task during our implementation. Rejecting and editing point content is also conceptually different from identifying them in source text.
+  Points extracted at the first stage must be refined to make them suitable for use in the following summarization module. These refinements focus on removing points generated from common phrases such as `I'm sure' and `Ask yourself\dots'. While adjustments could be made as points are extracted, this is was implemented as a separate task during our implementation phase. Rejecting and editing point content is also conceptually different from identifying them in source text. Much additional information is encoded at this stage.
 
   \section{Minimum Requirements}
     Some basic restrictions are applied to points matched by the Generic Frame, these matches must:
@@ -12,29 +10,30 @@
       \item{Have an average word length of 5 or characters}
     \end{itemize}
 
-    These three (opinionated) requirements balance the benefit and problem of matching more patterns a greater number of patterns using the Generic Frame. This does mean that shorter points, or points without a topic word can be returned, however, they must be matched by a FrameNet frame.
+    These three (opinionated) requirements balance the benefits and problems of matching a greater number of patterns, some lower quality, using the Generic Frame. This does mean that shorter points, or points without a search topic word can be returned, however, they must be matched by a FrameNet frame.
 
   \section{Person Nominal Subjects}
-    In an effort to better group extracted points into distinct statements used in the discussion, we opted to merge pronouns under a single \texttt{PERSON} subject. Points with these patterns are very common but also commonly segregated by different pronouns. Take the following point patterns:
+    In an effort to better cluster extracted points into distinct statements used in the discussion, we opted to merge pronouns under a single Person subject. Points with these patterns are very common but also commonly segregated by different pronouns. Take the following point patterns:
     \begin{itemize}
       \item{\texttt{people.nsubj kill.verb people.dobj}}
       \item{\texttt{he.nsubj kill.verb people.dobj}}
       \item{\texttt{they.nsubj kill.verb people.dobj}}
     \end{itemize}
 
-    While there is a semantic difference between these points, we made the decision to amalgamate them under patterns like \texttt{PERSON.nsubj kill.verb people.dobj}. This means groups for points are not dispersed among many pronouns. Reducing repetition between groups means we can continue to rely on group size as a measure of salience in the summarization task.
+    While there is a semantic difference between these points, we made the decision to amalgamate them under patterns like \texttt{PERSON.nsubj kill.verb people.dobj}. This means clusters for points are not dispersed among many pronouns. Reducing repetition between clusters means we can continue to rely on clusters size as a measure of salience in the summarization task.
 
   \section{Blacklists}
-    To complete this selection, a number of `blacklists' were established. These defined patterns and components that should be removed before proceeding.
-    \tocless\subsection{Nominal Subjects}
-      First points with pronoun or determiner nominal subjects were rejected. Points such as \texttt{it.nsubj have.verb rights.dobj} are ambiguous as the surrounding sentences may be required to resolve the anaphor \textit{it}. One possible resolution was to merge such points with the most common pattern with a noun or proper noun nominal subject. However, since groups of points were already of additional size we opted to remove these points instead to help keep results verifiable.
+    To complete this module's function of cleaning and refining points, a number of `blacklists' were established. These defined patterns of components that were of little interest and should be removed.
 
-      Currently the following subjects are grounds for rejection: \textit{it(PRP), that(DT), this(DT), which(WDT), what(WDT)}. Other words of the same tag such as \textit{they} or \textit{his/her} have not yet been excluded as they have yet to be the basis for an ambiguous point.
+    \tocless\subsection{Nominal Subjects}
+    First points with pronoun or determiner nominal subjects were rejected. Points such as \texttt{it.nsubj have.verb rights.dobj} are ambiguous as the surrounding sentences are required to resolve the anaphor \blockquote{it}. One possible resolution was to merge such points with the most common pattern with a noun or proper noun nominal subject (\texttt{fetus.nsubj have.verb rights.dobj} for example). We opted to remove these points instead to help keep results verifiable.
+
+      Currently the following subjects are grounds for rejection: \textit{it(PRP), that(DT), this(DT), which(WDT), what(WDT)}. Other words of the same tag such as \textit{they} or \textit{his/her} have not yet been excluded as they have yet occur as a prominent problem group. Rather than rashly remove content these are currently permitted.
 
     \tocless\subsection{Person Verb Combinations}
-      There are a series of verbs that are not allowed to form points when they have a \texttt{PERSON} subject. Certain phrases are very common across all our sample discussions and while these are important for comprehension, they do not make adequate points. \textit{object, understand, realize, debate, speak, stand, refer, explain, support, feel} are just some examples of `actions' that participants write about that do not generate points suitable for use in summaries.
+      There are a series of verbs that are not permitted to form points when they have a \texttt{PERSON} subject. Certain phrases are very common across all our sample discussions and while these are important for comprehension, they do not make interesting points. \textit{object, understand, realize, debate, speak, stand, refer, explain, support, feel} are just some examples of `actions' that participants write about that do not generate points suitable for use in summaries.
 
       These restrictions are only applied to points that consist of two components, a verb and \texttt{PERSON} subject. This means that \texttt{PERSON.nsubj understand.verb issue.dobj} is a valid point, whereas \texttt{PERSON.nsubj understand.verb} is not.
 
     \tocless\subsection{Patterns}
-      Common phrases used in discussion create another common class of poor quality points. Phrases such as \textit{`I'm correct [in saying]', `Something happened [to/that]', `[opposition] make the claim'} were common in all debates. They could not be used to add useful content to the summary and are removed. Rather than looking to define these with a general rule, point patterns are only added to this blacklist when they occur often enough.
+      Common phrases used in discussion create another common class of poor quality points. Phrases such as \textit{`I'm correct [in saying]', `Something happened [to/that]', `[opposition] make the claim'} were common in all debates. They could not be used to add useful content to the summary and are removed. Rather than looking to define these with a general rule, point patterns are only added to this blacklist when they occur often enough to be problematic.
