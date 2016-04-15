@@ -1,25 +1,24 @@
 \chapter{Point Extraction\label{chap:point-extraction}}
   \section{Point Concept Overview and Examples}
-    Points are a concept that we created to describe the minimal content unit in our summarization task. We originally defined a point as being a verb and it's required arguments. Points represent a statement made in a discussion in the simplest possible form. Using this representation enables grouping and comparisons, this is used when generating summaries. Take the following two statements as an example:
+    Points are a concept that we created to describe the minimal content unit in our summarization task. We originally defined a point as being a verb and it's required arguments. Points represent a statement made in a discussion in the simplest possible form. Using this representation enables grouping and comparisons, sub tasks of generating our summaries.
 
     \blockquote{\textit{Abortion is always wrong}}, \blockquote{\textit{Abortion is wrong in every way}}
 
-    We wanted to count these as as equivalent and using points as a representation enables this. The core data structure for a point (transferred as a JSON object) is as follows:
+    We wanted to count these as as equivalent and using points as a representation enables this. The core data structure for a point (transported as a JSON object) is as follows:
 
     \begin{itemize}
-      \item{Verb}
+      \item{Pattern consisting of components}
       \item{Source Information (Discussion \& Post Identifier, Stance)}
-      \item{\textbf{Components} / Pattern}
       \item{Extract String}
+      \item{Verb}
     \end{itemize}
 
-    The \textit{Components} attribute consists of a list of strings - a \textit{Pattern}. Each element represents a dependency of the verb and the relation of that dependency. For example, if \textit{fetus} were to be the subject of the point, then the component would be \texttt{fetus.nsubj}. Relations are defined using universal dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Using the example from above, the point component representation for both statements would be \texttt{abortion.nsubj be.verb wrong.dobj}. This common pattern makes it possible to reliably group statements that express the same idea - even when the phrasing differs.
-
+    The \textit{Components} attribute consists of a list of strings - a \textit{Pattern}. Each element represents a dependency of the verb and the relation of that dependency. For example, if \textit{fetus} were to be the subject of the point, then the component would be \texttt{fetus.nsubj}. Relations are defined using Universal Stanford Dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Using the example from above, the point component representation for both statements would be \texttt{abortion.nsubj be.verb wrong.dobj}. This common pattern makes it possible to reliably group statements that express the same idea, even when their phrasing differs.
 
   \section{Defining Points with Verb Frames}
-    In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivity that listed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query to match patterns not present in frames.
+    In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in frames.
     \tocless\subsection{VerbNet and FrameNet}
-      VerbNet is a XML, verb lexicon that lists classes of verbs and accompanying FrameNet \cite{fillmore2002framenet} frames \cite{schuler2005verbnet}. Represented in VerbNet's 274 classes are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `Murder' is given below.
+      VerbNet is an XML, verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `murder' is given below.
 
       \lstset{language=XML}
       \begin{lstlisting}
@@ -35,16 +34,16 @@
           </FRAME>
       \end{lstlisting}
 
-      We experimented using the information in the \texttt{primary} attribute. This information is did not always match what was annotated in the \texttt{SYNTAX} attribute. We switched to using the \texttt{SYNTAX} attribute content instead. To create the verb index described above we parsed the VerbNet catalogue into a key value structure. Each verb was a key, and list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all it's classes.
+      We experimented using the information in the \texttt{primary} attribute. This information is did not always match what was annotated in the \texttt{SYNTAX} element. We switched to using the \texttt{SYNTAX} element content instead. To create the verb index described above we parsed the VerbNet catalogue into a key value structure where each verb was the key, and list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of.
 
       Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
 
     \tocless\subsection{The Generic Frame}
-      Originally our intent had been to use only FrameNet frames to define allowed patterns for points. However there were verbs that were missing frames for \textit{all} possible patterns of interest. Usually this meant that there was a simple frame for the verb but it failed to adequately capture the context. Take the following example:
+      Originally our intent had been to use only FrameNet frames to define allowed patterns for points. However there were verbs missing frames for \textit{all} possible patterns of interest. Usually this meant that there was a simple frame for the verb but it failed to adequately capture the context. Take the following example:
 
       \blockquote{These images reflect the reality of abortions}
 
-      This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts more variable which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the Generic Frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
+      This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts considerably more unpredictable, which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the Generic Frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
 
     \tocless\subsection{Copula Verbs}
       Copula verbs are not the head of the sentence in output from the CoreNLP dependency parser. Take the following example:
@@ -66,15 +65,15 @@
         \end{itemize}
       \end{multicols}
 
-      Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The result is still much the same, the example above becomes \texttt{fetus.nsubj be.verb person.dobj} so it still matches ``points where people are the object''.
+      Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The result is still much the same, the example above becomes \texttt{fetus.nsubj be.verb person.dobj} so it still matches queries like: ``points where people are the object''.
 
   \section{Point Extracts}
-    We had a goal of summarization from quite an early stage. This meant that our extracted text needed to be as succinct in getting the information across as possible. Natural Language Generation was out of scope, though it would be an interesting option for further work. Patterns like \texttt{person.nsubj have.verb right.dobj} without the context are not natural to read. We have implemented a means of extracting the relevant words from the source sentence, again using information in the dependency parse.
+    We had a goal of summarization from quite an early stage. This meant that our extracted text needed to be as succinct in getting the information across as possible. Natural Language Generation was out of scope, though it would be an interesting option for further work. Patterns like \texttt{person.nsubj have.verb right.dobj} without the context are not natural to read. We have implemented a means of extracting the relevant words from the source sentence, using information in the dependency parse.
 
     When a pattern is identified as matching a frame a further query is run on the graph to extract it's context. Nodes in the graph that are related to the verb or any of it's descendants are returned as part of the context for the point. To keep points succinct the following relations cannot extend the context tree: \textit{adverbial clause modifiers, clausal subjects, clausal complement, generic dependent and parataxis}.
 
-    The effect of this is similar to that of sentence compression. The results are not so different from those reported by Knight and Marcu \cite{knight2000statistics}, though the approaches are fundamentally different. As they appear to do, we also strip trailing punctuation and capitalize where required. This is done at the summary generation stage in our approach.
+    The effect of this is similar to that of sentence compression. The results are not so different from those reported by Knight and Marcu \cite{knight2000statistics}, though the approach was fundamentally different. As they appear to do, we also strip trailing punctuation and capitalize where required. This is done at the summary generation stage in our approach, see Chapter \ref{chap:summary-generation}.
 
   \section{Extraction Process}
     The previous sections are intended to give a theoretical description of our approach to the extraction of points. This final section will give an overview of the implementation of that approach.
-    Making reference to Figure \ref{fig:arch-dia}, the Aggregator submits each post in turn to the Extractor. The extractor requests sentence parses for the post text and saves these into the Neo4j database. A query is then made to get all the verbs, for each verb the relevant frames are run as prepared Cypher queries to extract point patterns. For each matched verb a further query is ran to extract the point context. These are returned to the aggregator as a JSON array. Attributes to be included in the response must be specified in the request, as must relevant topics.
+    Making reference to Figure \ref{fig:arch-dia}, the Aggregator submits each post in turn to the Extractor. The Extractor requests sentence parses for the post text and saves these into the Neo4j database. A query is then ran to get all the verbs, for each verb the relevant frames are run as prepared Cypher queries to extract point patterns. For each matched verb a further query is ran to extract each point's context. These are returned to the aggregator as a JSON array. Attributes to be included in the response must be specified in the request, as must topics of interest.
