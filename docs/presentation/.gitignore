@@ -1,0 +1,8 @@
+!*.tex
+!*.sty
+
+!*.jpg
+!*.png
+
+*.pdf
+*.nav
