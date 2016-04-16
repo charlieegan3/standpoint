@@ -13,8 +13,24 @@
     Our project was based on this broad concept of a point as well as the idea points, representing units of informal argumentation, could be used to build a high-level summary of a discussion. News article comment sections; forum threads; film \& product reviews and even extended email conversations are all candidate applications for such analysis.
 
   \section{Objectives}
-    Continuing the work of a past project \textbf{(cite Angrosh?)} that implemented the idea of a simple point, we wanted to build on this and improve on the extraction of points from text. Fundamentally, this meant extracting more of the verb's arguments and related tokens - rather than only the subject and object.
+    Continuing the work of a past project that implemented the idea of a simple point, we wanted to build on this and improve on the extraction of points from text. Fundamentally, this meant extracting more of the verb's arguments and related tokens - rather than only the subject and object. Take the following sentence:
 
-    Another goal was to go beyond just extracting points and investigate relationships between them. Counter points pairs - points that represent opposing ideas - and co-occurring points - points commonly raised by the same user - were of particular interest. Connecting points and a user's annotated stance was also discussed. We also set out to present this information in a way that was easy to interpret.
+    \medskip
+    \begin{center}
+    \blockquote{\textit{I don't think so, an unborn child (however old) is not yet a human being.}}
+    \end{center}
+    \medskip
+
+    From this, taking only the subject and object of the verb \textit{is}, gives: \texttt{child.subject be.verb human.object}. This is useful, a structure like this can be linked with a point extracted from a sentence like: \blockquote{\textit{So you say: children are not complete humans until birth?}}. However, this lossy attraction is not suited to presentation. Our objective, with regards to better extracting points, was to \textit{additionally} extract the sub-sentence context in which a point was made. Continuing this example, the following string would be a `good' extract:
+
+    \medskip
+    \begin{center}
+    \blockquote{\textit{an unborn child is not yet a human being}}
+    \end{center}
+    \medskip
+
+    This almost half the length and still expresses the core idea expressed around `is' in the above sentence. Another goal was to go beyond just extracting points and investigate relationships between them. Counter points pairs --- points that represent opposing ideas --- and co-occurring points - points commonly raised by the same user - were of particular interest. Connecting points and a user's annotated stance was also discussed. We also set out to present this information in a way that was easy to interpret.
+
+    \medskip
 
     The project's success is evaluated with respect to these objectives.
