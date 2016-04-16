@@ -1,25 +1,30 @@
 \chapter{Technologies\label{chap:technologies}}
-  The project relies on a number of software dependencies, these are act as a foundation to the Natural Language Processing services in the tool. We also use the CoreNLP framework, this just of the use of this is discussed in the Point Extraction section (ref: chapter).
+  The project relies on a number of software dependencies, these are act as a foundation to the Natural Language Processing services in the tool.
+
+  \tocless\section{CoreNLP}
+    \blockquote{Stanford CoreNLP provides a set of natural language analysis tools.}\footnote{https://stanfordnlp.github.io/CoreNLP/}
+
+    CoreNLP provides the basis for our points extraction analysis and assists in selecting extracts during the generation of summaries. Running as separate service, modules in our analysis pipeline make requests to get sentences, dependency parses and lemmas for text. While the CoreNLP frame work implements a number of different annotators, we make use of the following: \texttt{depparse}, \texttt{lemma} which depend on \texttt{tokenize}, \texttt{ssplit} and \texttt{pos}.
 
   \tocless\section{Cypher and Neo4j}
-    \blockquote{Neo4j is a highly scalable native graph database that leverages data relationships as first-class entities, helping enterprises build intelligent applications to meet today's evolving data challenges.} \footnote{http://neo4j.com/}
+    \blockquote{Neo4j is a highly scalable native graph database that leverages data relationships as first-class entities, helping enterprises build intelligent applications to meet today's evolving data challenges.}\footnote{http://neo4j.com/}
 
     We use Neo4j to store parse information. Sentences are parsed using the CoreNLP dependency parser and the resulting graph structure is saved into a Neo4j database instance. Tokens and dependencies are represented as node and edges respectively. Nodes are are used to store the token in plaintext; the lemma, part-of-speech tag and it's index in the source sentence. Edges are directional and run from governor to dependent tokens, they have a single label attribute to store the dependency type.
 
-    \blockquote{Cypher is a declarative graph query language that allows for expressive and efficient querying and updating of the graph store.} \footnote{http://neo4j.com/docs/stable/cypher-introduction.html}
+    \blockquote{Cypher is a declarative graph query language that allows for expressive and efficient querying and updating of the graph store.}\footnote{http://neo4j.com/docs/stable/cypher-introduction.html}
 
-    Cypher is used to query dependency parses stored in the Neo4j database. After parsing the sentences from a user's post, all the dependency parses are saved. At this point a series of Cypher queries are executed to filter for allowed point patterns. These patterns, derived from VerbNet frame information, are represented in the Cypher syntax. Using Neo4j and Cypher in this way allows points to be extracted from many sentences at once. This was key to completing the analysis of large discussions in reasonable time.
+    Cypher is used to query dependency parses stored in the Neo4j database. After parsing the sentences from a user's post, all the dependency parses are saved. At this stage, a series of Cypher queries are executed to filter for allowed point patterns. These patterns, derived from VerbNet frame information, are represented in the Cypher syntax. Using Neo4j and Cypher in this way allows points to be extracted from many sentences at once. This was key to completing the analysis of large discussions in reasonable time.
 
   \tocless\section{ERB}
-    \blockquote{ERB provides an easy to use but powerful templating system for Ruby} \footnote{http://apidock.com/ruby/ERB}
+    \blockquote{ERB provides an easy to use but powerful templating system for Ruby}\footnote{http://apidock.com/ruby/ERB}
 
-    We use ERB to generate HTML summaries from the summarized point data. ERB templates were defined for each summary style evaluated. The evaluation forms distributed on Mechanical Turk were also generated using ERB templates. This allowed sets of summaries and surveys to be consistently re-generated as we iterated on the functionality of the summarization module and format of the questionnaires.
+    We use ERB to generate HTML summaries from the summarized points. ERB templates were defined for each summary style evaluated. The evaluation forms distributed on Mechanical Turk were also generated using ERB templates. This allowed sets of summaries and surveys to be consistently re-generated as we iterated on the functionality of the summarization module and format of the questionnaires.
 
   \tocless\section{Ruby \& Go}
-    Almost all of the functionality of the tool is implemented in the Ruby programming language. Ruby was selected for familiarity as well as it's suitability in connecting multiple networked services together. Once points had been extracted using a Ruby service, making use of CoreNLP and Neo4j, points are curated and refined using a small program written in Go, this task required fast iterations and it allowed the results of changes to the point curation to be reviewed in a faster feedback cycle. The logic encoded in this program could be written into the points extraction module.
+    Almost all of the functionality of the tool is implemented in the Ruby programming language. Ruby was selected for familiarity as well as it's suitability in connecting multiple networked services together. Once points had been extracted using a Ruby service, making use of CoreNLP and Neo4j, points are curated using a small program written in Go, this task required fast iterations and it allowed the results of changes to the point curation to be reviewed in a faster feedback cycle.
 
   \tocless\section{Docker}
-    \blockquote{Docker allows you to package an application with all of its dependencies into a standardized unit for software development.} \footnote{https://www.docker.com/what-docker}
+    \blockquote{Docker allows you to package an application with all of its dependencies into a standardized unit for software development.}\footnote{https://www.docker.com/what-docker}
 
     Docker is used to isolate the different environments of each service. CoreNLP and Neo4j are both run as containers using standard images. Our modules are run under the same system. All modules in communicate using JSON requests. Docker Compose is used to codify the system's configuration and start services when they are required for use in development.
 
