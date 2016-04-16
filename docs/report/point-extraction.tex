@@ -1,8 +1,56 @@
 \chapter{Point Extraction\label{chap:point-extraction}}
   \section{Point Concept Overview and Examples}
-    Points are a concept that we created to describe the minimal content unit in our summarization task. We originally defined a point as being a verb and it's required arguments. Points represent a statement made in a discussion in the simplest possible form. Using this representation enables grouping and comparisons, sub tasks of generating our summaries.
+    Points are a concept that we created to describe the minimal content unit in our summarization task. We originally defined a point as being a verb and it's context. Points represent a statement made in a discussion in a condensed form with an accompanying extract used to present the point to readers. Lets take the following sentence from a post in a discussion:
 
-    \blockquote{\textit{Abortion is always wrong}}, \blockquote{\textit{Abortion is wrong in every way}}
+    \medskip
+    \begin{center}
+      \blockquote{\textit{I don't think so, an unborn \textbf{child} (however old) \textbf{is} not yet a \textbf{human} being.}}
+    \end{center}
+    \medskip
+
+    This sentence makes the point that until a baby is born it does not count as a human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence may make the same points, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same point. We represent points using a pattern that list the core components, these two sentences both contain points that have this pattern: \texttt{child.subject be.verb human.object}.
+
+   This pattern is lossy and is not suitable for use in summary text. To overcome this, when extracting points from sentences, points are not only allocated a pattern but also an extract. Extracts are strings made of one or more substrings in the sentence. The extracts for the point in these two sentence would be:
+
+    \medskip
+    \begin{center}
+      \blockquote{\textit{an unborn child is not yet a human being}} and \blockquote{children are not complete humans until birth?}
+    \end{center}
+    \medskip
+
+    Using this representation for a point allows points expressed in different tenses or orders to be grouped together under while still keeping a relevant part of the source text to present the point. Points are fundamental object used in our analysis but they exist as part of a larger discussion model, see Figure \ref{fig:discmod}.
+
+    \begin{figure}
+      \centering
+      \caption{Discussion model showing relationships between subcomponents}
+
+      \TBox[fill=black!5]{10cm}{
+        Discussion \\[1ex]
+        \TBox[fill=black!10]{9.7cm}{
+          Post \\[1ex]
+          \TBox[fill=black!15]{9.4cm}{
+            Sentence \\[1ex]
+            \TBox[fill=green!5]{9.1cm}{
+              Point \\[1ex]
+              \TBox[fill=green!15]{2cm}{Extract}
+              \TBox[fill=green!15]{2cm}{Verb}
+              \TBox[fill=green!15]{3.95cm}{
+                Pattern \\[1ex]
+                \TBox[fill=green!25]{3.65cm}{Component}
+              }
+            }
+          }
+        }
+      }
+      \label{fig:discmod}
+    \end{figure}
+
+	\begin{itemize}
+	  \item[]{\textbf{Extract:} ``\textit{A woman has rights.}''}
+	  \item[]{\textbf{Verb:} have}
+	  \item[]{\textbf{Pattern:} \texttt{woman.nsubj have.verb rights.dobj}}
+	  \item[]{\textbf{Component:} \texttt{woman.nsubj}}
+	\end{itemize}
 
     We wanted to count these as as equivalent and using points as a representation enables this. The core data structure for a point (transported as a JSON object) is as follows:
 
@@ -22,16 +70,16 @@
 
       \lstset{language=XML}
       \begin{lstlisting}
-          <FRAME>
-              <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
-              <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
-              <SYNTAX>
-                  <NP value="Agent"><SYNRESTRS/></NP>
-                  <VERB/>
-                  <NP value="Patient"><SYNRESTRS/></NP>
-              </SYNTAX>
-              <SEMANTICS>...</SEMANTICS>
-          </FRAME>
+        <FRAME>
+          <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
+          <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
+          <SYNTAX>
+            <NP value="Agent"><SYNRESTRS/></NP>
+            <VERB/>
+            <NP value="Patient"><SYNRESTRS/></NP>
+          </SYNTAX>
+          <SEMANTICS>...</SEMANTICS>
+        </FRAME>
       \end{lstlisting}
 
       We experimented using the information in the \texttt{primary} attribute. This information is did not always match what was annotated in the \texttt{SYNTAX} element. We switched to using the \texttt{SYNTAX} element content instead. To create the verb index described above we parsed the VerbNet catalogue into a key value structure where each verb was the key, and list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of.
