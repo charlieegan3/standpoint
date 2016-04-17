@@ -63,24 +63,73 @@
 
     The \textit{Pattern} attribute consists of a list of two or more \textit{Components}. Each component represents a dependency of the verb and the relation of that dependency. For example, if a fetus were to be the subject, then the component would be \texttt{fetus.nsubj} (nominal subject). Relations are defined using Universal Stanford Dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Patterns are broken down into components to enable certain comparisons between points, for example, to test that \texttt{abortion.nsubj be.verb \textbf{legal.dobj}} and \texttt{abortion.nsubj be.verb \textbf{illegal.dobj}} are counter points.
 
+    With a definition for a point we can now explore the process of extracting these from text. A point, as described above, is built up using information from a dependency parse. A dependency parse is represented in the graph structure showing relationships between different tokens.
+
+	\begin{center}
+      \begin{dependency}[edge horizontal padding=0]
+          \begin{deptext}
+              A \&[2cm] fetus \&[2cm] has \&[2cm] rights \&[0.5cm] . \\
+          \end{deptext}
+          \depedge{2}{1}{determiner}
+          \depedge{3}{2}{nominal subject}
+          \depedge{3}{4}{direct object}
+          \depedge{3}{5}{punctuation}
+          \deproot[edge unit distance=2.1ex]{3}{verb}
+      \end{dependency}
+	\end{center}
+    \vspace{-7mm}
+
+    From this parsed representation of the sentence we can see how both the extract \blockquote{\textit{A fetus has rights.}} and the pattern \texttt{fetus.nsubj have.verb right.dobj} can be extracted. Sentences often contain more than one point, the following dependency parse shows a sentence that references two different points.
+
+    \vspace{3mm}
+	\begin{dependency}[edge horizontal padding=0]
+		\begin{deptext}
+			A \&[0.7cm] baby \&[0.7cm] has \&[0.7cm] rights \& , \& so \& a \&[0.7cm] fetus \& also \&[0.7cm] has \&[0.7cm] rights \\
+		\end{deptext}
+		\depedge{2}{1}{det}
+		\depedge{3}{2}{nsubj}
+		\deproot{3}{verb}
+		\depedge{3}{4}{dobj}
+		\depedge{3}{5}{punct}
+
+		\depedge[edge unit distance=1.2ex,label style={fill=green!15}]{3}{10}{parataxis}
+
+		\depedge{8}{6}{advmod}
+		\depedge{8}{7}{det}
+		\deproot{10}{verb}
+		\depedge{10}{8}{nsubj}
+		\depedge{10}{9}{advmod}
+		\depedge{10}{11}{dobj}
+	\end{dependency}
+    \vspace{-2mm}
+
+    Here the parse information helps isolate the two points: \texttt{baby.nsubj have.verb right.dobj} and \texttt{baby.nsubj have.verb right.dobj}. A parataxis relationship connects the two.
+
   \section{Defining Points with Verb Frames}
     In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in frames.
-    \tocless\subsection{VerbNet and FrameNet}
-      VerbNet is an XML, verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `murder' is given below.
 
-      \lstset{language=XML}
-      \begin{lstlisting}
-        <FRAME>
-          <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
-          <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
-          <SYNTAX>
-            <NP value="Agent"><SYNRESTRS/></NP>
-            <VERB/>
-            <NP value="Patient"><SYNRESTRS/></NP>
-          </SYNTAX>
-          <SEMANTICS>...</SEMANTICS>
-        </FRAME>
-      \end{lstlisting}
+    \tocless\subsection{VerbNet and FrameNet}
+    VerbNet is an XML, verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `murder' is shown in Figure \ref{fig:murder-frame}.
+
+      \begin{figure}
+        \centering
+        \caption{VerbNet frame example for verb murder}
+
+        \lstset{language=XML}
+        \begin{lstlisting}
+          <FRAME>
+            <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
+            <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
+            <SYNTAX>
+              <NP value="Agent"><SYNRESTRS/></NP>
+              <VERB/>
+              <NP value="Patient"><SYNRESTRS/></NP>
+            </SYNTAX>
+            <SEMANTICS>...</SEMANTICS>
+          </FRAME>
+        \end{lstlisting}
+        \label{fig:murder-frame}
+      \end{figure}
 
       We experimented using the information in the \texttt{primary} attribute. This information is did not always match what was annotated in the \texttt{SYNTAX} element. We switched to using the \texttt{SYNTAX} element content instead. To create the verb index described above we parsed the VerbNet catalogue into a key value structure where each verb was the key, and list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of.
 
