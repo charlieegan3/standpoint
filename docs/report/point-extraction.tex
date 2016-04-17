@@ -165,26 +165,33 @@
       This is an extract that only matched \texttt{image.nsubj reflect.verb}. Shorter points like this make extracts for points in a cluster considerably more varied, making clusters less cohesive. To overcome this we introduced the idea of the `Generic Frame'. This was a new query that could be run against any dependency graph to extract subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
 
     \tocless\subsection{Copula Verbs}
-      Copula verbs are not the head of the sentence in output from the CoreNLP dependency parser. Take the following example:
+    The CoreNLP dependency parse differs for copula verbs as the verb is not the root of the parse. Analyzing dependencies \textit{from the verb} only works when the verb is the root. The following examples illustrate the inherently different structure.
       \begin{multicols}{2}
         \raggedcolumns
-        \begin{itemize}[label={}]
-          \item{\blockquote{A woman has rights.}}
-          \item{\texttt{det(woman, a)}}
-          \item{\texttt{nsubj(has, woman)}}
-          \item{\texttt{dobj(has, rights)}}
-        \end{itemize}
+        \begin{center}
+          \begin{dependency}[edge horizontal padding=0]
+            \begin{deptext}
+              women \&[0.5cm] have \&[0.5cm] rights \\
+            \end{deptext}
+            \depedge{2}{1}{nsubj}
+            \depedge{2}{3}{dobj}
+            \deproot[edge unit distance=2.3ex]{2}{root}
+          \end{dependency}
+        \end{center}
         \columnbreak
-        \begin{itemize}[label={}]
-          \item{\blockquote{A fetus is a person.}}
-          \item{\texttt{det(fetus, a)}}
-          \item{\texttt{nsubj(person, fetus)}}
-          \item{\texttt{cop(person, is)}}
-          \item{\texttt{det(person, a)}}
-        \end{itemize}
+        \begin{center}
+          \begin{dependency}[edge horizontal padding=0]
+            \begin{deptext}
+              fetuses \&[0.5cm] are \&[0.5cm] people \\
+            \end{deptext}
+            \depedge{3}{1}{nsubj}
+            \depedge{3}{2}{cop}
+            \deproot[edge unit distance=2.3ex]{3}{root}
+          \end{dependency}
+        \end{center}
       \end{multicols}
 
-      Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The result is still much the same, the example above becomes \texttt{fetus.nsubj be.verb person.dobj} so it still matches queries like: ``points where people are the object''.
+      Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The example above becomes \texttt{fetus.nsubj be.verb people.dobj} so it matches queries like where people are the `object'.
 
   \section{Point Extracts}
     We had a goal of summarization from quite an early stage. This meant that our extracted text needed to be as succinct in getting the information across as possible. Natural Language Generation was out of scope, though it would be an interesting option for further work. Patterns like \texttt{person.nsubj have.verb right.dobj} without the context are not natural to read. We have implemented a means of extracting the relevant words from the source sentence, using information in the dependency parse.
