@@ -106,10 +106,10 @@
     Here the parse information helps isolate the two points: \texttt{baby.nsubj have.verb right.dobj} and \texttt{baby.nsubj have.verb right.dobj}. A parataxis relationship connects the two.
 
   \section{Defining Points with Verb Frames}
-    In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in frames.
+  Not all dependencies should be included in the point pattern, only ones essential to the meaning of the point. Some dependencies, like adverbial modifiers and parataxis, that do not introduce information relevant to the point's pattern, can easily be excluded. However, not all dependency types can be classified using a single rule. This is largely due to the different verb classes (transitive, intransitive and ditransitive) and how these are represented by the CoreNLP parser. In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in frames.
 
     \tocless\subsection{VerbNet and FrameNet}
-    VerbNet is an XML, verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example from for the verb `murder' is shown in Figure \ref{fig:murder-frame}.
+      VerbNet is an XML, verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example frame for the verb `murder' is shown in Figure \ref{fig:murder-frame}.
 
       \begin{figure}
         \centering
@@ -131,7 +131,7 @@
         \label{fig:murder-frame}
       \end{figure}
 
-      We experimented using the information in the \texttt{primary} attribute. This information is did not always match what was annotated in the \texttt{SYNTAX} element. We switched to using the \texttt{SYNTAX} element content instead. To create the verb index described above we parsed the VerbNet catalogue into a key value structure where each verb was the key, and list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of.
+      We use the \texttt{SYNTAX} element information to determine the type of dependencies that can be included in the pattern for a given verb. To create a `verb index' we parsed the VerbNet catalogue into a key-value structure where each verb was the key, and the list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of.
 
       Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
 
