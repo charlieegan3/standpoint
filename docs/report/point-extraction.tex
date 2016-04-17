@@ -1,24 +1,24 @@
 \chapter{Point Extraction\label{chap:point-extraction}}
   \section{Point Concept Overview and Examples}
-    Points are a concept that we created to describe the minimal content unit in our summarization task. We originally defined a point as being a verb and it's context. Points represent a statement made in a discussion in a condensed form with an accompanying extract used to present the point to readers. Lets take the following sentence from a post in a discussion:
+    A `point' is concept we created to describe a common object in our analysis - originally defined as: a verb and it's context. Points encapsulate both a human-readable extract from the text as well as a pattern representing the core components that can be used to match and compare points to others. Lets take the following sentence from a post in a discussion:
 
-    \medskip
+    \smallskip
     \begin{center}
       \blockquote{\textit{I don't think so, an unborn \textbf{child} (however old) \textbf{is} not yet a \textbf{human} being.}}
     \end{center}
-    \medskip
+    \smallskip
 
-    This sentence makes the point that until a baby is born it does not count as a human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence may make the same points, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same point. We represent points using a pattern that list the core components, these two sentences both contain points that have this pattern: \texttt{child.subject be.verb human.object}.
+    This sentence puts forward the idea that, until a baby is born, it does not qualify as human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence in the discussion may also put forward this idea, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same idea only the context differs. We represent points like these using a pattern that lists the core components, these two sentences both contain points that have this pattern: \texttt{child.subject be.verb human.object}.
 
-   This pattern is lossy and is not suitable for use in summary text. To overcome this, when extracting points from sentences, points are not only allocated a pattern but also an extract. Extracts are strings made of one or more substrings in the sentence. The extracts for the point in these two sentence would be:
+    This pattern loses some of the sentence context and is not suitable for use in human-readable text. To overcome this, when extracting points from sentences, points are represented as a pattern but as \textit{a pattern with an accompanying extract}. Extracts are strings made of one or more sentence substrings. The extracts for the points in these two sentences would be:
 
-    \medskip
+    \smallskip
     \begin{center}
-      \blockquote{\textit{an unborn child is not yet a human being}} and \blockquote{children are not complete humans until birth?}
+      \blockquote{\textit{an unborn child is not yet a human being}} \\ \blockquote{\textit{children are not complete humans until birth?}}
     \end{center}
-    \medskip
+    \smallskip
 
-    Using this representation for a point allows points expressed in different tenses or orders to be grouped together under while still keeping a relevant part of the source text to present the point. Points are fundamental object used in our analysis but they exist as part of a larger discussion model, see Figure \ref{fig:discmod}.
+    Using our representation enables points expressed in different tenses and contexts to be grouped together while still retaining a relevant part of the sentence context to present the human-readable point. Points are the fundamental unit used in our analysis and they exist as part of a larger hierarchical discussion model, see Figure \ref{fig:discmod}. Points are stored in a key value representation with attributes for the pattern, extract, verb and point's original source post in the discussion, see Table \ref{tab:point-keyval}.
 
     \begin{figure}
       \centering
@@ -32,12 +32,13 @@
             Sentence \\[1ex]
             \TBox[fill=green!5]{9.1cm}{
               Point \\[1ex]
-              \TBox[fill=green!15]{2cm}{Extract}
-              \TBox[fill=green!15]{2cm}{Verb}
-              \TBox[fill=green!15]{3.95cm}{
+              \TBox[fill=green!15]{2.5cm}{
                 Pattern \\[1ex]
-                \TBox[fill=green!25]{3.65cm}{Component}
+                \TBox[fill=green!25]{2.2cm}{Component}
               }
+              \TBox[fill=green!15]{1.68cm}{Extract}
+              \TBox[fill=green!15]{1.68cm}{Verb}
+              \TBox[fill=green!15]{1.68cm}{Source}
             }
           }
         }
@@ -45,23 +46,22 @@
       \label{fig:discmod}
     \end{figure}
 
-	\begin{itemize}
-	  \item[]{\textbf{Extract:} ``\textit{A woman has rights.}''}
-	  \item[]{\textbf{Verb:} have}
-	  \item[]{\textbf{Pattern:} \texttt{woman.nsubj have.verb rights.dobj}}
-	  \item[]{\textbf{Component:} \texttt{woman.nsubj}}
-	\end{itemize}
+    \begin{table}[]
+      \centering
+      \caption{The point data structure}
+      \label{tab:point-keyval}
+      \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Attribute}       & \textbf{Example Value}                         \\ \hline
+        Pattern                  & \texttt{\{woman.nsubj have.verb rights.dobj\}} \\
+                                 & Single Component: \texttt{woman.nsubj}         \\ \hline
+        Extract                  & ``\textit{A woman has rights.}''               \\ \hline
+        Verb                     & to \textit{have}                               \\ \hline
+        Source                   & \textit{Post: \#42, Debate: Abortion}          \\ \hline
+      \end{tabular}
+    \end{table}
 
-    We wanted to count these as as equivalent and using points as a representation enables this. The core data structure for a point (transported as a JSON object) is as follows:
-
-    \begin{itemize}
-      \item{Pattern consisting of components}
-      \item{Source Information (Discussion \& Post Identifier, Stance)}
-      \item{Extract String}
-      \item{Verb}
-    \end{itemize}
-
-    The \textit{Components} attribute consists of a list of strings - a \textit{Pattern}. Each element represents a dependency of the verb and the relation of that dependency. For example, if \textit{fetus} were to be the subject of the point, then the component would be \texttt{fetus.nsubj}. Relations are defined using Universal Stanford Dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Using the example from above, the point component representation for both statements would be \texttt{abortion.nsubj be.verb wrong.dobj}. This common pattern makes it possible to reliably group statements that express the same idea, even when their phrasing differs.
+    The \textit{Pattern} attribute consists of a list of two or more \textit{Components}. Each component represents a dependency of the verb and the relation of that dependency. For example, if a fetus were to be the subject, then the component would be \texttt{fetus.nsubj} (nominal subject). Relations are defined using Universal Stanford Dependencies\footnote{http://universaldependencies.org/docs/en/dep/}. Patterns are broken down into components to enable certain comparisons between points, for example, to test that \texttt{abortion.nsubj be.verb \textbf{legal.dobj}} and \texttt{abortion.nsubj be.verb \textbf{illegal.dobj}} are counter points.
 
   \section{Defining Points with Verb Frames}
     In order to look for legal patterns in dependency parse graphs we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in frames.
@@ -124,4 +124,4 @@
 
   \section{Extraction Process}
     The previous sections are intended to give a theoretical description of our approach to the extraction of points. This final section will give an overview of the implementation of that approach.
-    Making reference to Figure \ref{fig:arch-dia}, the Aggregator submits each post in turn to the Extractor. The Extractor requests sentence parses for the post text and saves these into the Neo4j database. A query is then ran to get all the verbs, for each verb the relevant frames are run as prepared Cypher queries to extract point patterns. For each matched verb a further query is ran to extract each point's context. These are returned to the aggregator as a JSON array. Attributes to be included in the response must be specified in the request, as must topics of interest.
+    Making reference to Figure \ref{fig:arch-dia}, the Aggregator submits each post in turn to the Extractor. The Extractor requests sentence parses for the post text and saves these into the Neo4j database. A query is then ran to get all the verbs, for each verb the relevant frames are run as prepared Cypher queries to extract point patterns. For each matched verb a further query is ran to extract each point's context. These are returned to the Aggregator as a JSON array. Attributes to be included in the response must be specified in the request, as must topics of interest.
