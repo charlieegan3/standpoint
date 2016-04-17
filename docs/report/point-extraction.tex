@@ -194,12 +194,42 @@
       Rather than making the copula verb the head of the sentence we opted to write adjusted queries that could be used for copula verbs when matching against frames. This allows the dependency parse to be left unaltered and makes the implementation more explicit. The example above becomes \texttt{fetus.nsubj be.verb people.dobj} so it matches queries like where people are the `object'.
 
   \section{Point Extracts}
-    We had a goal of summarization from quite an early stage. This meant that our extracted text needed to be as succinct in getting the information across as possible. Natural Language Generation was out of scope, though it would be an interesting option for further work. Patterns like \texttt{person.nsubj have.verb right.dobj} without the context are not natural to read. We have implemented a means of extracting the relevant words from the source sentence, using information in the dependency parse.
+    So far we have covered the identification of points and how the dependency parse information has been interpreted to arrive at a point's pattern. This is separate from the point extract, this is extracted separately, again using the information in the dependency parse. The task of selecting an extract for a point can be described as follows: recursively select nodes related to the verb until an adequate context for that verb is reached.
 
-    When a pattern is identified as matching a frame a further query is run on the graph to extract it's context. Nodes in the graph that are related to the verb or any of it's descendants are returned as part of the context for the point. To keep points succinct the following relations cannot extend the context tree: \textit{adverbial clause modifiers, clausal subjects, clausal complement, generic dependent and parataxis}.
+    This query was implemented as another Cypher query, similar to verb frames. However, rather than only detecting a small number of expected dependencies, this query follows dependencies recursively. Nodes in the graph that are related to the verb or any of it's descendants are returned as part of the context for the point. To keep points succinct the following relations cannot extend the context tree: \textit{adverbial clause modifiers, clausal subjects, clausal complement, generic dependencies and parataxis}. The following dependency graph represents this recursive process.
 
-    The effect of this is similar to that of sentence compression. The results are not so different from those reported by Knight and Marcu \cite{knight2000statistics}, though the approach was fundamentally different. As they appear to do, we also strip trailing punctuation and capitalize where required. This is done at the summary generation stage in our approach, see Chapter \ref{chap:summary-generation}.
+    \begin{center}
+      \begin{dependency}[edge horizontal padding=0]
+        \begin{deptext}
+          I \&[0.0cm] do \&[0.0cm] n't \&[0.1cm] think \&[0.5cm] so \&[0.1cm] , \&[0.0cm] an \&[0.0cm] unborn \&[0.1cm] child \&[0.0cm] ( \&[0.0cm] however \&[0.3cm] old \&[0.5cm] ) \&[0.1cm] still \&[0.7cm] has \&[0.2cm] rights \\
+        \end{deptext}
+
+        \depedge{4}{1}{nsubj}
+        \depedge{4}{2}{aux}
+        \depedge{4}{3}{neg}
+        \depedge{4}{5}{advmod}
+        \depedge{4}{6}{punct}
+        \depedge[edge unit distance=1.2ex]{4}{15}{ccomp $\rightarrow$}
+
+        \depedge[edge style={green!75!black, thick}]{9}{7}{det}
+        \depedge[edge style={green!75!black, thick}]{9}{8}{amod}
+        \depedge[edge style={red!90!black, thick}]{9}{12}{dep $\rightarrow$}
+
+        \depedge{12}{11}{advmod}
+        \depedge{12}{10}{punct}
+        \depedge{12}{13}{punct}
+
+        \depedge[edge style={green!75!black, thick}]{15}{14}{advmod}
+        \depedge[edge style={green!75!black, thick}]{15}{16}{dobj}
+        \depedge[edge unit distance=1.9ex,edge style={green!75!black, thick}]{15}{9}{$\leftarrow$ nsubj}
+
+        \deproot[edge unit distance=4.0ex,edge style={green!75!black, thick}]{15}{query root}
+      \end{dependency}
+    \end{center}
+
+    The green paths represent a query expanding into the graph following permitted dependencies. This gives \blockquote{\textit{an unborn child still has rights}} as the extract for the point. Upon reaching \texttt{dep}, a blacklisted dependency, that route is no longer explored and so excluded from the context. Should the query root have been for the other verb (\textit{think}) the blacklisted clausal compliment would have isolated the extract to \blockquote{\textit{I don't think so,}}.
+
+    This effect is not dissimilar from sentence compression, only there is a starting point `query verb'. The results are not so different from those reported by Knight and Marcu \cite{knight2000statistics}, though the approach was fundamentally different. As they appear to do, we also strip trailing punctuation and capitalize where required. This is done at the summary generation stage in our approach, see Chapter \ref{chap:summary-generation}.
 
   \section{Extraction Process}
-    The previous sections are intended to give a theoretical description of our approach to the extraction of points. This final section will give an overview of the implementation of that approach.
-    Making reference to Figure \ref{fig:arch-dia}, the Aggregator submits each post in turn to the Extractor. The Extractor requests sentence parses for the post text and saves these into the Neo4j database. A query is then ran to get all the verbs, for each verb the relevant frames are run as prepared Cypher queries to extract point patterns. For each matched verb a further query is ran to extract each point's context. These are returned to the Aggregator as a JSON array. Attributes to be included in the response must be specified in the request, as must topics of interest.
+    The previous sections give a theoretical description of our points extraction approach, this final section outlines it's implementation. Making reference to Figure \ref{fig:arch-dia}, the Aggregator submits each post in turn to the Extractor. The Extractor requests dependency parses for the post text from CoreNLP and saves these into the Neo4j graph database. A query is then ran to get all the verbs, for each verb the relevant frames are looked up in the index and run as prepared Cypher queries to extract point patterns. For each matched verb a further query is ran to extract each point's extract. These are returned to the Aggregator as a JSON array and written to disk in preparation for the next module in the pipeline.
