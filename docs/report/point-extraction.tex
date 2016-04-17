@@ -8,7 +8,7 @@
     \end{center}
     \smallskip
 
-    This sentence puts forward the idea that, until a baby is born, it does not qualify as human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence in the discussion may also put forward this idea, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same idea only the context differs. We represent points like these using a pattern that lists the core components, these two sentences both contain points that have this pattern: \texttt{child.subject be.verb human.object}.
+    This sentence puts forward the idea that, until a baby is born, it does not qualify as human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence in the discussion may also put forward this idea, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same idea only the context differs. We represent points like these using a pattern that Lists the core components, these two sentences both contain points that have this pattern: \texttt{child.subject be.verb human.object}.
 
     This pattern loses some of the sentence context and is not suitable for use in human-readable text. To overcome this, when extracting points from sentences, points are represented as a pattern but as \textit{a pattern with an accompanying extract}. Extracts are strings made of one or more sentence substrings. The extracts for the points in these two sentences would be:
 
@@ -131,16 +131,38 @@
         \label{fig:murder-frame}
       \end{figure}
 
-      We use the \texttt{SYNTAX} element information to determine the type of dependencies that can be included in the pattern for a given verb. To create a `verb index' we parsed the VerbNet catalogue into a key-value structure where each verb was the key, and the list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of.
+      We use the \texttt{SYNTAX} element information to determine the type of dependencies that can be included in the pattern for a given verb. To create a `verb index' we parsed the VerbNet catalogue into a key-value structure where each verb was the key, and the list of allowed frames the value. Some verbs are listed in more than one class, \textit{feel} for example is listed in seven classes, in these cases the verb was allocated all frames for all classes it was a member of. Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
 
-      Using this index, points can be extracted by querying the verb's dependency parse with each of it's frames.
+    \tocless\subsection{Matching Frames in Parses}
+      With an index of verbs and allowed frames all the information required to identify points in dependency parses is available. However, frames are not inherently capable of querying the dependency graph structure, for this queries for each type of frame must be written. While frames in different categories encode additional semantic information, there are far fewer `syntactically unique' frames than verb classes. Common frames such as \texttt{NounPhrase Verb NounPhrase} cover a large percentage of all listed frames in the index. We have implemented a means of querying dependency parses for 17 of the more common patterns covering 96\% of all frames in the index.
+
+      These queries are written in \textit{Cypher}, the declarative query language implemented by the Neo4j database that we used to store dependency parses during analysis. Figure \ref{fig:npvnpquery} shows an example query. Restrictions imposed commonly require a subject and object, the query result returns the nodes that match these relations. Should a verb \textit{not} have the relations to complete the frame then nothing is returned from the query.
+
+      \begin{figure}
+        \centering
+        \caption{Example Cypher query for the common \texttt{NP V NP} frame}
+
+        \begin{lstlisting}
+          MATCH (verb:Node)
+          WHERE verb.uuid = UUID
+          MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+          MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+          WHERE rel_nsubj.label = "nsubj"
+          AND rel_dobj.label = "dobj"
+          RETURN nsubj, verb, dobj;
+        \end{lstlisting}
+        \label{fig:npvnpquery}
+      \end{figure}
 
     \tocless\subsection{The Generic Frame}
-      Originally our intent had been to use only FrameNet frames to define allowed patterns for points. However there were verbs missing frames for \textit{all} possible patterns of interest. Usually this meant that there was a simple frame for the verb but it failed to adequately capture the context. Take the following example:
+      Originally our intent had been to use only queries derived from FrameNet frames to define allowed patterns for points. However there were verbs missing frames for some patterns of interest. Usually this meant a simple frame for the verb was listed but it failed to adequately capture point idea. Take the following example:
 
-      \blockquote{These images reflect the reality of abortions}
+      \bigskip
+      \begin{center}
+        \blockquote{These images reflect the reality of abortions}
+      \end{center}
 
-      This is an extract that matched \texttt{image.nsubj reflect.verb}. Having these shorter points makes groups of extracts considerably more unpredictable, which in turn means that our grouping function is not as useful. To overcome this we introduced the idea of the Generic Frame. This was a new query that could be run against a dependency graph that looked for subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
+      This is an extract that only matched \texttt{image.nsubj reflect.verb}. Shorter points like this make extracts for points in a cluster considerably more varied, making clusters less cohesive. To overcome this we introduced the idea of the `Generic Frame'. This was a new query that could be run against any dependency graph to extract subjects, objects and open clausal complements. This was used to increase the number of more complete points. For the extract above, the Generic Frame matched this more complete pattern: \texttt{image.nsubj reflect.verb reality.dobj}.
 
     \tocless\subsection{Copula Verbs}
       Copula verbs are not the head of the sentence in output from the CoreNLP dependency parser. Take the following example:
