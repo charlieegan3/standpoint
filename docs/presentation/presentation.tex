@@ -1,7 +1,7 @@
 \documentclass{beamer}
 \usetheme{metropolis}
 
-\usepackage{tikz}
+\usepackage{tikz,tikz-dependency}
 \usetikzlibrary{shapes.geometric, arrows}
 \tikzstyle{service} = [rectangle, minimum width=2cm, minimum height=1cm, text centered, draw=black, fill=white]
 \tikzstyle{flow} = [thick,->,>=stealth]
@@ -16,7 +16,7 @@
 
 \title{An argumentation-based approach to summarizing discussions}
 \date{}
-\author{Charlie Egan}
+\author{Dr. Advaith Siddharthan \& Charlie Egan}
 \institute{University of Aberdeen}
 
 \begin{document}
@@ -24,8 +24,6 @@
   \begin{frame}{Itinerary}
     \begin{enumerate}
       \item{Introduction}
-      \item[]{\tiny we are here \normalsize}
-        \vskip 0.5em
       \item{Summary Comparison \& Feedback}
       \item{Motivations}
       \item{Extracting Points}
@@ -37,102 +35,126 @@
   \end{frame}
 
   \begin{frame}{Summary Comparison \& Feedback}
-    \includegraphics[width=\textwidth]{form}
+	Compare two ~300 word summaries on the same topic.
+
+	\vfill
+
+	Consider their usefulness, which sections are most interesting?
+
+	Can you think of sections that might be useful that are missing?
+
+	\textcolor{red}{form link}
   \end{frame}
 
   \begin{frame}{Motivations}
 	\begin{center}
-	  \fbox{\includegraphics[width=\textwidth]{reddit}}
+	  \fbox{\includegraphics[width=0.7\textwidth]{reddit}}
 
 	  \fbox{\includegraphics[width=0.5\textwidth]{fire}}
 
-	  \fbox{\includegraphics[width=0.6\textwidth]{indyref}}
+	  \fbox{\includegraphics[width=0.6\textwidth]{tweets}}
+
+      \textcolor{red}{\#indyref data set: 137,647 Tweets, 400k figure based on http://www.cityam.com/1411081646/scottish-indyref-visualisation-see-how-twitter-reacted}
 	\end{center}
   \end{frame}
 
-  \begin{frame}{Extracting Points (1/4)}
-  	Discussion Model
-	\vfill
-	\TBox[fill=black!5]{10cm}{
-	  Discussion \\[1ex]
-	  \TBox[fill=black!10]{9.7cm}{
-	  	Post \\[1ex]
-		\TBox[fill=black!15]{9.4cm}{
-		  Sentence \\[1ex]
-		  \TBox[fill=green!5]{9.1cm}{
-			Point \\[1ex]
-			\TBox[fill=green!15]{2cm}{Extract}
-			\TBox[fill=green!15]{2cm}{Verb}
-			\TBox[fill=green!15]{3.95cm}{
-			  Pattern \\[1ex]
-			  \TBox[fill=green!25]{3.65cm}{Component}
-			}
-		  }
-		}
-	  }
+  \begin{frame}{What makes up a discussion?}
+    \TBox[fill=black!15]{10.5cm}{
+      \textbf{Discussion} \\[1ex]
+      \small{Topic: \textit{Abortion}}
+      \TBox[fill=green!5]{10.2cm}{
+        \textbf{Sentence} (User A) \\[1ex]
+        \small{``\textit{I think Abortion should be legal, women must have the choice.\dots}''}
+      }
+      \TBox[fill=red!5]{10.2cm}{
+        \textbf{Sentence} (User B) \\[1ex]
+        \small{``\textit{Abortion is wrong, I believe that a fetus has rights.\dots}''}
+      }
+      \TBox[fill=yellow!5]{10.2cm}{\dots}
 	}
-	\begin{itemize}
-	  \item[]{\textbf{Extract:} ``\textit{A woman has rights.}''}
-	  \item[]{\textbf{Verb:} have}
-	  \item[]{\textbf{Pattern:} \texttt{woman.nsubj have.verb rights.dobj}}
-	  \item[]{\textbf{Component:} \texttt{woman.nsubj}}
-	\end{itemize}
   \end{frame}
 
-  \begin{frame}{Extracting Points (2/4)}
-	\begin{itemize}
-	  \item[]{\textcolor{gray}{\textbf{Extract:} ``\textit{A woman has rights.}''}}
-	  \item[]{\textcolor{gray}{\textbf{Verb:} have}}
-	  \item[]{\textbf{Pattern:} \texttt{woman.nsubj have.verb rights.dobj}}
-	  \item[]{\textcolor{gray}{\textbf{Component:} \texttt{woman.nsubj}}}
-	\end{itemize}
-	\begin{center}
-	  Stanford Dependency Parse
-	  \fbox{\includegraphics[width=0.7\textwidth]{depparse}}
-	  \vfill
-	  Lemmas
+  \begin{frame}{Extracting Points (1/3)}
+    \TBox[fill=green!5]{10.5cm}{
+      \textbf{Sentence} \\[1ex]
 
-	  \fbox{\includegraphics[width=0.6\textwidth]{lemmas}}
+      \small{``\textit{I think Abortion should be legal, women must have the choice.}''}
+
+      \TBox[fill=black!15]{10.2cm}{
+        Point 1 \\[1ex]
+        \TBox[fill=black!5]{9.9cm}{Extract \hfill \textit{Abortion should be legal}}
+        \TBox[fill=black!5]{9.9cm}{Verb \hfill be}
+        \TBox[fill=black!5]{9.9cm}{
+          Pattern \hfill \texttt{abortion.subject \textcolor{blue}{be.verb} legal.object}
+        }
+      }
+      \TBox[fill=black!15]{10.2cm}{
+        Point 2 \\[1ex]
+        \TBox[fill=black!5]{9.9cm}{Extract \hfill \textit{women must have the choice}}
+        \TBox[fill=black!5]{9.9cm}{Verb \hfill have}
+        \TBox[fill=black!5]{9.9cm}{
+          Pattern \hfill \texttt{women.subject \textcolor{blue}{have.verb} choice.object}
+        }
+      }
+    }
+    Point 0, ``\textit{I think}'', is also identified.
+  \end{frame}
+
+  \begin{frame}{Extracting Points (2/3)}
+	\begin{itemize}
+	  \item[]{\textcolor{gray}{\textbf{Extract:} ``\textit{women must have the choice}''}}
+	  \item[]{\textcolor{gray}{\textbf{Verb:} have}}
+	  \item[]{\textbf{Pattern:} \texttt{woman.subj \textcolor{blue}{have.verb} choice.obj}}
+	\end{itemize}
+
+	\begin{center}
+	  \begin{dependency}[edge horizontal padding=0]
+		\begin{deptext}
+		  I \& think \& Abortion \& should \& be \& legal \&, \& women \& must \& have \& the \& choice \& . \\
+		\end{deptext}
+		\depedge{10}{12}{obj}
+		\depedge{10}{8}{subj}
+		\depedge[hide label]{10}{9}{}
+		\depedge[hide label]{12}{11}{}
+		\deproot[edge unit distance=2.3ex]{10}{point verb}
+	  \end{dependency}
+
+	  Lemma values (women $\rightarrow$ woman) are used in point patterns
 	\end{center}
   \end{frame}
 
-  \begin{frame}{Extracting Points (3/4)}
+  \begin{frame}{Extracting Points (3/3)}
     Verb Case Frames define allowed point patterns.
     \vfill
-    ``\textit{John gave Paul.}''
-    \TBox[fill=red!5]{\textwidth}{
-      Frame A \textcolor{red}{\xmark}\\[1ex]
-      \TBox[fill=white]{1.7cm}{NP}
-      \TBox[fill=black!15]{1.7cm}{gave}
-      \TBox[fill=white]{1.7cm}{NP}
-    }
+    \texttt{woman.subj \textcolor{blue}{have.verb} choice.obj}
     \vfill
-    ``\textit{John gave Paul the ball.}''
-    \TBox[fill=green!5]{\textwidth}{
-      Frame B \textcolor{green}{\cmark} \\[1ex]
+    \TBox[fill=red!5]{\textwidth}{
+      Frame A \textcolor{red}{\xmark} e.g. ``\textit{Alice had lunch with Bob.}'' \\[1ex]
       \TBox[fill=white]{1.7cm}{NP}
-      \TBox[fill=black!15]{1.7cm}{gave}
+      \TBox[fill=black!15]{1.7cm}{have}
       \TBox[fill=white]{1.7cm}{NP}
-      \TBox[fill=white]{1.7cm}{PREP}
+      \TBox[fill=white]{1.7cm}{with}
       \TBox[fill=white]{1.7cm}{NP}
     }
-  \end{frame}
-
-  \begin{frame}{Extracting Points (4/4)}
-	\resizebox{\textwidth}{!}{
-	  \begin{tikzpicture}[node distance=3.5cm]
-		\node (agg) [service] {1. Aggregator};
-		\node (top) [service, below of=agg, yshift=1.5cm] {Topic Analyzer};
-		\node (ext) [service, above of=agg, yshift=-1.5cm] {Extractor};
-		\node (cur) [service, right of=agg] {2. Curator};
-		\node (sum) [service, right of=cur] {3. Summarizer};
-
-		\draw [flow] (agg) -- (cur);
-		\draw [flow] (cur) -- (sum);
-		\draw[dotted] [depends] (agg) -- (ext);
-		\draw[dotted] [depends] (top) -- (agg);
-	  \end{tikzpicture}
-	}
+    \TBox[fill=red!5]{\textwidth}{
+      Frame B \textcolor{red}{\xmark} e.g. ``\textit{Alice had lunch at Carluccio's}'' \\[1ex]
+      \TBox[fill=white]{1.7cm}{NP}
+      \TBox[fill=black!15]{1.7cm}{have}
+      \TBox[fill=white]{1.7cm}{NP}
+      \TBox[fill=white]{1.7cm}{at}
+      \TBox[fill=white]{1.7cm}{NP}
+    }
+    \TBox[fill=red!5]{\textwidth}{
+      Frame C \textcolor{red}{\xmark} e.g. ``\textit{\textcolor{gray}{Who's had lunch?} Alice has!}'' \\[1ex]
+      \TBox[fill=white]{1.7cm}{NP}
+      \TBox[fill=black!15]{1.7cm}{have}
+    }
+    \TBox[fill=green!5]{\textwidth}{
+      Frame D \textcolor{green!70!black}{\cmark} e.g. ``\textit{Alice had lunch.}'' \\[1ex]
+      \TBox[fill=white]{1.7cm}{NP}
+      \TBox[fill=black!15]{1.7cm}{have}
+      \TBox[fill=white]{1.7cm}{NP}
+    }
   \end{frame}
 
   \begin{frame}{What Next?}
@@ -158,6 +180,23 @@
   \end{frame}
 
   \begin{frame}{What Next?}
+	\resizebox{\textwidth}{!}{
+	  \begin{tikzpicture}[node distance=3.5cm]
+		\node (agg) [service] {1. Aggregator};
+		\node (top) [service, below of=agg, yshift=1.5cm] {Topic Analyzer};
+		\node (ext) [service, above of=agg, yshift=-1.5cm] {Extractor};
+		\node (cur) [service, right of=agg] {2. Curator};
+		\node (sum) [service, right of=cur] {3. Summarizer};
+
+		\draw [flow] (agg) -- (cur);
+		\draw [flow] (cur) -- (sum);
+		\draw[dotted] [depends] (agg) -- (ext);
+		\draw[dotted] [depends] (top) -- (agg);
+	  \end{tikzpicture}
+	}
+  \end{frame}
+
+  \begin{frame}{What Next?}
     \fbox{\includegraphics[width=\textwidth]{disc_graph}}
   \end{frame}
 
@@ -180,7 +219,7 @@
       ``\textit{A fetus is a human being}''
       \&
       ``\textit{A fetus is \textbf{not} a human being}''\\
-      using string diffing \\$\downarrow$ \\
+      $\downarrow$ \\
       ``\textit{A fetus is \textbf{\{}not\textbf{\}} a human being}''
     \end{center}
   \end{frame}
@@ -194,13 +233,13 @@
 	  \TBox[fill=black!10]{4.65cm}{
         Post A (User 1) \\[1ex]
 		\TBox[fill=red!15]{1.17cm}{\small Point 1}
-		\TBox[fill=green!15]{1.17cm}{\small Point 2}
-		\TBox[fill=blue!15]{1.17cm}{\small Point 3}
+		\TBox[fill=green!35]{1.17cm}{\small Point 2}
+		\TBox[fill=blue!35]{1.17cm}{\small Point 3}
 	  }
 	  \TBox[fill=black!10]{4.65cm}{
         Post B (User 2) \\[1ex]
-		\TBox[fill=green!15]{1.17cm}{\small Point 2}
-		\TBox[fill=blue!15]{1.17cm}{\small Point 3}
+		\TBox[fill=green!35]{1.17cm}{\small Point 2}
+		\TBox[fill=blue!35]{1.17cm}{\small Point 3}
 		\TBox[fill=yellow!15]{1.17cm}{\small Point 4}
 	  }
 	  \TBox[fill=black!10]{4.65cm}{
@@ -211,14 +250,14 @@
 	  }
 	  \TBox[fill=black!10]{4.65cm}{
         Post D (User 4) \\[1ex]
-		\TBox[fill=red!15]{1.17cm}{\small Point 1}
-		\TBox[fill=blue!15]{1.17cm}{\small Point 3}
-		\TBox[fill=green!15]{1.17cm}{\small Point 2}
+		\TBox[fill=orange!15]{1.17cm}{\small Point 5}
+		\TBox[fill=blue!35]{1.17cm}{\small Point 3}
+		\TBox[fill=green!35]{1.17cm}{\small Point 2}
 	  }
 	}
 	\vfill
-    \TBox[fill=green!15]{1.17cm}{\small Point 2}
-    \TBox[fill=blue!15]{1.17cm}{\small Point 3}\\
+    \TBox[fill=green!35]{1.17cm}{\small Point 2}
+    \TBox[fill=blue!35]{1.17cm}{\small Point 3}\\
     Points 2 \& 3 are a common pair, raised together by 3 different posts.
   \end{frame}
 
@@ -234,33 +273,36 @@
   \end{frame}
 
   \begin{frame}{Evaluation \& Results}
-    \textbf{Evaluation Design}\\
-    \begin{itemize}
-      \item{Paid participants compared summaries}
-    \end{itemize}
-    \textbf{Results Summary}\\
-    \begin{itemize}
-      \item{Our layout summaries were preferred}
-      \item{Methods for the selection of extracts less clear}
-    \end{itemize}
+    Participants on Amazon Mechanical Turk compared summaries
+
+	\begin{center}
+	  \fbox{\includegraphics[width=0.85\textwidth]{results}}
+	\end{center}
   \end{frame}
 
-  \begin{frame}{Further Work}
-    \begin{itemize}
-      \item{Web application interface}
-      \item{Adjustments for better performance on smaller sets of text}
-      \item{Improve means of selecting extracts}
-      \item{Add support for hierarchical conversations and Twitter replies}
-      \item{New presentations, e.g. connected graph structure}
-      \item{Greater focus on argumentation structures and semantics}
-    \end{itemize}
-  \end{frame}
-
-  \begin{frame}{Questions \& Discussion}
+  \begin{frame}{Questions}
     \begin{center}
-      Thanks for listening.\\
-      Email: \textbf{c@egan.co} - Twitter: \textbf{@charlieegan3} \\
-      \textcolor{red}{Advaith / Adam details?}
+      \texttt{we.subject \textcolor{red}{have.verb} point.object}
+      \fbox{\includegraphics[width=0.45\textwidth]{disc_graph}}
+      \fbox{\includegraphics[width=0.45\textwidth]{summary}}
+
+      What would be interesting to do next?
+
+      \vfill
+      \begin{center}
+        \textbf{advaith@abdn.ac.uk} \\ \textbf{c@egan.co}
+      \end{center}
     \end{center}
   \end{frame}
+
+  %\begin{frame}{Further Work
+    %\begin{itemize}
+      %\item{Web application interface}
+      %\item{Adjustments for better performance on smaller sets of text}
+      %\item{Improve means of selecting extracts}
+      %\item{Add support for hierarchical conversations and Twitter replies}
+      %\item{New presentations, e.g. connected graph structure}
+      %\item{Greater focus on argumentation structures and semantics}
+    %\end{itemize}
+  %\end{frame}
 \end{document}
