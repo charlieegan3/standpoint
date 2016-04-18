@@ -1,0 +1,41 @@
+\documentclass[tikz]{article}
+\title{Debate Comparison Evaluation}
+\date{}
+
+\usepackage{fullpage, url, enumitem, multicol, titling, titlesec, tikz}
+\usepackage[a4paper,margin=1cm]{geometry}
+\setlength{\droptitle}{-5em}
+
+\pagenumbering{gobble}
+
+\titlespacing{\section}{0pt}{\parskip}{-\parskip}
+\titlespacing{\subsection}{0pt}{\parskip}{-\parskip}
+\titlespacing{\subsubsection}{0pt}{\parskip}{-\parskip}
+
+\newcommand\TBox[3][]{%
+  \tikz\node[draw,thick,minimum height=20cm,text width=#2,align=left,#1] {#3};}
+
+\begin{document}
+  \maketitle
+  \vskip -7em
+  Please read the statements below:
+  \begin{itemize}[noitemsep]
+    \item{I confirm that the research project has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.}
+    \item{I consent to the material I contribute being used to generate insights for the research project Debate Summarization Tool Evaluation.}
+    \item{I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.}
+    \item{I consent to allow the fully anonymized data to be used for future publications and other scholarly means of disseminating the findings from the research project.}
+    \item{I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.}
+  \end{itemize}
+  By continuing this task you agree to the above statements.
+
+  \noindent\makebox[\linewidth]{\rule{\textwidth}{0.1pt}}
+
+  Comments:
+
+  \textcolor{gray}{\small{Please make reference to your sheet numbers}}
+
+  \medskip
+
+  \TBox[fill=black!3]{0.92\textwidth}{}
+
+\end{document}
