@@ -15,10 +15,16 @@
 \newcommand\TBox[3][]{%
   \tikz\node[draw,thick,minimum height=20cm,text width=#2,align=left,#1] {#3};}
 
+\newcommand{\namesigdate}[2][5cm]{%
+  \begin{tabular}{@{}p{#1}@{}}
+    {\small \textit{#2}} \\[\normalbaselineskip] \hrule
+  \end{tabular}
+}
+
 \begin{document}
   \maketitle
   \vskip -7em
-  Please read the statements below:
+  \noindent Please read the statements below:
   \begin{itemize}[noitemsep]
     \item{I confirm that the research project has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.}
     \item{I consent to the material I contribute being used to generate insights for the research project Debate Summarization Tool Evaluation.}
@@ -26,7 +32,9 @@
     \item{I consent to allow the fully anonymized data to be used for future publications and other scholarly means of disseminating the findings from the research project.}
     \item{I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.}
   \end{itemize}
-  By continuing this task you agree to the above statements.
+  By continuing this task I understand and agree to the above statements.
+
+  \noindent \namesigdate{Name} \namesigdate{Signature}
 
   \noindent\makebox[\linewidth]{\rule{\textwidth}{0.1pt}}
 
