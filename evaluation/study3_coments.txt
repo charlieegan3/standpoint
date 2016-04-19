@@ -1,0 +1,105 @@
+Person A
+Sheet 1: 
+	A is more logical, B is context based
+Sheet 5: 
+	Pretence for A is more logical and clear but at times lost context (pre-filtered already?)
+	A - although structured is difficult to see fit or same linking sections e.g. multiple topics of most interest seem to provide
+
+Person B
+Sheet 1:
+	Summary a doesn't make sense sections seem arbitrary points and illegible seem to be illegible words plus sentences not actual arguments.
+	Summary b seems to be a selection of comments that were posted it probably can't be a representation of the whole debate or forum but provides a rich example for the analysis of their narrative and debate dynamics
+Sheet 6:
+	Again summary any attempts to provide an overview of the debate but something is to not make sense e.g. users that talk about… Section seems to show synonyms not correlations between themes.
+	The common points section however seems to provide a good overview you compare it to summary b
+	Some comments on summary b don't show relation to the topic.
+General Comment:
+	Neither summary format seems to provide a good overview of the content illegible themes and correlations in the dataset
+	Each provide a different thing and attempt at extracting of categorising information (seems), or examples of data
+	Without knowing how the summaries were generated it is hard to say what their validity is and how they can be interpreted and used
+
+Person C
+Sheet 4:
+	Prefer summary a
+	Clear structure in a not in B
+	The user marked sections: points for commonly discussed topics, people disagree on these points and uses talk about X and Y, as interesting
+	Missing section: points on which people agree
+Sheet 5:
+	Comments were the same as sheet 4
+
+Person D
+Sheet 3:
+	Prefer: A for summary of opinions. B for quotable verbatim text but can be abstract
+	Structuring sections: yes it helps to organise the data. but no it bias is the analysis of interest: points of disagreement
+	Missing: some illegible – ratio-percentage of people disagree on commonly occurring
+Sheet 6:
+	As sheet threeB is the Beighton text gives flavour e.g. Scots
+	B can be unfinished/not all info. E.g. NHS lies come from
+	B contains some irrelevant content ? EG love my new pen, or lack context e.g. oh dear x2
+
+Person E
+Sheet 5:
+	I find them both pretty confusing, B is more interesting but I am not sure what I am supposed to take away from it in terms of research.
+	I think the first time as more value-but likely excuse data that doesn't fit in preceptor categories
+Sheet 6:
+	Prefer A to B,  often feels like it lacks subject
+
+Person E
+Sheet 6:
+	Structure A but it's not very clear
+	Yes I like to have sections
+	Continuity discusses topics and positions like, although of course it would defend on what it is for
+	It would be good to have a sense of illegible
+Sheet 3:
+	In principle I prefer the structure of a, but I don't find it very clear
+	It would depend on a description of what this is for but in general
+	commonly discussed section
+	It doesn't say about frequency of different illegible
+
+Person F
+Sheet 5:
+	Summary a is easier to understand than summary B.
+	The common points and points for commonly discussed topics are interesting sections
+	They could be used to explain what people wrote about that day
+	Not sure how people disagree on points in section A
+Sheet 4:
+	Summary any is easier to understand, although the split sections could be better.
+	Not sure how these sections can be used to analyse/say something meaningful about the debate
+	Summary be makes even less sense
+
+Person G
+Sheet 6:
+	I prefer a because it is organised in a more coherent way
+	The structure makes it easier to follow
+	The first section on the points on which people disagree is most interesting
+	But the points for commonly discussed topics section don't map onto other commonly discussed points cleanly
+Sheet 1:
+	I prefer A because it is more organised.
+	I prefer the structuring into sections.
+	It would be helpful to make clear what comments were quotes from subjects and which were comments from researchers.
+
+Person H
+Sheet 2:
+	Abortion A: section on X and Y is unclear. Ditto the points for commonly discussed topics section
+	Abortion B: to unstructured, like a stream of consciousness
+	Prefer to see some order imposed on the data
+	Abortion A: section on people disagree on these points is most interesting as it raises very important philosophical debates
+Sheet 5:
+	Prefer the structure of section A
+	Easier to follow although it is clearly more filtered
+	X Y section is confusing
+	No section is particularly interesting relative to the others
+	Would like to see section on justification for vote choice
+
+Online Form Comments:
+Sheet 5:
+there appears to be two forms of statements ; passive - which is simply about event and trend reporting, and secondly tweets which urge followers to take a position on the vote. In this case, you have tweets which reflect on reality and tweets which are about how things will be under a particular decision.
+
+Sheet 2:
+Section A is merely  stating facts - and personal opinions/reflections. Section B is trying to find the motive for taking such a decision. 
+
+Sheet 6:
+Scotland of UK seems like Kashmir in India. Many voices are in support of referendum. Few also think about the future of Scotland, if it will be separated. 
+
+Sheet 2:
+It's more argumentative
