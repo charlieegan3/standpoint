@@ -22,5 +22,31 @@
         \centering
         \includegraphics[width=0.8\textwidth]{disc_graph}
       \end{figure}
+
+    \chapter{Blacklists\label{app:blacklists}}
+      \section{Ambiguous subjects}
+        \textit{it, that, this, which, what}
+
+      \section{Disallowed Person Actions}
+        The following verbs are not allowed in a 2 component point with a \texttt{PERSON.nsubj}:
+
+        \textit{agree, argue, ask, begin, believe, believe, call, care, change, close, come, come, continue, debate, disagree, end, explain, fail, feel, feel, find, follow, get, go, go, guess, happen, hear, leave, live, lose, make, move, object, open, read, realize, refer, show, sit, speak, stand, start, support, take, talk, tell, think, try, understand, wonder, write}
+
+      \section{Disallowed Points}
+        \texttt{PERSON.nsubj be.verb} cannot be completed by: \textit{able, aware, correct, false, favor, glad, good, here, interested, likely, one, right, say, sorry, sure, true, willing, wrong}
+
+        \noindent\texttt{PERSON.nsubj want.verb} cannot be completed by: \textit{have, what, what do}
+
+        \noindent\texttt{PERSON.nsubj} cannot be completed by: \textit{say.verb what.dobj, mean.verb what.dobj, know.verb what.dobj, believe.verb what.dobj, see.verb what.dobj, see.verb argument.dobj, have.verb problem.dobj, tell.verb they.dobj, think.verb what.dobj, argue.verb in.prep fact.dobj, argue.verb with.prep you.dobj}
+
+        \begin{itemize}
+		  \item{debate.nsubj be.verb about.dobj}
+		  \item{question.nsubj be.verb}
+		  \item{make.verb claim.dobj}
+		  \item{ask.verb yourself.dobj}
+		  \item{thing.nsubj happen.verb}
+		  \item{something.nsubj happen.verb}
+        \end{itemize}
+
   \addtocontents{toc}{\endgroup}
 \end{appendices}
