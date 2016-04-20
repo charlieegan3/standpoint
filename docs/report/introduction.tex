@@ -13,7 +13,9 @@
     Our project was based on this broad concept of a point as well as the idea that points, representing units of informal argumentation, could be used to build a high-level summary of a discussion. News article comment sections; forum threads; film \& product reviews and even extended email conversations are all candidate applications for such analysis. However, the focus of this work is on political discussions.
 
   \section{Objectives}
-    Continuing the work of a past project that implemented the idea of a simple point, we wanted to build on this and improve on the extraction of points from text. Fundamentally, this meant extracting more of the verb's arguments and related tokens - rather than only the subject and object. Take the following sentence:
+    The overall objective for the project was to implement a means of summarizing extensive discussions. In particular, discussions in social media have potential to grow very large. We wanted to find a way of representing the key concepts under discussion. For this task we chose to use points and the relationships between to form a condensed representation of the discussion.
+
+    Continuing the work of a past project that used a naive implementation of a point (subject, verb, object), we wanted to build on this and improve on the extraction of points from text. Fundamentally, this meant extracting more of the verb's arguments and related tokens - rather than only the subject and object. Take the following sentence:
 
     \medskip
     \begin{center}
@@ -29,7 +31,7 @@
     \end{center}
     \medskip
 
-    This almost half the length and still expresses the core idea expressed around `is' in the above sentence. Another goal was to go beyond just extracting points and investigate relationships between them. Counter points pairs --- points that represent opposing ideas --- and co-occurring points - points commonly raised by the same user - were of particular interest. Connecting points and a user's annotated stance was also discussed. We also set out to present this information in a way that was easy to interpret.
+    This is almost half the length of the original sentence but still represents the core idea expressed around `is' and is still easily readable. As part of generating summaries we wanted to go beyond just extracting points and investigate relationships between them. Counter points pairs --- points that represent opposing ideas --- and co-occurring points --- points commonly raised together by multiple users --- were of particular interest.
 
     \medskip
 
