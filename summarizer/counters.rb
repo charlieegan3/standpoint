@@ -14,9 +14,10 @@ module Counters
 
     counters.reject! { |k, _| k.size == 2 && k.join(" ").match(/(go|come)\.verb(\s|$)/) }
 
-    counters.sort_by { |k, v| groups[k].size + groups[v.first].size }
+    counters.map {|k, v| v.map { |c| [k, c] }}
+      .flatten(1)
+      .sort_by { |k, v| groups[k].size + groups[v].size }
       .reverse
-      .map { |k, v| [k, v.first] }
   end
 
   def self.negated_points(points)
@@ -80,33 +81,17 @@ module Counters
 
         next if options.flatten == p["Components"].map { |c| c.split(".").first }
 
-        # note that the assumption of first in l17 also needs to change
-        #permutations = []
-        #options.each_with_index do |set, index|
-          #set.each do |replacement|
-            #new = p["Components"].dup
-            #new[index] = "#{replacement}.#{p["Components"][index].split(".").last}"
-            #next if new == p["Components"]
-            #permutations << new
-          #end
-        #end
-
-        #counter_points[p["Components"]] = permutations.select { |p| groups[p] }
-
-        permutations = options.first.map { |index| [index] }
-        options[1..-1].each do |o|
-          permutations.each do |permutation|
-            new_permutations = []
-            o.each do |w|
-              new_permutations << (permutation + [w])
-            end
-            permutations = new_permutations
+        permutations = []
+        options.each_with_index do |set, index|
+          set.each do |replacement|
+            new = p["Components"].dup
+            new[index] = "#{replacement}.#{p["Components"][index].split(".").last}"
+            next if new == p["Components"]
+            permutations << new
           end
         end
 
-        counter_points[p["Components"]] = permutations.map do |permutation|
-          permutation.zip(p["Relations"]).map { |x| x.join(".") }
-        end.select { |p| groups[p] }
+        counter_points[p["Components"]] = permutations.select { |p| groups[p] }
       end
     end.reject! { |_, v| v.empty? }
   end
