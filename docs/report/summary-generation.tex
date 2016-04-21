@@ -58,7 +58,7 @@
 
       The identification of counter points was a goal for the project from the start. Counter points are matched on one of two possible criteria, either the presence of negation terminology or an antonym for a pattern component.
 
-      Potential, antonym-derived counter points, for a given point, are generated using it's pattern and a list of antonyms. Antonyms were sourced from WordNet \ref{wordnet} using the NLTK corpus reader interface\footnote{http://www.nltk.org/howto/wordnet.html}. Taking the pattern \texttt{woman.nsubj have.verb right.dobj} as an example, this generates the following counter points:
+      Potential, antonym-derived counter points, for a given point, are generated using it's pattern and a list of antonyms. Antonyms were sourced from WordNet \cite{miller1995wordnet} using the NLTK corpus reader interface\footnote{http://www.nltk.org/howto/wordnet.html}. Taking the pattern \texttt{woman.nsubj have.verb right.dobj} as an example, this generates the following counter points:
 
       \begin{itemize}[label={$\bullet$}]
         \item{\texttt{man.nsubj \textcolor{gray}{have.verb right.dobj}}}

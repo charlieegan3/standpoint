@@ -11,3 +11,5 @@
 
 !images
 !images/*
+
+!graphs/*.pdf
