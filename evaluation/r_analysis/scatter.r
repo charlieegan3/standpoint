@@ -22,5 +22,3 @@ plot <- ggplot(table, aes(x=bigram, y=turkers)) +
 pdf("scatter.pdf", width=4, height=4)
 grid.arrange(plot, ncol=1, nrow=1)
 dev.off()
-
-cor.test(table$bigram, table$turkers, short=FALSE, exact=TRUE)
