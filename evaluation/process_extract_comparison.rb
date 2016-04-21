@@ -87,8 +87,8 @@ print "Other Extracts: "
 rejected = scored_sentences - selected
 puts rejected_mean = rejected.map(&:last).reduce(:+) / rejected.size
 
-selected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(1)} - #{e}" }
-rejected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(1)} - #{e}" }
+selected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(3)} - #{e}" }
+rejected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(3)} - #{e}" }
 
 puts "\nComments\n"
 comments.each do |comment|

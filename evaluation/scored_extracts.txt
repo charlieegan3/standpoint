@@ -1,173 +1,173 @@
-4.6, Homosexuality is wrong.
-4.5, Abortion should be illegal.
-4.4, You don't believe in God.
-4.4, The woman has the right to her womb.
-4.3, Same-sex marriages should be legal.
-4.3, Evolution is a fact.
-4.3, People don't need a god.
-4.1, You have faith in God.
-4.1, The fetus is not a human being.
-4.0, They'd be good parents.
+4.556, Homosexuality is wrong.
+4.444, Abortion should be illegal.
+4.444, You don't believe in God.
+4.333, Same-sex marriages should be legal.
+4.333, The woman has the right to her womb.
+4.333, Evolution is a fact.
+4.333, People don't need a god.
+4.111, You have faith in God.
 4.0, You don't have insurance.
-3.9, They can't get health care.
-3.8, People kill people.
-3.8, The world was created in 6 days.
-3.6, People are automatically responsible.
-3.3, Evolution is a theory without mechanism.
-3.2, Guns were illegal.
-2.2, As they pay income taxes.
-4.8, A woman should have the right to choose.
-4.6, A fetus is a human being.
-4.6, Gay marriage should not be legal.
-4.5, The woman has a right to self-defense.
-4.4, They don't believe in God.
-4.4, Evolution is both a fact and a theory.
-4.4, A woman should have the right to decide.
-4.3, The only person that has authority over a child is the biological parent.
-4.3, Evolution is a scientific theory.
-4.3, Evolution is a theory that is supported at the micro level.
-4.2, Homosexuality is not morally wrong.
-4.2, Evolution is an observable fact.
-4.2, Abortion should be illegal in all cases.
-4.2, In Nicaragua abortions are always illegal.
-4.1, You don't need a god to have the ability to be a responsible, loving, and caring person.
-4.1, They get quality care.
-4.1, Guns are illegal.
-4.1, Biological evolution is a fact.
-4.1, Abortion is illegal.
-4.1, Abortion is illegal after the third trimester except in extreme circumstances.
-4.0, Evolution is fact.
+4.0, The fetus is not a human being.
+4.0, They'd be good parents.
+3.889, They can't get health care.
+3.778, People kill people.
+3.778, The world was created in 6 days.
+3.556, People are automatically responsible.
+3.333, Evolution is a theory without mechanism.
+3.222, Guns were illegal.
+2.222, As they pay income taxes.
+4.778, A woman should have the right to choose.
+4.556, Gay marriage should not be legal.
+4.556, A fetus is a human being.
+4.444, The woman has a right to self-defense.
+4.444, They don't believe in God.
+4.444, Evolution is both a fact and a theory.
+4.333, Evolution is a scientific theory.
+4.333, The only person that has authority over a child is the biological parent.
+4.333, Evolution is a theory that is supported at the micro level.
+4.333, A woman should have the right to decide.
+4.222, Evolution is an observable fact.
+4.222, Homosexuality is not morally wrong.
+4.222, Abortion should be illegal in all cases.
+4.111, Abortion is illegal after the third trimester except in extreme circumstances.
+4.111, Guns are illegal.
+4.111, In Nicaragua abortions are always illegal.
+4.111, Biological evolution is a fact.
+4.111, You don't need a god to have the ability to be a responsible, loving, and caring person.
+4.111, They get quality care.
+4.0, Abortion is illegal.
 4.0, You didn't have insurance.
-4.0, Guns are illegal in Chicago.
-4.0, In other words, a fetus and an embryo are both living beings.
-4.0, They pay their taxes.
-4.0, The world was created by God in seven days.
-4.0, 5 years ago, homosexual marriage was legal.
 4.0, An embryo or fetus isn't a human being.
-4.0, I believe in God, but I also pride my ability to reason.
-4.0, You believe in God.
+4.0, 5 years ago, homosexual marriage was legal.
+4.0, They pay their taxes.
+4.0, Evolution is fact.
+4.0, The world was created by God in seven days.
 4.0, I did not have insurance.
-3.9, They can't get prompt care.
-3.9, You don't have adequate health insurance.
-3.9, You believe in the wrong God.
-3.9, They don't get preventative care, timely diagnoses, or specialist treatments.
-3.8, The fetus is a human being, a person, from the moment of conception.
-3.8, Fetuses are human beings at a early stage of development.
-3.8, Abortion was illegal.
-3.8, Guns were illegal in the US.
-3.8, Evolution, strictly speaking, is fact.
-3.8, They all get the same quality care.
-3.8, People are responsible.
-3.8, The world was created in six days.
-3.8, Evolution is simply a scientific theory and there is no reason why the counterarguments to Evolution shouldn't be scientific.
-3.8, Guns should be completely illegal.
-3.8, Evolution (as Darwin and today's proponents describe it) is as solid a theory as gravity.
-3.7, A fetus is a potential human being, not an actual human being.
-3.7, Fetuses are not human beings.
-3.7, However, a woman doesn't have the right to terminate a life, regardless of whether it is inside her body or not.
-3.7, The world was created in exactly 6 days.
-3.7, People kill people, but guns make it a heck of a lot easier.
-3.7, They are not parents.
-3.7, Guns dont kill people, people kill people.
-3.7, I have a strong faith in Him.
-3.7, They need a god.
-3.6, Women have the right to choose, period.
-3.6, Guns used in street crimes, especially from gangs, are typically illegal.
-3.6, You have faith in some thing much bigger than your own existence.
-3.6, Those people are no longer parents.
-3.6, Guns shouldn't be illegal.
-3.6, I have insurance from the company I retired from.
-3.6, You pay taxes in Canada.
-3.6, PEOPLE KILL PEOPLE.
-3.6, We are so responsible.
-3.4, Is homosexuality morally wrong.
-3.4, Should marriage for same-sex couples be legal.
-3.4, These people are all parents regardless of the fact.
-3.4, Evolution is a theory that has not been proven and I think probably never will be.
-3.4, A woman has the right to a partial birth abortion.
-3.4, The fetus is not a human being and future Americans can never say its a human being.
-3.3, People never have needed a god or hope of eternal life or fear of eternal damnation.
-3.3, I don't need a god to tell me.
-3.3, In Canada we pay more taxes than California but we have the same GDP GSP and same population.
-3.3, The woman has a right to unplug.
-3.2, I have faith in my bank and they trust me with a check book.
-3.2, Not all people are responsible enough to keep their hands to themselves.
-3.2, Also, you pay more in taxes than most billionaires.
-3.2, Why do you have faith.
-3.2, You need god to know.
-3.2, Wrong - evolution is probably the most supported theory in biology - it's withstood considerable scrutiny for the past 150 years and is as strong as ever.
-3.2, More than 20,000 gun laws nation wide and bad people are still killing innocent people.
-3.2, The real question should be Is homosexuality morally wrong.
-3.2, You'd get better care at a veterinarian in the US.
-3.1, People will be less responsible in National Parks.
-3.1, The person was responsible.
-3.1, I don't believe in God of course.
-3.1, People pay through their taxes instead of in direct payments to their health insurance providers.
-3.1, In this case, abortion must be illegal in ALL cases.
-3.0, Oh, I'll get health care somehow, but you will pay for it with higher insurance premiums etc.
+4.0, Guns are illegal in Chicago.
+4.0, You believe in God.
+4.0, In other words, a fetus and an embryo are both living beings.
+4.0, I believe in God, but I also pride my ability to reason.
+3.889, The fetus is a human being, a person, from the moment of conception.
+3.889, They can't get prompt care.
+3.889, You believe in the wrong God.
+3.889, You don't have adequate health insurance.
+3.889, They don't get preventative care, timely diagnoses, or specialist treatments.
+3.778, Guns should be completely illegal.
+3.778, The world was created in six days.
+3.778, Guns were illegal in the US.
+3.778, People are responsible.
+3.778, They all get the same quality care.
+3.778, Evolution, strictly speaking, is fact.
+3.778, Fetuses are human beings at a early stage of development.
+3.778, A fetus is a potential human being, not an actual human being.
+3.778, Evolution is simply a scientific theory and there is no reason why the counterarguments to Evolution shouldn't be scientific.
+3.778, However, a woman doesn't have the right to terminate a life, regardless of whether it is inside her body or not.
+3.778, Evolution (as Darwin and today's proponents describe it) is as solid a theory as gravity.
+3.667, Guns dont kill people, people kill people.
+3.667, They are not parents.
+3.667, People kill people, but guns make it a heck of a lot easier.
+3.667, I have a strong faith in Him.
+3.667, Abortion was illegal.
+3.667, They need a god.
+3.667, The world was created in exactly 6 days.
+3.556, I have insurance from the company I retired from.
+3.556, Those people are no longer parents.
+3.556, PEOPLE KILL PEOPLE.
+3.556, Fetuses are not human beings.
+3.556, Guns used in street crimes, especially from gangs, are typically illegal.
+3.556, You pay taxes in Canada.
+3.556, You have faith in some thing much bigger than your own existence.
+3.556, Women have the right to choose, period.
+3.556, We are so responsible.
+3.556, Guns shouldn't be illegal.
+3.444, Is homosexuality morally wrong.
+3.444, These people are all parents regardless of the fact.
+3.444, Evolution is a theory that has not been proven and I think probably never will be.
+3.444, The fetus is not a human being and future Americans can never say its a human being.
+3.444, Should marriage for same-sex couples be legal.
+3.333, A woman has the right to a partial birth abortion.
+3.333, In Canada we pay more taxes than California but we have the same GDP GSP and same population.
+3.333, I don't need a god to tell me.
+3.333, People never have needed a god or hope of eternal life or fear of eternal damnation.
+3.222, I have faith in my bank and they trust me with a check book.
+3.222, Also, you pay more in taxes than most billionaires.
+3.222, Not all people are responsible enough to keep their hands to themselves.
+3.222, More than 20,000 gun laws nation wide and bad people are still killing innocent people.
+3.222, Why do you have faith.
+3.222, Wrong - evolution is probably the most supported theory in biology - it's withstood considerable scrutiny for the past 150 years and is as strong as ever.
+3.222, The real question should be Is homosexuality morally wrong.
+3.222, You need god to know.
+3.222, You'd get better care at a veterinarian in the US.
+3.111, People will be less responsible in National Parks.
+3.111, The woman has a right to unplug.
+3.111, The person was responsible.
+3.111, I don't believe in God of course.
+3.111, People pay through their taxes instead of in direct payments to their health insurance providers.
+3.0, In this case, abortion must be illegal in ALL cases.
 3.0, Have you ever not had insurance.
-3.0, You still have faith in the Supreme.
 3.0, People sometimes kill other people innocently.
+3.0, You still have faith in the Supreme.
 3.0, In the example given, she has been paying taxes in to the system for the past 12 years.
-2.9, LRB- same-sex marriage is legal.
-2.9, By the way, I am no longer a parent.
-2.9, Since same-sex marriage is legal.
-2.8, Who believes in God.
-2.8, In France you only get health care.
-2.8, You don't have insurance and you have to go to the hospital for any type of surgery or more than a doctor visitation the cost really hurts those who don't have a lot of money.
-2.7, Whether women should have a right to abort a fetus or not.
-2.7, Does a man or a woman have the right to force his involvement on his child.
-2.7, Evolution is fact, Creationism is so ludicrous and moronic.
-2.7, Where guns are illegal.
-2.7, I paid my taxes I want to be assured.
-2.7, Whether gay marriage should be legal, not about religious views on gay marriage.
-2.7, How the world was created in six days.
-2.7, Why evolution is only theory and not a proven fact.
-2.6, A fetus is not a human being, is not murder.
-2.6, Who killed people at her school.
-2.6, Along the lines of : Evolution is just a theory.
-2.6, Just people kill people.
-2.6, In God I believe in logic, not religion it makes all the more sense to believe in logic than religion.
-2.6, They will be bad parents, but this can't cause the state to ban these individuals.
-2.4, Who is responsible enough to go to a shooting range.
-2.4, Just because you have faith and believe in miracles you believe in god.
-2.4, Why homosexuality is wrong.
-2.4, Who need a god.
-2.3, Why, people, individually, are responsible.
-2.3, Guns were illegal in the first place.
-2.3, Who kill people.
-2.3, Who don't have insurance.
-2.3, You can't believe in God just in case.
-2.2, We NEED GOD to be.
-2.1, Gay marriage were legal.
-2.1, We are not responsible for this - which is of our own creation.
-2.1, I don't have insurance, and you know.
-2.1, Abortion is illegal after the third trimester except in extreme circumstancesNot.
-2.0, Weather same sex marriage should be legal or not in those states.
-2.0, For whether or not they will be good parents, or sexual abuse their kids.
+3.0, Oh, I'll get health care somehow, but you will pay for it with higher insurance premiums etc.
+2.889, LRB- same-sex marriage is legal.
+2.889, By the way, I am no longer a parent.
+2.889, Since same-sex marriage is legal.
+2.778, In France you only get health care.
+2.778, Who believes in God.
+2.778, Whether women should have a right to abort a fetus or not.
+2.778, Does a man or a woman have the right to force his involvement on his child.
+2.778, You don't have insurance and you have to go to the hospital for any type of surgery or more than a doctor visitation the cost really hurts those who don't have a lot of money.
+2.667, Where guns are illegal.
+2.667, I paid my taxes I want to be assured.
+2.667, A fetus is not a human being, is not murder.
+2.667, Whether gay marriage should be legal, not about religious views on gay marriage.
+2.667, How the world was created in six days.
+2.667, Evolution is fact, Creationism is so ludicrous and moronic.
+2.667, Why evolution is only theory and not a proven fact.
+2.556, Just people kill people.
+2.556, Along the lines of : Evolution is just a theory.
+2.556, Who killed people at her school.
+2.556, In God I believe in logic, not religion it makes all the more sense to believe in logic than religion.
+2.556, They will be bad parents, but this can't cause the state to ban these individuals.
+2.444, Who is responsible enough to go to a shooting range.
+2.444, Just because you have faith and believe in miracles you believe in god.
+2.444, Why homosexuality is wrong.
+2.444, Who need a god.
+2.333, You can't believe in God just in case.
+2.333, Who don't have insurance.
+2.333, Who kill people.
+2.333, Guns were illegal in the first place.
+2.333, Why, people, individually, are responsible.
+2.222, We NEED GOD to be.
+2.111, I don't have insurance, and you know.
+2.111, Abortion is illegal after the third trimester except in extreme circumstancesNot.
+2.111, Gay marriage were legal.
+2.111, We are not responsible for this - which is of our own creation.
 2.0, Without the presupposition that homosexuality is wrong.
-2.0, People were more responsible, but they aren.
 2.0, Eve, therefore homosexuality is wrong.
+2.0, For whether or not they will be good parents, or sexual abuse their kids.
 2.0, Who have insurance but can barely afford.
+2.0, Weather same sex marriage should be legal or not in those states.
+2.0, People were more responsible, but they aren.
 2.0, Them get the care that they need.
 2.0, Shouldn't they, then they can get health care too.
+2.0, Abortion being illegal.
 2.0, But, was the world created in six days.
 2.0, People pay with their taxes It is a myth.
-1.9, Abortion being illegal.
-1.9, Who believe in God (s) not on those who don't believe.
-1.9, It is that homosexuality is wrong.
-1.9, With whether or not same-sex marriage should be legal.
-1.8, Who don't have enough faith to believe.
-1.8, Onto what you pay in taxes.
-1.8, They are less than in EVERTY way, as parents, Christians, community members, called pedeophiles, perverts, sinners and many other ugly names.
-1.7, LRB- in which we don't need god.
-1.7, Else who has faith and hope by the grace of God that He doesn't exist.
-1.7, Evolution is just a theory, ID believers.
-1.7, Guns dont kill people, people kill people, from a gunsdont kill people I do corperation.
-1.6, A human, abortion should be illegal.
-1.6, And I didn't need god to tell me Or maybe.
-1.6, You have a faith or not, but, it should be.
-1.6, Is there that the world could have been created in six days.
-1.6, No remorse as a proof text that homosexuality is wrong.
-1.4, LRB- or what they're parents.
-1.3, Homosexuality is wrong into a murderer.
+1.889, With whether or not same-sex marriage should be legal.
+1.889, It is that homosexuality is wrong.
+1.889, Who believe in God (s) not on those who don't believe.
+1.778, Who don't have enough faith to believe.
+1.778, Onto what you pay in taxes.
+1.778, They are less than in EVERTY way, as parents, Christians, community members, called pedeophiles, perverts, sinners and many other ugly names.
+1.667, LRB- in which we don't need god.
+1.667, Evolution is just a theory, ID believers.
+1.667, Else who has faith and hope by the grace of God that He doesn't exist.
+1.667, Guns dont kill people, people kill people, from a gunsdont kill people I do corperation.
+1.667, A human, abortion should be illegal.
+1.556, And I didn't need god to tell me Or maybe.
+1.556, You have a faith or not, but, it should be.
+1.556, No remorse as a proof text that homosexuality is wrong.
+1.556, Is there that the world could have been created in six days.
+1.444, LRB- or what they're parents.
+1.333, Homosexuality is wrong into a murderer.

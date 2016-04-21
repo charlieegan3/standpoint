@@ -58,12 +58,14 @@ Dir.glob('extracts/*') do |p|
   end
 end
 bigram_scored_extracts = Hash[*bigram_scored_extracts.flatten]
-human_scored_extracts = Hash[*File.open('scored_extracts.txt').readlines.map { |x| [x[4..-1].strip, x[0..2].to_f] }.flatten]
+human_scored_extracts = Hash[*File.open('scored_extracts.txt').readlines.map { |x| [[x[x.index(",")+2..-2]], x[0..x.index(",")-1].to_f] }.flatten]
 
+puts "bigram, turkers"
 bigram_scored_extracts.each do |k, v|
   raise if human_scored_extracts[k].nil?
-  puts [v, human_scored_extracts[k]].join(", ")
+  puts [v.round(3), human_scored_extracts[k]].join(", ")
 end
+exit
 
 machine_mean = bigram_scored_extracts.values.mean
 machine_stdev = bigram_scored_extracts.values.standard_deviation
