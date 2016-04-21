@@ -49,8 +49,8 @@ layout_vs_stock,organization,layout-better,13
 layout_vs_stock,organization,same,5
 layout_vs_stock,organization,stock-better,1
 layout_vs_stock,organization,stock-much_better,1
-layout_vs_formatted,overall,layout-much_better,3
-layout_vs_formatted,overall,layout-better,8
-layout_vs_formatted,overall,same,14
-layout_vs_formatted,overall,formatted-better,15
 layout_vs_formatted,overall,formatted-much_better,14
+layout_vs_formatted,overall,formatted-better,15
+layout_vs_formatted,overall,same,14
+layout_vs_formatted,overall,layout-better,8
+layout_vs_formatted,overall,layout-much_better,3

@@ -105,13 +105,8 @@ comments.each do |comment|
 end
 
 puts "\nRatings:"
-p  ["layout-much_better", "layout-better", "same", "random_layout-better", "random_layout-much_better"].join(", ")
-["layout-much_better", "layout-better", "same", "random_layout-better", "random_layout-much_better"].sort.each do |a|
-  print (bigram_v_rand_answers.count(a).to_f * 100 / bigram_v_rand_answers.size).round(2).to_s + ", "
-end
-puts
-["layout-much_better", "layout-better", "same", "random_layout-better", "random_layout-much_better"].sort.each do |a|
-  puts bigram_v_rand_answers.count(a).to_s + ", "
+["layout-much_better", "layout-better", "same", "random_layout-better", "random_layout-much_better"].each do |a|
+  puts ["bigram_vs_random", "overall", a, bigram_v_rand_answers.count(a).to_i].join(",")
 end
 puts
 

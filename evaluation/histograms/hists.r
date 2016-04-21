@@ -13,13 +13,19 @@ myHist <- function(dataTable, graphTitle, xLabelsFrom, xLabelsTo){
                             panel.grid.major = element_blank(),
                             panel.grid.minor = element_blank()) +
          theme(axis.text.x = element_text(size=6, angle=90, hjust=1.1, vjust=0.5)) +
-         ylim(0,40) +
+         ylim(0,35) +
          scale_x_discrete(breaks=xLabelsFrom, labels=xLabelsTo)
   return(hist)
 }
 
+#------------------------------------------------------------------------------
+# Study 1
+#------------------------------------------------------------------------------
+
 table = read.csv(file="study1.csv", header=TRUE, sep=",")
 attach(table)
+
+#------------------------------------------------------------------------------
 
 dataLabels = c("plain-much_better", "plain-better", "same", "stock-better", "stock-much_better")
 printLabels = c("plain \n much better", "plain \n better", "same ", "stock \n better", "stock \n much better")
@@ -59,15 +65,33 @@ grid.arrange(plot1, plot2, plot3, plot4, plot5, ncol=5, nrow=1)
 
 #------------------------------------------------------------------------------
 
-dataLabels = c("layout-much_better", "layout-better", "same", "formatted-better", "formatted-much_better")
-printLabels = c("layout \n much better", "layout \n better", "same ", "formatted \n better", "formatted \n much better")
-
-table[table$comparison=='layout_vs_formatted' & table$factor=='overall',]
+dataLabels = c("formatted-much_better", "formatted-better", "same", "layout-better", "layout-much_better")
+printLabels = c("formatted \n much better", "formatted \n better", "same ", "layout \n better", "layout \n much better")
 
 plot1 <- myHist(table[table$comparison=='layout_vs_formatted' & table$factor=='overall',],
                 "Layout vs. Formatted \n (overall)", dataLabels, printLabels)
 
 pdf("layout_vs_formatted_hists.pdf", width=1.6, height=2)
+grid.arrange(plot1, ncol=1, nrow=1)
+
+#------------------------------------------------------------------------------
+# Study 2
+#------------------------------------------------------------------------------
+
+table = read.csv(file="study2.csv", header=TRUE, sep=",")
+attach(table)
+
+table
+
+dataLabels = c("bigram-much_better", "bigram-better", "same", "random-better", "random-much_better")
+printLabels = c("bigram \n much better", "bigram \n better", "same ", "random \n better", "random \n much better")
+
+table[table$comparison=='bigram_vs_random' & table$factor=='overall',]
+
+plot1 <- myHist(table[table$comparison=='bigram_vs_random' & table$factor=='overall',],
+                "Bigram vs. Random \n (overall)", dataLabels, printLabels)
+
+pdf("bigram_vs_random.pdf", width=1.6, height=2)
 grid.arrange(plot1, ncol=1, nrow=1)
 
 dev.off()
