@@ -91,7 +91,7 @@ table[table$comparison=='bigram_vs_random' & table$factor=='overall',]
 plot1 <- myHist(table[table$comparison=='bigram_vs_random' & table$factor=='overall',],
                 "Bigram vs. Random \n (overall)", dataLabels, printLabels)
 
-pdf("bigram_vs_random.pdf", width=1.6, height=2)
+pdf("bigram_vs_random_hists.pdf", width=1.6, height=2)
 grid.arrange(plot1, ncol=1, nrow=1)
 
 dev.off()
