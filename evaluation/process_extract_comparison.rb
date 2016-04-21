@@ -111,7 +111,7 @@ p  ["layout-much_better", "layout-better", "same", "random_layout-better", "rand
 end
 puts
 ["layout-much_better", "layout-better", "same", "random_layout-better", "random_layout-much_better"].sort.each do |a|
-  print bigram_v_rand_answers.count(a).to_s + ", "
+  puts bigram_v_rand_answers.count(a).to_s + ", "
 end
 puts
 
