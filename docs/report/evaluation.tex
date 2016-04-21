@@ -63,7 +63,7 @@
     \tocless\subsection{Study 3: Section Comparison}
       This study was completed as a paper exercise with workshop participants in a session before the approach was discussed. Participants were given side-by-side summary comparisons, similar to the first study, however only qualitative feedback was requested. Given two comparisons of layout and stock summaries on two different topics, participants were prompted to:
 
-      \blockquote{
+	  \blockquote{
         \textit{
           Write your comments about the two summaries. Feel free to
           say anything that strikes you, but particularly address:
@@ -80,6 +80,46 @@
 
   \section{Results}
     \tocless\subsection{Study 1: Summary Comparison}
+
+      \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{graphs/plain_vs_stock_hists}
+        \caption{Counts of participant responses when comparing of Plain \& Stock.}
+		\label{fig:plain_vs_stock_hist}
+      \end{figure}
+
+      \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{graphs/layout_vs_stock_hists}
+        \caption{Counts of participant responses when comparing of Layout \& Stock.}
+		\label{fig:layout_vs_stock_hist}
+      \end{figure}
+
+	  \begin{figure}
+		\centering
+		\begin{minipage}{.25\textwidth}
+		  \centering
+		  \includegraphics[width=\textwidth]{graphs/layout_vs_formatted_hists}
+		  \captionsetup{width=0.95\linewidth, font={footnotesize}}
+		  \captionof{figure}{Counts of participant responses when comparing of Layout \& Formatted.}
+		  \label{fig:lay_vs_formatted_hist}
+		\end{minipage}%
+		\begin{minipage}{.5\textwidth}
+		  \centering
+		  \includegraphics[width=0.8\textwidth]{graphs/scatter}
+		  \captionsetup{width=0.95\linewidth, font={footnotesize}}
+		  \captionof{figure}{Correlation between human and bigram scores.}
+		  \label{fig:bigram_vs_random_hist}
+		\end{minipage}%
+		\begin{minipage}{.25\textwidth}
+		  \centering
+		  \includegraphics[width=\textwidth]{graphs/bigram_vs_random_hists}
+		  \captionsetup{width=0.95\linewidth, font={footnotesize}}
+		  \captionof{figure}{Counts of participant responses when comparing of Bigram \& Random.}
+		  \label{fig:bigram_vs_random_hist}
+		\end{minipage}%
+	  \end{figure}
+
       The results of the summary comparison showed a strong preference for summaries based on points based extraction. When comparing the plain and stock summaries, our plain summaries were marked as better or much better by 69\% of participants. Plain summaries, lacking any kind of layout, were still scored better on organization by 57\% of participants.
 
       When comparing layout summaries against equal length stock summaries participant preference only became clearer. 89\% of participants rated the layout summary as better or much better than stock. Organization saw the greatest change, with a 30\% increase in favor of layout summaries.
@@ -104,18 +144,6 @@
       (Results of a Mann-Whitney U test, or some other means of comparing the selected vs. not extracts regarding the values from the likert scale scores. This is quite hard\dots)
 
       Currently results of a MWU test would read (where A is selected and B is not selected by the tool): The medians of Group A and Group B were 5 and 3, respectively. We ran a Mann-Whitney's U test to evaluate the difference in the responses of our 5-Likert scale question. We found a significant effect of Group (The mean ranks of Group A and Group B were 1026 and 767, respectively; U = *155681*, Z = *7.045*, p= 1.851 * 10\^-12, r = 0.0.17).
-
-      \begin{figure}[h]
-        \caption{\textcolor{red}{SAMPLE PLOT, machine z scores vs. z scores of \textit{mean} human ratings}}
-        \centering
-        \includegraphics[width=0.8\textwidth]{extract_z_scores}
-      \end{figure}
-
-      \begin{figure}[h]
-        \caption{\textcolor{red}{or the results can be presented like this. group the human scores 1-5, then for each score plot the corresponding machine score in the box plot}}
-        \centering
-        \includegraphics[width=0.8\textwidth]{boxplots}
-      \end{figure}
 
       One selected extract \blockquote{As they pay income taxes} scored particularly poorly with a score of mean score of 2.2/5. However, generally ratings correlate with the extract quality. These results are based on 1587 responses across 18 different clusters of extracts from six topics. The target population of this sample is all clusters of extracts selected for display in summaries.
 
