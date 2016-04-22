@@ -36,4 +36,4 @@ print(binom.test(succFail[1], succFail[3])$p.value)
 succFail = successesFailures(study2, 'bigram_vs_random', 'overall')
 print(binom.test(succFail[1], succFail[3])$p.value)
 
-cor.test(study2_extracts$bigram, study2_extracts$turkers, short=FALSE, exact=TRUE)$p.value
+cor.test(study2_extracts$bigram, study2_extracts$turkers, short=FALSE, exact=TRUE, method="pearson", alternative="greater")
