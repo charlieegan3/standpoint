@@ -3,9 +3,11 @@ require(gridExtra)
 
 library(scales)
 
-myHist <- function(dataTable, graphTitle, xLabelsFrom, xLabelsTo){
+myHist <- function(dataTable, graphTitle, xLabelsFrom, xLabelsTo, maxY){
+  dataTable$per <- sapply(dataTable$count, function(x) sprintf("%1.0f%%", round(x/54, 2) * 100))
   hist <- ggplot(dataTable, aes(y=dataTable$count, x=factor(dataTable$answer, levels=unique(as.character(dataTable$answer))))) +
          geom_bar(stat="identity", fill="grey") +
+         geom_text(aes(label=dataTable$per, y=dataTable$count, x=factor(dataTable$answer, levels=unique(as.character(dataTable$answer)))), vjust=-0.3, size=2.5) +
          ylab("") + xlab("") +
          theme_bw() + theme(plot.title=element_text(size=8, vjust=-3),
                             plot.margin=unit(c(0.1,0.1,-0.4,-0.4), "cm"),
@@ -13,7 +15,7 @@ myHist <- function(dataTable, graphTitle, xLabelsFrom, xLabelsTo){
                             panel.grid.major = element_blank(),
                             panel.grid.minor = element_blank()) +
          theme(axis.text.x = element_text(size=8, angle=90, hjust=1.05, vjust=0.4, lineheight=0.72)) +
-         ylim(0,35) +
+         ylim(0,maxY) +
          scale_x_discrete(breaks=xLabelsFrom, labels=xLabelsTo) +
          annotate("text",  x=Inf, y = Inf, label = graphTitle, size=3, hjust=1+(1.0/nchar(graphTitle)), vjust=1.5)
   return(hist)
@@ -32,15 +34,15 @@ dataLabels = c("plain-much_better", "plain-better", "same", "stock-better", "sto
 printLabels = c("plain \n much better", "plain better", "same ", "stock better", "stock \n much better")
 
 plot1 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='overall',],
-                "overall", dataLabels, printLabels)
+                "overall", dataLabels, printLabels, 35)
 plot2 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='content',],
-                "content", dataLabels, printLabels)
+                "content", dataLabels, printLabels, 35)
 plot3 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='punctuation',],
-                "punctuation", dataLabels, printLabels)
+                "punctuation", dataLabels, printLabels, 35)
 plot4 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='readability',],
-                "readability", dataLabels, printLabels)
+                "readability", dataLabels, printLabels, 35)
 plot5 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='organization',],
-                "organization", dataLabels, printLabels)
+                "organization", dataLabels, printLabels, 35)
 
 pdf("plain_vs_stock_hists.pdf", width=8, height=2)
 grid.arrange(plot1, plot2, plot3, plot4, plot5, ncol=5, nrow=1)
@@ -51,15 +53,15 @@ dataLabels = c("layout-much_better", "layout-better", "same", "stock-better", "s
 printLabels = c("layout \n much better", "layout better", "same ", "stock better", "stock \n much better")
 
 plot1 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='overall',],
-                "overall", dataLabels, printLabels)
+                "overall", dataLabels, printLabels, 40)
 plot2 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='content',],
-                "content", dataLabels, printLabels)
+                "content", dataLabels, printLabels, 40)
 plot3 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='punctuation',],
-                "punctuation", dataLabels, printLabels)
+                "punctuation", dataLabels, printLabels, 40)
 plot4 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='readability',],
-                "readability", dataLabels, printLabels)
+                "readability", dataLabels, printLabels, 40)
 plot5 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='organization',],
-                "organization", dataLabels, printLabels)
+                "organization", dataLabels, printLabels, 40)
 
 pdf("layout_vs_stock_hists.pdf", width=8, height=2)
 grid.arrange(plot1, plot2, plot3, plot4, plot5, ncol=5, nrow=1)
@@ -70,7 +72,7 @@ dataLabels = c("formatted-much_better", "formatted-better", "same", "layout-bett
 printLabels = c("formatted \n much better", "formatted better", "same ", "layout better", "layout \n much better")
 
 plot1 <- myHist(table[table$comparison=='layout_vs_formatted' & table$factor=='overall',],
-                "overall", dataLabels, printLabels)
+                "overall", dataLabels, printLabels, 35)
 
 pdf("layout_vs_formatted_hists.pdf", width=1.6, height=2)
 grid.arrange(plot1, ncol=1, nrow=1)
@@ -90,7 +92,7 @@ printLabels = c("bigram \n much better", "bigram better", "same ", "random bette
 table[table$comparison=='bigram_vs_random' & table$factor=='overall',]
 
 plot1 <- myHist(table[table$comparison=='bigram_vs_random' & table$factor=='overall',],
-                "overall", dataLabels, printLabels)
+                "overall", dataLabels, printLabels, 35)
 
 pdf("bigram_vs_random_hists.pdf", width=1.6, height=2)
 grid.arrange(plot1, ncol=1, nrow=1)
