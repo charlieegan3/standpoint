@@ -80,20 +80,55 @@
 
   \section{Results}
     \tocless\subsection{Study 1: Summary Comparison}
+      This first study made comparisons between three pairs of summary types: Plain vs. Stock, Layout vs. Stock \& Layout vs. Formatted. See see Appendix \ref{app:survey-section} for an example of how these comparisons were presented to participants.
 
-      \begin{figure}
-        \centering
-        \includegraphics[width=\textwidth]{graphs/plain_vs_stock_hists}
-        \caption{Counts of participant responses when comparing of Plain \& Stock.}
-		\label{fig:plain_vs_stock_hist}
-      \end{figure}
+      \tocless\subsubsection{Plain vs. Stock Comparison}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\textwidth]{graphs/plain_vs_stock_hists}
+          \caption{Counts of participant responses when comparing of Plain \& Stock.}
+          \label{fig:plain_vs_stock_hist}
+        \end{figure}
 
-      \begin{figure}
-        \centering
-        \includegraphics[width=\textwidth]{graphs/layout_vs_stock_hists}
-        \caption{Counts of participant responses when comparing of Layout \& Stock.}
-		\label{fig:layout_vs_stock_hist}
-      \end{figure}
+        \noindent For each of the five comparison factors presented in \ref{fig:plain_vs_stock_hist}, there is a preference for our Plain points summaries. These counts are aggregated from all Plain vs. Stock comparisons for the debate six topics. Each histogram represents 54 responses for a question comparing the two summary types on that factor. The results were tested using Sign tests for each comparison factor, `better' and `much better' for each type were aggregated, `same' was excluded. The family significance level was set at $\alpha = 0.05$; with $m = 5$ hypotheses - using the Bonferroni Correction ($\alpha / m$); gives an individual significance threshold as $0.05/5 = 0.01$. All factors were found to show a significant difference, see Table \ref{tab:pvs-pvals}.
+
+		\begin{table}[h]
+		  \centering
+		  \caption{Plain vs. Stock factor comparison $p$ values}
+		  \label{tab:pvs-pvals}
+		  \begin{tabular}{|l|l|l|l|l|l|}
+			\hline
+			\textbf{Overall} & \textbf{Content} & \textbf{Punctuation} & \textbf{Readability} & \textbf{Organization} \\ \hline
+			$p = \num{3.1e-06}$ & $p = \num{1.6e-06}$ & $p = \num{5.6e-09}$ & $p = \num{2.5e-05}$ & $p = \num{3.5e-06}$ \\ \hline
+		  \end{tabular}
+		\end{table}
+
+      \tocless\subsubsection{Layout vs. Stock Comparison}
+
+		\begin{figure}[h]
+		  \centering
+		  \includegraphics[width=\textwidth]{graphs/layout_vs_stock_hists}
+		  \caption{Counts of participant responses when comparing of Layout \& Stock.}
+		  \label{fig:layout_vs_stock_hist}
+		\end{figure}
+
+        \noindent Similarly, Layout was also compared against Stock on the same factors, the results of these comparison are presented in Figure \ref{fig:layout_vs_stock_hist}. We saw an even stronger preference than in the Plain comparison. Similar to that comparison: counts are aggregated from all comparisons for all topics; each histogram represents 54 responses; comparison results were tested using Sign tests and the individual significance threshold was $0.01$. Again, all factors were found to show a significant difference, see Table \ref{tab:lvs-pvals}.
+
+		\begin{table}[h]
+		  \centering
+		  \caption{Layout vs. Stock factor comparison $p$ values}
+		  \label{tab:lvs-pvals}
+		  \begin{tabular}{|l|l|l|l|l|l|}
+			\hline
+			\textbf{Overall} & \textbf{Content} & \textbf{Punctuation} & \textbf{Readability} & \textbf{Organization} \\ \hline
+			$p = \num{7.1e-11}$ & $p = \num{8.2e-10}$ & $p = \num{7e-11}$ & $p = \num{1.6e-11}$ & $p = \num{4.4e-12}$ \\ \hline
+		  \end{tabular}
+		\end{table}
+
+      \tocless\subsubsection{Formatted vs. Layout Comparison}
+        \noindent Finally, participants compared Formatted and Layout summaries --- there was only a single `overall' factor for this comparison. Results from the 54 responses for this comparison, presented in Figure \ref{fig:lay_vs_formatted_hist}, show a preference for Formatted summaries over Layout summaries with the same content. Comparing the results again using a Sign test (aggregating `better' and `much better' and excluding `same') showed a significant result ($p = 0.006$).
+
+        \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 
 	  \begin{figure}
 		\centering

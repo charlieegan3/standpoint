@@ -70,11 +70,18 @@
 
 \usepackage{caption, subcaption}
 
+\usepackage{siunitx}
+
+\usepackage{titlesec}
+\titleformat*{\subsubsection}{\large\bfseries}
+
 % my commands
 \newcommand{\nocontentsline}[3]{}
 \newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
 \newcommand\TBox[3][]{%
   \tikz\node[draw,thick,text width=#2,align=left,#1] {#3};}
+
+% begin content ---------------------------------------------------------------
 
 \title{An argumentation-based approach to summarizing discussions}
 \author{Charlie Egan}
