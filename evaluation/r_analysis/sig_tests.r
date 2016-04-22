@@ -5,6 +5,7 @@ study2 = read.csv(file="study2.csv", header=TRUE, sep=",")
 study2_extracts = read.csv(file="study2_extracts.csv", header=TRUE, sep=",")
 
 successesFailures <- function(table, comparison, factor) {
+  print(sprintf("total: %i",sum(table[table$comparison==comparison & table$factor==factor,]$count)))
   counts = table[table$comparison==comparison & table$factor==factor & table$answer!='same',]$count
   successes = sum(counts[1:2])
   failures = sum(counts[3:4])
