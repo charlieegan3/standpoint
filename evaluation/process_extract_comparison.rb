@@ -11,6 +11,7 @@ Dir.glob('./extract_comparison/ext*') do |path|
   responses += rows.map { |r| Hash[*headers.zip(r).flatten] }
 end
 
+puts "Unique Workers: #{responses.map { |x| x["WorkerId"] }.uniq.size}"
 answers = []
 
 bigram_v_rand_answers = []

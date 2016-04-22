@@ -32,6 +32,8 @@ Dir.glob('./summary_comparison/sum*') do |path|
   responses += rows.map { |r| Hash[*headers.zip(r).flatten] }
 end
 
+puts "Unique Workers: #{responses.map { |x| x["WorkerId"] }.uniq.size}"
+
 answers = []
 comments = []
 responses.each do |r|
