@@ -13,3 +13,6 @@
 !images/*
 
 !graphs/*.pdf
+
+!includes
+!includes/*.tex
