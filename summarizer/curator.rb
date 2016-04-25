@@ -44,25 +44,6 @@ module Curator
       end
       p["Score"] = score.to_f / clean.split(" ").size
     end
-#   banned = [
-#     ["PERSON.nsubj", "be.verb", "abortion.dobj"],
-#     ["PERSON.nsubj", "be.verb", "pregnant.dobj"],
-#     ["PERSON.nsubj", "have.verb", "pay.xcomp"],
-#     ["PERSON.nsubj", "have.verb", "care.dobj"],
-#     ["abortion.nsubj", "be.verb", "legal.dobj"]
-#   ]
-#   if points.last["Components"].size > 2 &&
-#     points.map { |p| p["Components"] }.uniq.size == 1 &&
-#     !banned.include?(original_points.first["Components"])
-#       list = (original_points.map { |p| Presenter.clean(p["String"]) } - [Presenter.clean(points.last["String"])]).uniq.take(9)
-#       if list.size > 7
-#         p points.last["Components"]
-#         puts list.map { |p| Presenter.clean(p) }.uniq + [Presenter.clean(points.last["String"])]
-#         print " > "
-#         puts Presenter.clean(points.last["String"])
-#         puts "------"
-#       end
-#   end
     return points if return_group
     return points.last
   end
@@ -75,7 +56,7 @@ module Curator
   end
 
   def self.reparse_points(points)
-    cnc = CoreNLPClient.new("http://local.docker:9000")
+    cnc = CoreNLPClient.new("http://corenlp_server:9000")
     points.map do |point|
       parse = cnc.request_parse(clean_string(point["String"])).first
       point["Relations"], point["Lemmas"] = relations_and_lemmas_from_parse(parse)

@@ -2,11 +2,12 @@ require "json"
 require 'net/http'
 
 unless ARGV[0]
-  puts "missing corpus"
+  puts "missing corpus argument"
+  puts "try: ruby collector.rb abortion"
   exit
 end
 
-path = "debates/#{ARGV[0]}/*"
+path = "#{ARGV[0]}/*"
 puts "Path: #{path}"
 posts = []
 Dir.glob(path) do |f|
