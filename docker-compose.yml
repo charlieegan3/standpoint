@@ -42,30 +42,6 @@ neo4j:
   mem_limit: "2g"
   memswap_limit: "2g"
 
-comment_store:
-  container_name: comment_store
-  build: ./comment_store
-  ports:
-   - "3000:3000"
-  links:
-    - comment_store_postgres:postgres
-  volumes:
-    - "./comment_store:/app"
-  environment:
-    POSTGRES_USER: "${POSTGRES_USER}"
-    POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-
-comment_store_postgres:
-  container_name: comment_store_postgres
-  image: postgres:9.4.5
-  ports:
-    - "5432:5432"
-  volumes:
-    - comment_store-postgres:/var/lib/postgresql/data
-  environment:
-    POSTGRES_USER: "${POSTGRES_USER}"
-    POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-
 corenlp_server:
   container_name: corenlp_server
   build: ./corenlp_server
