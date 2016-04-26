@@ -1,0 +1,3828 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\lstloadlanguages{Ruby}
+\lstdefinelanguage{HTML5}{
+    sensitive=true,
+    keywords={%
+	  typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,
+	  html, title, meta, style, head, body, script, canvas,
+	  border:, transform:, -moz-transform:, transition-duration:, transition-property:,
+	  transition-timing-function:
+    },
+    otherkeywords={<, >, \/},
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morecomment=[s]{<!}{>},
+    morestring=[b]',
+    morestring=[b]",
+    alsoletter={-},
+    alsodigit={:}
+}
+\lstdefinelanguage{Golang}%
+  {morekeywords=[1]{package,import,func,type,struct,return,defer,panic,%
+     recover,select,var,const,iota,},%
+   morekeywords=[2]{string,uint,uint8,uint16,uint32,uint64,int,int8,int16,%
+     int32,int64,bool,float32,float64,complex64,complex128,byte,rune,uintptr,%
+     error,interface},%
+   morekeywords=[3]{map,slice,make,new,nil,len,cap,copy,close,true,false,%
+     delete,append,real,imag,complex,chan,},%
+   morekeywords=[4]{for,break,continue,range,goto,switch,case,fallthrough,if,%
+     else,default,},%
+   morekeywords=[5]{Println,Printf,Error,},%
+   sensitive=true,%
+   morecomment=[l]{//},%
+   morecomment=[s]{/*}{*/},%
+   morestring=[b]',%
+   morestring=[b]",%
+   morestring=[s]{`}{`},%
+}
+
+\lstset{%
+  breaklines=true,
+  numbers=left,
+  basicstyle=\ttfamily\small\color{black},
+  commentstyle = \ttfamily\color{red},
+  keywordstyle=\ttfamily\color{blue},
+  stringstyle=\color{orange}}
+
+\pagenumbering{gobble}
+
+\title{Project Source Listing}
+\date{}
+
+\begin{document}
+  \maketitle
+  This document lists all important project files. Files and folders are described in the maintenance manual.
+  \pagebreak
+
+LISTINGS
+
+\end{document}
+\documentclass{article}
+\usepackage[a4paper,margin=1cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\lstloadlanguages{Ruby}
+\lstdefinelanguage{HTML5}{
+    sensitive=true,
+    keywords={%
+	  typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,
+	  html, title, meta, style, head, body, script, canvas,
+	  border:, transform:, -moz-transform:, transition-duration:, transition-property:,
+	  transition-timing-function:
+    },
+    otherkeywords={<, >, \/},
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morecomment=[s]{<!}{>},
+    morestring=[b]',
+    morestring=[b]",
+    alsoletter={-},
+    alsodigit={:}
+}
+\lstdefinelanguage{Golang}%
+  {morekeywords=[1]{package,import,func,type,struct,return,defer,panic,%
+     recover,select,var,const,iota,},%
+   morekeywords=[2]{string,uint,uint8,uint16,uint32,uint64,int,int8,int16,%
+     int32,int64,bool,float32,float64,complex64,complex128,byte,rune,uintptr,%
+     error,interface},%
+   morekeywords=[3]{map,slice,make,new,nil,len,cap,copy,close,true,false,%
+     delete,append,real,imag,complex,chan,},%
+   morekeywords=[4]{for,break,continue,range,goto,switch,case,fallthrough,if,%
+     else,default,},%
+   morekeywords=[5]{Println,Printf,Error,},%
+   sensitive=true,%
+   morecomment=[l]{//},%
+   morecomment=[s]{/*}{*/},%
+   morestring=[b]',%
+   morestring=[b]",%
+   morestring=[s]{`}{`},%
+}
+
+\lstset{%
+  breaklines=true,
+  numbers=left,
+  basicstyle=\ttfamily\small\color{black},
+  commentstyle = \ttfamily\color{red},
+  keywordstyle=\ttfamily\color{blue},
+  stringstyle=\color{orange}}
+
+\pagenumbering{gobble}
+
+\title{Project Source Listing}
+\date{}
+
+\begin{document}
+  \maketitle
+  This document lists all important project files. Files and folders are described in the maintenance manual.
+  \pagebreak
+
+
+\section*{analysis\_api/clean.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'json'
+
+unless ARGV[0]
+  puts "missing corpus argument"
+  puts "try: ruby clean.rb abortion"
+  exit
+end
+
+Dir.glob("#{ARGV[0]}/*").to_a.each do |file, index|
+  puts file
+  if file.include? "json"
+    `rm #{file}`
+    next
+  end
+  content = File.open(file).read
+  content = content.chars.select(&:valid_encoding?).join
+
+  meta = Hash[*content.scan(/^#.*=.*$/).map { |e| e.delete('#').split("=") }.flatten]
+  meta = meta.inject({}){ |memo,(k,v)| memo[k.to_sym] = v; memo }.merge!(post: file.gsub(/[^0-9]/, ''))
+
+  content = content
+    .gsub(/^#.*=.*$/, "")
+    .gsub(/\[[0-9]+\]/, "")
+    .gsub(/http\S+|\S{30,}/, "")
+    .gsub(/([a-z]{3,}\.)([A-Z][a-z]{3,})/, ' ')
+    .gsub(/([a-z]{3,}\.)([0-9]\.)/, ' ')
+    .gsub(/\s+/, " ")
+    .gsub("[...]", "")
+    .gsub("/>", "")
+    .gsub(" / ", "")
+    .strip
+  processed_file = meta.merge(content: content)
+  File.open("#{file}.json", "w").write(processed_file.to_json)
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{analysis\_api/collector.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require "json"
+require 'net/http'
+
+unless ARGV[0]
+  puts "missing corpus argument"
+  puts "try: ruby collector.rb abortion"
+  exit
+end
+
+path = "#{ARGV[0]}/*"
+puts "Path: #{path}"
+posts = []
+Dir.glob(path) do |f|
+  next unless f.include? "json"
+  post = JSON.parse(File.open(f).read)
+  posts << post if post["content"].length > 30
+end
+
+topic_text = posts.map { |p| p["content"] }.join("\n").gsub(/[^\w']/, " ").gsub(/\s+/, " ").downcase[0..60000]
+
+uri = URI('http://topic_api:4567/')
+http = Net::HTTP.new(uri.host, uri.port)
+topic_query = { text: topic_text, topic_count: 8, top_word_count: 8 }.to_json
+
+req = Net::HTTP::Post.new(uri)
+req.body = topic_query
+topics = JSON.parse(http.request(req).body)["topics"]
+
+out_file = File.open("#{ARGV[0]}_points.txt", "w")
+
+out_file.write("#{topics.join(",")}\n")
+uri = URI('http://points_api:4567/')
+http = Net::HTTP.new(uri.host, uri.port)
+posts.each_with_index do |post, index|
+  query = { text: post["content"], topics: topics, keys: %w(string pattern) }.to_json
+  req = Net::HTTP::Post.new(uri)
+  req.body = query
+  data = JSON.parse(http.request(req).body)
+  data.map { |p| out_file.write("#{p.merge(post).to_json},\n") }
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{curator/main.go}
+\begin{lstlisting}[language=Golang]
+
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"regexp"
+	"strings"
+)
+
+type RawPoint struct {
+	String             string
+	Pattern            string
+	Stance             string
+	OriginalStanceText string
+	OriginalTopic      string
+	Post               string
+	Content            string
+}
+
+type Point struct {
+	String             string
+	Verb               string
+	Stance             string
+	OriginalStanceText string
+	OriginalTopic      string
+	Post               string
+	Content            string `json:"-"`
+	Components         []string
+	Words              []string
+	Relations          []string
+}
+
+func (p *Point) print() {
+	fmt.Printf("(%v) : %v\n", strings.Join(p.Components, " "), p.String)
+}
+
+func (p *Point) componentString() string {
+	return strings.Join(p.Components, " ")
+}
+
+func (p *Point) matches(p2 Point) bool {
+	if p.Verb != p2.Verb {
+		return false
+	}
+	return p.matchesWords(p2) || p.componentString() == p2.componentString()
+}
+
+func (p *Point) matchesWords(p2 Point) bool {
+	return compare(p.Words, p2.Words) && compare(p2.Words, p.Words)
+}
+
+func compare(X, Y []string) bool {
+	m := make(map[string]int)
+
+	for _, y := range Y {
+		m[y]++
+	}
+
+	var ret []string
+	for _, x := range X {
+		if m[x] > 0 {
+			m[x]--
+			continue
+		}
+		ret = append(ret, x)
+	}
+
+	return len(ret) == 0
+}
+
+func containsStr(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+func containsInt(s []int, e int) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func removeDuplicates(elements []int) []int {
+	encountered := map[int]bool{}
+	result := []int{}
+
+	for v := range elements {
+		if encountered[elements[v]] == true {
+		} else {
+			encountered[elements[v]] = true
+			result = append(result, elements[v])
+		}
+	}
+	return result
+}
+
+func pairs(arr []int) [][]int {
+	var pairs [][]int
+	for i := 0; i < len(arr); i++ {
+		for j := i + 1; j < len(arr); j++ {
+			pairs = append(pairs, []int{arr[i], arr[j]})
+		}
+	}
+	return pairs
+}
+
+func upgradePoint(p RawPoint) Point {
+	pattern := regexp.MustCompile("cop|pass").ReplaceAllString(p.Pattern, "")
+	components := strings.Split(pattern, " ")
+	var verb string
+	var words []string
+	var relations []string
+	for _, v := range components {
+		parts := strings.Split(v, ".")
+		if parts[1] == "verb" {
+			verb = parts[0]
+		}
+		words = append(words, parts[0])
+		relations = append(relations, parts[1])
+	}
+	return Point{
+		String:             p.String,
+		Stance:             p.Stance,
+		OriginalStanceText: p.OriginalStanceText,
+		OriginalTopic:      p.OriginalTopic,
+		Post:               p.Post,
+		Content:            p.Content,
+		Verb:               verb,
+		Components:         components,
+		Relations:          relations,
+		Words:              words,
+	}
+}
+
+type ByLen [][]Point
+
+func (a ByLen) Len() int           { return len(a) }
+func (a ByLen) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByLen) Less(i, j int) bool { return len(a[i]) > len(a[j]) }
+
+func main() {
+	b, err := ioutil.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+
+	points := []Point{}
+	contents := strings.Split(string(b), "\n")
+	for i, v := range contents {
+		if i == 0 {
+			fmt.Println(v)
+			continue
+		} else if len(v) < 4 {
+			continue
+		} else if v[0] != '{' {
+			continue
+		}
+		var rawPoint = RawPoint{}
+		json.Unmarshal([]byte(v[0:len(v)-1]), &rawPoint)
+		points = append(points, upgradePoint(rawPoint))
+	}
+
+	bannedList := strings.Split("it.nsubj that.nsubj this.nsubj which.nsubj what.nsubj", " ")
+	bannedPersonList := strings.Split("object continue come go sit open close begin end believe happen leave understand realize debate speak show stand call refer believe lose change care hear write disagree read tell start talk explain come live take support guess feel follow make go get move agree find fail think wonder feel ask argue try", " ")
+	for i, v := range bannedPersonList {
+		bannedPersonList[i] = fmt.Sprintf("%v.verb", v)
+	}
+	bannedComponentList := []string{
+		"PERSON.nsubj be.verb correct.dobj",
+		"PERSON.nsubj be.verb able.dobj",
+		"PERSON.nsubj be.verb good.dobj",
+		"PERSON.nsubj be.verb likely.dobj",
+		"PERSON.nsubj be.verb sorry.dobj",
+		"PERSON.nsubj be.verb say.dobj",
+		"PERSON.nsubj be.verb aware.dobj",
+		"PERSON.nsubj be.verb one.dobj",
+		"PERSON.nsubj be.verb sure.dobj",
+		"PERSON.nsubj be.verb wrong.dobj",
+		"PERSON.nsubj be.verb glad.dobj",
+		"PERSON.nsubj be.verb here.dobj",
+		"PERSON.nsubj be.verb willing.dobj",
+		"PERSON.nsubj be.verb right.dobj",
+		"PERSON.nsubj be.verb true.dobj",
+		"PERSON.nsubj be.verb false.dobj",
+		"PERSON.nsubj be.verb favor.dobj",
+		"PERSON.nsubj be.verb interested.dobj",
+		"PERSON.nsubj want.verb have.xcomp",
+		"PERSON.nsubj want.verb what.dobj",
+		"PERSON.nsubj want.verb what.dobj do.xcomp",
+		"PERSON.nsubj say.verb what.dobj",
+		"PERSON.nsubj mean.verb what.dobj",
+		"PERSON.nsubj know.verb what.dobj",
+		"PERSON.nsubj believe.verb what.dobj",
+		"PERSON.nsubj see.verb what.dobj",
+		"PERSON.nsubj see.verb argument.dobj",
+		"PERSON.nsubj have.verb problem.dobj",
+		"PERSON.nsubj tell.verb they.dobj",
+		"PERSON.nsubj think.verb what.dobj",
+		"PERSON.nsubj argue.verb in.prep fact.dobj",
+		"PERSON.nsubj argue.verb with.prep you.dobj",
+		"debate.nsubj be.verb about.dobj",
+		"question.nsubj be.verb",
+		"make.verb claim.dobj",
+		"ask.verb yourself.dobj",
+		"thing.nsubj happen.verb",
+		"something.nsubj happen.verb",
+	}
+	personList := strings.Split("I.nsubj i.nsubj who.nsubj we.nsubj I.nsubj you.nsubj they.nsubj he.nsubj she.nsubj person.nsubj people.nsubj", " ")
+
+	originalSize := len(points)
+
+	for i := 0; i < len(points); i++ {
+		point := points[i]
+		if containsStr(personList, point.Components[0]) {
+			point.Components[0] = "PERSON.nsubj"
+		}
+		if containsStr(bannedList, point.Components[0]) {
+			points = append(points[:i], points[i+1:]...)
+			i--
+		} else if len(point.Components) == 2 && point.Components[0] == "PERSON.nsubj" && containsStr(bannedPersonList, point.Components[1]) {
+			points = append(points[:i], points[i+1:]...)
+			i--
+		} else if containsStr(bannedComponentList, strings.Join(point.Components, " ")) {
+			points = append(points[:i], points[i+1:]...)
+			i--
+		} else if len(point.String) < 10 {
+			points = append(points[:i], points[i+1:]...)
+			i--
+		}
+	}
+	fmt.Printf("%v of %v points disqualified\n", originalSize-len(points), originalSize)
+
+	for _, v := range points {
+		b, err := json.Marshal(v)
+		if err != nil {
+			return
+		}
+		fmt.Println(string(b))
+	}
+}
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{docker-compose.yml}
+\begin{lstlisting}[language=Ruby]
+
+analysis_api:
+  container_name: analysis_api
+  build: ./analysis_api
+  links:
+    - points_api:points_api
+    - topic_api:topic_api
+  volumes:
+    - "./analysis_api:/app"
+
+curator:
+  container_name: curator
+  build: ./curator
+  volumes:
+    - "./curator:/app"
+
+summarizer:
+  container_name: summarizer
+  build: ./summarizer
+  links:
+    - corenlp_server:corenlp_server
+  volumes:
+    - "./summarizer:/app"
+
+topic_api:
+  container_name: topic_api
+  build: ./topic_api
+  environment:
+    PORT: 4567
+  ports:
+    - "4567:4567"
+  volumes:
+    - "./topic_api:/app"
+
+points_api:
+  container_name: points_api
+  build: ./points_api
+  environment:
+    PORT: 4567
+    CNLP_PORT: 9000
+  ports:
+    - "4568:4567"
+  links:
+    - corenlp_server:corenlp_server
+    - neo4j:neo4j
+  volumes:
+    - "./points_api:/app"
+  restart: unless-stopped
+
+neo4j:
+  container_name: neo4j
+  image: neo4j
+  environment:
+    NEO4J_AUTH: none
+  ports:
+    - "7474:7474"
+  mem_limit: "2g"
+  memswap_limit: "2g"
+
+corenlp_server:
+  container_name: corenlp_server
+  build: ./corenlp_server
+  ports:
+    - "9000:9000"
+  environment:
+    RELEASE: "stanford-corenlp-full-2015-12-09"
+    RELEASE_URL: "http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip"
+  mem_limit: "2g"
+  memswap_limit: "2g"
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/extract\_ranking.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'pry'
+
+module Enumerable
+  def sum
+	self.inject(0){|accum, i| accum + i }
+  end
+
+  def mean
+	self.sum/self.length.to_f
+  end
+
+  def sample_variance
+	m = self.mean
+	sum = self.inject(0){|accum, i| accum +(i-m)**2 }
+	sum/(self.length - 1).to_f
+  end
+
+  def standard_deviation
+	return Math.sqrt(self.sample_variance)
+  end
+end
+
+def sorted_dup_hash(array)
+  Hash[*array.inject(Hash.new(0)) { |h,e| h[e] += 1; h }.
+    select { |k,v| v > 1 }.inject({}) { |r, e| r[e.first] = e.last; r }.
+    sort_by {|_,v| v}.reverse.flatten]
+end
+
+
+def self.bigrams(string)
+  words = string.downcase.gsub(/[^\s\w']/, "").split(/\s+/)
+  words.each_with_index.to_a[0..-2].map do |e, i|
+    [e, words[i+1]].join(" ")
+  end
+end
+
+def score_group(points)
+  group_bigrams = []
+  points.each do |p|
+      group_bigrams += bigrams(p["String"])
+  end
+  group_bigrams = sorted_dup_hash(group_bigrams)
+  points = points.sort_by do |p|
+    clean = p["String"].downcase.gsub(/[^\s\w']/, "").gsub(/\s+/, " ").strip
+    score = 0
+    group_bigrams.each do |k, v|
+      score += v if clean.include? k
+    end
+    p["Score"] = score.to_f / clean.split(" ").size
+  end
+end
+
+bigram_scored_extracts = []
+Dir.glob('extracts/*') do |p|
+  File.open(p).read.split('------').each do |group|
+    extracts = group.split("\n").reject { |l| l.length < 2 || l[0].match(/\W/) }
+    bigram_scored_extracts += score_group(extracts.map { |e| { "String" => e } }).map { |e| [e["String"], e["Score"]] }
+  end
+end
+bigram_scored_extracts = Hash[*bigram_scored_extracts.flatten]
+human_scored_extracts = Hash[*File.open('scored_extracts.txt').readlines.map { |x| [[x[x.index(",")+2..-2]], x[0..x.index(",")-1].to_f] }.flatten]
+
+puts "bigram, turkers"
+bigram_scored_extracts.each do |k, v|
+  raise if human_scored_extracts[k].nil?
+  puts [v.round(3), human_scored_extracts[k]].join(", ")
+end
+exit
+
+machine_mean = bigram_scored_extracts.values.mean
+machine_stdev = bigram_scored_extracts.values.standard_deviation
+
+machine_for_each_human_score = Hash.new([])
+File.open('scored_extracts_all.txt').readlines.map { |l| l.split("||") }.each do |e, scores|
+  next unless e.strip.length > 0
+  scores.strip.split(",").map(&:to_i).each do |s|
+    machine_score = bigram_scored_extracts[e]
+    raise if machine_score.nil?
+    machine_for_each_human_score[s] += [((machine_score - machine_mean) / machine_stdev).round(2)]
+  end
+end
+
+machine_for_each_human_score[1] += machine_for_each_human_score.delete(0)
+
+machine_for_each_human_score.sort_by { |k, _| k }.each do |k, v|
+  puts "r#{k} = c(#{v.join(",")})"
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/process\_extract\_comparison.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'pry'
+require 'csv'
+
+responses = []
+Dir.glob('./extract_comparison/ext*') do |path|
+  rows = []
+  CSV.foreach(path) do |row|
+    rows << row
+  end
+  headers, rows = rows[0], rows[1..-1]
+  responses += rows.map { |r| Hash[*headers.zip(r).flatten] }
+end
+
+puts "Unique Workers: #{responses.map { |x| x["WorkerId"] }.uniq.size}"
+answers = []
+
+bigram_v_rand_answers = []
+comments = []
+
+responses.each_with_index do |r, i|
+  r.select { |k, _| k.include? "Answer" }.sort_by { |_, v| v.length }.each do |q, a|
+    topic, id =  q.gsub("Answer.", "").split("-")
+    if id.match(/set[123]extract[0-9]+/)
+      a = a.gsub(",", ";").gsub(/\s+/, " ").to_i
+      answers << [topic + id, a, i]
+    elsif a.match(/^\w+\-\w+$|^same$/)
+      bigram_v_rand_answers << a
+    else
+      last_response = r.select { |k, v| k.include? id }.first.last
+      comments << { topic: topic, comment: a, last_response: last_response }
+    end
+  end
+end
+
+topic_sets = []
+Dir.glob('./extracts/ext*') do |path|
+  contents = File.open(path).read
+  sets = contents.split("------").map { |g| g.split("\n").reject { |l| l == "" } }.map do |g|
+    extracts = g[1..-2]
+    extracts[extracts.index(g[-1][2..-1])] = "(SELECTED) " + g[-1][2..-1]
+    extracts
+  end
+  topic = path.match(/\/extracts_(\w+)\.txt/)[1]
+  topic_sets << [topic, sets]
+end
+
+scored_sentences = []
+topic_sets.each do |topic, sets|
+  sets.each_with_index do |set, set_index|
+    set.each_with_index do |extract, extract_index|
+      key = "#{topic}set#{set_index + 1}extract#{extract_index + 1}"
+      scores = answers.select { |k, _| k == key }.map(&:last)
+      scores = answers.select { |k, _| k == key }.map { |_, v, _| v }
+      score = (scores.reduce(:+).to_f / scores.size)
+      scored_sentences << [extract, score]
+    end
+  end
+end
+
+less_than = 0
+more_than = 0
+answers.group_by(&:last).each do |k,v|
+  average = v.map { |a, s, _| s }.reduce(:+).to_f / v.size
+  topic = v.first.first.split("set").first
+  topic_sets.select { |k, v| k == topic }.each do |k, sets|
+    sets.each_with_index do |set, index|
+      index += 1
+      ans = Hash[*v.select { |k, _, _| k.include? "set#{index}" }.map { |k, v| [k.scan(/[0-9]+$/).first.to_i, v] }.flatten]
+      selected_index = set.index(set.select { |v| v.include? "SELECTED" }.first) + 1
+      score_for_selected = ans[selected_index]
+      score_for_selected < average ? less_than += 1 : more_than += 1
+    end
+  end
+end
+
+puts "Better than avg: #{more_than.to_f/(more_than+less_than)}"
+
+answers.map! { |x, y, _| [x, y] }
+
+print "All Extracts: "
+p mean = scored_sentences.map(&:last).reduce(:+) / scored_sentences.size
+
+print "Selected Extracts: "
+selected = scored_sentences.select { |s| s.first.include? "SELECTED" }
+puts selected_mean = selected.map(&:last).reduce(:+) / selected.size
+
+print "Other Extracts: "
+rejected = scored_sentences - selected
+puts rejected_mean = rejected.map(&:last).reduce(:+) / rejected.size
+
+selected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(3)} - #{e}" }
+rejected.sort_by(&:last).reverse.map { |e, s| puts "#{s.round(3)} - #{e}" }
+
+puts "\nComments\n"
+comments.each do |comment|
+  puts [
+    comment[:topic].upcase,
+    "A was bigram, B was random",
+    "rating given: " + comment[:last_response].gsub(/^layout/, "bigram_layout")
+  ].join(", ")
+  text = comment[:comment]
+  text.gsub!(/(^|\W)A\W/, " [BIGRAM] ")
+  text.gsub!(/(^|\W)B\W/, " [RANDOM] ")
+  puts text.strip
+  puts "-"*100
+end
+
+puts "\nRatings:"
+["layout-much_better", "layout-better", "same", "random_layout-better", "random_layout-much_better"].each do |a|
+  puts ["bigram_vs_random", "overall", a, bigram_v_rand_answers.count(a).to_i].join(",")
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/process\_summary\_comparison.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'pry'
+require 'csv'
+
+ab_index = {
+  ["abortion", ["layout", "formatted"]] => ["B", "A"],
+  ["abortion", ["layout", "stock"]] => ["A", "B"],
+  ["abortion", ["plain", "stock"]] => ["A", "B"],
+  ["creation", ["layout", "formatted"]] => ["A", "B"],
+  ["creation", ["layout", "stock"]] => ["B", "A"],
+  ["creation", ["plain", "stock"]] => ["B", "A"],
+  ["god", ["layout", "formatted"]] => ["B", "A"],
+  ["god", ["layout", "stock"]] => ["A", "B"],
+  ["god", ["plain", "stock"]] => ["A", "B"],
+  ["guns", ["layout", "formatted"]] => ["A", "B"],
+  ["guns", ["layout", "stock"]] => ["B", "A"],
+  ["guns", ["plain", "stock"]] => ["B", "A"],
+  ["gay_rights", ["layout", "formatted"]] => ["B", "A"],
+  ["gay_rights", ["layout", "stock"]] => ["A", "B"],
+  ["gay_rights", ["plain", "stock"]] => ["A", "B"],
+  ["healthcare", ["layout", "formatted"]] => ["A", "B"],
+  ["healthcare", ["layout", "stock"]] => ["B", "A"],
+  ["healthcare", ["plain", "stock"]] => ["B", "A"]
+}
+
+responses = []
+Dir.glob('./summary_comparison/sum*') do |path|
+  rows = []
+  CSV.foreach(path) do |row|
+    rows << row
+  end
+  headers, rows = rows[0], rows[1..-1]
+  responses += rows.map { |r| Hash[*headers.zip(r).flatten] }
+end
+
+puts "Unique Workers: #{responses.map { |x| x["WorkerId"] }.uniq.size}"
+
+answers = []
+comments = []
+responses.each do |r|
+  r.select { |k, _| k.include? "Answer" }.sort_by { |_, v| v.size }.each do |q, a|
+    topic, comparing, type =  q.gsub("Answer.", "").split("-")
+    a = a.gsub(",", ";").gsub(/\s+/, " ")
+    if a.match(/^\w+\-\w+$|^same$/)
+      answers << [topic, *comparing.split("_v_"), type, a]
+      last = answers.last
+    else
+      last_response = r.select { |k, v| k.include?(comparing + "-overall") }.first.last
+      orientation = ab_index[[topic, comparing.split("_v_")]]
+      translation = Hash[*orientation.zip(comparing.split("_v_")).flatten]
+      comments << { topic: topic, translation: translation, comment: a, last_response: last_response }
+    end
+  end
+end
+
+[["plain", "stock"], ["layout", "stock"], ["layout", "formatted"]].each do |pair|
+  ["overall", "content", "punctuation", "readability", "organization"].each do |factor|
+    counts = answers.map { |a| a[1..-1] }
+      .select { |r| r[0..1] == pair && r[2] == factor}
+      .group_by { |x| x.last }
+      .map { |k, v| [k, v.size] }
+      .sort_by { |k, v| v }
+    next if counts.empty?
+    sum = counts.map(&:last).reduce(:+)
+    counts = Hash[*counts.flatten]
+    [pair.first+"-much_better", pair.first+"-better", "same", pair.last+"-better", pair.last+"-much_better"].each do |answer|
+      puts [pair.join("_vs_"), factor, answer, counts[answer].to_i].join(",")
+    end
+  end
+end
+
+comments.group_by { |c| c[:translation].values.sort }.each do |k, comments|
+  puts k.join(" vs. ")
+  comments.each do |comment|
+    puts [
+      comment[:topic].upcase,
+      comment[:translation].map { |k, v| "#{v} was #{k}" }.join(", "),
+      "rating given: " + comment[:last_response]
+    ].join(", ")
+    text = comment[:comment]
+    comment[:translation].each do |from, to|
+      text.gsub!(/(^|\W)#{from}\W/, " [#{to.upcase}] ")
+    end
+    puts text.strip
+    puts "-"*75
+  end
+  puts ["*"*100, "*"*100, "\n"].join("\n")
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/r\_analysis/hists.r}
+\begin{lstlisting}[language=R]
+
+require(ggplot2)
+require(gridExtra)
+
+library(scales)
+
+myHist <- function(dataTable, graphTitle, xLabelsFrom, xLabelsTo, maxY){
+  dataTable$per <- sapply(dataTable$count, function(x) sprintf("%1.0f%%", round(x/54, 2) * 100))
+  hist <- ggplot(dataTable, aes(y=dataTable$count, x=factor(dataTable$answer, levels=unique(as.character(dataTable$answer))))) +
+         geom_bar(stat="identity", fill="grey") +
+         geom_text(aes(label=dataTable$per, y=dataTable$count, x=factor(dataTable$answer, levels=unique(as.character(dataTable$answer)))), vjust=-0.3, size=2.5) +
+         ylab("") + xlab("") +
+         theme_bw() + theme(plot.title=element_text(size=8, vjust=-3),
+                            plot.margin=unit(c(0.1,0.1,-0.4,-0.4), "cm"),
+                            axis.text=element_text(size=8),
+                            panel.grid.major = element_blank(),
+                            panel.grid.minor = element_blank()) +
+         theme(axis.text.x = element_text(size=8, angle=90, hjust=1.05, vjust=0.4, lineheight=0.72)) +
+         ylim(0,maxY) +
+         scale_x_discrete(breaks=xLabelsFrom, labels=xLabelsTo) +
+         annotate("text",  x=Inf, y = Inf, label = graphTitle, size=3, hjust=1+(1.0/nchar(graphTitle)), vjust=1.5)
+  return(hist)
+}
+
+#------------------------------------------------------------------------------
+# Study 1
+#------------------------------------------------------------------------------
+
+table = read.csv(file="study1.csv", header=TRUE, sep=",")
+attach(table)
+
+#------------------------------------------------------------------------------
+
+dataLabels = c("plain-much_better", "plain-better", "same", "stock-better", "stock-much_better")
+printLabels = c("plain \n much better", "plain better", "same ", "stock better", "stock \n much better")
+
+plot1 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='overall',],
+                "overall", dataLabels, printLabels, 35)
+plot2 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='content',],
+                "content", dataLabels, printLabels, 35)
+plot3 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='punctuation',],
+                "punctuation", dataLabels, printLabels, 35)
+plot4 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='readability',],
+                "readability", dataLabels, printLabels, 35)
+plot5 <- myHist(table[table$comparison=='plain_vs_stock' & table$factor=='organization',],
+                "organization", dataLabels, printLabels, 35)
+
+pdf("plain_vs_stock_hists.pdf", width=8, height=2)
+grid.arrange(plot1, plot2, plot3, plot4, plot5, ncol=5, nrow=1)
+
+#------------------------------------------------------------------------------
+
+dataLabels = c("layout-much_better", "layout-better", "same", "stock-better", "stock-much_better")
+printLabels = c("layout \n much better", "layout better", "same ", "stock better", "stock \n much better")
+
+plot1 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='overall',],
+                "overall", dataLabels, printLabels, 40)
+plot2 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='content',],
+                "content", dataLabels, printLabels, 40)
+plot3 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='punctuation',],
+                "punctuation", dataLabels, printLabels, 40)
+plot4 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='readability',],
+                "readability", dataLabels, printLabels, 40)
+plot5 <- myHist(table[table$comparison=='layout_vs_stock' & table$factor=='organization',],
+                "organization", dataLabels, printLabels, 40)
+
+pdf("layout_vs_stock_hists.pdf", width=8, height=2)
+grid.arrange(plot1, plot2, plot3, plot4, plot5, ncol=5, nrow=1)
+
+#------------------------------------------------------------------------------
+
+dataLabels = c("formatted-much_better", "formatted-better", "same", "layout-better", "layout-much_better")
+printLabels = c("formatted \n much better", "formatted better", "same ", "layout better", "layout \n much better")
+
+plot1 <- myHist(table[table$comparison=='layout_vs_formatted' & table$factor=='overall',],
+                "overall", dataLabels, printLabels, 35)
+
+pdf("layout_vs_formatted_hists.pdf", width=1.6, height=2)
+grid.arrange(plot1, ncol=1, nrow=1)
+
+#------------------------------------------------------------------------------
+# Study 2
+#------------------------------------------------------------------------------
+
+table = read.csv(file="study2.csv", header=TRUE, sep=",")
+attach(table)
+
+table
+
+dataLabels = c("bigram-much_better", "bigram-better", "same", "random-better", "random-much_better")
+printLabels = c("bigram \n much better", "bigram better", "same ", "random better", "random \n much better")
+
+table[table$comparison=='bigram_vs_random' & table$factor=='overall',]
+
+plot1 <- myHist(table[table$comparison=='bigram_vs_random' & table$factor=='overall',],
+                "overall", dataLabels, printLabels, 35)
+
+pdf("bigram_vs_random_hists.pdf", width=1.6, height=2)
+grid.arrange(plot1, ncol=1, nrow=1)
+
+dev.off()
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/r\_analysis/mann-whit.r}
+\begin{lstlisting}[language=R]
+
+library(coin)
+
+#example 1
+#http://yatani.jp/teaching/doku.php?id=hcistats:mannwhitney
+#GroupA = c(2,4,3,1,2,3,3,2,3,1)
+#GroupB = c(3,5,4,2,4,3,5,5,3,2)
+
+#example 2
+#http://www.snabonline.com/Content/SkillsSupport/MathsAndStatsSupport/M0_14S.pdf
+#GroupA = c(1,2,2,2,3,4,4,5)
+#GroupB = c(3,3,4,4,5,6,6,6)
+
+wt_old <- wilcox.test(GroupA, GroupB)
+
+g = factor(c(rep("GroupA", length(GroupA)), rep("GroupB", length(GroupB))))
+v = c(GroupA, GroupB)
+wt <- wilcox_test(v ~ g)
+
+r = rank(v)
+data = data.frame(g, r)
+mean((split(data, data$g))$GroupA$r)
+mean((split(data, data$g))$GroupB$r)
+
+median(GroupA)
+median(GroupB)
+length(GroupA)
+length(GroupB)
+
+abs(statistic(wt)) / sqrt(length(GroupA) + length(GroupB))
+pvalue(wt)
+wt_old$statistic
+wt
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/r\_analysis/scatter.r}
+\begin{lstlisting}[language=R]
+
+require(ggplot2)
+require(gridExtra)
+require(psych)
+
+library(scales)
+
+table = read.csv(file="study2_extracts.csv", header=TRUE, sep=",")
+attach(table)
+
+table$bigram = scale(table$bigram, center=TRUE, scale=TRUE)
+table$turkers = scale(table$turkers, center=TRUE, scale=TRUE)
+
+plot <- ggplot(table, aes(x=bigram, y=turkers)) +
+               geom_point(color="gray") +
+               geom_smooth(method=lm, se=FALSE, color="black") +
+               theme_bw() + theme(plot.title=element_text(size=8),
+                                  axis.text=element_text(size=8),
+                                  panel.grid.major = element_blank(),
+                                  panel.grid.minor = element_blank()) +
+               labs(x="Extract Bigram Score (z Score)", y="Mean Extract Human Score (z Score)")
+
+pdf("scatter.pdf", width=4, height=4)
+grid.arrange(plot, ncol=1, nrow=1)
+dev.off()
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/r\_analysis/sig\_tests.r}
+\begin{lstlisting}[language=R]
+
+library(scales)
+
+study1 = read.csv(file="study1.csv", header=TRUE, sep=",")
+study2 = read.csv(file="study2.csv", header=TRUE, sep=",")
+study2_extracts = read.csv(file="study2_extracts.csv", header=TRUE, sep=",")
+
+successesFailures <- function(table, comparison, factor) {
+  print(sprintf("total: %i",sum(table[table$comparison==comparison & table$factor==factor,]$count)))
+  counts = table[table$comparison==comparison & table$factor==factor & table$answer!='same',]$count
+  successes = sum(counts[1:2])
+  failures = sum(counts[3:4])
+
+  return(c(successes, failures, successes + failures))
+}
+
+study2_extracts$bigram = scale(study2_extracts$bigram, center=TRUE, scale=TRUE)
+study2_extracts$turkers = scale(study2_extracts$turkers, center=TRUE, scale=TRUE)
+
+
+factors = c('overall', 'content', 'punctuation', 'readability', 'organization')
+for(i in 1:5) {
+  succFail = successesFailures(study1, 'plain_vs_stock', factors[i])
+  print(factors[i])
+  print(binom.test(succFail[1], succFail[3])$p.value)
+}
+
+for(i in 1:5) {
+  succFail = successesFailures(study1, 'layout_vs_stock', factors[i])
+  print(factors[i])
+  print(binom.test(succFail[1], succFail[3])$p.value)
+}
+
+succFail = successesFailures(study1, 'layout_vs_formatted', 'overall')
+print(binom.test(succFail[1], succFail[3])$p.value)
+
+succFail = successesFailures(study2, 'bigram_vs_random', 'overall')
+print(binom.test(succFail[1], succFail[3])$p.value)
+
+cor.test(study2_extracts$bigram, study2_extracts$turkers, short=FALSE, exact=TRUE, method="pearson", alternative="greater")
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/survey/extracts.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'pry'
+require 'erb'
+
+summaries = {}
+Dir.glob('summaries/*') do |file|
+  name = file.split(/\W/)[1]
+  contents = File.open(file).read
+  summaries[name] = contents
+end
+
+topics = %w(abortion creation guns god gay_rights healthcare)
+
+
+
+
+groups = topics.map do |t|
+  sets = File.open("extracts_#{t}.txt").read.split("------")
+  sets.map { |s| s.split("\n").select { |l| l.length > 0 && l[0].match(/\w/) }.shuffle }
+end
+
+index = 0
+topics.zip(groups).each do |topic, sets|
+  erb = ERB.new(File.open("survey_extract.html.erb").read, 0, '>')
+  File.open("#{topic}.html", "w") { |file| file.write(erb.result(binding)) }
+  index += 1
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/survey/generate.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'pry'
+require 'erb'
+
+summaries = {}
+Dir.glob('summaries/*') do |file|
+  name = file.split(/\W/)[1]
+  contents = File.open(file).read
+  summaries[name] = contents
+end
+
+sets = [%w(abortion creation god), %w(creation abortion guns), %w(god guns gay_rights),
+  %w(guns god healthcare), %w(gay_rights healthcare abortion), %w(healthcare gay_rights creation)]
+
+sets.each_with_index do |set, index|
+  debate1, debate2, debate3 = set
+  erb = ERB.new(File.open("survey.html.erb").read, 0, '>')
+  File.open("#{index+1}.html", "w") { |file| file.write(erb.result(binding)) }
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/survey/server.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'sinatra'
+
+set :bind, '0.0.0.0'
+
+get '/' do
+  html = File.open(Dir.glob('*.html').sample).read
+  "<form action=\"/\" method=\"post\">" + html + "<input type=\"submit\" value=\"Submit\">"
+end
+
+post '/' do
+  "<table>" +
+  params.map { |k, v| "<td>#{k}</td><td>#{v}</td>" }.join("</tr><tr>") +
+  "</table>"
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/survey/survey.html.erb}
+\begin{lstlisting}[language=HTML5]
+
+<!-- <%= index + 1 %> -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style type="text/css">
+  h1 {
+    margin: 0.5em 0;
+  }
+  p {
+    margin: 2px 0px 0px 0px;
+    font-weight: 300;
+  }
+  .well {
+    margin-top: 10px;
+  }
+  .plain blockquote, .layout blockquote {
+    background: none;
+    border-left: none;
+    padding: 0px;
+    margin: 0px 0px 1px 20px;
+  }
+  blockquote p {
+    margin: 0;
+    font-size: 14px;
+    font-style: normal;
+    font-family: "Source Sans Pro", sans-serif;
+  }
+  .plain li p {
+    margin: 3px 0;
+  }
+  .plain ul {
+    margin-bottom: 0;
+  }
+  .plain p, .layout p, .stock p {
+    border-bottom: 1px solid #eee;
+  }
+  code {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 1em;
+    line-height: 1.45;
+    background-color: transparent;
+    padding: 0px;
+    color: SeaGreen;
+    font-weight: bold;
+  }
+  .plain strong, .layout strong {
+    font-weight: 300;
+  }
+  .plain ul
+  {
+    list-style-type: none;
+  }
+  .formatted blockquote {
+    margin: 0px 0px 1px 20px;
+    padding: 2px 5px;
+    background: #FAFAFA;
+  }
+  #completed {
+    font-size: 1.5em;
+    color: red;
+    font-weight: bold;
+  }
+</style>
+<script type="text/javascript">
+  function remaining() {
+    var names = [];
+    var completed = 0;
+    $.each($("#myForm input"), function( index, value ) {
+      names.push(value.name);
+      if (value.checked) {
+        completed += 1
+      }
+    });
+    $.each($("#myform textarea"), function( index, value ) {
+      names.push(value.name);
+      if (value.value.length > 1) {
+        completed += 1
+      }
+    });
+
+    var total = jQuery.unique( names ).length;
+    return total - completed;
+  }
+
+  function setCompleteStatus() {
+    var rem = remaining();
+    $("#completed").text("Questions Remaining: " + rem.toString());
+    if (rem === 0) {
+      $("#completed").hide();
+    } else {
+      $("#completed").show();
+    }
+  }
+
+  $( document ).ready(function() {
+    $( "#myForm input, #myForm textarea" ).change(function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).on('input', function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).focusout(function() {
+      setCompleteStatus();
+    });
+  });
+</script>
+
+<div id="myForm" class="container">
+  <div class="row">
+    <h1>Debate Summarization Evaluation</h1>
+    <p>Please do not complete this task, <strong>Summary Comparison <%= index + 1 %></strong>, more than once.</p>
+    <br/>
+    <div>
+      <p>The online world is full of debate and discussion - could these online debates be summarized automatically? We are investigating this question for an undergraduate research project and are asking people to compare different summaries. Making an effort to remain indifferent to the topics, please complete the form below to let us know what you think.</p>
+      <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> if you have any queries before starting the survey.</p>
+    </div>
+    <h3>Consent Form</h3>
+    <div class="well">
+      <p>Please read the statements below</p>
+      <ul>
+        <li>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</li>
+        <li>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</li>
+        <li>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</li>
+        <li>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</li>
+        <li>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</li>
+      </ul>
+      <p><strong>By continuing this questionnaire you agree to the above statements.</strong></p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h3>Instructions</h3>
+    <div>
+      <p>We will ask you to compare two summaries side-by-side, that differ in content or presentation, of the same online debate. </p>
+      <p>The task is just about the comparison of summaries at face value since reading the long source text would take too long. </p>
+      <p>Please remember that this is a student research project and that summaries are not intended to give preference to a particular viewpoint, nor should you allow your personal stance on a topic influence your decision.</p>
+      <p>In the following sections you will be asked to compare summaries on the following factors:</p>
+      <ul>
+        <li><strong>Content Interest / Informativeness</strong> the summary presents varied and interesting content.</li>
+        <li><strong>Readability</strong> the summary contents make sense; work without context; aren't repetitive; and are easy to read.</li>
+        <li><strong>Punctuation and Presentation</strong> the summary contents are correctly formatted as sentences, punctuation, capital letters and have sentence case.</li>
+        <li><strong>Organization</strong> related points occur near one and other.</li>
+        <li><strong>Overall</strong> aggregating your scores from those listed above - <strong>and any other factors you deem relevant</strong> - select your preferred summary.</li>
+      </ul>
+      <p>Please also note that lines in summaries are to be read independently (they are not paragraphs).</p>
+      <p>A summary is <strong>not</strong> intended to present a structured argument on the topic but rather <strong>give you a feel</strong> for what people talk about.</p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <h2>Section 1</h2>
+  <p>Please read the following summaries:</p>
+  <% s1, s2 = [['plain', summaries[debate1+"_plain"]], ['stock', summaries[debate1+"_stock_short"]]] %>
+  <% s1, s2 = [s1, s2].reverse if index.odd? %>
+  <div class="row">
+    <div class="col-md-6 <%= s1.first%>">
+      <h4><%= debate1 %> A</h4>
+      <%= s1.last %>
+    </div>
+    <div class="col-md-6 <%= s2.first%>">
+      <h4><%= debate1 %> B</h4>
+      <%= s2.last %>
+    </div>
+  </div>
+  <div class="well">
+    <p>1.1. Content Interest / Informativeness</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-content" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-content" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-content" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-content" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-content" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>1.2. Readability</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-readability" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-readability" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-readability" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-readability" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-readability" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>1.3. Punctuation and Presentation</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-punctuation" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>1.4. Organization</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-organization" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>1.5. Overall</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate1 %>-plain_v_stock-overall" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>1.6. Please justify your answer to Question 1.5:</p>
+    <textarea class="form-control" rows="5" name="<%= debate1 %>-plain_v_stock-comment"></textarea>
+  </div>
+
+  <hr/>
+
+  <h2>Section 2</h2>
+  <p>Please read the following summaries:</p>
+  <% s1, s2 = [['layout', summaries[debate2+"_layout"]], ['stock', summaries[debate2+"_stock_long"]]] %>
+  <% s1, s2 = [s1, s2].reverse if index.even? %>
+  <div class="row">
+    <div class="col-md-6 <%= s1.first%>">
+      <h4><%= debate2 %> A</h4>
+      <%= s1.last %>
+    </div>
+    <div class="col-md-6 <%= s2.first%>">
+      <h4><%= debate2 %> B</h4>
+      <%= s2.last %>
+    </div>
+  </div>
+  <div class="well">
+    <p>2.1. Content Interest / Informativeness</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-content" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-content" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-content" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-content" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-content" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.2. Readability</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-readability" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-readability" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-readability" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-readability" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-readability" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.3. Punctuation and Presentation</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-punctuation" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.4. Organization</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-organization" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.5. Overall</p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_stock-overall" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.6. Please justify your answer to 2.5:</p>
+    <textarea class="form-control" rows="5" name="<%= debate2 %>-layout_v_stock-comment"></textarea>
+  </div>
+
+  <hr/>
+
+  <h2>Section 3</h2>
+  <p>Please review the following summaries considering the presentation, note that you have already read this summary in the previous question.</p>
+  <p>In the formatted summary, keywords in explanations are in bold; topic words are in green bold and summary content has a grey background.</p>
+  <% s1, s2 = [['layout', summaries[debate2+"_layout"]], ['formatted', summaries[debate2+"_formatted"]]] %>
+  <% s1, s2 = [s1, s2].reverse if index.odd? %>
+  <div class="row">
+    <div class="col-md-6 <%= s1.first%>">
+      <h4><%= debate2 %> A</h4>
+      <%= s1.last %>
+    </div>
+    <div class="col-md-6 <%= s2.first%>">
+      <h4><%= debate2 %> B</h4>
+      <%= s2.last %>
+    </div>
+  </div>
+  <div class="well">
+    <p>3.1. Which presentation do you prefer?<p>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_formatted-overall" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_formatted-overall" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_formatted-overall" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_formatted-overall" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= debate2 %>-layout_v_formatted-overall" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>3.2. Please justify your answer to 3.1:</p>
+    <textarea class="form-control" rows="5" name="<%= debate2 %>-layout_v_formatted-comment"></textarea>
+  </div>
+  <p id="completed">Please answer all the questions.</p>
+</div>
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{evaluation/survey/survey\_extract.html.erb}
+\begin{lstlisting}[language=HTML5]
+
+<!-- <%= index + 1 %> -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style type="text/css">
+  h1 {
+    margin: 0.5em 0;
+  }
+  p {
+    margin: 2px 0px 0px 0px;
+    font-weight: 300;
+  }
+  .well {
+    margin-top: 10px;
+  }
+  .plain blockquote, .layout blockquote {
+    background: none;
+    border-left: none;
+    padding: 0px;
+    margin: 0px 0px 1px 20px;
+  }
+  blockquote p {
+    margin: 0;
+    font-size: 14px;
+    font-style: normal;
+    font-family: "Source Sans Pro", sans-serif;
+  }
+  .plain li p {
+    margin: 3px 0;
+  }
+  .plain ul {
+    margin-bottom: 0;
+  }
+  .plain p, .layout p, .stock p {
+    border-bottom: 1px solid #eee;
+  }
+  code {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 1em;
+    line-height: 1.45;
+    background-color: transparent;
+    padding: 0px;
+    color: SeaGreen;
+    font-weight: bold;
+  }
+  .plain strong, .layout strong {
+    font-weight: 300;
+  }
+  .plain ul
+  {
+    list-style-type: none;
+  }
+  .formatted blockquote {
+    margin: 0px 0px 1px 20px;
+    padding: 2px 5px;
+    background: #FAFAFA;
+  }
+  #completed {
+    font-size: 1.5em;
+    color: red;
+    font-weight: bold;
+  }
+</style>
+<script type="text/javascript">
+  function remaining() {
+    var names = [];
+    var completed = 0;
+    $.each($("#myForm input"), function( index, value ) {
+      names.push(value.name);
+      if (value.checked) {
+        completed += 1
+      }
+    });
+    $.each($("#myform textarea"), function( index, value ) {
+      names.push(value.name);
+      if (value.value.length > 1) {
+        completed += 1
+      }
+    });
+
+    var total = jQuery.unique( names ).length;
+    return total - completed;
+  }
+
+  function setCompleteStatus() {
+    var rem = remaining();
+    $("#completed").text("Questions Remaining: " + rem.toString());
+    if (rem === 0) {
+      $("#completed").hide();
+    } else {
+      $("#completed").show();
+    }
+  }
+
+  $( document ).ready(function() {
+    $( "#myForm input, #myForm textarea" ).change(function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).on('input', function() {
+      setCompleteStatus();
+    });
+    $( "#myForm textarea" ).focusout(function() {
+      setCompleteStatus();
+    });
+  });
+</script>
+
+<div id="myForm" class="container">
+  <div class="row">
+    <h1>Debate Summarization Evaluation</h1>
+    <p>Please do not complete this task, <strong>Extracts <%= index + 1 %></strong>, more than once.</p>
+    <br/>
+    <div>
+      <p>The online world is full of debate and discussion - could these online debates be summarized automatically? We are investigating this question for an undergraduate research project and are comparing some extracts from debates for use in summaries. Complete the form below to let us know what you think.</p>
+      <p>Please contact <a href="mailto:c.egan.12@aberdeen.ac.uk">c.egan.12@aberdeen.ac.uk</a> if you have any queries before starting the survey.</p>
+    </div>
+    <h3>Consent Form</h3>
+    <div class="well">
+      <p>Please read the statements below</p>
+      <ul>
+        <li>I confirm that the research project <strong>Debate Summarization Tool Evaluation</strong> has been explained to me. I have had the opportunity to ask questions about the project and have had these answered satisfactorily.</li>
+        <li>I consent to the material I contribute being used to generate insights for the research project <strong>Debate Summarization Tool Evaluation</strong>.</li>
+        <li>I understand that my participation in this research is voluntary and that I may withdraw from the study at any time.</li>
+        <li>I consent to allow the <strong>fully anonymized</strong> data to be used for future publications and other scholarly means of disseminating the findings from the research project.</li>
+        <li>I understand that the information/data acquired will be securely stored by researchers, but that appropriately anonymized data may in future be made available to others for research purposes only.</li>
+      </ul>
+      <p><strong>By continuing this questionnaire you agree to the above statements.</strong></p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h3>Instructions</h3>
+    <div>
+      <p>We have built a tool to extract points made in a discussion on <strong><%= topic.gsub("_", " ") %></strong>.</p>
+      <p>Given the following sets of similar points, rate them accounting for their <strong>succinctness</strong> and the extent to which they <strong>make sense</strong>.</p>
+      <br/>
+      <ul>
+        <li>Example of a <strong>good</strong> extract: <em>The bill was approved.</em></li>
+        <li>Example of a <strong>worse</strong> extract: <em>Similarly, the bill was approved.</em></li>
+        <li>Example of a <strong>bad</strong> extract: <em>The bill was approved as the.</em></li>
+      </ul>
+    </div>
+
+    Higher scores like 5/5 are better than lower ones like 1/5 or 2/5.
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <h2>Section 1</h2>
+    <% sets.each_with_index do |set, set_index| %>
+      <h4>Set <%= set_index + 1 %></h4>
+      <div class="well">
+      <% set.each_with_index do |e, i| %>
+        <% i += 1 %>
+        <p><strong>1.<%= set_index + 1 %>.<%= "#{i}." %></strong>  <%= e %></p>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="1">1/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="2">2/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="3">3/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="4">4/5</label>
+        <label class="radio-inline"><input type="radio" name="<%= topic %>-set<%= set_index + 1 %>extract<%= i %>" value="5">5/5</label>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <h2>Section 2</h2>
+  <p>Please review the following summaries and rate them accounting for their <strong>informativeness</strong> and the extent to which they <strong>make sense</strong>.</p>
+  <% s1, s2 = [['layout', summaries[topic + "_layout"]], ['random_layout', summaries['random_' + topic + "_layout"]]] %>
+  <div class="row">
+    <div class="col-md-6 <%= s1.first.split("_").join(" ") %>">
+      <h4><%= topic %> A</h4>
+      <%= s1.last %>
+    </div>
+    <div class="col-md-6 <%= s2.first.split("_").join(" ") %>">
+      <h4><%= topic %> B</h4>
+      <%= s2.last %>
+    </div>
+  </div>
+  <div class="well">
+    <p>2.1. Comparing the summary on how well, on average, the points make sense and their informativeness, give a relative rating:</p>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s1.first %>-much_better">A is much better</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s1.first %>-better">A is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="same">A and B are about the same</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s2.first %>-better">B is better</label>
+    <label class="radio-inline"><input type="radio" name="<%= topic %>-layout_v_layout_random" value="<%= s2.first %>-much_better">B is much better</label>
+    <p>2.2. Please justify your answer to 2.1:</p>
+    <textarea class="form-control" rows="5" name="<%= topic %>-layout_v_layout_random-comment"></textarea>
+  </div>
+  <p id="completed">Please answer all the questions.</p>
+</div>
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/app.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'json'
+require 'net/http'
+
+require 'sinatra'
+require 'neo4j'
+require 'pry'
+
+require './lib/corenlp_client'
+require './lib/neo4j_client'
+require './lib/frame'
+require './lib/node'
+require './lib/relation'
+require './lib/points_extraction'
+require './lib/utils'
+
+set :port, ENV['PORT']
+set :bind, '0.0.0.0'
+set :public_folder, 'static'
+
+corenlp_client = CoreNlpClient.new("http://corenlp_server:#{ENV['CNLP_PORT']}")
+neo4j_client = Neo4jClient.new("http://neo4j:7474")
+
+frames = JSON.parse(File.open('verbs.json', 'r').read)
+frame_queries = Hash[*Dir.glob('frame_queries/*.cql').map do |path|
+  [path.scan(/\/((\w|-)+)\./)[0][0].humanize.upcase.gsub('-COPULA', '-cop'),
+    File.open(path, 'r').read]
+end.flatten]
+
+post '/' do
+  data = JSON.parse(request.body.read)
+
+  points = []
+  Utils.chunk_text(35000, Utils.clean_text(data["text"])).each do |text|
+    neo4j_client.clear
+    sentences = corenlp_client.request_parse(text)
+    sentences.select! { |s| Utils.sentence_contains_topic(s, data['topics']) }
+    next if sentences.empty?
+    begin
+      puts sentences.size
+      sentences.each_slice(5).each do |group|
+        query_string = neo4j_client.generate_create_query_for_sentences(group)
+        neo4j_client.execute(query_string)
+      end
+      matches = PointsExtraction.matches_for_verbs(neo4j_client, frames, frame_queries)
+      points += PointsExtraction.points_for_matches(neo4j_client, matches, data['topics'], data['keys'])
+        .uniq
+        .sort_by(&:size)
+    rescue Exception => ex
+      puts ex
+      return points.to_json
+    end
+  end
+
+  points.to_json
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/LEX\_VERB\_NP\_PREP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//LEX VERB NP PREP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_lex:REL]->(lex:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
+MATCH (nmod)-[rel_prep:REL]->(prep:Node)
+WHERE rel_lex.label = "expl"
+AND rel_dobj.label = "dobj"
+AND rel_nmod.label =~ 'nmod:.*'
+AND rel_prep.label = "case"
+RETURN lex, verb, dobj, prep, nmod;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/LEX\_VERB\_PREP\_NP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//LEX VERB PREP NP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_lex:REL]->(lex:Node)
+MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
+MATCH (nmod)-[rel_prep:REL]->(prep:Node)
+MATCH (nmod)-[rel_dep:REL]->(dep:Node)
+WHERE rel_lex.label = "expl"
+AND rel_nmod.label =~ 'nmod:.*'
+AND rel_prep.label = "case"
+AND rel_dep.label = "dep"
+RETURN lex, verb, prep, nmod, dep;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+WHERE rel_nsubj.label = "nsubj"
+RETURN nsubj, verb;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_ADJ-copula.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB ADJ (copula)
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_adj:REL]->(adj:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_adj.label = "xcomp"
+RETURN nsubj, verb, adj;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_ADV-copula.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB ADV (copula)
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_advmod:REL]->(adv:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_advmod.label = "advmod"
+RETURN nsubj, verb, adv;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_ADV.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB ADV
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_adv:REL]->(adv:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_adv.label = "advmod"
+
+RETURN nsubj, verb, adv;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_ADV\_LEX.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB ADV LEX
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_adv:REL]->(adv:Node)
+MATCH (verb)-[rel_lex:REL]->(lex:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+AND rel_adv.label = "advmod"
+AND rel_lex.label = "advmod"
+AND adv.index < lex.index
+RETURN nsubj, verb, dobj, lex
+
+ORDER BY nsubj.index;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_ADV\_PREP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB ADV PREP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_adv:REL]->(adv:Node)
+MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
+MATCH (nmod)-[rel_prep:REL]->(prep:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_adv.label = "advmod"
+AND rel_nmod.label =~ 'nmod.*'
+AND rel_prep.label = "case"
+
+RETURN nsubj, verb, adv;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_LEX.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB LEX
+//why can't there JUST be an nsubj to the head of the NP?
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH path=(nsubj:Node)-[REL*1..3]->(verb)
+MATCH (np2)-[rel_lex:REL]->(lex:Node)
+
+WHERE rel_lex.label = "advmod"
+AND "acl" IN SQlRACT(r in relationships(path) | r.label)
+RETURN nsubj, verb, lex
+ORDER BY nsubj.index;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP-copula.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP (copula)
+
+MATCH (dobj:Node)
+MATCH (dobj)-[rel_cop:REL]->(verb:Node)
+MATCH (dobj)-[rel_nsubj:REL]->(nsubj:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_cop.label = "cop"
+AND ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+RETURN nsubj, verb, dobj;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+RETURN nsubj, verb, dobj;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP\_LEX.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP LEX
+//in conj 2nd np the first nn is selected (since it relates to the 2nd via conj:and or other)
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_lex:REL]->(lex:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+AND rel_lex.label = "advmod"
+RETURN nsubj, verb, dobj, lex
+ORDER BY dobj.index;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP\_LEX\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP LEX NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_np2:REL]->(np2:Node)
+MATCH (np2)-[rel_lex:REL]->(lex:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+AND rel_np2.label = "advcl"
+AND rel_lex.label = "mark"
+RETURN nsubj, verb, dobj, lex, np2;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_xcomp:REL]->(xcomp:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+AND rel_xcomp.label = "xcomp"
+RETURN nsubj, verb, dobj, xcomp;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP\_PREP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP PREP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_np3:REL]->(np3:Node)
+MATCH (np3)-[rel_prep:REL]->(prep:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+AND rel_np3.label =~ 'nmod.*'
+AND rel_prep.label = "case"
+RETURN nsubj, verb, dobj, prep, np3;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_NP\_PREP\_NP\_PREP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB NP PREP NP PREP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (verb)-[rel_nmod1:REL]->(nmod1:Node)
+MATCH (verb)-[rel_nmod2:REL]->(nmod2:Node)
+MATCH (nmod1)-[rel_case1:REL]->(prep1:Node)
+MATCH (nmod2)-[rel_case2:REL]->(prep2:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+AND rel_nmod1.label =~ 'nmod.*'
+AND rel_nmod2.label =~ 'nmod.*'
+AND rel_case1.label = "case"
+AND rel_case2.label = "case"
+AND nmod1.index < nmod2.index
+
+RETURN nsubj, verb, dobj, prep1, nmod1, prep2, nmod2;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_PREP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB PREP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+MATCH (dobj)-[rel_prep:REL]->(prep:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label =~ 'nmod.*'
+AND rel_prep.label = "case"
+RETURN nsubj, verb, prep, dobj;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_PREP\_NP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB PREP NP NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
+MATCH (nmod)-[rel_prep:REL]->(prep:Node)
+MATCH (nmod)-[rel_dobj:REL]->(dobj:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "appos"
+AND rel_nmod.label =~ 'nmod.*'
+AND rel_prep.label = "case"
+
+RETURN nsubj, verb, prep, nmod, dobj;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/NP\_VERB\_PREP\_NP\_PREP\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//NP VERB PREP NP PREP NP
+//here the NP at the end is really a sentence, the verb is returned
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
+MATCH (nmod)-[rel_prep:REL]->(prep:Node)
+MATCH (verb2:Node)-[rel_advcl:REL]-(verb)
+MATCH (verb2)-[rel_prep2:REL]-(prep2:Node)
+
+WHERE rel_nsubj.label = "nsubj"
+AND rel_nmod.label =~ 'nmod.*'
+AND rel_prep.label = "case"
+AND rel_advcl.label =~ 'advcl|ccomp'
+AND verb2.part_of_speech =~ 'VB.?'
+AND rel_prep2.label =~ 'mark|case'
+
+RETURN nsubj, verb, prep, nmod, prep2, verb2;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/PREP\_NP\_VERB\_NP.cql}
+\begin{lstlisting}[language=SQl]
+
+//PREP NP VERB NP
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+MATCH (verb)-[rel_nmod:REL]->(nmod:Node)
+MATCH (nmod)-[rel_prep:REL]->(prep:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+WHERE rel_nmod.label =~ 'nmod:.*'
+AND rel_dobj.label = "dobj"
+AND rel_prep.label = "case"
+RETURN prep, nmod, verb, dobj;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/frame\_queries/VERB-universal.cql}
+\begin{lstlisting}[language=SQl]
+
+//VERB
+//attempts to match the tree for all verbs
+
+MATCH (verb:Node)
+WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
+OPTIONAL MATCH (verb)-[nsubj_rel:REL]->(nsubj:Node) WHERE nsubj_rel.label = "nsubj"
+OPTIONAL MATCH (verb)-[nsubjpass_rel:REL]->(nsubjpass:Node) WHERE nsubjpass_rel.label = "nsubjpass"
+OPTIONAL MATCH p=(verb)<--(dobjcop:Node)-->(nsubjcop:Node) WHERE ALL (r IN relationships(p) WHERE r.label = "nsubj" OR r.label = "cop")
+OPTIONAL MATCH (verb)-[xcomp_rel:REL]->(xcomp:Node) WHERE xcomp_rel.label = "xcomp"
+OPTIONAL MATCH (verb)-[dobj_rel:REL]->(dobj:Node) WHERE ANY (l IN ['dobj', 'nmod.*'] WHERE dobj_rel.label =~ l)
+RETURN nsubj, nsubjpass, nsubjcop, verb, dobj, dobjcop, xcomp;
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/corenlp\_client.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+class CoreNlpClient
+  def initialize(host)
+    #params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
+    params = URI.encode('properties={"annotators": "lemma,tokenize,ssplit,depparse"}')
+
+    @uri = URI(host + "/?" + params)
+    @http_client = Net::HTTP.new(@uri.host, @uri.port)
+  end
+
+  def request_parse(text)
+    req = Net::HTTP::Post.new(@uri)
+    req.body = text
+    JSON.parse(@http_client.request(req).body)['sentences'].map do |sentence|
+      [sentence['tokens'], sentence['collapsed-ccprocessed-dependencies']]
+    end
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/frame.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+class Frame
+  attr_accessor :components, :pattern_string, :source, :example, :verb
+  def initialize(raw_frame, verb)
+    @pattern_string = raw_frame['syntax'].map do |c|
+      c['value'] ? "#{c['name']}.#{c['value']}" : c['name']
+    end.join(" ")
+    @components = components_for_pattern
+    @source = raw_frame['source']
+    @copula = raw_frame['copula']
+    @example = raw_frame['examples'].first
+    @verb = verb
+  end
+
+  def is_copula?
+    @copula == true
+  end
+
+  def pos_pattern_string
+    @components.map { |c| c[:pos] }.join(" ")
+  end
+
+  def components_for_pattern
+    [].tap do |components|
+      @pattern_string.split(/\s+/).each_with_index do |subpattern, index|
+        components << build_component(subpattern, index)
+      end
+    end
+  end
+
+  def build_component(subpattern, index)
+    tags = subpattern.scan(/(?:[A-Z]+)([\.\-_][\w-]+)/).flatten
+    pos = subpattern.dup
+    tags.each { |t| pos.gsub!(t, '') }
+    tags.map! { |t| t.gsub(/^[\W_]+|[\W_]+$/, '') }
+    return { index: index, string: subpattern, pos: pos, tags: tags }
+  end
+
+  def to_hash
+    {
+      string: @pattern_string,
+      bare_frame: pos_pattern_string,
+      missing_representation: 'not implemented',
+      source: @source,
+      example: @example,
+      verb: @verb,
+    }
+  end
+
+  def self.universal_frame(verb)
+    { "examples"=>["any verb pattern"],
+      "syntax"=> [{ "name"=>"VERB", "value"=>"Universal" }] }
+  end
+
+  def self.copula_frames(copula_verb)
+    [
+      {
+        "examples"=>["He was a builder."], "copula"=>true,
+        "syntax"=> [
+          {"name"=>"NP", "restrictions"=>[]},
+          {"name"=>"VERB", "value"=>"Copula", "restrictions"=>[]},
+          {"name"=>"NP", "restrictions"=>[]}
+        ]
+      },
+      {
+        "examples"=>["He was fat."], "copula"=>true,
+        "syntax"=> [
+          {"name"=>"NP", "restrictions"=>[]},
+          {"name"=>"VERB", "value"=>"Copula", "restrictions"=>[]},
+          {"name"=>"ADJ", "restrictions"=>[]}
+        ]
+      },
+      {
+        "examples"=>["The rope came loose"], "copula"=>true,
+        "syntax"=> [
+          {"name"=>"NP", "restrictions"=>[]},
+          {"name"=>"VERB", "value"=>"Copula", "restrictions"=>[]},
+          {"name"=>"ADV", "restrictions"=>[]}
+        ]
+      }
+    ].map { |f| Frame.new(f, copula_verb) }
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/neo4j\_client.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+class Neo4jClient
+  def initialize(url)
+    Neo4j::Session.open(:server_db, url)
+  end
+
+  def sentence_query_components(tokens, dependencies, sentence_index)
+    nodes = tokens.map do |t|
+      [t['word'], t['pos'], t['lemma'], t['index'].to_i-1]
+    end
+    relations = dependencies.uniq.map do |d|
+      [d['dep'], d['governor'].to_i-1, d['dependent'].to_i-1]
+    end
+    relations.reject! { |l, g, d| g == d || l == 'ROOT'}
+
+    return if relations.empty?
+
+    nodes.map! do |word, pos, lemma, index|
+      options = { word: word, part_of_speech: pos, lemma: lemma, index: index }
+      Node.string_for_create(options, sentence_index)
+    end
+    query_string = "#{nodes.join(", ")}"
+
+    relations.map! do |label, parent_index, child_index|
+      Relation.string_for_create("n#{parent_index}", label, "n#{child_index}", sentence_index)
+    end
+    query_string += ", #{relations.join(", ")}"
+  end
+
+  def generate_create_query_for_sentences(sentences)
+    query_string = "CREATE " + sentences.each_with_index.to_a.map do |data, index|
+      sentence_query_components(*data, index)
+    end.compact.join(", ")
+  end
+
+  def execute(query_string)
+    Neo4j::Session.query(query_string)
+  end
+
+  def clear
+    Node.delete_all
+  end
+
+  def verbs
+    expl_verb_query = %q{MATCH (expl_verb:Node) WHERE expl_verb.part_of_speech =~ 'VB.?'
+                         MATCH (expl_verb)-[r:REL]-(expl:Node)
+                         WHERE r.label = "expl"
+                         RETURN DISTINCT expl_verb.uuid as uuid;}
+    expl_verb_uuids = Neo4j::Session.query(expl_verb_query).map(&:uuid)
+
+    non_aux_verb_query = %q{MATCH (verb:Node) WHERE verb.part_of_speech =~ 'VB.?'
+                            MATCH p=(verb)--(x)
+                            WHERE NOT ANY (r in relationships(p) WHERE r.label =~ 'aux.*')
+                            RETURN DISTINCT verb;}
+    Neo4j::Session.query(non_aux_verb_query)
+      .map(&:verb)
+      .reject { |v| expl_verb_uuids.include? v.uuid }
+  end
+
+  def permitted_descendants(node, copula)
+    standard_query = %q{match (verb:Node {uuid: "NODE_UUID"})
+                        match p=(verb)-[*]->(related)
+                        where NOT ANY (l IN ['advcl', 'csubj', 'ccomp', 'dep', 'parataxis'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                        return verb, related;}
+    copula_query = %q{match (verb:Node {uuid: "NODE_UUID"})
+                      match (cop:Node)-[rel_cop:REL]->(verb)
+                      match p=(cop)-[*]->(related)
+                      where rel_cop.label = "cop"
+                      and NOT ANY (l IN ['advcl', 'csubj', 'ccomp', 'dep', 'parataxis'] WHERE ANY (r IN relationships(p) WHERE r.label =~ l))
+                      and related <> verb
+                      return verb, cop, related;}
+    if copula
+      [standard_query, copula_query].map do |query|
+        query.gsub!('NODE_UUID', node.uuid)
+        Neo4j::Session.query(query).to_a
+      end.max_by(&:size)
+    else
+      return Neo4j::Session.query(standard_query.gsub('NODE_UUID', node.uuid)).to_a
+    end
+  end
+
+  def permitted_descendant_string(node, copula=false)
+    permitted_descendants(node, copula).to_a.map do |result|
+      result.to_h.to_a.map(&:last)
+    end.flatten.uniq.sort_by(&:index).map(&:word).join(" ")
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/node.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+class Node
+  include Neo4j::ActiveNode
+
+  property :word
+  property :part_of_speech
+  property :lemma
+  property :index
+
+  has_many :out, :children, model_class: :Node, rel_class: :Relation
+  has_many :in, :parents, model_class: :Node, rel_class: :Relation
+
+  def self.string_for_create(options, sentence_index)
+    options.merge!(uuid: SecureRandom.uuid)
+    attribute_string = options.map do |k,v|
+      v = "\"#{v}\"" unless v.is_a? Integer
+      "#{k} : #{v}"
+    end.join(", ")
+
+    "(s#{sentence_index}n#{options[:index]}:Node {#{attribute_string}})"
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/points\_extraction.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module PointsExtraction
+  COPULAE = %w(act appear be become come end get go grow fall feel keep look prove remain run seem smell sound stay taste turn wax)
+
+  def self.points_for_matches(neo4j_client, matches, topics, keys)
+    points = matches.map do |verb, results|
+      results.reject! { |r| r.first.to_a.compact.size < 2 }
+      next if results.empty?
+      string = neo4j_client.permitted_descendant_string(verb, PointsExtraction::COPULAE.include?(verb.lemma))
+      results.map do |r|
+        match = Hash[r.first.to_h.to_a.reject { |e| e.last.nil? }]
+        if r.last.map { |f| f[:frames] }.uniq == [:generic] &&
+             r.first.to_a.compact.size < 3 &&
+             (match.map {|_, v| v.word } & topics).empty? &&
+             (match.map {|_, v| v.word }.map(&:length).reduce(&:+) / match.size) < 5
+          next
+        end
+        result = {}
+        result.merge!(string: string) if keys.include? 'string'
+        result.merge!(match: match) if keys.include? 'match'
+        result.merge!(pattern: match.map { |k, v| "#{v.lemma}.#{k}" }.join(" ")) if keys.include? 'pattern'
+        result.merge!(frames: r.last.map { |f| f[:frames] }.uniq) if keys.include? 'frames'
+        result
+      end
+    end.flatten.compact
+  end
+
+  def self.matches_for_verbs(neo4j_client, frames, frame_queries)
+    verb_queries = neo4j_client.verbs.map do |v|
+      queries_for_verb(v, frames, frame_queries).map do |q|
+        { uuid: v.uuid, query: q.first, frames: q.last }
+      end
+    end.flatten.group_by { |e| e[:query] }
+
+    verb_queries.map do |shared_query, frame_queries|
+      shared_query = shared_query.gsub("UUIDS", frame_queries.map { |q| q[:uuid] }.join('", "'))
+      neo4j_client.execute(shared_query).to_a.map { |r| [r, frame_queries] }
+    end.flatten(1).compact.group_by { |r| r.first.verb }.reject { |_, v| v.empty? }
+  end
+
+  private
+  def self.queries_for_verb(verb, frames, frame_queries)
+    return [] unless frames[verb.lemma]
+    frames = frames[verb.lemma].map { |f| Frame.new(f, verb.lemma) }
+    if COPULAE.include? verb.lemma
+      frames += Frame.copula_frames(verb.lemma)
+    end
+    [].tap do |queries|
+      frames.group_by { |f| [f.pos_pattern_string, f.is_copula?] }.each do |pattern, frames|
+        query_name = pattern.last ? pattern.first + '-cop' : pattern.first
+        queries << [frame_queries[query_name], frames] if frame_queries[query_name]
+      end
+    end.push([frame_queries['VERB-UNIVERSAL'], :generic])
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/relation.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+class Relation
+  include Neo4j::ActiveRel
+
+  from_class :Node
+  to_class   :Node
+  type 'REL'
+
+  property :label
+
+  def self.string_for_create(from, relation, to, sentence_index)
+    "(s#{sentence_index}#{from})-[s#{sentence_index.to_s+from+to+SecureRandom.hex[0..5]}:REL { label : \"#{relation}\" }]->(s#{sentence_index}#{to})"
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/lib/utils.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Utils
+  def self.chunk_text(chunk_length, text)
+    text.gsub!(/([a-z]\.)([A-Z])/, ' ')
+    lines = text.split(/$|\. /)
+
+    things=[].tap do |chunks|
+      chunks << ""
+      until lines.empty? do
+        chunks << "" if (chunks.last + lines.first).length > chunk_length
+        chunks[-1] += ". " + lines.shift
+      end
+    end
+  end
+
+  def self.clean_text(text)
+    text.encode(Encoding.find('UTF-8'), { invalid: :replace, undef: :replace, replace: ''})
+        .gsub(/[^\w\s\n\.,\(\)\{\}\]\["'\$£;:\-&\?]/, " ").gsub('"', '')
+  end
+
+  def self.sentence_contains_topic(sentence, topics)
+    string = sentence.first.map { |t| t['word'] }.join.downcase
+    topics.each do |t|
+      return true if string.include? t
+    end
+    false
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{points\_api/tasks/parse\_verb\_net.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'json'
+require 'nokogiri'
+require 'pry'
+
+verbs = Hash.new([])
+
+Dir.glob('verb_frames/*.xml') do |path|
+  doc = Nokogiri::XML(File.open(path).read)
+  members = doc.css('MEMBERS MEMBER').map { |e| e['name'] }
+
+  frames = doc.css('FRAMES FRAME').map do |frame|
+    examples = frame.css('EXAMPLE').map(&:text)
+    syntax = frame.css('SYNTAX > *').map do |component|
+      { name: component.name, value: component['value'],
+        restrictions: component.css('SYNRESTR').map{ |s| { value: s['value'], type: s['type'] } }}
+    end
+    semantics = frame.css('SEMANTICS > *').map do |predicate|
+      {
+        value: predicate['value'],
+        args: predicate.css('ARG').map { |a| { type: a['type'], value: a['value'] } }
+      }
+    end
+    { examples: examples, syntax: syntax, semantics: semantics, source: path }
+  end
+
+  members.each do |member|
+    verbs[member] += frames
+  end
+end
+
+File.open('verbs.json', 'w').write(verbs.to_json)
+puts "Wrote #{verbs.size} to verbs.json"
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{stock\_summarizers/summarizer\_topic.py}
+\begin{lstlisting}[language=Python]
+
+#!/usr/bin/env python
+import re, random, math, collections, itertools, sys, os
+
+#------------- Function Definitions ---------------------
+
+#calculates p(W)
+def getProbabilities(sentences, pWord):
+    freq = {} # {} initialises a dictionary [hash function]
+    allWordsTot = 0
+    #iterate through each sentence
+    for sentence in sentences:
+        wordList = re.findall(r"[\w']+", sentence)
+
+        for word in wordList: #iterate over words in sentence
+            allWordsTot += 1 # keeps count of total words in dataset
+            if not (word in freq):
+                freq[word] = 1
+            else:
+                freq[word] += 1
+
+
+        # Calculate p(word)
+    for word in freq.keys():
+        pWord[word] = (freq[word] / float(allWordsTot) )
+
+def cleanSentence(sentence):
+    sentence = re.sub('^\W+', '', sentence)
+    sentence = re.sub('[^\w\.\?]+$', '', sentence)
+    sentence = re.sub('\/>?', '', sentence)
+    sentence = re.sub('\.+', '.', sentence)
+    sentence = re.sub('\s+', ' ', sentence)
+    return sentence.capitalize()
+
+def wordList(sentence):
+    return re.findall(r"[\w']+", sentence)
+
+def wordCount(sentence):
+    return len(wordList(sentence))
+
+#----------------------------------------------------------
+
+def scoreSentences(sentences, pWord, maxLength):
+    summaryLength = 0
+    iters = 0
+    while summaryLength <= maxLength and iters < 1000:
+        scores = {}
+        iters += 1
+
+        sentences = [s for s in sentences if (len(s) < (maxLength * 1.05) - summaryLength)]
+        sentences = [s for s in sentences if (wordCount(s) > 3)]
+        if len(sentences) == 0:
+            break
+
+        for s in sentences:
+            words = wordList(s)
+            count = len(words)
+            score = 0
+            for w in words:
+                score += pWord[w]
+            scores[s] = score / count
+
+        s = max(scores, key=scores.get)
+
+        if summaryLength <= (maxLength * 1.05):
+            print (cleanSentence(s))
+            summaryLength += wordCount(s)
+        for word in wordList(s): #iterate over words and reduce probabilities
+            pWord[word] *= pWord[word]
+
+#-----------------------------------------------------------
+
+f = sys.argv[1]
+f = open("../stock_summarizers/" + f + ".txt", 'r')
+
+text = f.read().replace('#stance=stance1', '').replace('#stance=stance2', '')
+text = ''.join([i if ord(i) < 128 else '' for i in text])
+#text = text.replace('.', '. ')
+
+#sentences = re.split(r'\n|\. ', text)
+sentences = re.split(r'\n', text)
+
+pWord={}
+getProbabilities(sentences,  pWord)
+
+scoreSentences(sentences, pWord, int(sys.argv[2]))
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/abortion\_formatted.html}
+\begin{lstlisting}[language=HTML5]
+
+<p>People <strong>disagree</strong> on these points:</p>
+        <blockquote>
+      <p><code>Abortion</code> should be illegal.</p>
+    </blockquote>
+          <blockquote>
+      <p><code>Life</code> begins at conception.</p>
+    </blockquote>
+          <blockquote>
+      <p>I am <code>pro</code>-<code>life</code> for the most part.</p>
+    </blockquote>
+  
+  <blockquote>
+    <p>A <code>fetus</code> is a <code>person</code>.</p>
+  </blockquote>
+  <blockquote>
+    <p>Animals and fetuses have <code>rights</code>.</p>
+  </blockquote>
+  <blockquote>
+    <p><code>Abortion</code> is still murder.</p>
+  </blockquote>
+
+<p><strong>Commonly occurring points</strong> made in the discussion were:</p>
+  <blockquote>
+    <p>Seriously : I am against all <code>abortion</code>.</p>
+  </blockquote>
+  <blockquote>
+    <p>She is pregnant and the <code>baby</code>.</p>
+  </blockquote>
+  <blockquote>
+    <p>Taking the <code>life</code> of another <code>person</code>.</p>
+  </blockquote>
+
+<p>Users that talk about <strong><em>X</em> often talk about <em>Y</em></strong>.</p>
+  <blockquote>
+    <p>
+    <strong>(<em>X</em>)</strong>
+      You have no right to any <code>life</code>.      <strong>(<em>Y</em>)</strong>
+      Not to have an <code>abortion</code>.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+    <strong>(<em>X</em>)</strong>
+      She can't have an <code>abortion</code>.      <strong>(<em>Y</em>)</strong>
+      <code>Abortion</code> should not be banned.    </p>
+  </blockquote>
+  <blockquote>
+    <p>
+    <strong>(<em>X</em>)</strong>
+      Otherwise a <code>person</code> will die.      <strong>(<em>Y</em>)</strong>
+      Save the <code>life</code> of someone.    </p>
+  </blockquote>
+
+<p>Common points made in the discussion that <strong>link terms</strong> were:</p>
+  <blockquote>
+    <p>A <code>human</code> being refers to a specific <code>living</code> organism of a specific kind.</p>
+  </blockquote>
+  <blockquote>
+    <p>The <code>human</code> <code>life</code> cycle begins at conception.</p>
+  </blockquote>
+  <blockquote>
+    <p>As when <code>life</code> begins for a butterfly or moth.</p>
+  </blockquote>
+
+<p>Points for <strong>commonly discussed topics</strong>:</p>
+<ul>
+      <li>
+      <p>Abortion              <blockquote>
+          <p>Seeking an early, first term <code>abortion</code>.</p>
+        </blockquote>
+              <blockquote>
+          <p>Banning partial birth <code>abortion</code>.</p>
+        </blockquote>
+              <blockquote>
+          <p>Get an <code>abortion</code> in no way.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Woman              <blockquote>
+          <p>You are a very brave and strong <code>woman</code>.</p>
+        </blockquote>
+              <blockquote>
+          <p>Saving to the pregnant <code>woman</code>.</p>
+        </blockquote>
+              <blockquote>
+          <p>After a <code>woman</code> has an <code>abortion</code>.</p>
+        </blockquote>
+          </li>
+      <li>
+      <p>Fetus              <blockquote>
+          <p>Killing an innocent <code>fetus</code>.</p>
+        </blockquote>
+              <blockquote>
+          <p>They are fetuses, not <code>human</code> beings.</p>
+        </blockquote>
+              <blockquote>
+          <p>All of us were once a <code>fetus</code>.</p>
+        </blockquote>
+          </li>
+  </ul>
+
+<p>Points about <strong>multiple topics</strong>:</p>
+  <blockquote>
+    <p>Find the balance between a womans <code>choice</code> and protecting <code>human</code> <code>life</code>.</p>
+  </blockquote>
+  <blockquote>
+    <p><code>Abortions</code> <code>kill</code> <code>life</code>.</p>
+  </blockquote>
+  <blockquote>
+    <p><code>Abortion</code> is not killing a <code>human</code> <code>child</code>.</p>
+  </blockquote>
+
+<p>People ask <strong>questions</strong> like:</p>
+  <blockquote>
+    <p>When does <code>HUMAN</code> <code>life</code> begin?</p>
+  </blockquote>
+  <blockquote>
+    <p>Do you value your <code>life</code> above that of 3,613 strangers?</p>
+  </blockquote>
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/condense.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Condense
+  def self.condense_group(group)
+    return group if group.size < 2
+    new_group = []
+    merged = []
+    pairs = group.uniq.combination(2).sort_by { |p1, p2| (p1.length - p2.length).abs }
+    pairs.each do |s1, s2|
+      originals = [s1, s2]
+      next unless ((merged + new_group) & originals).empty?
+      s1 = s1.downcase.gsub(/[^\s\w']/, "").strip
+      s2 = s2.downcase.gsub(/[^\s\w']/, "").strip
+      res = Differ.diff_by_word(s1, s2).to_s.gsub('"', "").gsub(" >> ", "|")
+      change_count = res.scan(/\-|/).size
+      group_count = res.scan(/\{[\w\|\s'\-]+\}/).size
+      shared = (s1.split(/\s/) & s2.split(/\s/))
+      if shared.empty? || group_count > 2 || change_count > 1 || change_count + group_count > 2
+        new_group += originals
+      else
+        merged += originals
+        new_group << merge_diff_groups(res)
+      end
+    end
+    new_group += group - ((new_group + merged))
+    (new_group - merged).uniq
+      .map { |s| present_matched_string(s) }
+      .sort_by { |s| s.index("{") || 1000 }
+  end
+
+  def self.merge_diff_groups(string)
+    match = string.scan(/\{.+\} \{.+\}/).first
+    return format_match_string(string) if match.nil?
+    g1, g2 = match.split("} {").map { |e| e.gsub(/\{|\}/, "").split("|") }
+    replacement = g1.zip(g2).map { |g| g.join(" ") }.join("|")
+    format_match_string(string.gsub(match, " { #{replacement} } "))
+  end
+
+  def self.format_match_string(string)
+    string.gsub(/\s*\}\s*/, "} ")
+      .gsub(/\s*\{\s*/, " {")
+      .gsub(/\s+/, " ")
+      .gsub(/|\-/, "")
+      .gsub(/\s?\|\s?/, "|")
+      .gsub("{'t}", "{can't}") #https://en.wiktionary.org/wiki/Category:English_words_suffixed_with_-n%27t
+      .gsub("{n't}", "{not}")
+      .strip
+  end
+
+  def self.present_matched_string(string)
+    string.gsub!(" '", "'")
+    string[0].upcase + string[1..-1] + "."
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/counters.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Counters
+  PATTERN = /(\W|^)(n't|no|not|none|no one|nobody|nothing|neither|nowhere|never)(\W|$)/i
+  def self.counter_points(points)
+    antonyms = JSON.parse(File.open("antonyms.json").read)
+    groups = points.group_by { |p| p["Components"] }
+
+    counters = counters_for_points(points, groups, antonyms)
+
+    counters.each do |k, v|
+      v.each do |counter|
+        counters.delete(counter) # remove mirrors
+      end
+    end
+
+    counters.reject! { |k, _| k.size == 2 && k.join(" ").match(/(go|come)\.verb(\s|$)/) }
+
+    counters.map {|k, v| v.map { |c| [k, c] }}
+      .flatten(1)
+      .sort_by { |k, v| groups[k].size + groups[v].size }
+      .reverse
+  end
+
+  def self.negated_points(points)
+    plain, neg = points.group_by { |p| p["String"].downcase.match(PATTERN).nil? }
+      .map(&:last)
+      .map { |g| Curator.reparse_points(Curator.select_best(g, true)) }
+
+    return [] unless plain && neg
+    neg.select! {|p| p["Relations"].include? "neg" }
+    return [] if neg.empty?
+
+    plain, neg = [plain, neg].map { |g| g.uniq { |p| Curator.clean_string(p["String"]) }  }
+
+    counter_points = []
+    plain.product(neg).each do |p1, p2|
+      s1 = p1["String"].downcase.gsub(/[^\s\w']/, "").strip
+      s2 = p2["String"].downcase.gsub(/[^\s\w']/, "").strip
+      next if Levenshtein.distance(s1, s2) > 20
+      res = Differ.diff_by_word(s1, s2).to_s.gsub('"', "").gsub(" >> ", "|")
+      res = res.gsub("{+s}", "").gsub(/\|s\}/, "}").gsub(/\-|/, "")
+      next unless res.include?("{")
+      next if res.match(/\}\w\{/) || res.match(/\w(\{|\})\w/) || res.match(/\w(\{|\})\w/)
+      next if res.chars.count("|") > 1
+      next if (s1.split(" ").size - s2.split(" ").size).abs > 6
+      next if (s1.split(" ") & s2.split(" ")).size < (s1.split(" ") + s2.split(" ")).size.to_f / 4
+      next if res.scan(/\{[^\}]+\}/).size > 2
+      next if res.scan(/\{[^\}]+\}/).join(" ").gsub(/[^\w\s]+/, " ").scan(/\w+ /).size > res.gsub(/[^\w\s]/, " ").scan(/\w+ /).size * 0.75
+      next if res.scan(/\{[^\}]+\}/).map { |s| s.scan(/\w+ /).size }.max > 5
+      counter_points << [res, p1, p2]
+    end
+
+    counter_point_groups = []
+    counter_points.sort_by { |cp| cp.first.length  }.reverse.each do |cp|
+      allocated = false
+      counter_point_groups.each_with_index do |g, i|
+        g.each do |s|
+          next if Levenshtein.distance(cp.first, s.first) > 20
+          allocated = true
+          counter_point_groups[i] << cp
+          break
+        end
+        break if allocated
+      end
+      counter_point_groups << [cp] unless allocated
+    end
+    return counter_point_groups
+  end
+
+  def self.replacement_options(point, antonyms)
+    [].tap do |options|
+      point["Components"].map { |c| c.split(".").first }.each do |w|
+        options << (antonyms[w] || [w])
+      end
+    end
+  end
+
+  def self.counters_for_points(points, groups, antonyms)
+    {}.tap do |counter_points|
+      points.uniq { |p| p["Components"] }.each do |p|
+        options = replacement_options(p, antonyms)
+
+        next if options.flatten == p["Components"].map { |c| c.split(".").first }
+
+        permutations = []
+        options.each_with_index do |set, index|
+          set.each do |replacement|
+            new = p["Components"].dup
+            new[index] = "#{replacement}.#{p["Components"][index].split(".").last}"
+            next if new == p["Components"]
+            permutations << new
+          end
+        end
+
+        counter_points[p["Components"]] = permutations.select { |p| groups[p] }
+      end
+    end.reject! { |_, v| v.empty? }
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/curator.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'net/http'
+
+module Curator
+  class CoreNLPClient
+    def initialize(host)
+      params = URI.encode('properties={"annotators": "lemma,tokenize,ssplit,depparse"}')
+
+      @uri = URI(host + "/?" + params)
+      @http_client = Net::HTTP.new(@uri.host, @uri.port)
+    end
+
+    def request_parse(text)
+      req = Net::HTTP::Post.new(@uri)
+      req.body = text
+      JSON.parse(@http_client.request(req).body)['sentences'].map do |sentence|
+        [sentence['tokens'], sentence['collapsed-ccprocessed-dependencies']]
+      end
+    end
+  end
+
+  def self.select_best(points, return_group=false)
+    #original_points = points.dup
+    points = reparse_points(points.uniq { |p| p["String"] })
+    #if return_group
+      #return points
+    #else
+      #return points.sample
+    #end
+    points = permitted(points)
+    if points.empty?
+      return_group ? (return []) : (return nil)
+    end
+
+    group_bigrams = []
+    points.each do |p|
+      group_bigrams += bigrams(p["String"])
+    end
+    group_bigrams = Utils.sorted_dup_hash(group_bigrams)
+    points = points.sort_by do |p|
+      clean = p["String"].downcase.gsub(/[^\s\w']/, "").gsub(/\s+/, " ").strip
+      score = 0
+      group_bigrams.each do |k, v|
+        score += v if clean.include? k
+      end
+      p["Score"] = score.to_f / clean.split(" ").size
+    end
+    return points if return_group
+    return points.last
+  end
+
+  def self.bigrams(string)
+    words = string.downcase.gsub(/[^\s\w']/, "").split(/\s+/)
+    words.each_with_index.to_a[0..-2].map do |e, i|
+      [e, words[i+1]].join(" ")
+    end
+  end
+
+  def self.reparse_points(points)
+    cnc = CoreNLPClient.new("http://corenlp_server:9000")
+    points.map do |point|
+      parse = cnc.request_parse(clean_string(point["String"])).first
+      point["Relations"], point["Lemmas"] = relations_and_lemmas_from_parse(parse)
+      point
+    end
+  end
+
+  def self.permitted(points)
+    points.reject do |point|
+      !point["String"].length.between?(15, 100) ||
+      #point["String"].match(/^(if|and|but|or|just|after|before|their|his|her|why)/i) ||
+      point["String"].downcase.match(/^\W*(who|what|when|where|why|which|how|whether)/) ||
+      point["String"].include?("?") ||
+      point["String"].match(/is\W+$/) ||
+      point["String"].match(/this|And/) ||
+      point["String"].match(/^\w+ ?, /) ||
+      point["String"].match(/(\s*,){2}/) ||
+      point["String"].match(/([A-Z]+ ){2,}/) ||
+      point["String"].scan(/[a-z]+[0-9A-Z]/).any? ||
+      point["String"].scan(/[LR]RB|[LR]SB/).size.odd? ||
+      point["Relations"].count { |r| r.match(/dep|acl|csubj|ccomp/) } > 0 ||
+      point["Relations"].count { |r| r.match(/advcl/) } > 1 ||
+      point["Relations"].count { |r| r.match(/conj|nmod/) } > 2 ||
+      point["Relations"].join(" ").match(/amod (punct)?$/) ||
+      (!point["Lemmas"].join("").match(/VB/) && point["String"].length <= 20) ||
+      contains_case_change(point) ||
+      contains_bad_it(point) ||
+      bad_repeated_word(point) ||
+      boring_words(point, 2)
+    end
+  end
+
+  def self.clean_string(string, question=false)
+    string = string.strip
+      .gsub(/^[^\w\{]+/, "")
+      .gsub(/ ?- ?\.?$/, "")
+      .gsub(/[\s;\.,]+$/, "")
+      .gsub(/\s+(n?[,'\.])/, '')
+      .gsub("-LRB-", "(").gsub("-RRB-", ")")
+      .gsub("( ", "(").gsub(" )", ")")
+      .gsub("-LSB-", "[").gsub("-RSB-", "]")
+      .gsub("[ ", "[").gsub(" ]", "]").strip
+      .gsub("` ", "'")
+      .gsub(" '", "'")
+      .gsub(/'([^t])/, '')
+      .gsub(/([^\w\}]+\w{0,1})$/, "")
+      .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
+      .gsub(" i ", " I ")
+      .gsub(/[^A-Za-z\)\}\]]+$/, "")
+    unless question
+      string.gsub!(/^(therefor|therefore|then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
+    end
+    string = "#{string[0].upcase}#{string[1..-1]}"
+    string.gsub!(/[;.]+/, "")
+    string.gsub!(/ [:\-]$/, "")
+    string.gsub!(" ,", "")
+    string = string.strip
+    if question
+      string += "?" if string.strip[-1] != "?"
+    else
+      string += "." if string.strip[-1] != "."
+    end
+    string
+  end
+
+  def self.relations_and_lemmas_from_parse(parse)
+    relations = parse.last.group_by { |r| r["dependent"] }
+      .map { |k, v| [k-1, v.map { |r| r["dep"] }] }
+      .sort_by { |index, _| index }
+      .map(&:last).map { |r| r.join("|") }
+    return relations, parse.first.map { |t| t["lemma"] + ":" + t["originalText"] + ":" + t["pos"] }
+  end
+
+  def self.contains_case_change(point)
+    return false unless point["String"].match(/\s[A-Z]/)
+    return true if point["String"].match(/\?|\.[A-Z]/)
+    point["Lemmas"].count do |e|
+      next unless e.match(/\w/) && point["Lemmas"].index(e) > 0
+      e = e.split(":")
+      e[1].match(/^[A-Z]/) && !e[2].match(/^NN|^PRP/) && e[1].upcase != e[1]
+    end > 0
+  end
+
+  def self.contains_bad_it(point)
+    return false unless point["Lemmas"].map { |l| l.split(":").first}.include? "it"
+    clean_text = point["String"].downcase
+    return false if clean_text.include? "act on it"
+    !clean_text.match(/(and|but|whether)\sit\s/)
+  end
+
+  def self.boring_words(point, count)
+    point["Lemmas"].count do |e|
+      next unless e.match(/\w/)
+      e = e.split(":")
+      e[2].match(/^NN|^JJ|RB/)
+    end < count
+  end
+
+  def self.bad_repeated_word(point)
+    point["Lemmas"].reject { |l| l.match(/:{2,}/) }
+      .map { |l| l.split(":").first }
+      .inject { |last, e| break if last == e && e.match(/\w/) && !e.match(/be|have/); last = e }.nil?
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/paragraphizer.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Paragraphizer
+  def self.generate_paragraph(data)
+    paragraph = ""
+
+    data[:counter_points].each_with_index do |points, index|
+      p, c = points
+      paragraph += Presenter.clean(p["String"]) + "\n"
+    end
+
+    data[:negated_points].each_with_index do |point, index|
+      paragraph += Presenter.clean(point[1]["String"]) + "\n"
+    end
+
+    data[:related_points].each_with_index do |points, index|
+      p, r = points
+      paragraph += Presenter.clean(p["String"]) + "\n"
+      paragraph += Presenter.clean(r["String"]) + "\n"
+    end
+
+    data[:common_points].each_with_index do |p, index|
+      paragraph += Presenter.clean(p["String"]) + "\n"
+    end
+
+    data[:longer_points].each do |p|
+      paragraph += Presenter.clean(p["String"]) + "\n"
+    end
+    data[:multiple_topic_points].each_with_index do |p, index|
+      paragraph += Presenter.clean(p["String"]) + "\n"
+    end
+
+    data[:commonly_discussed_topic_points].each_with_index do |topic, index|
+      topic, points = topic
+      points.each_with_index do |p, index|
+        paragraph += Presenter.clean(p["String"]) + "\n"
+      end
+    end
+
+    data[:question_points].each_with_index do |p, index|
+      paragraph += Presenter.clean(p["String"], true) + "\n"
+    end
+
+    return paragraph
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/presenter.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Presenter
+  def self.format(string, topics, question=false)
+    highlight(clean(string, question), topics)
+  end
+
+  def self.clean(string, question=false)
+    string = string.strip
+      .gsub(/^[^\w\{]+/, "")
+      .gsub(/ ?- ?\.?$/, "")
+      .gsub(/[\s;\.,]+$/, "")
+      .gsub(/\s+(n?[,'\.])/, '')
+      .gsub("-LRB-", "(").gsub("-RRB-", ")")
+      .gsub("( ", "(").gsub(" )", ")")
+      .gsub("-LSB-", "[").gsub("-RSB-", "]")
+      .gsub("[ ", "[").gsub(" ]", "]").strip
+      .gsub("` ", "'")
+      .gsub(/'([^tmlsrvd])/, '')
+      .gsub(/([^\w\}]+\w{0,1})$/, "")
+      .gsub("does not", "doesn't").gsub("can not", "can't").gsub("do not", "don't")
+      .gsub(" i ", " I ")
+      .gsub(/[^A-Za-z\)\}\]]+$/, "")
+    unless question
+      string.gsub!(/^(therefor|therefore|then|than|so|to|when|what|that|even if|if|of|even|about|because)\s/i, "")
+    end
+    string = "#{string[0].upcase}#{string[1..-1]}" rescue binding.pry
+    string.gsub!(/[;.]+/, "")
+    string.gsub!(/ [:\-]$/, "")
+    string.gsub!(" ,", "")
+    string = string.strip
+    if question
+      string += "?" if string.strip[-1] != "?"
+    else
+      string += "." if string.strip[-1] != "."
+    end
+    string
+  end
+
+  def self.highlight(string, topics)
+    string = string.gsub("|", "<strong> or </strong>")
+      .gsub("{", "<strong> (</strong>")
+      .gsub("}", "<strong>) </strong>")
+    topic_regex = topics.sort_by(&:length).reverse.join("|")
+    string.scan(/#{topic_regex}/i).each { |match| string.gsub!(/(^|\W)#{match}(\W)/, '' + "<code>#{match}</code>" + '') }
+    string.strip
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/related.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Related
+  def self.related_points(points)
+    posts = points.group_by { |p| p["Post"] }
+
+    ptoi = {}
+    itop = {}
+    points.each_with_index { |p, i| ptoi[p["Components"]] = i; itop[i] = p }
+
+    posts = posts.map { |k, v| v.map { |p| ptoi[p["Components"]] }.uniq }
+
+    related = Hash.new(0)
+    posts.each do |p|
+      p.combination(2).to_a.each do |c|
+        related[c] += 1
+      end
+    end
+
+    related = related.reject { |k,v| v < 3 }
+    related = related.sort_by { |k, v| v }.reverse
+
+    related.map do |points, count|
+      points.map! { |p| itop[p] }
+      if (points.first["Components"] & points.last["Components"]).size > 1
+        next
+      end
+      [points.map { |p| p["Components"] }, count]
+    end.compact.map(&:first)
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/summarizer.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'json'
+require 'erb'
+
+require 'pry'
+require 'differ'
+require 'levenshtein'
+
+require_relative 'summary'
+require_relative 'utils'
+require_relative 'related'
+require_relative 'counters'
+require_relative 'curator'
+require_relative 'condense'
+require_relative 'presenter'
+require_relative 'paragraphizer'
+
+title = ARGV[0].scan(/(\w+)_p/).flatten.first
+  .gsub(/(.)([A-Z])/,' ').split(" ").map(&:capitalize).join(" ")
+
+out_file_name = title.split(/\W+/).join("_").downcase
+in_file_name = title.split(" ").map(&:capitalize).join.tap { |e| e[0] = e[0].downcase }
+
+lines = File.open(ARGV[0]).readlines
+topics = lines.first.split(",").map(&:strip)
+points = lines[2..-1].map { |l| JSON.parse(l) }
+summary = Summary.new(title, points, topics, 3)
+summary.build
+
+@title = title
+@summary = summary
+
+erb = ERB.new(File.open("template_formatted.html.erb").read, 0, '>')
+html = erb.result binding
+File.open(out_file_name + "_formatted.html", "w") { |file| file.write(html) }
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/summary.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+class Summary
+  attr_accessor :topics, :counter_points, :related_points, :negated_points,
+    :common_points, :longer_points, :commonly_discussed_topic_points,
+    :multiple_topic_points, :question_points, :point_count
+
+  def initialize(title, points, topics, point_count)
+    @title, @points, @topics, @point_count = title, points, topics, point_count
+    @groups = Hash[*points.group_by { |p| p["Components"] }.sort_by { |_, v| v.size }.reverse.flatten(1)]
+    @used_points = []
+  end
+
+  def build
+    @counter_points = generate_counter_points; print "."
+    @related_points = generate_related_points; print "."
+    @negated_points = generate_negated_points; print "."
+    @common_points = generate_common_points; print "."
+    @longer_points = generate_longer_points; print "."
+    @commonly_discussed_topic_points = generate_commonly_discussed_topic_points; print "."
+    @multiple_topic_points = generate_multiple_topic_points; print "."
+    @question_points = generate_question_points; print ".\n"
+  end
+
+  def generate_counter_points
+    count = 0
+    Counters.counter_points(available_points).map do |point, counter|
+      next if count >= @point_count
+      point = Curator.select_best(@groups[point])
+      counter = Curator.select_best(@groups[counter])
+      next if [point, counter].map(&:nil?).any?
+      count += 1
+      use_point(point); use_point(counter)
+      [point, counter]
+    end.compact
+  end
+
+  def generate_related_points
+    count = 0
+    used_related_points = []
+    Related.related_points(available_points).map do |point, related|
+      next if count >= @point_count
+      point = Curator.select_best(@groups[point])
+      related = Curator.select_best(@groups[related])
+      next if [point, related].map(&:nil?).any?
+      next unless (used_related_points & [point, related]).empty?
+      count += 1
+      used_related_points << point << related
+      use_point(point); use_point(related)
+      [point, related]
+    end.compact
+  end
+
+  def generate_negated_points
+    count = 0
+    points = @groups.take(100).map do |_, group|
+      next if count >= @point_count * 2
+      counter_point_groups = Counters.negated_points(available_points(group))
+      next if counter_point_groups.empty?
+      best = counter_point_groups.map { |g| g.min_by { |r, _, _| r.length } }.min_by { |r, _, _| r.scan(/\||\{|\}/).size }
+      next unless best
+      count += 1
+      use_point(best[1]); use_point(best[2])
+      best[0] = Curator.clean_string(Condense.format_match_string(Condense.merge_diff_groups(best.first)))
+      best
+    end.compact.sort_by! { |best, _, _| best.scan(/\{|\}|\|/).size }
+    if points.size > @point_count
+      points.reverse.take(points.size - @point_count).each do |_, p1, p2|
+        return_point(p1)
+        return_point(p2)
+      end
+    end
+    points.take(@point_count)
+  end
+
+  def generate_common_points
+    count = 0
+    @groups.map do |k, g|
+      next if count >= @point_count
+      best = Curator.select_best(available_points(g))
+      next if best.nil?
+      count += 1
+      use_point(best)
+    end.compact
+  end
+
+  def generate_longer_points
+    used_topics = []
+    points = []
+    @groups.reject { |k, v| k.size < 4 || v.uniq { |p| p["String"] }.size < 2 }.sort_by { |_, v| v.size }.reverse.map do |k, g|
+      g.uniq! { |p| p["String"] }
+      best = Curator.select_best(available_points(g))
+      next unless best
+      topics = @topics.select { |t| best["String"].downcase.include?(t) || best["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.include?(t) }
+      next if (used_topics & topics).size > 1
+      next if points.map { |p| p["String"] }.include? best["String"]
+      used_topics += topics
+      points << best
+    end
+    points.sort_by do |point|
+      @topics.select do |t|
+        point["String"].downcase.include?(t) ||
+        point["Lemmas"].select { |l| l.match(/[a-z]/) }.map { |l| l.split(":").first }.include?(t)
+      end.size
+    end.reverse.take(@point_count)
+  end
+
+  def generate_commonly_discussed_topic_points
+    count = 0
+    top_topics.map do |t|
+      next if count >= @point_count
+      topic_points = []
+      used_components = []
+      @groups.select { |k, _| k.join(" ").include? " #{t}." }.each do |k, group|
+        best = Curator.select_best(available_points(group))
+        next unless best
+        next if (best["Components"] - used_components).size < 1
+        size = Condense.condense_group(topic_points.compact.map { |p| Presenter.clean(p["String"]) }).size
+        next_size = Condense.condense_group(topic_points.compact.map { |p| Presenter.clean(p["String"]) } + [Presenter.clean(best["String"])]).size
+        next if size >= @point_count || next_size == size
+        topic_points << best
+        used_components += best["Components"]
+      end
+      count += 1
+      [t, topic_points.compact]
+    end.compact
+  end
+
+  def generate_multiple_topic_points
+    topic_points = @points.sort_by { |p| @topics.count { |t| p["String"].downcase.include? t } }.reverse.take(100)
+    topic_points.uniq! { |p| p["String"] }
+    selected_points = []
+    for i in 0..15
+      selected_points << topic_points.delete(Curator.select_best(topic_points))
+      break if selected_points.compact.size >= @point_count
+    end
+    selected_points.compact
+  end
+
+  def generate_question_points
+    question_groups = @points.select { |p| p["String"].strip[-1] == "?" }
+          .uniq {|p| p["String"] }
+          .group_by { |p| p["Components"] }
+          .sort_by { |k, v| v.size }
+          .select { |k, v| v.size > 2 }
+    count = 0
+    question_groups.map do |_, group|
+      next if count >= @point_count
+      count += 1
+      group.sort_by { |p| p["String"].length }.first
+    end.compact
+  end
+
+  def metadata
+    {
+      points: @points.size,
+      groups: @groups.size,
+      posts: @points.group_by { |p| p["Post"] }.size,
+    }
+  end
+
+  def to_h
+    {
+      counter_points: @counter_points,
+      related_points: @related_points,
+      negated_points: @negated_points,
+      common_points: @common_points,
+      longer_points: @longer_points,
+      commonly_discussed_topic_points: @commonly_discussed_topic_points,
+      multiple_topic_points: @multiple_topic_points,
+      question_points: @question_points,
+    }
+  end
+
+  private
+
+  def available_points(points=@points)
+    points.select { |p| (@used_points & point_id_strings(p)).empty? }
+  end
+
+  def use_point(point)
+    @used_points += point_id_strings(point)
+    point
+  end
+
+  def return_point(point)
+    @used_points -= point_id_strings(point)
+    point
+  end
+
+  def point_id_strings(point)
+    if point["Lemmas"]
+      lemma_string = point["Lemmas"].select { |l| l.match(/[a-z]/) }.reject { |l| l.match(/IN|DT|MD/) }.map { |l| l.split(":").first }.join(" ").downcase
+    end
+    clean_string = point["String"].gsub(/[^\w\s]+/, "").gsub(/\s+/, " ").strip.downcase.gsub(/\s(at|from)\s/, " ")
+    formatted_string = Presenter.clean(point["String"])
+    [
+      lemma_string,
+      clean_string,
+      clean_string.gsub(" ", ""),
+      formatted_string,
+      formatted_string.gsub(" ", ""),
+      point["Components"].select { |c| c.match(/\.\w*(verb|subj|obj)/) }.map { |c| c.split(".").first }.join(" ")
+    ].compact
+  end
+
+  def top_topics
+    Utils.sorted_dup_hash(@groups.keys.flatten.map(&:downcase))
+      .keys.select { |e|
+        e.match(/nsubj|dobj/) &&
+        !e.match(/person|they|\.verb|\.prep|it\.|what\.|that\.|one\./)
+      }.map { |e| e.split(".").first }.uniq
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/template\_formatted.html.erb}
+\begin{lstlisting}[language=HTML5]
+
+<p>People <strong>disagree</strong> on these points:</p>
+<% @summary.counter_points.each do |point, counter| %>
+  <% point = [point["String"], counter["String"]] %>
+  <% if point.size == 2 %>
+    <blockquote>
+      <p><%= Presenter.format(point.first, @summary.topics) %></p>
+    </blockquote>
+  <% else %>
+    <blockquote><p><%= Presenter.format(point.first, @summary.topics) %></p></blockquote>
+  <% end %>
+<% end %>
+
+<% @summary.negated_points.each do |_, first, _| %>
+  <blockquote>
+    <p><%= Presenter.format(first["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p><strong>Commonly occurring points</strong> made in the discussion were:</p>
+<% @summary.common_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p>Users that talk about <strong><em>X</em> often talk about <em>Y</em></strong>.</p>
+<% @summary.related_points.each do |point, related| %>
+  <blockquote>
+    <p>
+    <strong>(<em>X</em>)</strong>
+      <%= Presenter.format(point["String"], @summary.topics) %>
+      <strong>(<em>Y</em>)</strong>
+      <%= Presenter.format(related["String"], @summary.topics) %>
+    </p>
+  </blockquote>
+<% end %>
+
+<p>Common points made in the discussion that <strong>link terms</strong> were:</p>
+<% @summary.longer_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p>Points for <strong>commonly discussed topics</strong>:</p>
+<ul>
+  <% @summary.commonly_discussed_topic_points.each do |topic, points| %>
+    <li>
+      <p><%= topic.capitalize %>
+      <% points.map { |p| Presenter.clean(p["String"]) }.take(@summary.point_count).each do |point| %>
+        <blockquote>
+          <p><%= Presenter.format(point, @summary.topics) %></p>
+        </blockquote>
+      <% end%>
+    </li>
+  <% end %>
+</ul>
+
+<p>Points about <strong>multiple topics</strong>:</p>
+<% @summary.multiple_topic_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics) %></p>
+  </blockquote>
+<% end %>
+
+<p>People ask <strong>questions</strong> like:</p>
+<% if @summary.question_points.empty? %>
+  <blockquote>
+    <p>There were no repeated questions</p>
+  </blockquote>
+<% end %>
+<% @summary.question_points.each do |point| %>
+  <blockquote>
+    <p><%= Presenter.format(point["String"], @summary.topics, true) %></p>
+  </blockquote>
+<% end %>
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{summarizer/utils.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+module Utils
+  def self.sorted_dup_hash(array)
+    Hash[*array.inject(Hash.new(0)) { |h,e| h[e] += 1; h }.
+      select { |k,v| v > 1 }.inject({}) { |r, e| r[e.first] = e.last; r }.
+      sort_by {|_,v| v}.reverse.flatten]
+  end
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{topic\_api/app.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require 'sinatra'
+require 'lda-ruby'
+require 'json'
+
+set :port, ENV['PORT']
+set :bind, '0.0.0.0'
+
+class TopicAnalyzer
+  def initialize(text, topic_count)
+    corpus = Lda::Corpus.new
+    corpus.add_document(Lda::TextDocument.new(corpus, text))
+    @lda = Lda::Lda.new(corpus)
+    @lda.num_topics = topic_count
+    @lda.em('random')
+  end
+
+  def top_words(count)
+    @lda.top_words(count).values
+  end
+end
+
+blacklist = ["-", "http", "https", "feel", "make", "right", "wrong", "things"]
+
+get "/" do
+  "Post to this route with a JSON payload. (text, topic_count, top_word_count)"
+end
+
+post '/' do
+  payload = JSON.parse(request.body.read)
+  text = payload["text"].encode("UTF-8", :invalid=>:replace, :replace=>"?")
+
+  ta = TopicAnalyzer.new(text, payload["topic_count"].to_i)
+  groups = ta.top_words(payload["top_word_count"].to_i)
+
+  groups.map! { |g| g - blacklist }
+
+  {
+    topics: groups.flatten.uniq.sort,
+    groups: groups
+  }.to_json
+end
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{utilities/plotter/graph.html}
+\begin{lstlisting}[language=HTML5]
+
+<!DOCTYPE>
+<html>
+  <head>
+    <title>Points Extraction</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+    <script src="https://rawgit.com/cytoscape/cytoscape.js-cose-bilkent/master/cytoscape-cose-bilkent.js"></script>
+
+    <style>
+      #cy {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 999;
+      }
+    </style>
+
+    <script>
+      $(function(){
+        var cy = window.cy = cytoscape({
+          container: document.getElementById('cy'),
+          boxSelectionEnabled: false,
+          autounselectify: true,
+          layout: {
+            name: 'cose-bilkent',
+            edgeElasticity: 10,
+            idealEdgeLength: 150,
+            nodeRepulsion: 1000,
+            animate: false,
+          },
+          style: [
+            {
+              selector: 'node',
+              style: {
+                'content': 'data(value)',
+                'width': 'data(weight)',
+                'height': 'data(weight)',
+                'text-valign': 'center',
+                'text-halign': 'center',
+                'color' : 'black',
+                'font-size': '25px',
+                'background-color': 'YellowGreen',
+                'border-width': 2,
+                'border-color': 'SeaGreen'
+              },
+            },
+            {
+              selector: 'edge',
+              style: {
+                'label': 'data(label)',
+                'width': 4,
+                'font-size': '20px',
+                'line-color': '#f2f2f2',
+                'target-arrow-color': '#ccc',
+                'target-arrow-shape': 'triangle',
+                'edge-text-rotation': 'autorotate',
+              }
+            },
+            {
+              selector: '[type="verb"]',
+              style: {
+                'shape': 'diamond',
+                'background-color': '#ff884d',
+                'border-width': 0,
+              }
+            }
+          ],
+          "elements":{"nodes":[], "edges":[]}
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="cy"></div>
+  </body>
+</html>
+
+
+\end{lstlisting}
+\pagebreak
+
+\section*{utilities/plotter/plot.rb}
+\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
+
+require "pry"
+require "json"
+
+def sorted_dup_hash(array)
+  Hash[*array.inject(Hash.new(0)) { |h,e| h[e] += 1; h }.
+  select { |k,v| v > 1 }.inject({}) { |r, e| r[e.first] = e.last; r }.
+  sort_by {|_,v| v}.reverse.flatten]
+end
+
+data = File.open("summary.txt").readlines.select { |l| l.match(/^[0-9]+ : \[/) }.take(30)
+data.map! do |l|
+  l = l.downcase.split(" : ")
+  { count: l.first.to_i, pattern: l.last.gsub(/\[|\]/, "").chomp }
+end
+
+patterns = data.map { |x| x[:pattern].split(" ").map{|x|x.split(".").first }}
+
+words, verbs = [], []
+data.each do |point|
+  point[:count].times do
+    point[:pattern].split(" ").map{ |x| x.split(".") }.each do |word, rel|
+      words << word
+      verbs << word if rel == "verb"
+    end
+  end
+end
+verbs.uniq!
+
+words = Hash[*sorted_dup_hash(words).map { |k, v| [k, Math::log(v).round(2) * 50] }.flatten]
+nodes = words.map do |k, v|
+  {
+    id: k,
+    value: k,
+    weight: v,
+    type: verbs.include?(k) ? "verb" : "",
+  }
+end
+
+edges = []
+patterns.each do |pattern|
+  if pattern.size == 2
+    edges << { source: pattern.first, target: pattern.last, label: ""}
+  elsif pattern.size == 3
+    edges << { source: pattern.first, target: pattern.last, label: pattern[1].split(".").first}
+  elsif pattern.size == 4
+    edges << { source: pattern.first, target: pattern[1], label: ""}
+    edges << { source: pattern[1], target: pattern[3], label: pattern[2].split(".").first}
+  elsif pattern.size == 5
+    edges << { source: pattern.first, target: pattern[2], label: pattern[1].split(".").first}
+    edges << { source: pattern[2], target: pattern[4], label: pattern[3].split(".").first}
+  end
+end
+edges.uniq!
+
+in_relationship = []
+edges.each do |e|
+  in_relationship += [e[:source], e[:target]]
+end
+
+nodes.select! { |n| in_relationship.include?(n[:id]) }
+
+nodes.map! { |e| { data: e } }
+edges.map! { |e| { data: e } }
+elements = Hash[:elements, { nodes: nodes, edges: edges }].to_json[1..-2]
+
+template = File.open("graph.html").read
+File.open("output.html", "w").write(template.gsub('"elements":{"nodes":[], "edges":[]}', elements))
+
+
+\end{lstlisting}
+\pagebreak
+
+
+\end{document}
