@@ -115,19 +115,18 @@
         \centering
         \caption{VerbNet frame example for verb murder}
 
-        \lstset{language=XML}
-        \begin{lstlisting}
-          <FRAME>
-            <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
-            <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
-            <SYNTAX>
-              <NP value="Agent"><SYNRESTRS/></NP>
-              <VERB/>
-              <NP value="Patient"><SYNRESTRS/></NP>
-            </SYNTAX>
-            <SEMANTICS>...</SEMANTICS>
-          </FRAME>
-        \end{lstlisting}
+        \begin{minted}{XML}
+<FRAME>
+  <DESCRIPTION primary="NP V NP" secondary="Basic Transitive"/>
+  <EXAMPLES><EXAMPLE>Brutus murdered Julius Cesar.</EXAMPLE></EXAMPLES>
+  <SYNTAX>
+    <NP value="Agent"><SYNRESTRS/></NP>
+    <VERB/>
+    <NP value="Patient"><SYNRESTRS/></NP>
+  </SYNTAX>
+  <SEMANTICS>...</SEMANTICS>
+</FRAME>
+        \end{minted}
         \label{fig:murder-frame}
       \end{figure}
 
@@ -144,15 +143,15 @@
         \centering
         \caption{Example Cypher query for the common \texttt{NP V NP} frame}
 
-        \begin{lstlisting}
-          MATCH (verb:Node)
-          WHERE verb.uuid = UUID
-          MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
-          MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
-          WHERE rel_nsubj.label = "nsubj"
-          AND rel_dobj.label = "dobj"
-          RETURN nsubj, verb, dobj;
-        \end{lstlisting}
+        \begin{minted}{Cypher}
+MATCH (verb:Node)
+WHERE verb.uuid = UUID
+MATCH (verb)-[rel_nsubj:REL]->(nsubj:Node)
+MATCH (verb)-[rel_dobj:REL]->(dobj:Node)
+WHERE rel_nsubj.label = "nsubj"
+AND rel_dobj.label = "dobj"
+RETURN nsubj, verb, dobj;
+        \end{minted}
         \label{fig:npvnpquery}
       \end{figure}
 
