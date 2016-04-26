@@ -1,3 +1,9 @@
+# node.rb
+#
+# This class extends the Neo4j::ActiveNode class and defines the structure that
+# should be used to save tokens in the Neo4j database. This includes attributes
+# and dependency relations to other nodes.
+
 class Node
   include Neo4j::ActiveNode
 

@@ -1,3 +1,8 @@
+# neo4j_client.rb
+#
+# This is a wrapper for the Neo4j services and is used to execute queries
+# and fetch results using a simplified interface.
+
 class Neo4jClient
   def initialize(url)
     Neo4j::Session.open(:server_db, url)

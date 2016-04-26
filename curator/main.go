@@ -1,3 +1,7 @@
+// main.go
+//
+// This implements the points curation task
+
 package main
 
 import (
@@ -9,6 +13,7 @@ import (
 	"strings"
 )
 
+// this represents points as they are saved by the points extraction tool
 type RawPoint struct {
 	String             string
 	Pattern            string
@@ -19,6 +24,7 @@ type RawPoint struct {
 	Content            string
 }
 
+// this process upgrades points, adding attributes to aid later analysis
 type Point struct {
 	String             string
 	Verb               string
@@ -111,6 +117,9 @@ func pairs(arr []int) [][]int {
 	return pairs
 }
 
+// this function uses the point's existing attributes to generate some new ones
+// these new attributes make the points easier to process
+// for example, point patterns are split into separate components
 func upgradePoint(p RawPoint) Point {
 	pattern := regexp.MustCompile("cop|pass").ReplaceAllString(p.Pattern, "")
 	components := strings.Split(pattern, " ")
@@ -145,12 +154,15 @@ func (a ByLen) Len() int           { return len(a) }
 func (a ByLen) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByLen) Less(i, j int) bool { return len(a[i]) > len(a[j]) }
 
+// main task function
 func main() {
+	// read in the list of points
 	b, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
 
+	// parse points into rawpoints and then upgrade them
 	points := []Point{}
 	contents := strings.Split(string(b), "\n")
 	for i, v := range contents {
@@ -167,6 +179,7 @@ func main() {
 		points = append(points, upgradePoint(rawPoint))
 	}
 
+	// these are the blacklists that are applied to points
 	bannedList := strings.Split("it.nsubj that.nsubj this.nsubj which.nsubj what.nsubj", " ")
 	bannedPersonList := strings.Split("object continue come go sit open close begin end believe happen leave understand realize debate speak show stand call refer believe lose change care hear write disagree read tell start talk explain come live take support guess feel follow make go get move agree find fail think wonder feel ask argue try", " ")
 	for i, v := range bannedPersonList {
@@ -216,6 +229,7 @@ func main() {
 
 	originalSize := len(points)
 
+	// This loop applies the blacklist rejections and nsubj amalgamations
 	for i := 0; i < len(points); i++ {
 		point := points[i]
 		if containsStr(personList, point.Components[0]) {
@@ -237,6 +251,7 @@ func main() {
 	}
 	fmt.Printf("%v of %v points disqualified\n", originalSize-len(points), originalSize)
 
+	// this prints the selected / upgraded points to disk in a new points file
 	for _, v := range points {
 		b, err := json.Marshal(v)
 		if err != nil {

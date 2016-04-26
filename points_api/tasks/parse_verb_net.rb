@@ -1,3 +1,9 @@
+# parse_verb_net.rb
+#
+# This is a script used in parsing the XML information from VerbNet. VerbNet
+# is not stored in it’s original form in the project source but is available
+# for download here: http://verbs.colorado.edu/verb-index/vn/verbnet-3.2.tar.gz
+
 require 'json'
 require 'nokogiri'
 require 'pry'

@@ -1,3 +1,8 @@
+# utils.rb
+#
+# This implements a series of helper functions. Used in the extraction  of points
+
+
 module Utils
   def self.chunk_text(chunk_length, text)
     text.gsub!(/([a-z]\.)([A-Z])/, '\1 \2')

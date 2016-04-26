@@ -1,3 +1,7 @@
+# generate.rb
+#
+# This is a script used in generating the evaluation questionnaires
+
 require 'pry'
 require 'erb'
 

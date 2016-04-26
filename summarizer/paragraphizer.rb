@@ -1,3 +1,9 @@
+# paragraphizer.rb
+#
+# This file is was used in the generation of the Plain summary style for the
+# evaluation. It is not used in the current summarizer implementation to keep
+# the basic analysis process as simple as possible.
+
 module Paragraphizer
   def self.generate_paragraph(data)
     paragraph = ""
@@ -24,6 +30,7 @@ module Paragraphizer
     data[:longer_points].each do |p|
       paragraph += Presenter.clean(p["String"]) + "\n"
     end
+
     data[:multiple_topic_points].each_with_index do |p, index|
       paragraph += Presenter.clean(p["String"]) + "\n"
     end

@@ -1,3 +1,8 @@
+# corenlp_client
+#
+# This is a wrapper used in requesting dependency parse information from
+# the CoreNLP service.
+
 class CoreNlpClient
   def initialize(host)
     #params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')

@@ -1,3 +1,8 @@
+# process_extract_comparison.rb
+#
+# This is a general purpose script to process the results from Study 2.
+# It prints the results in a variety of formats.
+
 require 'pry'
 require 'csv'
 

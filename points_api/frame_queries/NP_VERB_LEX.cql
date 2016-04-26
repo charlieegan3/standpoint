@@ -1,5 +1,4 @@
 //NP VERB LEX
-//why can't there JUST be an nsubj to the head of the NP?
 
 MATCH (verb:Node)
 WHERE ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)

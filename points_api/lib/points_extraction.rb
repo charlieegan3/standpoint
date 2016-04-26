@@ -1,6 +1,15 @@
+# points_extraction.rb
+#
+# This is the central file to extracting points from text. This is called from
+# the application twice, first to get the verbs that have valid frame matches
+# from in the database and then, for each of these, to get the extract
+# information for the match as a complete point, ready to send in the response.
+
 module PointsExtraction
   COPULAE = %w(act appear be become come end get go grow fall feel keep look prove remain run seem smell sound stay taste turn wax)
 
+  # This will complete the points extraction process, given that some verbs
+  # matched frames, this will complete the point structure to return
   def self.points_for_matches(neo4j_client, matches, topics, keys)
     points = matches.map do |verb, results|
       results.reject! { |r| r.first.to_a.compact.size < 2 }
@@ -24,6 +33,8 @@ module PointsExtraction
     end.flatten.compact
   end
 
+  # this iterates all the verbs and tests that they each match frames, those
+  # that do are returned
   def self.matches_for_verbs(neo4j_client, frames, frame_queries)
     verb_queries = neo4j_client.verbs.map do |v|
       queries_for_verb(v, frames, frame_queries).map do |q|
@@ -38,6 +49,7 @@ module PointsExtraction
   end
 
   private
+  # this fetches the cql queries for the frames
   def self.queries_for_verb(verb, frames, frame_queries)
     return [] unless frames[verb.lemma]
     frames = frames[verb.lemma].map { |f| Frame.new(f, verb.lemma) }

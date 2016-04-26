@@ -1,14 +1,21 @@
+# summary.rb
+#
+# This file implements the class for a summary object. Summary instances are
+# built up in the build method
+
 class Summary
   attr_accessor :topics, :counter_points, :related_points, :negated_points,
     :common_points, :longer_points, :commonly_discussed_topic_points,
     :multiple_topic_points, :question_points, :point_count
 
+  # a title, list of points, topics, and desired point count are inputs
   def initialize(title, points, topics, point_count)
     @title, @points, @topics, @point_count = title, points, topics, point_count
     @groups = Hash[*points.group_by { |p| p["Components"] }.sort_by { |_, v| v.size }.reverse.flatten(1)]
     @used_points = []
   end
 
+  # each section of the summary is built in turn, this takes some time
   def build
     @counter_points = generate_counter_points; print "."
     @related_points = generate_related_points; print "."
@@ -171,6 +178,8 @@ class Summary
   end
 
   private
+
+  # these private methods implement the point `spending' concept used in avoiding reuse
 
   def available_points(points=@points)
     points.select { |p| (@used_points & point_id_strings(p)).empty? }

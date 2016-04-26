@@ -1,3 +1,10 @@
+# presenter.rb
+#
+# This module implements the clean and format methods. Given a string such
+# as “, abortion is a right - ” it will output “Abortion is a right.”.
+# Every extract is cleaned using the methods defined here before being
+# included as part of a summary.
+
 module Presenter
   def self.format(string, topics, question=false)
     highlight(clean(string, question), topics)

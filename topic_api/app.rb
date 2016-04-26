@@ -1,3 +1,9 @@
+# app.rb
+#
+# This file implements the topic api service. It exposes a route that can
+# accept requests containing a body of text. From this is runs the LDA
+# analysis and returns the topic words as a response.
+
 require 'sinatra'
 require 'lda-ruby'
 require 'json'

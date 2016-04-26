@@ -1,3 +1,10 @@
+# condense.rb
+#
+# This module implements a means of merging strings that are similar. Making
+# use of the differ gem, this can take a pair of strings
+# e.g. "Abortion is not a right" and "Abortion is a right" and output:
+# "Abortion is {not} a right".
+
 module Condense
   def self.condense_group(group)
     return group if group.size < 2

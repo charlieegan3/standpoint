@@ -1,3 +1,9 @@
+# frame.rb
+#
+# This class represents a frame. Frames loads from the index are used to
+# initialize instances of this class. This exposes a number of helper methods
+# used in processing frames and points.
+
 class Frame
   attr_accessor :components, :pattern_string, :source, :example, :verb
   def initialize(raw_frame, verb)

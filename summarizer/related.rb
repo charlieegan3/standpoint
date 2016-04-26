@@ -1,3 +1,9 @@
+# related.rb
+#
+# This implements the search for related points. Using the post source of
+# points, they can be grouped. These commonly occurring pairs of patterns make
+# up the list of related point pairs.
+
 module Related
   def self.related_points(points)
     posts = points.group_by { |p| p["Post"] }

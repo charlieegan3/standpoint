@@ -1,3 +1,8 @@
+# plot.rb
+#
+# This script takes a list of point patterns and uses the graph HTML template
+# to build a resulting HTML file.
+
 require "pry"
 require "json"
 

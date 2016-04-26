@@ -1,3 +1,9 @@
+# curator.rb
+#
+# This implements the selection of the best extract for a list of points.
+# This was tested in Study 2. select_best, given a list of points, will return
+# the highest scoring one from the bigram model.
+
 require 'net/http'
 
 module Curator

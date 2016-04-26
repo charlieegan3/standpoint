@@ -1,3 +1,7 @@
+# counters.rb
+#
+# This file implements the search process for both counter and negated points.
+
 module Counters
   PATTERN = /(\W|^)(n't|no|not|none|no one|nobody|nothing|neither|nowhere|never)(\W|$)/i
   def self.counter_points(points)

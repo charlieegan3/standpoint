@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+
+# summarizer_topic.py
+# This is the implementation of the ‘Stock’ summarizer used in the evaluation
+# that was adjusted to run as part of the summary generation pro- cess.
+# Originally sourced from:
+# http://homepages.abdn.ac.uk/advaith/pages/teaching/NLP/practicals/Practical3.zip
+
 import re, random, math, collections, itertools, sys, os
 
 #------------- Function Definitions ---------------------

@@ -1,5 +1,12 @@
+# extract_ranking.rb
+#
+# This is a script that contains the same bigram ranking code used in
+# generating summaries. It can be used to get scores for a group of extracts.
+
 require 'pry'
 
+# extend array for basic stats
+# Source http://stackoverflow.com/a/7749613/1510063
 module Enumerable
   def sum
 	self.inject(0){|accum, i| accum + i }
@@ -26,7 +33,7 @@ def sorted_dup_hash(array)
     sort_by {|_,v| v}.reverse.flatten]
 end
 
-
+# for a string, return the all the bigrams
 def self.bigrams(string)
   words = string.downcase.gsub(/[^\s\w']/, "").split(/\s+/)
   words.each_with_index.to_a[0..-2].map do |e, i|
@@ -34,6 +41,7 @@ def self.bigrams(string)
   end
 end
 
+# this method implements the bigram model
 def score_group(points)
   group_bigrams = []
   points.each do |p|
@@ -50,6 +58,7 @@ def score_group(points)
   end
 end
 
+# load the extracts and score them
 bigram_scored_extracts = []
 Dir.glob('extracts/*') do |p|
   File.open(p).read.split('------').each do |group|
@@ -58,8 +67,11 @@ Dir.glob('extracts/*') do |p|
   end
 end
 bigram_scored_extracts = Hash[*bigram_scored_extracts.flatten]
+
+# load the turker scored extracts
 human_scored_extracts = Hash[*File.open('scored_extracts.txt').readlines.map { |x| [[x[x.index(",")+2..-2]], x[0..x.index(",")-1].to_f] }.flatten]
 
+# print both scores for each extract
 puts "bigram, turkers"
 bigram_scored_extracts.each do |k, v|
   raise if human_scored_extracts[k].nil?
