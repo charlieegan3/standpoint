@@ -100,6 +100,7 @@ summaries.
 This section lists all top level files and folders as well as sub folders containing source code. Some files are omitted in the interest of brevity.
 
 \subsection*{analysis\_api}
+  This service makes used of the points api to collect a list of points for an entire discussion.
   \begin{itemize}
     \item
       \texttt{Dockerfile}: This is a file that contains the specification for an container to be used in collecting points for a corpus. This is used by Docker Compose to build the container image. It is built on the base Ruby docker image.
@@ -110,12 +111,14 @@ This section lists all top level files and folders as well as sub folders contai
   \end{itemize}
 
 \subsection*{corenlp\_server}
+  This is a shell representing CoreNLP image as used as a service by other components.
   \begin{itemize}
     \item
       \texttt{Dockerfile}: This is a more complex, custom Dockerfile for the CoreNLP service. Used via docker-compose and based on the Java base image this file specifies how the CoreNLP server environment should be configured for use by other services.
   \end{itemize}
 
 \subsection*{curator}
+  This single program service implements points curation.
   \begin{itemize}
     \item
       \texttt{Dockerfile}: This simple docker file specifies a Golang environment to run the points curation task.
@@ -127,6 +130,7 @@ This section lists all top level files and folders as well as sub folders contai
   This file is used as the basis for docker-compose in the project. The contents represent all local provisioning settings for services and how they are connected to one and other in YAML syntax. For example, we can see that the analysis\_api is connected with \texttt{links:} to the points and topic API --- as diagrammed in Chapter \ref{chap:system-architecture}. This file also specifies the locations of all Dockerfiles for each service in the project.
 
 \subsection*{docs}
+  This folder contains the project's documentation source.
   \begin{itemize}
     \item
       \texttt{presentation}: This folder contains the slides used in presenting the tool for at the social media workshop in Study 3.
@@ -135,6 +139,7 @@ This section lists all top level files and folders as well as sub folders contai
   \end{itemize}
 
 \subsection*{evaluation}
+  This folder contains all resources used or generated as part of the evaluation.
   \begin{itemize}
     \item
       \texttt{evaluation\_sheet}: This folder contains the evaluation forms used in Study 3.
@@ -157,6 +162,7 @@ This section lists all top level files and folders as well as sub folders contai
   \end{itemize}
 
 \subsection*{points\_api}
+  This is the core system service and is largely reusable. It is implemented as a simple web service that, for a request containing text, returns the results of points extraction analysis.
   \begin{itemize}
     \item
       \texttt{Dockerfile}: This defines the configuration required to run an instance of the points API. This includes installing the dependencies from the Gemfile.
@@ -199,63 +205,66 @@ This section lists all top level files and folders as well as sub folders contai
   \end{itemize}
 
 \subsection*{stock\_summarizers}
+  This folder contains other summarizer implementations used in evaluation.
   \begin{itemize}
     \item
-      \texttt{summarizer\_topic.py}:
+      \texttt{summarizer\_topic.py}: This is the implementation of the `Stock' summarizer used in the evaluation that was adjusted to run as part of the summary generation process. Originally sourced from \\ http://homepages.abdn.ac.uk/advaith/pages/teaching/NLP/practicals/Practical3.zip
   \end{itemize}
 
 \subsection*{summarizer}
+  This folder contains files for the summarizer service, the service that processes a list of extracted points into HTML summaries.
 
-\begin{itemize}
-  \item
-    \texttt{Dockerfile}:
-  \item
-    \texttt{Gemfile}:
-  \item
-    \texttt{antonyms.json}:
-  \item
-    \texttt{condense.rb}:
-  \item
-    \texttt{counters.rb}:
-  \item
-    \texttt{curator.rb}:
-  \item
-    \texttt{paragraphizer.rb}:
-  \item
-    \texttt{presenter.rb}:
-  \item
-    \texttt{related.rb}:
-  \item
-    \texttt{render.rb}:
-  \item
-    \texttt{summarizer.rb}:
-  \item
-    \texttt{summary.rb}:
-  \item
-    \texttt{template\_formatted.html.erb}:
-  \item
-    \texttt{utils.rb}:
-\end{itemize}
-
-\subsection*{topic\_api}
   \begin{itemize}
     \item
-      \texttt{Dockerfile}:
+      \texttt{Dockerfile}: This defines the Ruby image required to run the summarization task. As part of the build process the requirements from the Gemfile are installed.
     \item
-      \texttt{Gemfile}:
+      \texttt{Gemfile}: This lists the requirements for the summarizer service. This service makes use of \texttt{differ} --- a string diffing library --- and \texttt{levenshtein} a library for calculating the Levenshtein distance of two strings. The debugger Pry is also required when debugging the service.
     \item
-      \texttt{app.rb}:
+      \texttt{antonyms.json}: This is a key value index of all antonyms used in the counter point analysis. This is sourced from the Wordnet NLTK corpus. Each word is a key, each value is a list of its antonyms.
+    \item
+      \texttt{condense.rb}: This module implements a means of merging strings that are similar. Making use of the differ gem, this can take a pair of strings e.g. \blockquote{\textit{Abortion is not a right}} and \blockquote{\textit{Abortion is a right}} and output: \blockquote{\textit{Abortion is \textbf{\{}not\textbf{\}} a right}}.
+    \item
+      \texttt{counters.rb}: This file implements the search process for both counter and negated points.
+    \item
+      \texttt{curator.rb}: This implements the selection of the best extract for a list of points. This was tested in Study 2. \texttt{select\_best}, given a list of points, will return the highest scoring one from the bigram model.
+    \item
+      \texttt{paragraphizer.rb}: This file is was used in the generation of the Plain summary style for the evaluation. It is not used in the current summarizer implementation to keep the basic analysis process as simple as possible.
+    \item
+      \texttt{presenter.rb}: This module implements the clean and format methods. Given a string such as \blockquote{\textit{, abortion is a right - }} it will output \blockquote{\textit{Abortion is a right.}}. Every extract is cleaned using the methods defined here before being included as part of a summary.
+    \item
+      \texttt{related.rb}: This module implements the identification of related points.
+    \item
+      \texttt{summarizer.rb}: This script brings all the other modules in this service together and uses them to analyze points and produce a summary from them.
+    \item
+      \texttt{summary.rb}: This class implements the summary object. The summarizer uses an instance of this class to build a summary before passing it to an ERB template and writing an HTML summary to disk.
+    \item
+      \texttt{template\_formatted.html.erb}: This is the template used specify the format a summary object should take when presented in HTML. Given a summary object this fills a series of sections to complete the summary using the information stored in the summary.
+    \item
+      \texttt{utils.rb}: This file contains a utility function for collecting a key value representation of the duplicates in a list. This is used in the summary class.
+  \end{itemize}
+
+\subsection*{topic\_api}
+  This folder contains the files that represent the topic api, a service that wraps the third-party LDA topic modeler.
+  \begin{itemize}
+    \item
+      \texttt{Dockerfile}: This defines the docker image used to run an instance of the topic api. This sets up a base Ruby installation and installs the project gem dependencies.
+    \item
+      \texttt{Gemfile}: This lists the three service dependencies. Similar to the points api, this service is also implemented as a Sinatra application. It also requires a Ruby wrapper to a C LDA (Latent Dirichlet allocation) implementation and the Pry debugger.
+    \item
+      \texttt{app.rb}: This file implements the topic api service. It exposes a route that can accept requests containing a body of text. From this is runs the LDA analysis and returns the topic words as a response.
   \end{itemize}
 
 \subsection*{utilities}
+  This folder contained other experimental implementations. Currently it only includes the graph representation plotter.
+
   \begin{itemize}
     \item
       \texttt{plotter}:
 
       \begin{itemize}
       \item
-        \texttt{graph.html}:
+        \texttt{graph.html}: This is a template, standalone template for the graph representation of points as seen in Appendix \ref{app:disc_graph}.
       \item
-        \texttt{plot.rb}:
+        \texttt{plot.rb}: This script takes a list of point patterns and uses the graph HTML template to build a resulting HTML file.
       \end{itemize}
   \end{itemize}
