@@ -2,124 +2,7 @@
 \usepackage[a4paper,margin=1cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{listings}
-
-\newcommand\YAMLcolonstyle{\color{red}\mdseries}
-\newcommand\YAMLkeystyle{\color{black}\bfseries}
-\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
-
-\lstloadlanguages{Ruby}
-\lstdefinelanguage{HTML5}{
-    sensitive=true,
-    keywords={%
-	  typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,
-	  html, title, meta, style, head, body, script, canvas,
-	  border:, transform:, -moz-transform:, transition-duration:, transition-property:,
-	  transition-timing-function:
-    },
-    otherkeywords={<, >, \/},
-    ndkeywords={class, export, boolean, throw, implements, import, this},
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    morecomment=[s]{<!}{>},
-    morestring=[b]',
-    morestring=[b]",
-    alsoletter={-},
-    alsodigit={:}
-}
-\lstdefinelanguage{Golang}%
-  {morekeywords=[1]{package,import,func,type,struct,return,defer,panic,%
-     recover,select,var,const,iota,},%
-   morekeywords=[2]{string,uint,uint8,uint16,uint32,uint64,int,int8,int16,%
-     int32,int64,bool,float32,float64,complex64,complex128,byte,rune,uintptr,%
-     error,interface},%
-   morekeywords=[3]{map,slice,make,new,nil,len,cap,copy,close,true,false,%
-     delete,append,real,imag,complex,chan,},%
-   morekeywords=[4]{for,break,continue,range,goto,switch,case,fallthrough,if,%
-     else,default,},%
-   morekeywords=[5]{Println,Printf,Error,},%
-   sensitive=true,%
-   morecomment=[l]{//},%
-   morecomment=[s]{/*}{*/},%
-   morestring=[b]',%
-   morestring=[b]",%
-   morestring=[s]{`}{`},%
-}
-
-\lstset{%
-  breaklines=true,
-  numbers=left,
-  basicstyle=\ttfamily\small\color{black},
-  commentstyle = \ttfamily\color{red},
-  keywordstyle=\ttfamily\color{blue},
-  stringstyle=\color{orange}}
-
-\pagenumbering{gobble}
-
-\title{Project Source Listing}
-\date{}
-
-\begin{document}
-  \maketitle
-  This document lists all important project files. Files and folders are described in the maintenance manual.
-  \pagebreak
-
-LISTINGS
-
-\end{document}
-\documentclass{article}
-\usepackage[a4paper,margin=1cm]{geometry}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{listings}
-
-\newcommand\YAMLcolonstyle{\color{red}\mdseries}
-\newcommand\YAMLkeystyle{\color{black}\bfseries}
-\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
-
-\lstloadlanguages{Ruby}
-\lstdefinelanguage{HTML5}{
-    sensitive=true,
-    keywords={%
-	  typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,
-	  html, title, meta, style, head, body, script, canvas,
-	  border:, transform:, -moz-transform:, transition-duration:, transition-property:,
-	  transition-timing-function:
-    },
-    otherkeywords={<, >, \/},
-    ndkeywords={class, export, boolean, throw, implements, import, this},
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    morecomment=[s]{<!}{>},
-    morestring=[b]',
-    morestring=[b]",
-    alsoletter={-},
-    alsodigit={:}
-}
-\lstdefinelanguage{Golang}%
-  {morekeywords=[1]{package,import,func,type,struct,return,defer,panic,%
-     recover,select,var,const,iota,},%
-   morekeywords=[2]{string,uint,uint8,uint16,uint32,uint64,int,int8,int16,%
-     int32,int64,bool,float32,float64,complex64,complex128,byte,rune,uintptr,%
-     error,interface},%
-   morekeywords=[3]{map,slice,make,new,nil,len,cap,copy,close,true,false,%
-     delete,append,real,imag,complex,chan,},%
-   morekeywords=[4]{for,break,continue,range,goto,switch,case,fallthrough,if,%
-     else,default,},%
-   morekeywords=[5]{Println,Printf,Error,},%
-   sensitive=true,%
-   morecomment=[l]{//},%
-   morecomment=[s]{/*}{*/},%
-   morestring=[b]',%
-   morestring=[b]",%
-   morestring=[s]{`}{`},%
-}
-
-\lstset{%
-  breaklines=true,
-  numbers=left,
-  basicstyle=\ttfamily\small\color{black},
-  commentstyle = \ttfamily\color{red},
-  keywordstyle=\ttfamily\color{blue},
-  stringstyle=\color{orange}}
+\usepackage{minted}
 
 \pagenumbering{gobble}
 
@@ -133,8 +16,7 @@ LISTINGS
 
 
 \section*{analysis\_api/clean.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'json'
 
 unless ARGV[0]
@@ -171,12 +53,11 @@ Dir.glob("#{ARGV[0]}/*").to_a.each do |file, index|
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{analysis\_api/collector.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require "json"
 require 'net/http'
 
@@ -219,12 +100,11 @@ posts.each_with_index do |post, index|
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{curator/main.go}
-\begin{lstlisting}[language=Golang]
-
+\begin{minted}[linenos=true,breaklines=true]{Go}
 package main
 
 import (
@@ -474,12 +354,11 @@ func main() {
 }
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{docker-compose.yml}
-\begin{lstlisting}[language=Ruby]
-
+\begin{minted}[linenos=true,breaklines=true]{YAML}
 analysis_api:
   container_name: analysis_api
   build: ./analysis_api
@@ -550,12 +429,11 @@ corenlp_server:
   memswap_limit: "2g"
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/extract\_ranking.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'pry'
 
 module Enumerable
@@ -645,12 +523,11 @@ machine_for_each_human_score.sort_by { |k, _| k }.each do |k, v|
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/process\_extract\_comparison.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'pry'
 require 'csv'
 
@@ -764,12 +641,11 @@ puts "\nRatings:"
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/process\_summary\_comparison.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'pry'
 require 'csv'
 
@@ -859,12 +735,11 @@ comments.group_by { |c| c[:translation].values.sort }.each do |k, comments|
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/r\_analysis/hists.r}
-\begin{lstlisting}[language=R]
-
+\begin{minted}[linenos=true,breaklines=true]{R}
 require(ggplot2)
 require(gridExtra)
 
@@ -967,12 +842,11 @@ grid.arrange(plot1, ncol=1, nrow=1)
 dev.off()
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/r\_analysis/mann-whit.r}
-\begin{lstlisting}[language=R]
-
+\begin{minted}[linenos=true,breaklines=true]{R}
 library(coin)
 
 #example 1
@@ -1007,12 +881,11 @@ wt_old$statistic
 wt
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/r\_analysis/scatter.r}
-\begin{lstlisting}[language=R]
-
+\begin{minted}[linenos=true,breaklines=true]{R}
 require(ggplot2)
 require(gridExtra)
 require(psych)
@@ -1039,12 +912,11 @@ grid.arrange(plot, ncol=1, nrow=1)
 dev.off()
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/r\_analysis/sig\_tests.r}
-\begin{lstlisting}[language=R]
-
+\begin{minted}[linenos=true,breaklines=true]{R}
 library(scales)
 
 study1 = read.csv(file="study1.csv", header=TRUE, sep=",")
@@ -1086,12 +958,11 @@ print(binom.test(succFail[1], succFail[3])$p.value)
 cor.test(study2_extracts$bigram, study2_extracts$turkers, short=FALSE, exact=TRUE, method="pearson", alternative="greater")
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/survey/extracts.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'pry'
 require 'erb'
 
@@ -1120,12 +991,11 @@ topics.zip(groups).each do |topic, sets|
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/survey/generate.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'pry'
 require 'erb'
 
@@ -1146,12 +1016,11 @@ sets.each_with_index do |set, index|
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/survey/server.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'sinatra'
 
 set :bind, '0.0.0.0'
@@ -1168,12 +1037,11 @@ post '/' do
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/survey/survey.html.erb}
-\begin{lstlisting}[language=HTML5]
-
+\begin{minted}[linenos=true,breaklines=true]{XML+Ruby}
 <!-- <%= index + 1 %> -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1459,12 +1327,11 @@ end
 </div>
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{evaluation/survey/survey\_extract.html.erb}
-\begin{lstlisting}[language=HTML5]
-
+\begin{minted}[linenos=true,breaklines=true]{XML+Ruby}
 <!-- <%= index + 1 %> -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1661,12 +1528,11 @@ end
 </div>
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/app.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'json'
 require 'net/http'
 
@@ -1724,12 +1590,11 @@ post '/' do
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/LEX\_VERB\_NP\_PREP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //LEX VERB NP PREP NP
 
 MATCH (verb:Node)
@@ -1745,12 +1610,11 @@ AND rel_prep.label = "case"
 RETURN lex, verb, dobj, prep, nmod;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/LEX\_VERB\_PREP\_NP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //LEX VERB PREP NP NP
 
 MATCH (verb:Node)
@@ -1766,12 +1630,11 @@ AND rel_dep.label = "dep"
 RETURN lex, verb, prep, nmod, dep;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB
 
 MATCH (verb:Node)
@@ -1781,12 +1644,11 @@ WHERE rel_nsubj.label = "nsubj"
 RETURN nsubj, verb;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_ADJ-copula.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB ADJ (copula)
 
 MATCH (verb:Node)
@@ -1798,12 +1660,11 @@ AND rel_adj.label = "xcomp"
 RETURN nsubj, verb, adj;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_ADV-copula.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB ADV (copula)
 
 MATCH (verb:Node)
@@ -1815,12 +1676,11 @@ AND rel_advmod.label = "advmod"
 RETURN nsubj, verb, adv;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_ADV.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB ADV
 
 MATCH (verb:Node)
@@ -1834,12 +1694,11 @@ AND rel_adv.label = "advmod"
 RETURN nsubj, verb, adv;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_ADV\_LEX.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB ADV LEX
 
 MATCH (verb:Node)
@@ -1859,12 +1718,11 @@ RETURN nsubj, verb, dobj, lex
 ORDER BY nsubj.index;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_ADV\_PREP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB ADV PREP NP
 
 MATCH (verb:Node)
@@ -1882,12 +1740,11 @@ AND rel_prep.label = "case"
 RETURN nsubj, verb, adv;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_LEX.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB LEX
 //why can't there JUST be an nsubj to the head of the NP?
 
@@ -1897,17 +1754,16 @@ MATCH path=(nsubj:Node)-[REL*1..3]->(verb)
 MATCH (np2)-[rel_lex:REL]->(lex:Node)
 
 WHERE rel_lex.label = "advmod"
-AND "acl" IN SQlRACT(r in relationships(path) | r.label)
+AND "acl" IN CypherRACT(r in relationships(path) | r.label)
 RETURN nsubj, verb, lex
 ORDER BY nsubj.index;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP-copula.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP (copula)
 
 MATCH (dobj:Node)
@@ -1919,12 +1775,11 @@ AND ANY (uuid IN ["UUIDS"] WHERE uuid = verb.uuid)
 RETURN nsubj, verb, dobj;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP
 
 MATCH (verb:Node)
@@ -1936,12 +1791,11 @@ AND rel_dobj.label = "dobj"
 RETURN nsubj, verb, dobj;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP\_LEX.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP LEX
 //in conj 2nd np the first nn is selected (since it relates to the 2nd via conj:and or other)
 
@@ -1957,12 +1811,11 @@ RETURN nsubj, verb, dobj, lex
 ORDER BY dobj.index;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP\_LEX\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP LEX NP
 
 MATCH (verb:Node)
@@ -1979,12 +1832,11 @@ AND rel_lex.label = "mark"
 RETURN nsubj, verb, dobj, lex, np2;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP NP
 
 MATCH (verb:Node)
@@ -1998,12 +1850,11 @@ AND rel_xcomp.label = "xcomp"
 RETURN nsubj, verb, dobj, xcomp;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP\_PREP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP PREP NP
 
 MATCH (verb:Node)
@@ -2019,12 +1870,11 @@ AND rel_prep.label = "case"
 RETURN nsubj, verb, dobj, prep, np3;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_NP\_PREP\_NP\_PREP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB NP PREP NP PREP NP
 
 MATCH (verb:Node)
@@ -2047,12 +1897,11 @@ AND nmod1.index < nmod2.index
 RETURN nsubj, verb, dobj, prep1, nmod1, prep2, nmod2;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_PREP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB PREP NP
 
 MATCH (verb:Node)
@@ -2066,12 +1915,11 @@ AND rel_prep.label = "case"
 RETURN nsubj, verb, prep, dobj;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_PREP\_NP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB PREP NP NP
 
 MATCH (verb:Node)
@@ -2089,12 +1937,11 @@ AND rel_prep.label = "case"
 RETURN nsubj, verb, prep, nmod, dobj;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/NP\_VERB\_PREP\_NP\_PREP\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //NP VERB PREP NP PREP NP
 //here the NP at the end is really a sentence, the verb is returned
 
@@ -2116,12 +1963,11 @@ AND rel_prep2.label =~ 'mark|case'
 RETURN nsubj, verb, prep, nmod, prep2, verb2;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/PREP\_NP\_VERB\_NP.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //PREP NP VERB NP
 
 MATCH (verb:Node)
@@ -2135,12 +1981,11 @@ AND rel_prep.label = "case"
 RETURN prep, nmod, verb, dobj;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/frame\_queries/VERB-universal.cql}
-\begin{lstlisting}[language=SQl]
-
+\begin{minted}[linenos=true,breaklines=true]{Cypher}
 //VERB
 //attempts to match the tree for all verbs
 
@@ -2154,12 +1999,11 @@ OPTIONAL MATCH (verb)-[dobj_rel:REL]->(dobj:Node) WHERE ANY (l IN ['dobj', 'nmod
 RETURN nsubj, nsubjpass, nsubjcop, verb, dobj, dobjcop, xcomp;
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/corenlp\_client.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 class CoreNlpClient
   def initialize(host)
     #params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
@@ -2179,12 +2023,11 @@ class CoreNlpClient
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/frame.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 class Frame
   attr_accessor :components, :pattern_string, :source, :example, :verb
   def initialize(raw_frame, verb)
@@ -2269,12 +2112,11 @@ class Frame
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/neo4j\_client.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 class Neo4jClient
   def initialize(url)
     Neo4j::Session.open(:server_db, url)
@@ -2363,12 +2205,11 @@ class Neo4jClient
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/node.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 class Node
   include Neo4j::ActiveNode
 
@@ -2392,12 +2233,11 @@ class Node
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/points\_extraction.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module PointsExtraction
   COPULAE = %w(act appear be become come end get go grow fall feel keep look prove remain run seem smell sound stay taste turn wax)
 
@@ -2454,12 +2294,11 @@ module PointsExtraction
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/relation.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 class Relation
   include Neo4j::ActiveRel
 
@@ -2475,12 +2314,11 @@ class Relation
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/lib/utils.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Utils
   def self.chunk_text(chunk_length, text)
     text.gsub!(/([a-z]\.)([A-Z])/, ' ')
@@ -2510,12 +2348,11 @@ module Utils
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{points\_api/tasks/parse\_verb\_net.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'json'
 require 'nokogiri'
 require 'pry'
@@ -2550,12 +2387,11 @@ File.open('verbs.json', 'w').write(verbs.to_json)
 puts "Wrote #{verbs.size} to verbs.json"
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{stock\_summarizers/summarizer\_topic.py}
-\begin{lstlisting}[language=Python]
-
+\begin{minted}[linenos=true,breaklines=true]{Python}
 #!/usr/bin/env python
 import re, random, math, collections, itertools, sys, os
 
@@ -2643,12 +2479,11 @@ getProbabilities(sentences,  pWord)
 scoreSentences(sentences, pWord, int(sys.argv[2]))
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/abortion\_formatted.html}
-\begin{lstlisting}[language=HTML5]
-
+\begin{minted}[linenos=true,breaklines=true]{HTML}
 <p>People <strong>disagree</strong> on these points:</p>
         <blockquote>
       <p><code>Abortion</code> should be illegal.</p>
@@ -2769,12 +2604,11 @@ scoreSentences(sentences, pWord, int(sys.argv[2]))
   </blockquote>
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/condense.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Condense
   def self.condense_group(group)
     return group if group.size < 2
@@ -2829,12 +2663,11 @@ module Condense
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/counters.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Counters
   PATTERN = /(\W|^)(n't|no|not|none|no one|nobody|nothing|neither|nowhere|never)(\W|$)/i
   def self.counter_points(points)
@@ -2935,12 +2768,11 @@ module Counters
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/curator.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'net/http'
 
 module Curator
@@ -3106,12 +2938,11 @@ module Curator
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/paragraphizer.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Paragraphizer
   def self.generate_paragraph(data)
     paragraph = ""
@@ -3158,12 +2989,11 @@ module Paragraphizer
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/presenter.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Presenter
   def self.format(string, topics, question=false)
     highlight(clean(string, question), topics)
@@ -3212,12 +3042,11 @@ module Presenter
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/related.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Related
   def self.related_points(points)
     posts = points.group_by { |p| p["Post"] }
@@ -3249,12 +3078,11 @@ module Related
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/summarizer.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'json'
 require 'erb'
 
@@ -3291,12 +3119,11 @@ html = erb.result binding
 File.open(out_file_name + "_formatted.html", "w") { |file| file.write(html) }
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/summary.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 class Summary
   attr_accessor :topics, :counter_points, :related_points, :negated_points,
     :common_points, :longer_points, :commonly_discussed_topic_points,
@@ -3511,12 +3338,11 @@ class Summary
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/template\_formatted.html.erb}
-\begin{lstlisting}[language=HTML5]
-
+\begin{minted}[linenos=true,breaklines=true]{XML+Ruby}
 <p>People <strong>disagree</strong> on these points:</p>
 <% @summary.counter_points.each do |point, counter| %>
   <% point = [point["String"], counter["String"]] %>
@@ -3595,12 +3421,11 @@ end
 <% end %>
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{summarizer/utils.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 module Utils
   def self.sorted_dup_hash(array)
     Hash[*array.inject(Hash.new(0)) { |h,e| h[e] += 1; h }.
@@ -3610,12 +3435,11 @@ module Utils
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{topic\_api/app.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require 'sinatra'
 require 'lda-ruby'
 require 'json'
@@ -3659,12 +3483,11 @@ post '/' do
 end
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{utilities/plotter/graph.html}
-\begin{lstlisting}[language=HTML5]
-
+\begin{minted}[linenos=true,breaklines=true]{HTML}
 <!DOCTYPE>
 <html>
   <head>
@@ -3746,12 +3569,11 @@ end
 </html>
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 \section*{utilities/plotter/plot.rb}
-\begin{lstlisting}[language=Ruby,stringstyle=\color{black}]
-
+\begin{minted}[linenos=true,breaklines=true]{Ruby}
 require "pry"
 require "json"
 
@@ -3821,7 +3643,7 @@ template = File.open("graph.html").read
 File.open("output.html", "w").write(template.gsub('"elements":{"nodes":[], "edges":[]}', elements))
 
 
-\end{lstlisting}
+\end{minted}
 \pagebreak
 
 

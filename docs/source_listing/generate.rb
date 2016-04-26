@@ -7,7 +7,6 @@ files = [
 	'../../evaluation/process_extract_comparison.rb',
 	'../../evaluation/process_summary_comparison.rb',
 	'../../evaluation/r_analysis/hists.r',
-	'../../evaluation/r_analysis/mann-whit.r',
 	'../../evaluation/r_analysis/scatter.r',
 	'../../evaluation/r_analysis/sig_tests.r',
 	'../../evaluation/survey/extracts.rb',
@@ -64,21 +63,21 @@ files = [
 
 template = '
 \section*{FILE}
-\begin{lstlisting}[language=EXT]
+\begin{minted}[linenos=true,breaklines=true]{EXT}
 CODE
-\end{lstlisting}
+\end{minted}
 \pagebreak
 '
 
 exts = {
-  "rb" => 'Ruby,stringstyle=\color{black}',
+  "rb" => 'Ruby',
   "r" => "R",
-  "html" => "HTML5",
-  "erb" => "HTML5",
+  "html" => "HTML",
+  "erb" => "XML+Ruby",
   "py" => "Python",
-  "cql" => "SQl",
-  "yml" => "Ruby",
-  "go" => "Golang",
+  "cql" => "Cypher",
+  "yml" => "YAML",
+  "go" => "Go",
 }
 
 def escape(string)
@@ -90,11 +89,10 @@ files.each do |path|
   contents = File.open(path).read
   all_listings += template
     .gsub("FILE", escape(path.gsub('../../', '')))
-    .gsub("CODE", "\n#{contents}\n")
+    .gsub("CODE", "#{contents}\n")
     .gsub("EXT", exts[path.split(".").last])
 end
 
 document = File.open('listing_template.tex').read
-puts document
 puts document.gsub("LISTINGS", all_listings)
 

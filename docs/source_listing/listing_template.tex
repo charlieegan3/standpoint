@@ -2,56 +2,7 @@
 \usepackage[a4paper,margin=1cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{listings}
-
-\newcommand\YAMLcolonstyle{\color{red}\mdseries}
-\newcommand\YAMLkeystyle{\color{black}\bfseries}
-\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
-
-\lstloadlanguages{Ruby}
-\lstdefinelanguage{HTML5}{
-    sensitive=true,
-    keywords={%
-	  typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,
-	  html, title, meta, style, head, body, script, canvas,
-	  border:, transform:, -moz-transform:, transition-duration:, transition-property:,
-	  transition-timing-function:
-    },
-    otherkeywords={<, >, \/},
-    ndkeywords={class, export, boolean, throw, implements, import, this},
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    morecomment=[s]{<!}{>},
-    morestring=[b]',
-    morestring=[b]",
-    alsoletter={-},
-    alsodigit={:}
-}
-\lstdefinelanguage{Golang}%
-  {morekeywords=[1]{package,import,func,type,struct,return,defer,panic,%
-     recover,select,var,const,iota,},%
-   morekeywords=[2]{string,uint,uint8,uint16,uint32,uint64,int,int8,int16,%
-     int32,int64,bool,float32,float64,complex64,complex128,byte,rune,uintptr,%
-     error,interface},%
-   morekeywords=[3]{map,slice,make,new,nil,len,cap,copy,close,true,false,%
-     delete,append,real,imag,complex,chan,},%
-   morekeywords=[4]{for,break,continue,range,goto,switch,case,fallthrough,if,%
-     else,default,},%
-   morekeywords=[5]{Println,Printf,Error,},%
-   sensitive=true,%
-   morecomment=[l]{//},%
-   morecomment=[s]{/*}{*/},%
-   morestring=[b]',%
-   morestring=[b]",%
-   morestring=[s]{`}{`},%
-}
-
-\lstset{%
-  breaklines=true,
-  numbers=left,
-  basicstyle=\ttfamily\small\color{black},
-  commentstyle = \ttfamily\color{red},
-  keywordstyle=\ttfamily\color{blue},
-  stringstyle=\color{orange}}
+\usepackage{minted}
 
 \pagenumbering{gobble}
 
