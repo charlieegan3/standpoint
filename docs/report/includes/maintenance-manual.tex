@@ -97,185 +97,165 @@ summaries.
 
 \section{Project Source Listing}
 
+This section lists all top level files and folders as well as sub folders containing source code. Some files are omitted in the interest of brevity.
+
 \subsection*{analysis\_api}
-
-\begin{itemize}
-
-\item
-  \texttt{Dockerfile}:
-\item
-  \texttt{clean.rb}:
-\item
-  \texttt{collector.rb}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{Dockerfile}: This is a file that contains the specification for an container to be used in collecting points for a corpus. This is used by Docker Compose to build the container image. It is built on the base Ruby docker image.
+    \item
+      \texttt{clean.rb}: This is a script for cleaning a corpus of posts. The key line: \texttt{content.chars.select(\&:valid\_encoding?).join} forcibly removed invalid characters. This file also parses post metadata lines (\#key=value) and saves the input files as JSON.
+    \item
+      \texttt{collector.rb}: This should be seen as a client for the points\_api. This script iterates the post files in the specified corpus directory and uses the points\_api to collect points for each post in turn.
+  \end{itemize}
 
 \subsection*{corenlp\_server}
-
-\begin{itemize}
-
-\item
-  \texttt{Dockerfile}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{Dockerfile}: This is a more complex, custom Dockerfile for the CoreNLP service. Used via docker-compose and based on the Java base image this file specifies how the CoreNLP server environment should be configured for use by other services.
+  \end{itemize}
 
 \subsection*{curator}
-
-\begin{itemize}
-
-\item
-  \texttt{Dockerfile}:
-\item
-  \texttt{main.go}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{Dockerfile}: This simple docker file specifies a Golang environment to run the points curation task.
+    \item
+      \texttt{main.go}: This is file implements the entirety of the points curation task. It's process is described in detail in \ref{chap:points-curation}.
+  \end{itemize}
 
 \subsection*{docker-compose.yml}
+  This file is used as the basis for docker-compose in the project. The contents represent all local provisioning settings for services and how they are connected to one and other in YAML syntax. For example, we can see that the analysis\_api is connected with \texttt{links:} to the points and topic API --- as diagrammed in Chapter \ref{chap:system-architecture}. This file also specifies the locations of all Dockerfiles for each service in the project.
 
 \subsection*{docs}
-
-\begin{itemize}
-
-\item
-  \texttt{presentation}:
-\item
-  \texttt{report}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{presentation}: This folder contains the slides used in presenting the tool for at the social media workshop in Study 3.
+    \item
+      \texttt{report}: This folder contains all files used to generate the project report.
+  \end{itemize}
 
 \subsection*{evaluation}
-
-\begin{itemize}
-
-\item
-  \texttt{evaluation\_sheet}:
-\item
-  \texttt{extract\_comparison\ (RESULTS)}:
-\item
-  \texttt{summary\_comparison\ (RESULTS)}:
-\item
-  \texttt{extract\_ranking.rb}:
-\item
-  \texttt{process\_extract\_comparison.rb}:
-\item
-  \texttt{process\_summary\_comparison.rb}:
-\item
-  \texttt{r\_analysis/}:
-\item
-  \texttt{study3\_comments.txt}:
-\item
-  \texttt{survey/}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{evaluation\_sheet}: This folder contains the evaluation forms used in Study 3.
+    \item
+      \texttt{extract\_comparison\ (RESULTS)}: This folder contains the results from Study 2 in CSV format as exported from Amazon Mechanical turk.
+    \item
+      \texttt{summary\_comparison\ (RESULTS)}: This folder contains the results from Study 1 in CSV format as exported from Amazon Mechanical turk.
+    \item
+      \texttt{extract\_ranking.rb}: This is a script that contains the same bigram ranking code used in generating summaries. It can be used to get scores for a group of extracts.
+    \item
+      \texttt{process\_extract\_comparison.rb}: This is a general purpose script to process the results from Study 2. It prints the results in a variety of formats.
+    \item
+      \texttt{process\_summary\_comparison.rb}: This is a general purpose script to process the results from Study 1. It prints the results in a variety of formats.
+    \item
+      \texttt{r\_analysis/}: This folder contains the r script files used to generate the graphs and significance figures used in the results section.
+    \item
+      \texttt{study3\_comments.txt}: This file contains the typed comments from the Study 3 participants.
+    \item
+      \texttt{survey/}: This folder contains a series of files that were used to generated the questionnaires for Studies 1 \& 2. These process summaries as exported by the summarizer into HTML that is read for use on Mechanical Turk's HIT interface.
+  \end{itemize}
 
 \subsection*{points\_api}
-
-\begin{itemize}
-
-\item
-  \texttt{Dockerfile}:
-\item
-  \texttt{Gemfile}:
-\item
-  \texttt{app.rb}:
-\item
-  \texttt{frame\_queries}:
-\item
-  \texttt{groups.json}:
-\item
-  \texttt{lib}:
-
   \begin{itemize}
+    \item
+      \texttt{Dockerfile}: This defines the configuration required to run an instance of the points API. This includes installing the dependencies from the Gemfile.
+    \item
+      \texttt{Gemfile}: The Gemfile lists the requirements for this service. The points api is implemented as a basic Sinatra application and makes used of the Sinatra microframework. It also requires an XML parser (nokogiri) and the ruby neo4j wrapper.
+    \item
+      \texttt{app.rb}: This file implements the core of the points extraction service. It defines a root route that that accepts requests for points analysis. It splits the text into chunks and extracts sentences before triggering the points analysis.
+    \item
+      \texttt{frame\_queries}: This folder contains all the frame queries in Cypher for each of the frame patterns (\texttt{NP VERB NP} etc.). The folder also contains variations of queries for copula verbs and the generic frame query.
+    \item
+      \texttt{groups.json}: This is a JSON representation of the VerbNet database. It is not only used for inspecting verb classes when debugging.
+    \item
+      \texttt{lib}:
 
-  \item
-    \texttt{corenlp\_client.rb}:
-  \item
-    \texttt{frame.rb}:
-  \item
-    \texttt{neo4j\_client.rb}:
-  \item
-    \texttt{node.rb}:
-  \item
-    \texttt{points\_extraction.rb}:
-  \item
-    \texttt{relation.rb}:
-  \item
-    \texttt{utils.rb}:
+      \begin{itemize}
+        \item
+          \texttt{corenlp\_client.rb}: This is a wrapper used in requesting dependency parse information from the CoreNLP service.
+        \item
+          \texttt{frame.rb}: This class represents a frame. Frames loads from the index are used to initialize instances of this class. This exposes a number of helper methods used in processing frames and points.
+        \item
+          \texttt{neo4j\_client.rb}: This is a wrapper for the Neo4j services and is used to execute queries and fetch results using a simplified interface.
+        \item
+          \texttt{node.rb}: This class extends the Neo4j::ActiveNode class and defines the structure that should be used to save tokens in the Neo4j database. This includes attributes and dependency relations to other nodes.
+        \item
+          \texttt{points\_extraction.rb}: This is the central file to extracting points from text. This is called from the application twice, first to get the verbs that have valid frame matches from in the database and then, for each of these, to get the extract information for the match as a complete point, ready to send in the response.
+        \item
+          \texttt{relation.rb}: This class extends the Neo4j::ActiveRel class and defines the structure of a dependency graph edge. These objects only have a single label attribute and connect two tokens nodes in the graphs.
+        \item
+          \texttt{utils.rb}: This file contains a utility function for collecting a key value representation of the duplicates in a list. This is used in throughout the service.
+      \end{itemize}
+    \item
+      \texttt{tasks}:
+
+      \begin{itemize}
+        \item
+          \texttt{parse\_verb\_net.rb}: This is a script used in parsing the XML information from VerbNet. VerbNet is not stored in it's original form in the project source but is available for download here: \\ http://verbs.colorado.edu/verb-index/vn/verbnet-3.2.tar.gz
+      \end{itemize}
+    \item
+      \texttt{verbs.json}: This is the verb index. It is loaded by the application and used to lookup frame each verb found in the input text.
   \end{itemize}
-\item
-  \texttt{tasks}:
-
-  \begin{itemize}
-
-  \item
-    \texttt{parse\_verb\_net.rb}:
-  \end{itemize}
-\item
-  \texttt{verbs.json}:
-\end{itemize}
-
-\subsection*{readme.md}
 
 \subsection*{stock\_summarizers}
-
-\begin{itemize}
-
-\item
-  \texttt{summarizer\_topic.py}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{summarizer\_topic.py}:
+  \end{itemize}
 
 \subsection*{summarizer}
 
 \begin{itemize}
-
-\item
-  \texttt{Dockerfile}:
-\item
-  \texttt{Gemfile}:
-\item
-  \texttt{antonyms.json}:
-\item
-  \texttt{condense.rb}:
-\item
-  \texttt{counters.rb}:
-\item
-  \texttt{curator.rb}:
-\item
-  \texttt{paragraphizer.rb}:
-\item
-  \texttt{presenter.rb}:
-\item
-  \texttt{related.rb}:
-\item
-  \texttt{render.rb}:
-\item
-  \texttt{summarizer.rb}:
-\item
-  \texttt{summary.rb}:
-\item
-  \texttt{template\_formatted.html.erb}:
-\item
-  \texttt{utils.rb}:
+  \item
+    \texttt{Dockerfile}:
+  \item
+    \texttt{Gemfile}:
+  \item
+    \texttt{antonyms.json}:
+  \item
+    \texttt{condense.rb}:
+  \item
+    \texttt{counters.rb}:
+  \item
+    \texttt{curator.rb}:
+  \item
+    \texttt{paragraphizer.rb}:
+  \item
+    \texttt{presenter.rb}:
+  \item
+    \texttt{related.rb}:
+  \item
+    \texttt{render.rb}:
+  \item
+    \texttt{summarizer.rb}:
+  \item
+    \texttt{summary.rb}:
+  \item
+    \texttt{template\_formatted.html.erb}:
+  \item
+    \texttt{utils.rb}:
 \end{itemize}
 
 \subsection*{topic\_api}
-
-\begin{itemize}
-\item
-  \texttt{Dockerfile}:
-\item
-  \texttt{Gemfile}:
-\item
-  \texttt{app.rb}:
-\end{itemize}
+  \begin{itemize}
+    \item
+      \texttt{Dockerfile}:
+    \item
+      \texttt{Gemfile}:
+    \item
+      \texttt{app.rb}:
+  \end{itemize}
 
 \subsection*{utilities}
-
-\begin{itemize}
-
-\item
-  \texttt{plotter}:
-
   \begin{itemize}
-  \item
-    \texttt{graph.html}:
-  \item
-    \texttt{plot.rb}:
-  \end{itemize}
-\end{itemize}
+    \item
+      \texttt{plotter}:
 
+      \begin{itemize}
+      \item
+        \texttt{graph.html}:
+      \item
+        \texttt{plot.rb}:
+      \end{itemize}
+  \end{itemize}
