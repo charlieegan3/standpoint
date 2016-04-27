@@ -33,7 +33,7 @@ This guide will list steps to complete the analysis for a single arbitrary discu
 2. From the project root directory run `docker-compose run curator /bin/bash` to get a console ready to run the curation task.
 3. To clean the list for summarization run: `go run main.go abortion_points.txt > abortion_points_clean.txt`
 
-### Generating a Summaries
+### Generating Summaries
 1. First get a clean list of points to use in generating the summary. From the project root run: `mv curator/abortion_points_clean.txt summarizer/abortion_points_clean.txt`.
 2. Now run: `docker-compose run summarizer /bin/bash` to get a console prepared for generating summaries.
 3. To generate a summary for your clean list of points run: `ruby summarizer.rb abortion_points_clean.txt`
