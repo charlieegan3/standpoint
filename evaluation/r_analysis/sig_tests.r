@@ -37,3 +37,15 @@ succFail = successesFailures(study2, 'bigram_vs_random', 'overall')
 print(binom.test(succFail[1], succFail[3])$p.value)
 
 cor.test(study2_extracts$bigram, study2_extracts$turkers, short=FALSE, exact=TRUE, method="pearson", alternative="greater")
+
+layout_results = study1[study1$comparison=='layout_vs_stock' & study1$factor=='overall',]$count
+plain_results = study1[study1$comparison=='plain_vs_stock' & study1$factor=='overall',]$count
+
+ours_much_better = c(plain_results[1],layout_results[1])
+ours_better = c(plain_results[2],layout_results[2])
+same = c(plain_results[3],layout_results[3])
+stock_better = c(plain_results[4],layout_results[4])
+stock_much_better = c(plain_results[5],layout_results[5])
+
+table = rbind(ours_much_better, ours_better, same, stock_better, stock_much_better)
+fisher.test(table, alternative='less')
