@@ -135,9 +135,11 @@
 %%%% Then the abstract and acknowledgements
 
 \begin{abstract}
-  With an ever increasing number of internet users, online communities are hosting an ever growing number of discussions. This user generated content contains millions of statements, opinions and ideas. Current systems for discovery of such information are playing catch-up and in the meantime much of this resource is all but inaccessible.
+  With an ever increasing number of internet users, online communities are hosting an ever growing number of discussions. This user generated content contains millions of statements, opinions and ideas. Current systems for discovery of such information are playing catch-up, and in the meantime much of this resource is all but inaccessible.
 
-  In this paper an approach for summarizing such information is proposed. Our approach is based on the idea of `point extraction', where a point is a verb and it's arguments. We implement and test our approach on six online debates before evaluating our summaries against a high-performing, extractive summarizer. We found that we were able to improve significantly on this.
+  In this paper an approach for summarizing such information is proposed. Our approach is based on the idea of `point extraction', where a point is a verb and it's arguments. The approach uses both dependency parse information and verb case frames to identify and extract valid points.
+
+  We test the approach using online debates and evaluate our summaries against a high-performing, extractive summarizer. We found that we were able to improve significantly on this baseline by showing that points make better summary content units than sentences. We also show and that the analysis enabled by representing a discussion as points is also valuable to the task of automatic summarization.
 \end{abstract}
 
 \begin{acknowledgements}
