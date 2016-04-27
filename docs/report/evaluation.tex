@@ -18,7 +18,7 @@
 
     \begin{itemize}
       \item{The readability and informativeness of our summaries do not improve on those of existing tools. (\textbf{H1})}
-      \item{Explanations introducing summary sections does not improve readability. (\textbf{H2})}
+      \item{Explanations introducing summary sections does not improve overall readability. (\textbf{H2})}
       \item{Our means of selecting extracts is not better than random selection. (\textbf{H3})}
       \item{All summary sections are equally useful to readers. (\textbf{H4})}
     \end{itemize}
@@ -114,11 +114,36 @@
 		  \label{fig:layout_vs_stock_hist}
 		\end{figure}
 
-        Similarly, Layout was also compared against Stock on the same factors, the results of these comparisons are presented in Figure \ref{fig:layout_vs_stock_hist}. We observed a stronger preference for Layout summaries. Similar to that comparison, counts were aggregated from all comparisons for all debate topics; each histogram represents 54 responses; comparison results were tested using Sign tests; and the individual significance threshold was $0.01$ (calculated using the Bonferroni Correction). Again, all factors were found to show a significant difference for this comparison, see Table \ref{tab:lvs-pvals}. Comparing the readability scores in \ref{fig:layout_vs_stock_hist} against those in \ref{fig:plain_vs_stock_hist} shows an improvement in the readability after introducing sections to the same sets of points. \textcolor{red}{This is cause to reject \textbf{H2}. We can state that the summary sections improve readability}.
+        Similarly, Layout was also compared against Stock on the same factors, the results of these comparisons are presented in Figure \ref{fig:layout_vs_stock_hist}. We observed a stronger preference for Layout summaries.
+
+        \textcolor{green}{
+          To test this comparison against the Plain vs. Stock comparison in order to address \textbf{H2} we used a One-sided, Fisher's Exact Test. Taking the 54 responses for the `overall' ratings from each, we performed the test on the following contingency table.
+        }
 
 		\begin{table}[h]
 		  \centering
-		  \caption{Layout vs. Stock factor comparison $p$ values}
+		  \caption{Plain \& Layout vs Stock responses contingency table}
+		  \label{tab:cont}
+		  \begin{tabular}{llll}
+								   & \textbf{\shortstack{Plain (A) vs. \\ Stock (B)}} & \textbf{\shortstack{Layout (A) vs. \\ Stock (B)}} & \textit{Row Total} \\
+			\textbf{A much better} & 17                               & 31                                & 48                 \\
+			\textbf{A better}      & 21                               & 18                                & 39                 \\
+			\textbf{A same}        & 9                                & 1                                 & 10                 \\
+			\textbf{B better}      & 5                                & 2                                 & 7                  \\
+			\textbf{B much better} & 2                                & 2                                 & 4                  \\
+			\textit{Column Total}  & 54                               & 54                                & 108
+		  \end{tabular}
+		\end{table}
+
+		The p-value was found to be significant ($p = 0.011$). This gives cause to reject H2, that using summary sections does not improve the overall readability.
+
+        \textcolor{red}{
+          Similar to that comparison, counts were aggregated from all comparisons for all debate topics; each histogram represents 54 responses; comparison results were tested using Sign tests; and the individual significance threshold was $0.01$ (calculated using the Bonferroni Correction). Again, all factors were found to show a significant difference for this comparison, see Table \ref{tab:lvs-pvals}. Comparing the readability scores in \ref{fig:layout_vs_stock_hist} against those in \ref{fig:plain_vs_stock_hist} shows an improvement in the readability after introducing sections to the same sets of points. \textcolor{red}{This is cause to reject \textbf{H2}. We can state that the summary sections improve readability}.
+        }
+
+		\begin{table}[h]
+		  \centering
+          \caption{\textcolor{red}{Layout vs. Stock factor comparison $p$ values}}
 		  \label{tab:lvs-pvals}
 		  \begin{tabular}{|l|l|l|l|l|l|}
 			\hline
@@ -162,7 +187,7 @@
 	      \noindent Extracts selected by our tool for display were scored above average 73\% of the time. Participants were instructed to score preferred extracts higher on a 5-point Likert scale. Extracts selected by the bigram model scored, on average, 3.93/5 while those not selected scored 3.11/5, 16\% lower. Each extract was rated by 9 participants. To test the significance of this result we compared the participant scores with those allocated by the bigram model using Pearson's product moment correlation coefficient. The results of this test ($cor = 0.28, p = 0.0001$) show a significant correlation between the two scores. Figure \ref{fig:scatter} shows this relationship, when the bigram model assigns a good score it is also scored well by participants. While the bigram model score often conflicts with that of the study participants, there is agreement in high-scoring extracts. This is acceptable because the model is only required to select one good extract per cluster when producing summaries.
 
       \tocless\subsubsection{Bigram vs Random Extract Selection}
-	      \noindent In this study participants also compared two Layout summaries, one with extracts selected by the bigram model, the other with randomly selected extracts from the same clusters. This comparison showed an apparent preference for the bigram summary. 43\% of participants preferred the bigram summary, 22\% scored them the same, and 35\% preferred the randomly generated summaries. Breaking this down by topic, the abortion bigram summary scored more than 5 times the random summary; for creation and healthcare both summaries scored equally. Interestingly, the random god summary scored higher than the accompanying bigram one. This method was intended to evaluate the bigram model at a summary level, however the results appear to vary greatly by topic and show no significant difference. To test these results we again used a one-sided Sign test. Grouping `better' \& `much better' and excluding neutral ratings, the bigram model was selected by 23 of 42 participants, giving $p >> 0.05$. Based on this result were unable to reject \textbf{H3}.
+	      \noindent In this study participants also compared two Layout summaries, one with extracts selected by the bigram model, the other with randomly selected extracts from the same clusters. This comparison showed an apparent preference for the bigram summary. 43\% of participants preferred the bigram summary, 22\% scored them the same, and 35\% preferred the randomly generated summaries. Breaking this down by topic, the abortion bigram summary scored more than 5 times the random summary; for creation and healthcare both summaries scored equally. Interestingly, the random god summary scored higher than the accompanying bigram one. This method was intended to evaluate the bigram model at a summary level, however the results appear to vary greatly by topic and show no significant difference. To test these results we again used a one-sided Sign test. Grouping `better' \& `much better' and excluding neutral ratings, the bigram model was selected by 23 of 42 participants, giving $p >> 0.05$. Based on this result were unable to reject \textbf{H3}, meaning that the bigram model for extract selection is not significantly better than random.
 
     \tocless\subsection{Study 3: Section Comparison}
       This final study was intended to answer questions on the utility of different summary sections. We received comments from 11/15 participants at the workshop, each comparing two pairs of summaries. 14 out of 22 comments, expressed a preference for a summary, 11 choosing the Layout summary and 3 choosing the Stock summary. Three different attendees marked the disagreement section as being the most interesting. Reference was not made to sections on questions or `longer form points'.
@@ -180,7 +205,7 @@
       In summary, based on their comments, participants acknowledge succinctness, variety and informativeness of the Plain summaries. This positive result, and feedback from the comparison, show the effectiveness of the points extraction approach. Points can form better summaries, even without section explanations and clear grouping.
 
     \tocless\subsection{Layout vs. Stock}
-      Similarly, Layout summaries were significantly preferred over Stock summaries. References to organisation doubled in comments for this comparison. Readability and the idea of assimilating information were also common factors cited in justifications for choosing Layout summaries.
+      \textcolor{green}{Layout summaries were preferred over Stock summaries significantly more than Plain summaries}. References to organisation doubled in comments for this comparison. Readability and the idea of assimilating information were also common factors cited in justifications for choosing Layout summaries.
 
       Interestingly, only one comment made a direct reference to `categories' (sections) of the summary. There was another comment that suggested the related points were distracting. We had however expected a greater number of references to summary sections. There were fewer comments in this comparison that suggested the participants believed the summaries to be written by a human. This is perhaps because sections hint at a more structured and mechanized approach.
 
