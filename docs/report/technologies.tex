@@ -7,7 +7,7 @@
     CoreNLP provides the basis for our points extraction analysis and assists in selecting extracts during the generation of summaries. Running as a separate service, modules in our analysis pipeline make requests to get sentences, dependency parses and lemmas for text. While the CoreNLP frame work implements a number of different `annotators', we only make use of \texttt{depparse} \& \texttt{lemma} --- which depend on \texttt{tokenize}, \texttt{ssplit} and \texttt{pos}.
 
   \tocless\section{Verb Case Frames}
-    While not strictly a software dependency, we made use of verb cases frames (standard representations of allowed verb argument patterns) in the definition of valid points. Using frames included as part of the VerbNet index \cite{schuler2005verbnet, fillmore2002framenet}, we were able to implement a mapping between these and the dependency parse information. This connection was implemented using queries on the Neo4j graph database.
+    While not strictly a software dependency, we made use of verb cases frames (standard representations of allowed verb argument patterns) in the definition of valid points. Using FrameNet frames included as part of the VerbNet index \cite{schuler2005verbnet, fillmore2002framenet}, we were able to implement a mapping between these and the dependency parse information. This connection was implemented using queries on the Neo4j graph database.
 
   \tocless\section{Cypher and Neo4j}
     \blockquote{Neo4j is a highly scalable native graph database that leverages data relationships as first-class entities, helping enterprises build intelligent applications to meet today's evolving data challenges.}\footnote{http://neo4j.com/}

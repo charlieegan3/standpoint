@@ -1,6 +1,6 @@
 \chapter{Point Extraction\label{chap:point-extraction}}
   \section{Point Concept Overview and Examples}
-    A `point' is a concept we created to describe a common object in our analysis --- originally defined as: a verb and its arguments. Points encapsulate both a human-readable extract from the text as well as a pattern representing the core components that can be used to match and compare points to others. Lets take the following example sentence:
+    A `point' is a concept we created to describe a common object in our analysis --- originally defined as: a verb and its arguments. Points encapsulate both a human-readable extract from the text as well as a pattern representing the core components that can be used to match and compare points to others. Extracts and patterns are stored as attributes in a key-value structure that represents a point. Lets walk through extracting such a structure from the following sentence:
 
     \smallskip
     \begin{center}
@@ -8,7 +8,7 @@
     \end{center}
     \smallskip
 
-    This sentence puts forward the idea that, until a baby is born, it does not qualify as human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence in the discussion may also put forward this idea, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same idea only the, context differs. We represent points like these using a pattern that lists the core components, these two sentences both contain points that have the pattern: \texttt{child.subject be.verb human.object}.
+    This sentence puts forward the idea that, until a baby is born, it does not qualify as human. This idea is centered around the verb `\textit{is}', \blockquote{...an unborn child \textbf{is} not yet a human being}. Another sentence in the discussion may also put forward this idea, for example: \blockquote{\textit{So you say: children are not complete humans until birth?}}. Both of these sentences have words that express the same idea only the context differs. At this first stage, negation and question tokens are ignored. The aim is to get to the core idea being discussed, regardless of negation or what might be implied by a question. We represent these core ideas as point patterns which list the key arguments and the verb. These two sentences both contain points with the pattern: \texttt{child.subject be.verb human.object} --- the core idea that they both make reference to.
 
     This pattern loses some of the sentence context and is not suitable for use in human-readable text. To overcome this, when extracting points from sentences, points are represented as a pattern but \textit{with an accompanying extract}. Extracts are strings made of one or more sentence substrings. The extracts for the points in these two sentences would be:
 
@@ -18,7 +18,7 @@
     \end{center}
     \smallskip
 
-    Using this pattern/extract representation enables points expressed in different tenses and contexts to be grouped together using their patterns; while retaining the relevant parts of the sentence to present the human-readable points. While points are the fundamental unit used in our analysis, Figure \ref{fig:discmod} shows how points make up part of a larger, hierarchical, discussion model. Points are stored in a key value representation with attributes for the pattern, extract, verb and point's original source post in the discussion, see Table \ref{tab:point-keyval}.
+    Using this pattern/extract representation enables points expressed in different tenses and contexts to be grouped together using their patterns --- while also retaining the relevant parts of the sentence to present the human-readable points. While points are the fundamental unit used in our analysis, Figure \ref{fig:discmod} shows how points make up part of a larger, hierarchical, discussion model. Points are stored in a key value representation with attributes for the pattern, extract, verb and point's original source post in the discussion, see Table \ref{tab:point-keyval}.
 
     \begin{figure}
       \centering
@@ -79,7 +79,7 @@
 	\end{center}
     \vspace{-7mm}
 
-    From this parsed representation of the sentence we can see how both an extract \blockquote{\textit{A fetus has rights.}} and pattern \texttt{fetus.nsubj have.verb right.dobj} are constructed. Sentences often contain more than one point, the following dependency parse shows a sentence that references two different points.
+    From this parsed representation of the sentence we can see how both an extract \blockquote{\textit{A fetus has rights.}} and pattern \texttt{fetus.nsubj have.verb right.dobj} could be constructed using the graph's relations. In this example the nominal subject and direct object relations form the pattern, while all relations are followed from the verb to generate the extract. In more complex graphs not all relations are used to avoid excessively long extracts. Also, patterns must sometimes be derived from more than subject and object relations. Sentences often contain more than one point, the following (more complex) dependency parse shows a sentence that references two different points.
 
     \vspace{3mm}
 	\begin{dependency}[edge horizontal padding=0]
@@ -103,13 +103,13 @@
 	\end{dependency}
     \vspace{-2mm}
 
-    Here the parse information helps isolate the two points: \texttt{baby.nsubj have.verb right.dobj} and \texttt{fetus.nsubj have.verb right.dobj}. A \texttt{parataxis} relationship connects the two thought this relation is not used.
+    Here the parse information helps isolate the two points: \texttt{baby.nsubj have.verb right.dobj} and \texttt{fetus.nsubj have.verb right.dobj}. A \texttt{parataxis} relationship connects the two --- though this is one such relation that is not used to expand a point's extract.
 
   \section{Defining Points with Verb Frames}
-    Not all dependencies should be included in pattern, only those essential to the meaning of the point. Some dependencies, like adverbial modifiers and parataxis, that do not introduce information relevant to the point's pattern, can easily be excluded. However, not all dependency types can be classified using a single rule. This is largely due to the different verb classes (transitive, intransitive and ditransitive) and how these are represented by the CoreNLP parser. In order to look for legal patterns in dependency parse graphs, we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in FrameNet.
+    Not all of a verbs relations should be included in the point pattern but rather only those essential to the meaning. This typically means using only subject and object; however, this cannot be defined for all verbs with a single rule. Some additional dependencies, like adverbial modifiers and parataxis as seen in the previous example, which do not introduce information relevant to the point's pattern can be universally excluded. However, not all dependency types are easily classified. This is largely due to the different verb classes (transitive, intransitive and ditransitive) and how these are represented in parses by the CoreNLP parser. In order to look for legal patterns in dependency parse graphs, we needed an index of verb transitivities that listed allowed patterns for a given verb. We started using FrameNet frames for this task and later extended these with a generic query as a heuristic to match patterns not present in FrameNet.
 
     \tocless\subsection{VerbNet and FrameNet}
-      VerbNet is an XML verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs we can use the frames represented in the source class to determine the allowable forms. An example frame for the verb `murder' is shown in Figure \ref{fig:murder-frame}.
+      VerbNet is an XML verb lexicon that lists classes of verbs and accompanying FrameNet frames \cite{schuler2005verbnet,fillmore2002framenet}. Represented in VerbNet's 274 `classes' are 4402 member verbs. For each of these verbs classes, a wide range of attributes are listed. FrameNet frames are one such attribute, and the only one we make use of. These describe the verb's syntactic arguments and the semantic meaning of each in that frame. We can use the frames represented in the source class to determine the allowable forms for each verb. An example frame for the verb `murder' is shown in Figure \ref{fig:murder-frame}. Here we see that the verb takes two Noun Phrase arguments, an Agent (murderer) and Patient (victim).
 
       \begin{figure}
         \centering
@@ -130,7 +130,7 @@
         \label{fig:murder-frame}
       \end{figure}
 
-      We use the \texttt{SYNTAX} element information to determine the type of dependencies that can be included in the pattern for a given verb. To create a `verb index' we parsed the VerbNet catalogue into a key-value structure where each verb was the key, and the list of allowed frames the value. Some verbs are listed in more than one class; for example, \textit{feel} is listed in seven classes. In such cases the verb was allocated all frames for all classes it was a member of. Using this index, points can be extracted by querying the verb's dependency parse using information from each of its frames.
+      We use this \texttt{SYNTAX} element information to determine the type of dependencies that can be included in the pattern for a given verb. To create a `verb index' we parsed the VerbNet catalogue into a key-value structure where each verb was the key, and the list of allowed frames the value. Some verbs are listed in more than one class; for example, \textit{feel} is listed in seven classes. In such cases the verb was allocated all frames for all classes it was a member of. Using this index, points can be extracted by querying the verb's dependency parse using information from each of its frames.
 
     \tocless\subsection{Matching Frames in Parses}
       With an index of verbs and their allowed frames, all the information required to identify points in dependency parses is available. However, frames are not inherently capable of querying the dependency graph structure and queries for each type of frame must be written. While frames in different categories encode additional semantic information, there are far fewer `syntactically unique' frames than verb classes. Common frames such as \texttt{NounPhrase Verb NounPhrase} cover a high percentage of all frames in the index. We have manually implemented a means of querying dependency parses for 17 of the more common patterns covering 96\% of all frames in the index.
