@@ -28,7 +28,7 @@
 
     \begin{itemize}
       \item{The readability and informativeness of our summaries do not improve on those of existing tools. (\textbf{H1})}
-      \item{Explanations introducing summary sections do not improve overall readability. (\textbf{H2})}
+      \item{Introducing summary sections does not improve overall readability. (\textbf{H2})}
       \item{Our means of selecting extracts is not better than random selection. (\textbf{H3})}
       \item{All summary sections are equally useful to readers. (\textbf{H4})}
     \end{itemize}
@@ -102,7 +102,7 @@
           \label{fig:plain_vs_stock_hist}
         \end{figure}
 
-        \noindent All of the five comparison factors presented in \ref{fig:plain_vs_stock_hist} show a preference for our Plain summaries. These counts are aggregated from all Plain vs. Stock comparisons for all six debate topics. Each histogram represents 54 responses for a question comparing the two summaries on that factor. The results were tested using Sign tests for each comparison factor. `better' and `much better' were aggregated, `same' results were excluded. The family significance level was set at $\alpha = 0.05$; with $m = 5$ hypotheses - using the Bonferroni Correction ($\alpha / m$); gives an individual significance threshold as $0.05/5 = 0.01$. All factors, including both `readability' and `content', were found to show a significant difference, see Table \ref{tab:pvs-pvals}. This enables us to reject \textbf{H1} --- that our tool does not improve on the results of existing tools --- with a good level of confidence.
+        \noindent All of the five comparison factors presented in Figure \ref{fig:plain_vs_stock_hist} show a preference for our Plain summaries. These counts are aggregated from all Plain vs. Stock comparisons for all six debate topics. Each histogram represents 54 responses for a question comparing the two summaries on that factor. The results were tested using Sign tests for each comparison factor. `better' and `much better' were aggregated, `same' results were excluded. The family significance level was set at $\alpha = 0.05$; with $m = 5$ hypotheses - using the Bonferroni Correction ($\alpha / m$); gives an individual significance threshold as $0.05/5 = 0.01$. All factors, including both `readability' and `content', were found to show a significant difference, see Table \ref{tab:pvs-pvals}. This enables us to reject \textbf{H1} --- that our tool does not improve on the results of existing tools --- with a good level of confidence.
 
 		\begin{table}[h]
 		  \centering
@@ -126,9 +126,7 @@
 
         Similarly, Layout was also compared against Stock on the same factors, the results of these comparisons are presented in Figure \ref{fig:layout_vs_stock_hist}. We observed a stronger preference for Layout summaries.
 
-        \textcolor{green}{
-          To test this comparison against the Plain vs. Stock comparison in order to address \textbf{H2} we used a One-sided, Fisher's Exact Test. Taking the 54 responses for the `overall' ratings from each, we performed the test on the following contingency table.
-        }
+        To test this comparison against the Plain vs. Stock comparison, in order to address \textbf{H2}, we used a One-sided, Fisher's Exact Test. Taking the 54 responses for the `overall' ratings from both comparisons, the test was performed on the following contingency table.
 
 		\begin{table}[h]
 		  \centering
@@ -145,22 +143,7 @@
 		  \end{tabular}
 		\end{table}
 
-		The p-value was found to be significant ($p = 0.011$). This gives cause to reject H2, that using summary sections does not improve the overall readability.
-
-        \textcolor{red}{
-          Similar to that comparison, counts were aggregated from all comparisons for all debate topics; each histogram represents 54 responses; comparison results were tested using Sign tests; and the individual significance threshold was $0.01$ (calculated using the Bonferroni Correction). Again, all factors were found to show a significant difference for this comparison, see Table \ref{tab:lvs-pvals}. Comparing the readability scores in \ref{fig:layout_vs_stock_hist} against those in \ref{fig:plain_vs_stock_hist} shows an improvement in the readability after introducing sections to the same sets of points. \textcolor{red}{This is cause to reject \textbf{H2}. We can state that the summary sections improve readability}.
-        }
-
-		\begin{table}[h]
-		  \centering
-          \caption{\textcolor{red}{Layout vs. Stock factor comparison $p$ values}}
-		  \label{tab:lvs-pvals}
-		  \begin{tabular}{|l|l|l|l|l|l|}
-			\hline
-			\textbf{Overall} & \textbf{Content} & \textbf{Punctuation} & \textbf{Readability} & \textbf{Organization} \\ \hline
-			$p = \num{7.1e-11}$ & $p = \num{8.2e-10}$ & $p = \num{7e-11}$ & $p = \num{1.6e-11}$ & $p = \num{4.4e-12}$ \\ \hline
-		  \end{tabular}
-		\end{table}
+		The p-value was found to be significant ($p = 0.011$). This gives cause to reject H2: that summary sections do not improve the overall readability.
 
       \tocless\subsubsection{Formatted vs. Layout Comparison}
         \noindent Finally, participants compared Formatted and Layout summaries --- there was only a single `overall' factor for this comparison. Results from the 54 responses, presented in Figure \ref{fig:lay_vs_formatted_hist}, show a preference for Formatted over Layout summaries with the same content. Comparing the results again using a Sign test (aggregating `better' \& `much better' and excluding `same'), showed a significant result ($p = 0.006$). This result builds on the previous comparison, showing that not only sections but other elements of presentation can improve generated summaries.
@@ -215,7 +198,7 @@
       In summary, based on their comments, participants acknowledge succinctness, variety and informativeness of the Plain summaries. This positive result, and feedback from the comparison, show the effectiveness of the points extraction approach. Points can form better summaries, even without section explanations and clear grouping.
 
     \tocless\subsection{Layout vs. Stock}
-      \textcolor{green}{Layout summaries were preferred over Stock summaries significantly more than Plain summaries}. References to organisation doubled in comments for this comparison. Readability and the idea of assimilating information were also common factors cited in justifications for choosing Layout summaries.
+      Layout summaries were preferred significantly more than Plain summaries over Stock. References to organization doubled in comments for this comparison. Readability and the idea of assimilating information were also common factors cited in justifications for choosing Layout summaries.
 
       Interestingly, only one comment made a direct reference to `categories' (sections) of the summary. There was another comment that suggested the related points were distracting. We had however expected a greater number of references to summary sections. There were fewer comments in this comparison that suggested the participants believed the summaries to be written by a human. This is perhaps because sections hint at a more structured and mechanized approach.
 
