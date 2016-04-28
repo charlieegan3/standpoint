@@ -18,6 +18,9 @@
 
     Cypher is used to query dependency parses stored in the Neo4j database. After parsing the sentences from a user's post, all the dependency parses are saved. At this stage, a series of Cypher queries are executed to filter for allowed point patterns. These patterns, derived from case frame information, are represented in the Cypher syntax. Using Neo4j and Cypher in this way allows points to be extracted from many sentences at once. This was key to completing the analysis of large discussions in reasonable time.
 
+  \tocless\section{Latent Dirichlet Allocation Implementation}
+    We use a service to evaluate the core topics of a discussion. This is based on an implementation of the \textit{Latent Dirichlet Allocation} generative model\footnote{https://github.com/ealdent/lda-ruby}. Discussion text is analyzed as a whole by a \textit{Topic Analyzer}, the service that exposes this implementation to other components --- see Chapter \ref{chap:system-architecture}. Topics are used in accessing the value of extracted points as well as guiding the extraction process.
+
   \tocless\section{ERB}
     \blockquote{ERB provides an easy to use but powerful templating system for Ruby}\footnote{http://apidock.com/ruby/ERB}
 
