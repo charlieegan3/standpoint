@@ -2,11 +2,11 @@
 Points extracted at the first stage must be refined to make them suitable for use in the following summarization module. These refinements focus on removing points generated from common phrases such as \textit{`I'm sure'} and \textit{`Ask yourself\dots'}. While adjustments could be made as points are extracted, this was implemented as a separate task during our implementation phase. Rejecting and editing point content is also conceptually different from identifying them in source text and much additional information is encoded at this stage. This chapter explains in detail the adjustments made to a list of extracted points in order to make them useful in the summarization task.
 
   \section{Minimum Requirements}
-    Some basic restrictions are applied to points matched by the Generic Frame. The Generic Frame returns a large number of additional points (on top of other frame results) many of which are of little interest. To make sure that points from the Generic Frame are useful the following heuristics are applied as requirements.
+    Some basic restrictions are applied to points matched by the Generic Frame. The Generic Frame returns a large number of additional points (on top of other frame results), many of which are of little interest. To make sure that points from the Generic Frame are useful the following heuristics are applied as requirements.
 
     \begin{itemize}
-      \item{Contain a topic word - this is a good estimation of a point's informativeness}
-      \item{Have a subject, object and average word length of 5 or more characters - this restricts extremely short points from being matched. Points ideally make some form of connection between words of interest}
+      \item{Contain a topic word - this is a good estimation of a point's informativeness.}
+      \item{Have a subject, object and average word length of 5 or more characters - this restricts extremely short points from being matched. Points ideally make some form of connection between words of interest.}
     \end{itemize}
 
     These requirements balance the benefits and problems of matching a greater number of patterns, some lower quality, using the Generic Frame. This means that shorter points, or points without a search topic word can only be returned by matching the query for a FrameNet frame.
@@ -31,7 +31,7 @@ Points extracted at the first stage must be refined to make them suitable for us
       The following ambiguous subjects were grounds for rejection of a point: \textit{it(PRP), that(DT), this(DT), which(WDT), what(WDT)}.
 
     \tocless\subsection{Person Verb Combinations}
-    There are a series of verbs that are not permitted to form points when they have a \texttt{PERSON} subject. Certain phrases such as \blockquote{\textit{I think}} as very common; while important for comprehension, they do not make interesting points. \textit{object, understand, realize, debate, speak, stand, refer, explain, support, feel} are some examples of `actions' that participants write about which generate unsuitable points for use in summaries.
+    There are a series of verbs that are not permitted to form points when they have a \texttt{PERSON} subject. Certain phrases such as \blockquote{\textit{I think}} are very common; while important for comprehension, they do not make interesting points. \textit{object, understand, realize, debate, speak, stand, refer, explain, support, feel} are some examples of `actions' that participants write about which generate unsuitable points for use in summaries.
 
       These restrictions are only applied to points that consist of two components, a verb and \texttt{PERSON} subject. This means that \texttt{PERSON.nsubj understand.verb issue.dobj} is a valid point, whereas \texttt{PERSON.nsubj understand.verb} is not.
 
