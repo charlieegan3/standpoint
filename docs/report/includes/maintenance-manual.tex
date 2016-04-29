@@ -10,7 +10,7 @@ described using references to key sections of code.
 
 Extracting points as part of generating a summary for a debate is
 described in the user manual. This however makes use of the
-\texttt{analysis\_api} to collect points. This should could be seen as
+\texttt{analysis\_api} to collect points. This could be seen as
 an example of how one might use the \texttt{points\_api} service. This
 section of code in the \texttt{collector.rb} file in the
 \texttt{analysis\_api} folder is where points for text are extracted.
@@ -39,7 +39,7 @@ This shows that extracting points with the points api is a simple
 request/response process. This excerpt from the points\_api shows in
 part how requests for points are handled. The input text is split into
 sentences (each with a dependency parse) and these are saved in turn to
-the neo4j database.
+the Neo4j database.
 
 \begin{minted}[breaklines=true]{Ruby}
 # save each group of sentences
@@ -123,7 +123,7 @@ This section lists all top level files and folders as well as sub folders contai
     \item
       \texttt{Dockerfile}: This simple docker file specifies a Golang environment to run the points curation task.
     \item
-      \texttt{main.go}: This is file implements the entirety of the points curation task. It's process is described in detail in \ref{chap:point-curation}.
+      \texttt{main.go}: This file implements the entirety of the points curation task. It's process is described in detail in \ref{chap:point-curation}.
   \end{itemize}
 
 \subsection*{docker-compose.yml}
@@ -133,7 +133,7 @@ This section lists all top level files and folders as well as sub folders contai
   This folder contains the project's documentation source.
   \begin{itemize}
     \item
-      \texttt{presentation}: This folder contains the slides used in presenting the tool for at the social media workshop in Study 3.
+      \texttt{presentation}: This folder contains the slides used in presenting the tool at the social media workshop in Study 3.
     \item
       \texttt{report}: This folder contains all files used to generate the project report.
   \end{itemize}
@@ -158,7 +158,7 @@ This section lists all top level files and folders as well as sub folders contai
     \item
       \texttt{study3\_comments.txt}: This file contains the typed comments from the Study 3 participants.
     \item
-      \texttt{survey/}: This folder contains a series of files that were used to generated the questionnaires for Studies 1 \& 2. These process summaries as exported by the summarizer into HTML that is read for use on Mechanical Turk's HIT interface.
+      \texttt{survey/}: This folder contains a series of files that were used to generated the questionnaires for Studies 1 \& 2. These process summaries as exported by the summarizer into HTML that is ready for use on Mechanical Turk's HIT interface.
   \end{itemize}
 
 \subsection*{points\_api}
@@ -167,13 +167,13 @@ This section lists all top level files and folders as well as sub folders contai
     \item
       \texttt{Dockerfile}: This defines the configuration required to run an instance of the points API. This includes installing the dependencies from the Gemfile.
     \item
-      \texttt{Gemfile}: The Gemfile lists the requirements for this service. The points api is implemented as a basic Sinatra application and makes used of the Sinatra microframework. It also requires an XML parser (nokogiri) and the ruby neo4j wrapper.
+      \texttt{Gemfile}: The Gemfile lists the requirements for this service. The points api is implemented as a basic Sinatra application and makes used of the Sinatra microframework. It also requires an XML parser (nokogiri) and the Ruby Neo4j wrapper.
     \item
       \texttt{app.rb}: This file implements the core of the points extraction service. It defines a root route that that accepts requests for points analysis. It splits the text into chunks and extracts sentences before triggering the points analysis.
     \item
       \texttt{frame\_queries}: This folder contains all the frame queries in Cypher for each of the frame patterns (\texttt{NP VERB NP} etc.). The folder also contains variations of queries for copula verbs and the generic frame query.
     \item
-      \texttt{groups.json}: This is a JSON representation of the VerbNet database. It is not only used for inspecting verb classes when debugging.
+      \texttt{groups.json}: This is a JSON representation of the VerbNet database. It is only used for inspecting verb classes when debugging.
     \item
       \texttt{lib}:
 
@@ -181,7 +181,7 @@ This section lists all top level files and folders as well as sub folders contai
         \item
           \texttt{corenlp\_client.rb}: This is a wrapper used in requesting dependency parse information from the CoreNLP service.
         \item
-          \texttt{frame.rb}: This class represents a frame. Frames loads from the index are used to initialize instances of this class. This exposes a number of helper methods used in processing frames and points.
+          \texttt{frame.rb}: This class represents a frame. Frames loaded from the index are used to initialize instances of this class. This exposes a number of helper methods used in processing frames and points.
         \item
           \texttt{neo4j\_client.rb}: This is a wrapper for the Neo4j services and is used to execute queries and fetch results using a simplified interface.
         \item
@@ -189,7 +189,7 @@ This section lists all top level files and folders as well as sub folders contai
         \item
           \texttt{points\_extraction.rb}: This is the central file to extracting points from text. This is called from the application twice, first to get the verbs that have valid frame matches from in the database and then, for each of these, to get the extract information for the match as a complete point, ready to send in the response.
         \item
-          \texttt{relation.rb}: This class extends the Neo4j::ActiveRel class and defines the structure of a dependency graph edge. These objects only have a single label attribute and connect two tokens nodes in the graphs.
+          \texttt{relation.rb}: This class extends the Neo4j::ActiveRel class and defines the structure of a dependency graph edge. These objects only have a single label attribute and connect two token nodes in the graphs.
         \item
           \texttt{utils.rb}: This implements a series of helper functions used in the extraction  of points.
       \end{itemize}
@@ -198,7 +198,7 @@ This section lists all top level files and folders as well as sub folders contai
 
       \begin{itemize}
         \item
-          \texttt{parse\_verb\_net.rb}: This is a script used in parsing the XML information from VerbNet. VerbNet is not stored in it's original form in the project source but is available for download here: \\ http://verbs.colorado.edu/verb-index/vn/verbnet-3.2.tar.gz
+          \texttt{parse\_verb\_net.rb}: This is a script used in parsing the XML information from VerbNet. VerbNet is not stored in its original form in the project source but is available for download here: \\ http://verbs.colorado.edu/verb-index/vn/verbnet-3.2.tar.gz
       \end{itemize}
     \item
       \texttt{verbs.json}: This is the verb index. It is loaded by the application and used to lookup frame each verb found in the input text.
@@ -218,7 +218,7 @@ This section lists all top level files and folders as well as sub folders contai
     \item
       \texttt{Dockerfile}: This defines the Ruby image required to run the summarization task. As part of the build process the requirements from the Gemfile are installed.
     \item
-      \texttt{Gemfile}: This lists the requirements for the summarizer service. This service makes use of \texttt{differ} --- a string diffing library --- and \texttt{levenshtein} a library for calculating the Levenshtein distance of two strings. The debugger Pry is also required when debugging the service.
+      \texttt{Gemfile}: This lists the requirements for the summarizer service. This service makes use of \texttt{differ} --- a string diffing library --- and \texttt{levenshtein}, a library for calculating the Levenshtein distance of two strings. The debugger Pry is also required when debugging the service.
     \item
       \texttt{antonyms.json}: This is a key value index of all antonyms used in the counter point analysis. This is sourced from the Wordnet NLTK corpus. Each word is a key, each value is a list of its antonyms.
     \item
@@ -238,7 +238,7 @@ This section lists all top level files and folders as well as sub folders contai
     \item
       \texttt{summary.rb}: This class implements the summary object. The summarizer uses an instance of this class to build a summary before passing it to an ERB template and writing an HTML summary to disk.
     \item
-      \texttt{template\_formatted.html.erb}: This is the template used specify the format a summary object should take when presented in HTML. Given a summary object this fills a series of sections to complete the summary using the information stored in the summary.
+      \texttt{template\_formatted.html.erb}: This is the template used specify the format a summary object should take when presented in HTML. Given a summary object, this fills a series of sections to complete the HTML summary.
     \item
       \texttt{utils.rb}: This file contains a utility function for collecting a key value representation of the duplicates in a list. This is used in the summary class.
   \end{itemize}
@@ -251,7 +251,7 @@ This section lists all top level files and folders as well as sub folders contai
     \item
       \texttt{Gemfile}: This lists the three service dependencies. Similar to the points api, this service is also implemented as a Sinatra application. It also requires a Ruby wrapper to a C LDA (Latent Dirichlet allocation) implementation and the Pry debugger.
     \item
-      \texttt{app.rb}: This file implements the topic api service. It exposes a route that can accept requests containing a body of text. From this is runs the LDA analysis and returns the topic words as a response.
+      \texttt{app.rb}: This file implements the topic api service. It exposes a route that can accept requests containing a body of text. From this it runs the LDA analysis and returns the topic words as a response.
   \end{itemize}
 
 \subsection*{utilities}
@@ -263,7 +263,7 @@ This section lists all top level files and folders as well as sub folders contai
 
       \begin{itemize}
       \item
-        \texttt{graph.html}: This is a template, standalone template for the graph representation of points as seen in Appendix \ref{app:disc_graph}.
+        \texttt{graph.html}: This is a template for the graph representation of points as seen in Appendix \ref{app:disc_graph}.
       \item
         \texttt{plot.rb}: This script takes a list of point patterns and uses the graph HTML template to build a resulting HTML file.
       \end{itemize}

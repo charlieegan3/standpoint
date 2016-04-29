@@ -8,7 +8,7 @@ I cannot accept contributions to the project before May 2016 as it must be all m
 
 ## Setup Instructions
 
-This guide will list steps to complete the analysis for a single arbitrary discussion. The only software that you need to install on you computer is Docker and Docker compose. Docker hosts lightweight virtual machines called containers that run each of our services.
+This guide will list steps to complete the analysis for a single arbitrary discussion. The only software that you need to install on your computer is Docker and Docker Compose. Docker hosts lightweight virtual machines called containers that run each of our services.
 
 ### Installation
 1. [Install Docker](https://docs.docker.com/engine/installation/) and the [Docker Compose interface](https://docs.docker.com/compose/install/). This varies depending on the host operating system.
@@ -20,12 +20,12 @@ This guide will list steps to complete the analysis for a single arbitrary discu
 1. First you need to get a corpus in place to run the analysis on. This guide will talk you through using the Abortion corpus we used. Download the corpus to the `analysis_api` folder: `curl -L https://gist.github.com/charlieegan3/5662280729f19a154f5e118eec26315c/archive/e8a879bdb9aab88d5f570f43fff0d91f6ccad34a.zip > analysis_api/abortion.zip`
 2. Now unzip the downloaded corpus: `unzip analysis_api/abortion.zip -d analysis_api/abortion && mv analysis_api/abortion/**/* analysis_api/abortion/ && rm -r analysis_api/abortion/5*`
 3. (OPTIONAL) Inspect a corpus file: `cat analysis_api/abortion/post_1`. Lines like `#key=value` are parsed into metadata. These are optional.
-4. It is now time to start a console in the `analysis_api` service. Todo this run: `docker-compose run analysis_api /bin/bash`.
+4. It is now time to start a console in the `analysis_api` service. To do this run: `docker-compose run analysis_api /bin/bash`.
 5. You will now have a new prompt `/app#`. The current directory is `analysis_api`, file changes are synced between this container and the host. Type `ls` and you will see the contents of the `analysis_api` folder.
-6. Before extracting points from the corpus we need to clean the posts for invalid characters and parse any metadata. Run `ruby clean.rb abortion` to do this for all of the files in raw abortion corpus we downloaded.
+6. Before extracting points from the corpus we need to clean the posts for invalid characters and parse any metadata. Run `ruby clean.rb abortion` to do this for all of the files in the raw abortion corpus we downloaded.
 
 ### Extracting Points
-1. You are now ready to extract a list of points from the corpus. To do this run `ruby collector.rb abortion`. This will take some around 10-15 mins and is quite an intensive task. Output is written to `abortion_points.txt` in the `analysis_api` directory. This will be a large file (~50mb), The first line is a list of topics and the following lines represent each point in JSON.
+1. You are now ready to extract a list of points from the corpus. To do this run `ruby collector.rb abortion`. This will take around 10-15 mins and is quite an intensive task. Output is written to `abortion_points.txt` in the `analysis_api` directory. This will be a large file (~50mb), The first line is a list of topics and the following lines represent each point in JSON.
 2. When you have finished running the points extraction process you  can exit the analysis_api console with `exit`.
 
 ### Cleaning/Curating Points
