@@ -17,7 +17,7 @@ These instructions have been tested on: OSX 10.11, Ubuntu 12 & 14 and on Digital
 2. Check that you can run `docker ps` and see output starting: `CONTAINER ID...`
 3. Change directory into the project folder `cd {project-folder-path}`
 4. Run `docker-compose build`, this will download all the dependencies for each of the project's services. This includes a series of operating system images and the CoreNLP framework and will take some time (allow 20-25 mins on a 20mbps connection, time also depends on the resources allocated to Docker).
-5. Note: the CoreNLP service will sometimes run out of memory or fail to respond. In this case you will need to run the task again adjusting the code to start from the failed post. You can stop all currently running containers with docker stop $(docker ps -a -q) from the host OS.
+5. Note: the CoreNLP service will sometimes run out of memory or fail to respond. In this case you will need to run the task again adjusting the code to start from the failed post. You can stop all currently running containers with docker stop $(docker ps -a -q) from the host OS. If your computer is low on RAM you may also wish to try reducing the 2gb allocated to Neo4j and CoreNLP in the `docker-compose.yml` file.
 
 ### Setting Up a Corpus
 1. First you need to get a corpus in place to run the analysis on. This guide will talk you through using the Abortion corpus we used. Download the corpus to the `analysis_api` folder: `curl -L https://gist.github.com/charlieegan3/5662280729f19a154f5e118eec26315c/archive/e8a879bdb9aab88d5f570f43fff0d91f6ccad34a.zip > analysis_api/abortion.zip`

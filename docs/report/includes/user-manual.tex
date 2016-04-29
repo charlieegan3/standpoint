@@ -28,7 +28,7 @@ These instructions have been tested on: OSX 10.11, Ubuntu 12 \& 14 and on Digita
 \begin{enumerate}
 	\item{You are now ready to extract a list of points from the corpus. To do this run \texttt{ruby collector.rb abortion}. This will take around 10-15 mins and is quite an intensive task. Output is written to \texttt{abortion\_points.txt} in the \texttt{analysis\_api} directory. This will be a large file (approx. 50mb), The first line is a list of topics and the following lines represent each point in JSON.}
 	\item{When you have finished running the points extraction process you  can exit the analysis\_api console with \texttt{exit}.}
-    \item{Note: the CoreNLP service will sometimes run out of memory or fail to respond. In this case you will need to run the task again adjusting the code to start from the failed post. You can stop all currently running containers with \texttt{docker stop \$(docker ps -a -q)}}.
+    \item{Note: the CoreNLP service will sometimes run out of memory or fail to respond. In this case you will need to run the task again adjusting the code to start from the failed post. You can stop all currently running containers with \texttt{docker stop \$(docker ps -a -q)}. If your computer is low on RAM you may also wish to try reducing the 2gb allocated to Neo4j and CoreNLP in the docker-compose.yml file.}
 \end{enumerate}
 
 \section{Cleaning/Curating Points}
