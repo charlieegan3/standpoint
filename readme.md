@@ -8,13 +8,16 @@ I cannot accept contributions to the project before May 2016 as it must be all m
 
 ## Setup Instructions
 
-This guide will list steps to complete the analysis for a single arbitrary discussion. The only software that you need to install on your computer is Docker and Docker Compose. Docker hosts lightweight virtual machines called containers that run each of our services.
+This guide will list steps to complete the analysis for a single arbitrary discussion. The only software that you need to install on your computer is Docker and Docker Compose (unzip also required to extract sample corpus). Docker hosts lightweight virtual machines called containers that run each of our services.
+
+These instructions have been tested on: OSX 10.11, Ubuntu 12 & 14 and on Digital Ocean (4GB Memory, 60GB Disk, LON1).
 
 ### Installation
 1. [Install Docker](https://docs.docker.com/engine/installation/) and the [Docker Compose interface](https://docs.docker.com/compose/install/). This varies depending on the host operating system.
 2. Check that you can run `docker ps` and see output starting: `CONTAINER ID...`
 3. Change directory into the project folder `cd {project-folder-path}`
 4. Run `docker-compose build`, this will download all the dependencies for each of the project's services. This includes a series of operating system images and the CoreNLP framework and will take some time (allow 20-25 mins on a 20mbps connection, time also depends on the resources allocated to Docker).
+5. Note: the CoreNLP service will sometimes run out of memory or fail to respond. In this case you will need to run the task again adjusting the code to start from the failed post. You can stop all currently running containers with docker stop $(docker ps -a -q) from the host OS.
 
 ### Setting Up a Corpus
 1. First you need to get a corpus in place to run the analysis on. This guide will talk you through using the Abortion corpus we used. Download the corpus to the `analysis_api` folder: `curl -L https://gist.github.com/charlieegan3/5662280729f19a154f5e118eec26315c/archive/e8a879bdb9aab88d5f570f43fff0d91f6ccad34a.zip > analysis_api/abortion.zip`
@@ -32,6 +35,7 @@ This guide will list steps to complete the analysis for a single arbitrary discu
 1. To prepare the list of points for use in summarization they must first be reformatted. First you need to move your extracted points file into the `curator` directory. From the project root run: `mv analysis_api/abortion_points.txt curator/abortion_points.txt`
 2. From the project root directory run `docker-compose run curator /bin/bash` to get a console ready to run the curation task.
 3. To clean the list for summarization run: `go run main.go abortion_points.txt > abortion_points_clean.txt`
+3. Type `exit` to leave the curator service.
 
 ### Generating Summaries
 1. First get a clean list of points to use in generating the summary. From the project root run: `mv curator/abortion_points_clean.txt summarizer/abortion_points_clean.txt`.

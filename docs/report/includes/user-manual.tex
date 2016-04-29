@@ -2,7 +2,9 @@ This document is also available online: \\ http://bit.ly/points\_extraction\_use
 
 \noindent\hrulefill
 
-\noindent This guide will list steps to complete the analysis for a single arbitrary discussion. The only software that you need to install on your computer is Docker and Docker Compose. Docker hosts lightweight virtual machines called containers that run each of our services.
+\noindent This guide will list steps to complete the analysis for a single arbitrary discussion. The only software that you need to install on your computer is Docker and Docker Compose (unzip required to unzip sample corpus). Docker hosts lightweight virtual machines called containers that run each of our services.
+
+These instructions have been tested on: OSX 10.11, Ubuntu 12 \& 14 and on Digital Ocean (4GB Memory, 60GB Disk, LON1).
 
 \section{Installation}
 \begin{enumerate}
@@ -26,6 +28,7 @@ This document is also available online: \\ http://bit.ly/points\_extraction\_use
 \begin{enumerate}
 	\item{You are now ready to extract a list of points from the corpus. To do this run \texttt{ruby collector.rb abortion}. This will take around 10-15 mins and is quite an intensive task. Output is written to \texttt{abortion\_points.txt} in the \texttt{analysis\_api} directory. This will be a large file (approx. 50mb), The first line is a list of topics and the following lines represent each point in JSON.}
 	\item{When you have finished running the points extraction process you  can exit the analysis\_api console with \texttt{exit}.}
+    \item{Note: the CoreNLP service will sometimes run out of memory or fail to respond. In this case you will need to run the task again adjusting the code to start from the failed post. You can stop all currently running containers with \texttt{docker stop \$(docker ps -a -q)}}.
 \end{enumerate}
 
 \section{Cleaning/Curating Points}
@@ -33,6 +36,7 @@ This document is also available online: \\ http://bit.ly/points\_extraction\_use
 	\item{To prepare the list of points for use in summarization they must first be reformatted. First you need to move your extracted points file into the \texttt{curator} directory. From the project root run: \\ \texttt{mv analysis\_api/abortion\_points.txt curator/abortion\_points.txt}}
 	\item{From the project root directory run \texttt{docker-compose run curator /bin/bash} to get a console ready to run the curation task.}
 	\item{To clean the list for summarization run: \\ \texttt{go run main.go abortion\_points.txt > abortion\_points\_clean.txt}}
+    \item{Type \texttt{exit} to leave the curator service.}
 \end{enumerate}
 
 \section{Generating Summaries}
