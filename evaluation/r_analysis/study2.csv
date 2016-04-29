@@ -1,6 +1,0 @@
-comparison, factor, answer, count
-bigram_vs_random,overall,bigram-much_better,10
-bigram_vs_random,overall,bigram-better,13
-bigram_vs_random,overall,same,12
-bigram_vs_random,overall,random-better,11
-bigram_vs_random,overall,random-much_better,8
