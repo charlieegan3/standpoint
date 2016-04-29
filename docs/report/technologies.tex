@@ -1,5 +1,5 @@
 \chapter{Technologies\label{chap:technologies}}
-  Our project relies on a number of software dependencies, these act as a foundation to services we implemented.
+  Our project relies on a number of software dependencies that form a foundation for the services we implemented.
 
   \tocless\section{CoreNLP}
     \blockquote{Stanford CoreNLP provides a set of natural language analysis tools.}\footnote{https://stanfordnlp.github.io/CoreNLP/}
@@ -7,32 +7,29 @@
     CoreNLP provides the basis for our points extraction analysis and assists in selecting extracts during the generation of summaries. Running as a separate service, modules in our analysis pipeline make requests to get sentences, dependency parses and lemmas for text. While the CoreNLP frame work implements a number of different `annotators', we only make use of \texttt{depparse} \& \texttt{lemma} --- which depend on \texttt{tokenize}, \texttt{ssplit} and \texttt{pos}.
 
   \tocless\section{Verb Case Frames}
-    While not strictly a software dependency, we made use of verb cases frames (standard representations of allowed verb argument patterns) in the definition of valid points. Using FrameNet frames included as part of the VerbNet index \cite{schuler2005verbnet, fillmore2002framenet}, we were able to implement a mapping between these and the dependency parse information. This connection was implemented using queries on the Neo4j graph database.
+    While not strictly a software dependency, we made use of verb case frames (standard representations of allowed verb argument patterns) in the definition of valid points. Using FrameNet frames included as part of the VerbNet index \cite{schuler2005verbnet, fillmore2002framenet}, we were able to implement a mapping between these and the dependency parse information. This connection was implemented using queries on the Neo4j graph database.
 
   \tocless\section{Cypher and Neo4j}
     \blockquote{Neo4j is a highly scalable native graph database that leverages data relationships as first-class entities, helping enterprises build intelligent applications to meet today's evolving data challenges.}\footnote{http://neo4j.com/}
 
-    We use Neo4j to store parse information. Sentences are parsed using the CoreNLP dependency parser and the resulting graph structure is saved to a Neo4j instance. Tokens and dependencies are represented as nodes and edges respectively. Nodes are used to store the token in plaintext; the lemma, part-of-speech tag and its index in the source sentence. Edges are directional; connect governor to dependent tokens; and have a single attribute to store the dependency type.
+    We use Neo4j to store and query parse information. Sentences are parsed using the CoreNLP dependency parser and the resulting graph structure is saved to a Neo4j instance. Tokens and dependencies are represented as nodes and edges respectively. Nodes are used to store the token in plaintext; the lemma, part-of-speech tag and its index in the source sentence. Edges are directional; connect governor to dependent tokens; and have a single attribute to store the dependency type.
 
     \blockquote{Cypher is a declarative graph query language that allows for expressive and efficient querying and updating of the graph store.}\footnote{http://neo4j.com/docs/stable/cypher-introduction.html}
 
     Cypher is used to query dependency parses stored in the Neo4j database. After parsing the sentences from a user's post, all the dependency parses are saved. At this stage, a series of Cypher queries are executed to filter for allowed point patterns. These patterns, derived from case frame information, are represented in the Cypher syntax. Using Neo4j and Cypher in this way allows points to be extracted from many sentences at once. This was key to completing the analysis of large discussions in reasonable time.
 
   \tocless\section{Latent Dirichlet Allocation Implementation\label{sec:lda-tech}}
-    We use a service to evaluate the core topics of a discussion. This is based on an implementation of the \textit{Latent Dirichlet Allocation} generative model\footnote{https://github.com/ealdent/lda-ruby}. Discussion text is analyzed as a whole by a \textit{Topic Analyzer}, the service that exposes this implementation to other components --- see Chapter \ref{chap:system-architecture}. Topics are used in accessing the value of extracted points as well as guiding the extraction process.
+    We use a service to evaluate the core topics of a discussion. This is based on an implementation of the \textit{Latent Dirichlet Allocation} generative model\footnote{https://github.com/ealdent/lda-ruby}. Discussion text is analyzed as a whole by a \textit{Topic Analyzer}, a service that exposes this implementation --- see Chapter \ref{chap:system-architecture}. Topics are used in assessing the value of extracted points as well as guiding the extraction process.
 
   \tocless\section{ERB}
     \blockquote{ERB provides an easy to use but powerful templating system for Ruby}\footnote{http://apidock.com/ruby/ERB}
 
-    We use ERB (Embedded RuBy) to generate HTML documents used as part of the evaluation (see Chapter \ref{chap:evaluation}). ERB templates were defined for each summary style being evaluated. The evaluation forms distributed on Mechanical Turk were also generated using ERB. Having templates for these documents allowed sets of summaries and surveys to be consistently re-generated as we iterated on the functionality of the summarization module and format of the questionnaires.
+    We use ERB (Embedded RuBy) to generate HTML documents used as part of the evaluation (see Chapter \ref{chap:evaluation}). ERB templates were defined for each summary style being evaluated. The evaluation forms distributed on Mechanical Turk were also generated using ERB. Having templates for these documents allowed sets of summaries and surveys to be consistently re-generated as we iterated on the functionality of the summarization module and questionnaire format.
 
   \tocless\section{Ruby \& Go}
-    Almost all of the functionality of the tool is implemented in the Ruby programming language. Ruby was selected for its familiarity as well as its suitability in connecting multiple networked services together. Once points had been extracted using a Ruby service, making use of CoreNLP and Neo4j, points are curated using a small program written in Go, this task required fast iterations and it allowed the results of changes to the point curation to be reviewed in a faster feedback cycle. Point curation is discussed in chapter \ref{chap:point-curation}.
+    Almost all of the functionality of the tool is implemented in the Ruby programming language. Ruby was selected for its familiarity and suitability in connecting multiple networked services together. Once points had been extracted using a Ruby service, making use of CoreNLP and Neo4j, points are curated using a small program written in Go, this task required fast iterations and it allowed the results of changes to the point curation to be reviewed in a faster feedback cycle. Point curation is discussed in Chapter \ref{chap:point-curation}.
 
   \tocless\section{Docker}
     \blockquote{Docker allows you to package an application with all of its dependencies into a standardized unit for software development.}\footnote{https://www.docker.com/what-docker}
 
-    Docker is used to isolate the different environments of each service. CoreNLP and Neo4j are both run as containers using standard images. Our modules are run under the same system. All modules in communicate using JSON requests. Docker Compose is used to codify the system's configuration and start services when they are required for use in development.
-
-  \tocless\section{git}
-    All work for the project, including documentation, was tracked in version control using git. Changes were synced with a remote repository on GitHub and other remotes as a means of backup and transfer between machines.
+    Docker is used to isolate the different environments of each service. CoreNLP and Neo4j are both run as containers using standard images. Our modules are run under the same system. All modules communicate using JSON requests. Docker Compose is used to codify the system's configuration and start services when they are required for use in development.
