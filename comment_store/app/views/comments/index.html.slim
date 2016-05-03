@@ -1,0 +1,10 @@
+h1 Collected Threads Index
+table
+  tbody
+    -@comments.each do |c|
+      tr
+        td =link_to "View Comments", comment_path(c)
+        td
+          |&nbsp;Source&nbsp;
+          =link_to c.domain, c.source, target: "_blank"
+        td =c.summary_text
