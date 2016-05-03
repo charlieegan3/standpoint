@@ -66,3 +66,27 @@ corenlp_server:
     RELEASE_URL: "http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip"
   mem_limit: "2g"
   memswap_limit: "2g"
+
+standpoint_server:
+  container_name: standpoint_server
+  build: ./standpoint_server
+  ports:
+   - "3000:3000"
+  links:
+    - standpoint_server_postgres:postgres
+  volumes:
+    - "./standpoint_server:/app"
+  environment:
+    POSTGRES_USER: "${POSTGRES_USER}"
+    POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
+standpoint_server_postgres:
+  container_name: standpoint_server_postgres
+  image: postgres:9.4.5
+  ports:
+    - "5432:5432"
+  volumes:
+    - standpoint_server_postgres:/var/lib/postgresql/data
+  environment:
+    POSTGRES_USER: "${POSTGRES_USER}"
+    POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
