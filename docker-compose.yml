@@ -1,26 +1,3 @@
-analysis_api:
-  container_name: analysis_api
-  build: ./analysis_api
-  links:
-    - points_api:points_api
-    - topic_api:topic_api
-  volumes:
-    - "./analysis_api:/app"
-
-curator:
-  container_name: curator
-  build: ./curator
-  volumes:
-    - "./curator:/app"
-
-summarizer:
-  container_name: summarizer
-  build: ./summarizer
-  links:
-    - corenlp_server:corenlp_server
-  volumes:
-    - "./summarizer:/app"
-
 topic_api:
   container_name: topic_api
   build: ./topic_api

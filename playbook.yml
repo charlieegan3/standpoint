@@ -1,0 +1,21 @@
+- hosts: all
+  sudo: true
+  remote_user: root
+  vars:
+    - swap_size: "6144"
+  roles:
+    - role: novuso.swap
+    - role: angstwad.docker_ubuntu
+    - role: franklinkim.docker-compose
+    - role: geerlingguy.git
+  tasks:
+    - git: repo=git://github.com/charlieegan3/standpoint.git
+           dest=~/app
+    - name: Kill app
+      command: docker-compose kill
+      args:
+        chdir: ~/app
+    - name: Build App
+      command: docker-compose build
+      args:
+        chdir: ~/app
