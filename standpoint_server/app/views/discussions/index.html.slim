@@ -1,7 +1,17 @@
 h1 Standpoint
 p
   em A tool to summarize online discussion into interesting summaries.
+
+h2 Collect a New Discussion
+p ="Currently processing #{@jobs} jobs" if @jobs > 0
+=form_tag("discussions", method: "post") do
+  =text_field_tag(:url)
+  =submit_tag("Analyze")
+
 h2 Collected Discussions
-ul
+table
   - @discussions.each do |d|
-    li =link_to d.title, discussion_path(d)
+    tr
+      td
+        =distance_of_time_in_words(Time.zone.now, d.created_at) + " ago"
+      td =link_to d.title, discussion_path(d)

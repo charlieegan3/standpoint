@@ -15,6 +15,8 @@ class RedditCollector
     save_the_children(discussion, nil, comments)
   end
 
+  handle_asynchronously :perform
+
   private
   def save_the_children(discussion, parent, replies)
 	return if replies.blank?
