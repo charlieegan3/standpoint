@@ -30,8 +30,6 @@ neo4j:
     NEO4J_AUTH: none
   ports:
     - "7474:7474"
-  mem_limit: "2g"
-  memswap_limit: "2g"
 
 corenlp_server:
   container_name: corenlp_server
@@ -41,8 +39,6 @@ corenlp_server:
   environment:
     RELEASE: "stanford-corenlp-full-2015-12-09"
     RELEASE_URL: "http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip"
-  mem_limit: "2g"
-  memswap_limit: "2g"
 
 standpoint_server:
   container_name: standpoint_server
