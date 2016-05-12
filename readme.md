@@ -2,6 +2,6 @@
   <img src="http://i.imgur.com/GfkiN7o.jpg" alt="logo"/>
 </p>
 
-Standpoint is a tool for the analysis of large discussions. Currently it builds summaries based on basic augmentation relations between points commonly made in a discussion.
+A tool to summarize online discussion into interesting summaries.
 
 Status: creating a simple web ui/demo
