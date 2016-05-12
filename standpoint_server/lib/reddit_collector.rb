@@ -13,6 +13,8 @@ class RedditCollector
 	  source: "Reddit"
 	)
     save_the_children(discussion, nil, comments)
+
+    DiscussionAnalyzer.new.perform(discussion)
   end
 
   handle_asynchronously :perform

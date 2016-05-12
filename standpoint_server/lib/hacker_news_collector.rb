@@ -13,8 +13,9 @@ class HackerNewsCollector
 	  url: url,
       source: "Hacker News"
 	)
-
 	save_the_children(discussion, nil, data["children"])
+
+    DiscussionAnalyzer.new.perform(discussion)
   end
 
   handle_asynchronously :perform
