@@ -1,0 +1,7 @@
+.cluster
+  p =pattern
+  ul
+    -points.each do |p|
+      li
+        =p.extract
+        =link_to "(source)", "#comment_#{p.comment.id}"

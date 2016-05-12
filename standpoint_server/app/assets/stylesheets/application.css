@@ -17,4 +17,11 @@
 .comment {
   margin-left: 5px;
   border-left: 1px solid #eee;
+  background-color: white;
+}
+.comment:target {
+  background-color: yellow;
+}
+.comment .meta {
+  color: grey;
 }

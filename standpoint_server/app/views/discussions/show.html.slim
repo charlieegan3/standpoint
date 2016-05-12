@@ -1,4 +1,11 @@
 p =link_to @discussion.title, @discussion.url
 
+h2 Point Clusters
+
+ul
+  -@discussion.point_clusters.each do |pattern, points|
+    li =render 'points/show_cluster', pattern: pattern, points: points
+
+h2 Comments
 -@discussion.root_comments.each do |c|
   =render 'comments/show', comment: c

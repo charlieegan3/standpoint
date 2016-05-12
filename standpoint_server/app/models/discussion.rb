@@ -5,6 +5,14 @@ class Discussion < ActiveRecord::Base
     comments.where(parent: nil).order('votes DESC')
   end
 
+  def point_clusters
+    comments.map(&:points)
+      .flatten
+      .group_by(&:pattern)
+      .sort_by { |k, v| v.size }
+      .reverse
+  end
+
   def topic_text
     comments.pluck(:text)
       .join(" ")
