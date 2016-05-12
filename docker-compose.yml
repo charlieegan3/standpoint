@@ -64,6 +64,8 @@ standpoint_worker:
   command: bundle exec rake jobs:work
   links:
     - standpoint_server_postgres:postgres
+  volumes:
+    - "./standpoint_server:/app"
   environment:
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"

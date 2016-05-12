@@ -1,0 +1,7 @@
+.comment
+  p
+    =comment.text
+    br
+    =[comment.user, comment.votes].join(" ")
+  -comment.ordered_children.each do |c|
+    =render 'comments/show', comment: c

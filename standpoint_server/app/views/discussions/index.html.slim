@@ -4,4 +4,4 @@ p
 h2 Collected Discussions
 ul
   - @discussions.each do |d|
-    li =link_to d.title, d.url
+    li =link_to d.title, discussion_path(d)

@@ -1,0 +1,4 @@
+p =link_to @discussion.title, @discussion.url
+
+-@discussion.root_comments.each do |c|
+  =render 'comments/show', comment: c

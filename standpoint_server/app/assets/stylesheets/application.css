@@ -13,3 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+.comment {
+  margin-left: 5px;
+  border-left: 1px solid #eee;
+}
