@@ -23,6 +23,14 @@ points_api:
     - "./points_api:/app"
   restart: unless-stopped
 
+point_extractor:
+  container_name: point_extractor
+  build: ./point_extractor
+  links:
+    - corenlp_server
+  volumes:
+    - "./point_extractor:/app"
+
 neo4j:
   container_name: neo4j
   image: neo4j

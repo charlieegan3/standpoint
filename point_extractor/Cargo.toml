@@ -4,4 +4,4 @@ version = "0.1.0"
 authors = ["Charlie Egan <git@charlieegan3.com>"]
 
 [dependencies]
-graph_match = "0.2.1"
+graph_match = "0.2.2"

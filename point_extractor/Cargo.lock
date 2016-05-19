@@ -2,11 +2,11 @@
 name = "point_extractor"
 version = "0.1.0"
 dependencies = [
- "graph_match 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "graph_match 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "graph_match"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
