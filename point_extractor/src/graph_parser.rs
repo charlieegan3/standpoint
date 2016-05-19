@@ -38,14 +38,34 @@ pub fn parse(string: String) -> Result<graph_match::graph::Graph, String> {
     return Ok(graph);
 }
 
+#[test]
+fn parse_valid_graph() {
+    let string_graph =
+        "type:node identifier:node0\n\
+         type:node identifier:node1\n\
+         type:edge identifier:edge1 source:0 target:1";
+    let graph = parse(string_graph.to_string());
+    assert_eq!(true, graph.is_ok());
+}
+#[test]
+fn parse_invalid_graph() {
+    let string_graph =
+        "type:thing identifier:node0\n\
+         type:eddge identifier:edge1 source:0 target:1";
+    let graph = parse(string_graph.to_string());
+    assert_eq!(false, graph.is_ok());
+}
+
 fn parse_line(line: String) -> HashMap<String,String> {
     let mut attributes: HashMap<String,String> = HashMap::new();
     for pair in line.split(" ") {
         let mut pair = pair.split(":");
         match pair.next() {
             Some(k) => {
+                if k.len() == 0 { continue; }
                 match pair.next() {
                     Some(v) => {
+                        if v.len() == 0 { continue; }
                         attributes.insert(k.to_string(), v.to_string());
                     },
                     None => continue,
@@ -55,6 +75,31 @@ fn parse_line(line: String) -> HashMap<String,String> {
         }
     }
     return attributes;
+}
+
+#[test]
+fn parse_line_to_attributes() {
+    let line = "type:node key:value".to_string();
+    let attributes = parse_line(line);
+    let mut expected_attributes: HashMap<String,String> = HashMap::new();
+    expected_attributes.insert("type".to_string(), "node".to_string());
+    expected_attributes.insert("key".to_string(), "value".to_string());
+    assert_eq!(expected_attributes.len(), attributes.len());
+    for pair in &expected_attributes {
+        assert_eq!(attributes.get(pair.0).unwrap(), pair.1);
+    }
+}
+#[test]
+fn parse_line_to_attributes_poorly_formatted() {
+    let line = "type:node key:value key2 : value ".to_string();
+    let attributes = parse_line(line);
+    let mut expected_attributes: HashMap<String,String> = HashMap::new();
+    expected_attributes.insert("type".to_string(), "node".to_string());
+    expected_attributes.insert("key".to_string(), "value".to_string());
+    assert_eq!(expected_attributes.len(), attributes.len());
+    for pair in &expected_attributes {
+        assert_eq!(attributes.get(pair.0).unwrap(), pair.1);
+    }
 }
 
 fn extract_source_target(attributes: &HashMap<String,String>) -> Option<(usize,usize)> {
@@ -77,3 +122,23 @@ fn extract_source_target(attributes: &HashMap<String,String>) -> Option<(usize,u
     }
 }
 
+#[test]
+fn extract_source_and_target_from_attributes() {
+    let mut attributes: HashMap<String,String> = HashMap::new();
+    attributes.insert("source".to_string(), "1".to_string());
+    attributes.insert("target".to_string(), "2".to_string());
+    assert_eq!(Some((1,2)), extract_source_target(&attributes));
+}
+#[test]
+fn extract_source_and_target_from_attributes_invalid() {
+    let mut attributes: HashMap<String,String> = HashMap::new();
+    attributes.insert("source".to_string(), "a".to_string());
+    attributes.insert("target".to_string(), "b".to_string());
+    assert_eq!(None, extract_source_target(&attributes));
+}
+#[test]
+fn extract_source_and_target_from_attributes_missing() {
+    let mut attributes: HashMap<String,String> = HashMap::new();
+    attributes.insert("key".to_string(), "value".to_string());
+    assert_eq!(None, extract_source_target(&attributes));
+}
