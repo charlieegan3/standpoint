@@ -1,23 +1,17 @@
 extern crate graph_match;
 extern crate hyper;
+extern crate rustc_serialize;
 
-use hyper::Url;
-use hyper::client::Request;
-use std::io::Read;
+mod core_nlp;
 
 fn main() {
-    let mut url = Url::parse("http://corenlp_server:9000").unwrap();
-    url.query_pairs_mut().append_pair("properties", "{\"annotators\": \"lemma,tokenize,ssplit,depparse\"}");
-    println!("{}", url.as_str());
-
-    let client = hyper::Client::new();
-
-    let mut res = client.post(url.as_str())
-        .body("This is a sentence about a dog.")
-        .send()
-        .unwrap();
-
-    let mut body = String::new();
-    res.read_to_string(&mut body);
-    println!("{}", body);
+    let text = "This is a sentence".to_string();
+    match core_nlp::graphs_for_text(&text) {
+        Ok(graphs) => {
+            for g in graphs {
+                println!("{}", g);
+            }
+        },
+        Err(message) => println!("There was an error in building the graph string representation ({})", message),
+    }
 }

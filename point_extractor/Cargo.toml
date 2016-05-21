@@ -6,3 +6,4 @@ authors = ["Charlie Egan <git@charlieegan3.com>"]
 [dependencies]
 graph_match = "0.2.2"
 hyper = "0.9"
+rustc-serialize = "0.3"
