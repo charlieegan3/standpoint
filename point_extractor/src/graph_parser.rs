@@ -1,20 +1,25 @@
 extern crate graph_match;
 use std::collections::HashMap;
 
-pub fn parse(string: String) -> Result<graph_match::graph::Graph, String> {
+pub fn parse(string: &String) -> Result<graph_match::graph::Graph, String> {
     let mut graph = graph_match::graph::Graph {
         nodes: vec![],
         edges: vec![],
     };
     for line in string.split("\n") {
         let attributes = parse_line(line.to_string());
+        let mut graph_component_attributes = attributes.clone();
+        graph_component_attributes.remove("identifier");
+        graph_component_attributes.remove("type");
+        graph_component_attributes.remove("source");
+        graph_component_attributes.remove("target");
         match attributes.get("type") {
             Some(element_type) => {
                 match element_type.as_str() {
                     "node" => {
                         match attributes.get("identifier") {
                             Some(identifier) => {
-                                graph.add_node(identifier.clone(), Some(attributes.clone()));
+                                graph.add_node(identifier.clone(), Some(graph_component_attributes));
                             }
                             None => return Err("Missing identifier".to_string()),
                         }
@@ -27,7 +32,7 @@ pub fn parse(string: String) -> Result<graph_match::graph::Graph, String> {
                                         graph.add_edge(source,
                                                        target,
                                                        identifier.clone(),
-                                                       Some(attributes.clone()));
+                                                       Some(graph_component_attributes));
                                     }
                                     None => return Err("Invalid source or target".to_string()),
                                 }
@@ -48,13 +53,13 @@ pub fn parse(string: String) -> Result<graph_match::graph::Graph, String> {
 fn parse_valid_graph() {
     let string_graph = "type:node identifier:node0\ntype:node identifier:node1\ntype:edge \
                         identifier:edge1 source:0 target:1";
-    let graph = parse(string_graph.to_string());
+    let graph = parse(&string_graph.to_string());
     assert_eq!(true, graph.is_ok());
 }
 #[test]
 fn parse_invalid_graph() {
     let string_graph = "type:thing identifier:node0\ntype:eddge identifier:edge1 source:0 target:1";
-    let graph = parse(string_graph.to_string());
+    let graph = parse(&string_graph.to_string());
     assert_eq!(false, graph.is_ok());
 }
 
