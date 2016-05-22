@@ -6,7 +6,7 @@ mod core_nlp;
 mod graph_parser;
 
 fn main() {
-    let text = "the man ran home.".to_string();
+    let text = "The man ran home.".to_string();
     let string_graphs = match core_nlp::graphs_for_text(&text) {
         Ok(graphs) => graphs,
         Err(message) => panic!("There was an error in building the graph string representation ({})", message),
@@ -28,6 +28,9 @@ fn main() {
                 continue;
             }
         };
-        println!("{:?}", graph_match::match_graph(&query, 1, &graph));
+        let matched_components = graph_match::match_graph(&query, 1, &graph);
+
+        println!("{:?}", matched_components);
+        println!("{:?}", graph_match::expand_subgraph(&graph, 2, &vec![]));
     }
 }
