@@ -8,6 +8,14 @@ pub fn parse(string: &String) -> Result<graph_match::graph::Graph, String> {
     };
     for line in string.split("\n") {
         let attributes = parse_line(line.to_string());
+
+        match attributes.get("identifier") {
+            Some(identifier) => {
+                if identifier == "ROOT" { continue }
+            },
+            _ => {}
+        }
+
         let mut graph_component_attributes = attributes.clone();
         graph_component_attributes.remove("identifier");
         graph_component_attributes.remove("type");
@@ -55,6 +63,19 @@ fn parse_valid_graph() {
                         identifier:edge1 source:0 target:1";
     let graph = parse(&string_graph.to_string());
     assert_eq!(true, graph.is_ok());
+}
+#[test]
+fn parse_valid_graph_complex() {
+    let string_graph = "type:node identifier:PRP0 index:0 pos:PRP word:I\n\
+        type:node identifier:VBD1 index:1 pos:VBD word:ran\n\
+        type:node identifier:.2 index:2 pos:. word:.\n\
+        type:edge identifier:ROOT label:ROOT source:0 target:1\n\
+        type:edge identifier:nsubj label:nsubj source:1 target:0\n\
+        type:edge identifier:punct label:punct source:1 target:2";
+
+    let graph = parse(&string_graph.to_string()).unwrap();
+    assert_eq!(3, graph.nodes.len());
+    assert_eq!(2, graph.edges.len()); // root should be discarded
 }
 #[test]
 fn parse_invalid_graph() {
