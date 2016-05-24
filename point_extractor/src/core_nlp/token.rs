@@ -1,6 +1,8 @@
 extern crate rustc_serialize;
 
+use std::fmt;
 use rustc_serialize::json::Json;
+use rustc_serialize::{Decodable, Decoder};
 
 pub fn token_to_node_string(token: &Json) -> Result<String, String> {
     let token: Token = match rustc_serialize::json::decode(&format!("{}", token)) {
@@ -25,9 +27,41 @@ fn test_token_to_node_string() {
         }"#;
     let json_token = Json::from_str(token_json_string).unwrap();
     assert_eq!("type:node identifier:DT2 index:2 pos:DT word:another original_text:another \
-                lemma:another offset_start:40 offset_end:47 before:  after: ",
+                lemma:another offset_start:40 offset_end:47 before:space after:space",
                token_to_node_string(&json_token).unwrap());
 }
+
+enum Context {
+    Space,
+    Empty,
+    Unknown,
+}
+
+impl fmt::Display for Context {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Context::Space => write!(f, "space"),
+            Context::Empty => write!(f, "empty"),
+            Context::Unknown => write!(f, "unknown"),
+        }
+    }
+}
+
+impl Decodable for Context {
+    fn decode<D: Decoder>(d: &mut D) -> Result<Self, D::Error> {
+        match d.read_str() {
+            Ok(string) => {
+                match string.as_str() {
+                    " " => Ok(Context::Space),
+                    "" => Ok(Context::Empty),
+                    _ => { println!("Unknown Context: {}", string); Ok(Context::Unknown) }
+                }
+            },
+            Err(error) => return Err(error),
+        }
+    }
+}
+
 
 struct Token {
     index: usize,
@@ -36,8 +70,8 @@ struct Token {
     original_text: String,
     lemma: String,
     offsets: (usize, usize),
-    before: String,
-    after: String,
+    before: Context,
+    after: Context,
 }
 
 impl Token {
