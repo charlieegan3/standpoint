@@ -7,9 +7,33 @@ mod graph_parser;
 
 use graph_match::matching::EqualityRequirement;
 
+fn matched_components_to_pattern(matched_components: &graph_match::matching::MatchedComponents, graph: &graph_match::graph::Graph) -> String {
+    let mut pattern: Vec<(usize, String)> = Vec::new();
+
+    for component in &matched_components.list {
+        let mut label = String::new();
+        match component.from_edge {
+            Some(edge) => label.push_str(&graph.edges[edge].identifier.as_str()),
+            None => label.push_str("root"),
+        }
+        label.push_str(".");
+        match graph.nodes[component.node].attributes {
+            Some(ref attrs) => {
+                match attrs.get("lemma") {
+                    Some(lemma) => label.push_str(lemma.as_str()),
+                    None => label.push_str("BLANK"),
+                }
+            },
+            None => label.push_str("BLANK"),
+        }
+        pattern.push((component.node, label));
+    }
+
+    pattern.sort_by(|a,b| a.0.cmp(&b.0));
+    return pattern.iter().map(|e| e.1.clone() ).collect::<Vec<String>>().join(" ");
+}
 
 fn main() {
-
     let text = "The man ran home, the man eat the food.".to_string();
     let string_graphs = match core_nlp::graphs_for_text(&text) {
         Ok(graphs) => graphs,
@@ -19,8 +43,8 @@ fn main() {
     let query_string = "type:node identifier:subj pos:NN\n\
                         type:node identifier:verb pos:VB\n\
                         type:node identifier:obj pos:NN\n\
-                        type:edge identifier:edge0 source:1 target:0 label:nsubj\n\
-                        type:edge identifier:edge1 source:1 target:2 label:dobj";
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:dobj";
     let query = graph_parser::parse(&query_string.to_string()).unwrap();
 
     for g in string_graphs {
@@ -37,6 +61,7 @@ fn main() {
         println!("Points");
         for matched_components in graph_match::match_graph(&query, 1, &graph, &EqualityRequirement::Contains) {
             println!("{:?}", matched_components.list);
+            println!("{:?}", matched_components_to_pattern(&matched_components, &graph));
             let root_node_index = matched_components.list[0].node;
             println!("{:?}", graph_match::expand_subgraph(&graph, root_node_index, &banned_edges));
         }
