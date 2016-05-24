@@ -6,8 +6,9 @@ mod core_nlp;
 mod graph_parser;
 
 use graph_match::matching::EqualityRequirement;
+use graph_match::graph::Graph;
 
-fn matched_components_to_pattern(matched_components: &graph_match::matching::MatchedComponents, graph: &graph_match::graph::Graph) -> String {
+fn matched_components_to_pattern(matched_components: &graph_match::matching::MatchedComponents, graph: &Graph) -> String {
     let mut pattern: Vec<(usize, String)> = Vec::new();
 
     for component in &matched_components.list {
@@ -31,6 +32,46 @@ fn matched_components_to_pattern(matched_components: &graph_match::matching::Mat
 
     pattern.sort_by(|a,b| a.0.cmp(&b.0));
     return pattern.iter().map(|e| e.1.clone() ).collect::<Vec<String>>().join(" ");
+}
+
+fn subgraph_nodes_to_extract_string(node_indexes: &Vec<usize>, graph: &Graph) -> String {
+    let mut extract_string = String::new();
+    let mut sorted_node_indexes = node_indexes.clone();
+    sorted_node_indexes.sort_by(|a, b| a.cmp(b));
+    for index in sorted_node_indexes {
+        match graph.nodes[index].attributes {
+            Some(ref attrs) => {
+                match attrs.get("before") {
+                    Some(value) => {
+                        match value.as_str() {
+                            "space" => extract_string.push_str(" "),
+                            "empty" => extract_string.push_str(""),
+                            "unknown" => extract_string.push_str("?"),
+                            _ => extract_string.push_str("???"),
+                        }
+                    }
+                    _ => {}
+                }
+                match attrs.get("word") {
+                    Some(value) => extract_string.push_str(value.as_str()),
+                    _ => {}
+                }
+                match attrs.get("after") {
+                    Some(value) => {
+                        match value.as_str() {
+                            "space" => extract_string.push_str(" "),
+                            "empty" => extract_string.push_str(""),
+                            "unknown" => extract_string.push_str("?"),
+                            _ => extract_string.push_str("???"),
+                        }
+                    }
+                    _ => {}
+                }
+            },
+            None => {}
+        };
+    }
+    return extract_string.replace("  ", " ");
 }
 
 fn main() {
@@ -60,10 +101,10 @@ fn main() {
         let banned_edges: Vec<String> = vec!["advcl".to_string(), "csubj".to_string(), "ccomp".to_string(), "dep".to_string(), "parataxis".to_string()];
         println!("Points");
         for matched_components in graph_match::match_graph(&query, 1, &graph, &EqualityRequirement::Contains) {
-            println!("{:?}", matched_components.list);
             println!("{:?}", matched_components_to_pattern(&matched_components, &graph));
             let root_node_index = matched_components.list[0].node;
-            println!("{:?}", graph_match::expand_subgraph(&graph, root_node_index, &banned_edges));
+            let node_indexes = graph_match::expand_subgraph(&graph, root_node_index, &banned_edges);
+            println!("{:?}", subgraph_nodes_to_extract_string(&node_indexes, &graph));
         }
     }
 }
