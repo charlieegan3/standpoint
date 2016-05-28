@@ -2,7 +2,7 @@
 name = "point_extractor"
 version = "0.1.0"
 dependencies = [
- "graph_match 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "graph_match 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hyper 0.9.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -38,7 +38,7 @@ dependencies = [
 
 [[package]]
 name = "graph_match"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
