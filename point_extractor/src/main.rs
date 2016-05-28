@@ -2,9 +2,11 @@ extern crate graph_match;
 extern crate hyper;
 extern crate rustc_serialize;
 
+#[macro_use]
+mod macros;
 mod core_nlp;
 mod graph_parser;
-mod presentation;
+mod points;
 mod frames;
 mod verbs;
 
@@ -18,7 +20,7 @@ fn main() {
     let text = "The man ran home, he eat his food. He climbed the stairs.".to_string();
     let string_graphs = match core_nlp::graphs_for_text(&text) {
         Ok(graphs) => graphs,
-        Err(message) => panic!("There was an error in building the graph string representation ({})", message),
+        Err(message) => panic!("There was an error in building the graph string repoints ({})", message),
     };
 
     for g in string_graphs {
@@ -30,45 +32,19 @@ fn main() {
             }
         };
 
-        let mut verb_indices: Vec<usize> = Vec::new();
-        for node_index in 0..graph.nodes.len() {
-            match graph.nodes[node_index].attributes {
-                Some(ref attrs) => {
-                    match attrs.get("pos") {
-                        Some(pos) => {
-                            if pos.contains("VB") {
-                                verb_indices.push(node_index);
-                            }
-                        },
-                        None => println!("Node {} was missing a POS.", node_index)
-                    }
-                },
-                None => println!("Node {} was missing attributes.", node_index),
+        let verb_indices = match points::find_verbs(&graph) {
+            Some(indices) => indices,
+            None => {
+                println!("There were no verbs.");
+                continue;
             }
         };
 
-        let mut queries: Vec<(usize, String)> = Vec::new();
-        for verb_index in verb_indices {
-            match graph.nodes[verb_index].attributes {
-                Some(ref attrs) => {
-                    match attrs.get("lemma") {
-                        Some(lemma) => {
-                            match verbs.get(lemma) {
-                                Some(pattern) => {
-                                    match frames.get(pattern) {
-                                        Some(_) => {
-                                            queries.push((verb_index, pattern.clone()))
-                                        },
-                                        None => println!("{} has no match in the frame index.", pattern),
-                                    }
-                                },
-                                None => println!("{} is not in the verb index", lemma),
-                            }
-                        },
-                        None => println!("verb was missing a lemma."),
-                    }
-                },
-                None => println!("Node previously matched on attrs is now missing attrs."),
+        let queries = match points::build_queries(&verb_indices, &graph, &verbs, &frames) {
+            Some(queries) => queries,
+            None => {
+                println!("No queries could be generated.");
+                continue;
             }
         };
 
@@ -77,10 +53,10 @@ fn main() {
                 Some(frame) => {
                     println!("Pattern: {}", query.1);
                     for matched_components in graph_match::match_graph(&frame.1, frame.0, &graph, Some(query.0), &EqualityRequirement::Contains) {
-                        println!("{:?}", presentation::matched_components_to_pattern(&matched_components, &graph));
+                        println!("{:?}", points::matched_components_to_pattern(&matched_components, &graph));
                         let root_node_index = matched_components.list[0].node;
                         let node_indexes = graph_match::expand_subgraph(&graph, root_node_index, &banned_edges);
-                        println!("{:?}", presentation::subgraph_nodes_to_extract_string(&node_indexes, &graph));
+                        println!("{:?}", points::subgraph_nodes_to_extract_string(&node_indexes, &graph));
                     }
                 },
                 None => println!("Previously matched frame now missing."),
