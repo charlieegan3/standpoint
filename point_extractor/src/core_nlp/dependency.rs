@@ -36,8 +36,8 @@ impl Dependency {
             new_source = self.source - 1;
         }
         return format!("type:edge identifier:{} label:{} source:{} target:{}",
-                       self.dep,
-                       self.dep,
+                       self.dep.replace(":", "_"),
+                       self.dep.replace(":", "_"),
                        new_source,
                        self.target - 1);
     }
