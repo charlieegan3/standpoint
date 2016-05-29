@@ -34,17 +34,19 @@ fn find_verbs_in_graph() {
 
 pub fn build_queries(verb_indices: &Vec<usize>,
                      graph: &Graph,
-                     verbs: &HashMap<String, String>,
+                     verbs: &HashMap<String, Vec<String>>,
                      frames: &HashMap<String, (usize, Graph)>)
                      -> Option<Vec<(usize, String)>> {
     let mut queries: Vec<(usize, String)> = Vec::new();
     for verb_index in verb_indices {
         let attrs = try_opt_clone!(graph.nodes[*verb_index].attributes);
         let lemma = try_opt_clone!(attrs.get("lemma"));
-        let pattern = try_opt_clone!(verbs.get(lemma));
-        match frames.get(pattern) {
-            Some(_) => queries.push((*verb_index, pattern.clone())),
-            None => return None,
+        let patterns = try_opt_clone!(verbs.get(lemma));
+        for pattern in patterns {
+            match frames.get(pattern) {
+                Some(_) => queries.push((*verb_index, pattern.clone())),
+                None => println!("Frame missing for: {}", pattern),
+            }
         }
     }
     return Some(queries);
@@ -52,6 +54,7 @@ pub fn build_queries(verb_indices: &Vec<usize>,
 
 #[test]
 fn build_queries_for_verbs_in_graph() {
+    use graph_parser;
     let verb_indices = vec![0];
     let mut graph = Graph {
         edges: vec![],
@@ -64,8 +67,8 @@ fn build_queries_for_verbs_in_graph() {
 
     graph.add_node(String::from("node0"), Some(verb_attrs.clone()));
 
-    let mut verbs: HashMap<String, String> = HashMap::new();
-    verbs.insert(String::from("run"), String::from("NP V NP"));
+    let mut verbs: HashMap<String, Vec<String>> = HashMap::new();
+    verbs.insert(String::from("run"), vec![String::from("NP V NP")]);
     let mut frames: HashMap<String, (usize, Graph)> = HashMap::new();
 
     let query_string = "type:node identifier:subj\n\
