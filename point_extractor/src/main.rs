@@ -20,7 +20,7 @@ fn main() {
     let text = "The man ran home, he eat his food. He climbed the stairs.".to_string();
     let string_graphs = match core_nlp::graphs_for_text(&text) {
         Ok(graphs) => graphs,
-        Err(message) => panic!("There was an error in building the graph string repoints ({})", message),
+        Err(message) => panic!("There was an error in building the graph string ({})", message),
     };
 
     for g in string_graphs {
