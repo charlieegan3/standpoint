@@ -1,18 +1,23 @@
 use std::collections::HashMap;
 use graph_match::graph::Graph;
-us graph_parser;
+use graph_parser;
 
 pub fn frame_index() -> HashMap<String, (usize, Graph)> {
     let mut index: HashMap<String, (usize, Graph)> = HashMap::new();
     let frames = vec![
         np_v(),
         np_v_np(),
-        np_v_adj(),
         np_v_adv(),
         np_v_adv_lex(),
         np_v_adv_prep_np(),
         lex_v_np_prep_np(),
         lex_v_prep_np_np(),
+        np_v_prep_np(),
+        np_v_prep_np_prep_np(),
+        np_v_np_prep_np(),
+        prep_np_v_np(),
+
+        copula_np_v_adj(),
     ];
 
     for frame in frames {
@@ -46,6 +51,46 @@ fn np_v_adv() -> (String, usize, Graph) {
     return (String::from("NP VERB ADV"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
+fn np_v_prep_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:node identifier:prep\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:nmod\n\
+                        type:edge identifier:case source:2 target:3 label:case";
+    return (String::from("NP VERB PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn np_v_np_prep_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:node identifier:prep\n\
+                        type:node identifier:np3\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:dobj\n\
+                        type:edge identifier:nmod source:1 target:4 label:nmod\n\
+                        type:edge identifier:case source:4 target:3 label:case";
+    return (String::from("NP VERB NP PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+// this requires a more fuzzy match on clausal relations that are assumed not to exist elsewhere
+fn np_v_prep_np_prep_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:nmod\n\
+                        type:node identifier:prep\n\
+                        type:node identifier:verb2 pos:VB\n\
+                        type:node identifier:prep2\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:nmod source:1 target:2 label:nmod\n\
+                        type:edge identifier:case source:2 target:3 label:case\n\
+                        type:edge identifier:advcl source:4 target:1 label:advcl\n\
+                        type:edge identifier:case source:4 target:5 label:case";
+    return (String::from("NP VERB PREP NP PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
 fn np_v_adv_prep_np() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
@@ -71,6 +116,17 @@ fn np_v_adv_lex() -> (String, usize, Graph) {
                         type:edge identifier:adv source:1 target:3 label:advmod\n\
                         type:edge identifier:lex source:1 target:4 label:advmod";
     return (String::from("NP VERB ADV LEX"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn prep_np_v_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:prep\n\
+                        type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:edge identifier:nmod source:2 target:1 label:nmod\n\
+                        type:edge identifier:obj source:2 target:3 label:dobj\n\
+                        type:edge identifier:case source:1 target:0 label:case";
+    return (String::from("PREP NP VERB NP"), 2, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
 fn lex_v_np_prep_np() -> (String, usize, Graph) {
