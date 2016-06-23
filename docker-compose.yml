@@ -28,6 +28,8 @@ point_extractor:
   build: ./point_extractor
   links:
     - corenlp_server
+  ports:
+    - "3456:3456"
   volumes:
     - "./point_extractor:/app"
 
