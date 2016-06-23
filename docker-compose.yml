@@ -58,8 +58,6 @@ standpoint_server:
   links:
     - standpoint_server_postgres:postgres
     - standpoint_worker
-    - points_api
-    - topic_api
   volumes:
     - "./standpoint_server:/app"
   environment:
@@ -72,8 +70,7 @@ standpoint_worker:
   command: bundle exec rake jobs:work
   links:
     - standpoint_server_postgres:postgres
-    - points_api
-    - topic_api
+    - point_extractor
   volumes:
     - "./standpoint_server:/app"
   environment:
@@ -86,7 +83,7 @@ standpoint_server_postgres:
   ports:
     - "5432:5432"
   volumes:
-    - standpoint_server_postgres:/var/lib/postgresql/data
+    - standpoint_postgres_volume:/var/lib/postgresql/data
   environment:
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"

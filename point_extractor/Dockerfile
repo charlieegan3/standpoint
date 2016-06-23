@@ -4,4 +4,4 @@ WORKDIR /app
 ADD . /app
 RUN cargo build
 
-CMD /bin/bash
+CMD cargo run

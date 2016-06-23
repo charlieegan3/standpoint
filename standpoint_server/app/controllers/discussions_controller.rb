@@ -19,4 +19,9 @@ class DiscussionsController < ApplicationController
     end
     redirect_to root_path, flash: { error: "Bad URL" }
   end
+
+  def reset
+    Delayed::Job.delete_all
+    redirect_to root_path, flash: { error: "All jobs deleted" }
+  end
 end

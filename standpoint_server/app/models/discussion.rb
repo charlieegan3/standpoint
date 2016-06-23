@@ -12,12 +12,4 @@ class Discussion < ActiveRecord::Base
       .sort_by { |k, v| v.size }
       .reverse
   end
-
-  def topic_text
-    comments.pluck(:text)
-      .join(" ")
-      .gsub(/[^\w']/, " ")
-      .gsub(/\s+/, " ")
-      .downcase[0..60000]
-  end
 end
