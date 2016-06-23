@@ -15,6 +15,7 @@ pub fn frame_index() -> HashMap<String, (usize, Graph)> {
         np_v_prep_np(),
         np_v_prep_np_prep_np(),
         np_v_np_prep_np(),
+        np_v_np_np(),
         prep_np_v_np(),
 
         copula_np_v_adj(),
@@ -42,6 +43,10 @@ fn np_v() -> (String, usize, Graph) {
     return (String::from("NP VERB"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
+// not currently implementable, requires fuzzy list of edge matching
+// fn np_v_lex() {
+// }
+
 fn np_v_adv() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
@@ -49,6 +54,17 @@ fn np_v_adv() -> (String, usize, Graph) {
                         type:edge identifier:subj source:1 target:0 label:nsubj\n\
                         type:edge identifier:advmod source:1 target:2 label:advmod";
     return (String::from("NP VERB ADV"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn np_v_np_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:dobj\n\
+                        type:node identifier:xcomp\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:nmod\n\
+                        type:edge identifier:xcomp source:1 target:3 label:xcomp";
+    return (String::from("NP VERB NP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
 fn np_v_prep_np() -> (String, usize, Graph) {
