@@ -42,7 +42,7 @@ class Neo4jClient
   end
 
   def clear
-    Node.delete_all
+    execute("MATCH (n) DETACH DELETE n;")
   end
 
   def verbs
