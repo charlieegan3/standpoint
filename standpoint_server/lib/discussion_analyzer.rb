@@ -8,7 +8,7 @@ class DiscussionAnalyzer
     points = get_points(discussion.comments)
   end
 
-  #handle_asynchronously :perform
+  handle_asynchronously :perform
 
   private
   def get_points(comments)
@@ -17,8 +17,9 @@ class DiscussionAnalyzer
     comments.each do |c|
       req = Net::HTTP::Post.new(uri)
       req.body = c.text
-      resp = http.request(req).body
-      JSON.parse(http.request(req).body).each do |point|
+      resp = http.request(req)
+      next unless http.request(req).message == "OK"
+      JSON.parse(resp.body).each do |point|
         Point.create(
           comment: c, extract: point["extract"], pattern: point["pattern"])
       end

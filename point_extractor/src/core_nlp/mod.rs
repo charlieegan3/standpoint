@@ -50,7 +50,11 @@ fn get_corenlp_response(text: &String) -> Result<String, hyper::error::Error> {
 }
 
 fn parse_sentences(body: &String) -> Result<Vec<(Array, Array)>, String> {
-    let json = Json::from_str(&body).unwrap();
+    let json = match Json::from_str(&body) {
+        Ok(json) => json,
+        Err(error) => return Err(format!("Failed get parse. Error: {}", error)),
+    };
+
     let raw_sentences = match json.find_path(&["sentences"]) {
         Some(raw_sentences) => {
             match raw_sentences.as_array() {
