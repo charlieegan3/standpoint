@@ -8,21 +8,6 @@ topic_api:
   volumes:
     - "./topic_api:/app"
 
-points_api:
-  container_name: points_api
-  build: ./points_api
-  environment:
-    PORT: 4567
-    CNLP_PORT: 9000
-  ports:
-    - "4568:4567"
-  links:
-    - corenlp_server:corenlp_server
-    - neo4j:neo4j
-  volumes:
-    - "./points_api:/app"
-  restart: unless-stopped
-
 point_extractor:
   container_name: point_extractor
   build: ./point_extractor
@@ -32,14 +17,6 @@ point_extractor:
     - "3456:3456"
   volumes:
     - "./point_extractor:/app"
-
-neo4j:
-  container_name: neo4j
-  image: neo4j
-  environment:
-    NEO4J_AUTH: none
-  ports:
-    - "7474:7474"
 
 corenlp_server:
   container_name: corenlp_server
