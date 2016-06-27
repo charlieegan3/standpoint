@@ -177,7 +177,7 @@ fn lex_v_prep_np_np() -> (String, usize, Graph) {
 fn copula_np_v_adj() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
-                        type:node identifier:adj\n\
+                        type:node identifier:adj pos:JJ\n\
                         type:edge identifier:cop source:2 target:1 label:cop\n\
                         type:edge identifier:subj source:2 target:0 label:nsubj";
     return (String::from("copula:NP VERB ADJ"), 2, graph_parser::parse(&query_string.to_string()).unwrap());
@@ -186,7 +186,7 @@ fn copula_np_v_adj() -> (String, usize, Graph) {
 fn copula_np_v_np() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
-                        type:node identifier:dobj\n\
+                        type:node identifier:dobj pos:NN\n\
                         type:edge identifier:cop source:2 target:1 label:cop\n\
                         type:edge identifier:subj source:2 target:0 label:nsubj";
     return (String::from("copula:NP VERB NP"), 2, graph_parser::parse(&query_string.to_string()).unwrap());

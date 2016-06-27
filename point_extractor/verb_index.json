@@ -35376,6 +35376,7 @@
     "verb": "be",
     "frame_patterns": [
       "NP VERB NP",
+      "NP VERB ADJ",
       "NP VERB PREP NP"
     ]
   },
