@@ -31,6 +31,25 @@ fn test_token_to_node_string() {
                token_to_node_string(&json_token).unwrap());
 }
 
+#[test]
+fn test_reserved_token_to_node_string() {
+    let token_json_string = r#"{
+        "index": 13,
+        "word": ":",
+        "originalText": ":",
+        "lemma": ":",
+        "characterOffsetBegin": 40,
+        "characterOffsetEnd": 41,
+        "pos": ":",
+        "before": "",
+        "after": " "
+        }"#;
+    let json_token = Json::from_str(token_json_string).unwrap();
+    assert_eq!("type:node identifier:COLON12 index:12 pos:COLON word:COLON original_text:COLON \
+                lemma:COLON offset_start:40 offset_end:41 before:empty after:space",
+               token_to_node_string(&json_token).unwrap());
+}
+
 enum Context {
     Space,
     BigSpace,
@@ -89,17 +108,35 @@ impl Token {
         return format!("type:node identifier:{}{} index:{} pos:{} word:{} \
                        original_text:{} lemma:{} offset_start:{} \
                        offset_end:{} before:{} after:{}",
-                       self.pos,
+                       Token::sanitize(&self.pos),
                        self.index - 1,
                        self.index - 1,
-                       self.pos,
-                       self.word,
-                       self.original_text,
-                       self.lemma,
+                       Token::sanitize(&self.pos),
+                       Token::sanitize(&self.word),
+                       Token::sanitize(&self.original_text),
+                       Token::sanitize(&self.lemma),
                        self.offsets.0,
                        self.offsets.1,
                        self.before,
                        self.after);
+    }
+
+    fn sanitize(string: &String) -> String {
+        let mut clean_string = string.clone();
+        clean_string = clean_string.replace(":", "COLON");
+        clean_string = clean_string.replace("-rrb-", ")");
+        clean_string = clean_string.replace("-RRB-", ")");
+        clean_string = clean_string.replace("-lrb-", "(");
+        clean_string = clean_string.replace("-LRB-", "(");
+        clean_string = clean_string.replace("-rsb-", "]");
+        clean_string = clean_string.replace("-RSB-", "]");
+        clean_string = clean_string.replace("-lsb-", "[");
+        clean_string = clean_string.replace("-LSB-", "[");
+        clean_string = clean_string.replace("-rcb-", "}");
+        clean_string = clean_string.replace("-RCB-", "}");
+        clean_string = clean_string.replace("-lcb-", "{");
+        clean_string = clean_string.replace("-LCB-", "{");
+        return clean_string;
     }
 }
 

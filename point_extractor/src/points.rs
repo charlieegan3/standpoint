@@ -91,8 +91,8 @@ fn build_queries_for_verbs_in_graph() {
                         type:edge identifier:obj source:1 target:2 label:dobj";
     let frame = (1, graph_parser::parse(&query_string.to_string()).unwrap());
     frames.insert(String::from("NP V NP"), frame);
-    let result = build_queries(&verb_indices, &graph, &verbs, &frames).unwrap();
-    assert_eq!(vec![(0, String::from("NP V NP"))], result);
+    let result = build_queries(&verb_indices, &graph, &verbs, &frames, &vec![]).unwrap();
+    assert_eq!(vec![(Some(0), String::from("NP V NP"))], result);
 }
 
 pub fn matched_components_to_pattern(matched_components: &graph_match::matching::MatchedComponents,
@@ -151,14 +151,7 @@ pub fn subgraph_nodes_to_extract_string(node_indexes: &Vec<usize>, graph: &Graph
         match graph.nodes[index].attributes {
             Some(ref attrs) => {
                 match attrs.get("before") {
-                    Some(value) => {
-                        match value.as_str() {
-                            "space" => extract_string.push_str(" "),
-                            "empty" => extract_string.push_str(""),
-                            "unknown" => extract_string.push_str("?"),
-                            _ => extract_string.push_str("???"),
-                        }
-                    }
+                    Some(value) => extract_string.push_str(&format_context(&value)),
                     _ => {}
                 }
                 match attrs.get("word") {
@@ -166,21 +159,26 @@ pub fn subgraph_nodes_to_extract_string(node_indexes: &Vec<usize>, graph: &Graph
                     _ => {}
                 }
                 match attrs.get("after") {
-                    Some(value) => {
-                        match value.as_str() {
-                            "space" => extract_string.push_str(" "),
-                            "empty" => extract_string.push_str(""),
-                            "unknown" => extract_string.push_str("?"),
-                            _ => extract_string.push_str("???"),
-                        }
-                    }
+                    Some(value) => extract_string.push_str(&format_context(&value)),
                     _ => {}
                 }
             }
             None => {}
         };
     }
-    return extract_string.replace("  ", " ");
+    return extract_string.replace("  ", " ").replace("COLON", ":");
+}
+
+fn format_context(context: &String) -> String {
+    let plaintext = match context.as_str() {
+        "space" => " ",
+        "bigspace" => "\t",
+        "newline" => "\n",
+        "empty" => "",
+        "unknown" => "?",
+        _ => "???",
+    };
+    return String::from(plaintext);
 }
 
 #[test]
