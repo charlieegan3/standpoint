@@ -35,21 +35,34 @@ fn find_verbs_in_graph() {
 pub fn build_queries(verb_indices: &Vec<usize>,
                      graph: &Graph,
                      verbs: &HashMap<String, Vec<String>>,
-                     frames: &HashMap<String, (usize, Graph)>)
-                     -> Option<Vec<(usize, String)>> {
-    let mut queries: Vec<(usize, String)> = Vec::new();
-    for verb_index in verb_indices {
-        let attrs = try_opt_clone!(graph.nodes[*verb_index].attributes);
-        let lemma = try_opt_clone!(attrs.get("lemma"));
-        let patterns = try_opt_clone!(verbs.get(lemma));
-        for pattern in patterns {
-            match frames.get(pattern) {
-                Some(_) => queries.push((*verb_index, pattern.clone())),
-                None => println!("Frame missing for: {}", pattern),
+                     frames: &HashMap<String, (usize, Graph)>,
+                     copula_verbs: &Vec<String>)
+    -> Option<Vec<(Option<usize>, String)>> {
+        let mut queries: Vec<(Option<usize>, String)> = Vec::new();
+        for verb_index in verb_indices {
+            let attrs = try_opt_clone!(graph.nodes[*verb_index].attributes);
+            let lemma = try_opt_clone!(attrs.get("lemma"));
+            let raw_patterns = try_opt_clone!(verbs.get(lemma));
+            let is_copula = copula_verbs.contains(lemma);
+            for pattern in raw_patterns {
+                if is_copula {
+                    match frames.get(&format!("copula:{}", pattern)) {
+                        Some(_) => {
+                            queries.push((None, format!("copula:{}", pattern)));
+                        },
+                        None => println!("Frame missing for: {}", pattern),
+                    }
+                } else {
+                    match frames.get(&format!("{}", pattern)) {
+                        Some(_) => {
+                            queries.push((Some(*verb_index), pattern.clone()));
+                        },
+                        None => println!("Frame missing for: {}", pattern),
+                    }
+                }
             }
         }
-    }
-    return Some(queries);
+        return Some(queries);
 }
 
 #[test]
@@ -84,31 +97,31 @@ fn build_queries_for_verbs_in_graph() {
 
 pub fn matched_components_to_pattern(matched_components: &graph_match::matching::MatchedComponents,
                                      graph: &Graph)
-                                     -> String {
-    let mut pattern: Vec<(usize, String)> = Vec::new();
+    -> String {
+        let mut pattern: Vec<(usize, String)> = Vec::new();
 
-    for component in &matched_components.list {
-        let mut label = String::new();
-        match graph.nodes[component.node].attributes {
-            Some(ref attrs) => {
-                match attrs.get("lemma") {
-                    Some(lemma) => label.push_str(lemma.as_str()),
-                    None => label.push_str("BLANK"),
+        for component in &matched_components.list {
+            let mut label = String::new();
+            match graph.nodes[component.node].attributes {
+                Some(ref attrs) => {
+                    match attrs.get("lemma") {
+                        Some(lemma) => label.push_str(lemma.as_str()),
+                        None => label.push_str("BLANK"),
+                    }
                 }
+                None => label.push_str("BLANK"),
             }
-            None => label.push_str("BLANK"),
+            label.push_str(".");
+            match component.from_edge {
+                Some(edge) => label.push_str(&graph.edges[edge].identifier.as_str()),
+                None => label.push_str("root"),
+            }
+            pattern.push((component.node, label));
         }
-        label.push_str(".");
-        match component.from_edge {
-            Some(edge) => label.push_str(&graph.edges[edge].identifier.as_str()),
-            None => label.push_str("root"),
-        }
-        pattern.push((component.node, label));
-    }
 
-    pattern.sort_by(|a, b| a.0.cmp(&b.0));
-    return pattern.iter().map(|e| e.1.clone()).collect::<Vec<String>>().join(" ");
-}
+        pattern.sort_by(|a, b| a.0.cmp(&b.0));
+        return pattern.iter().map(|e| e.1.clone()).collect::<Vec<String>>().join(" ");
+    }
 
 #[test]
 fn matched_component_pattern() {
@@ -127,7 +140,7 @@ fn matched_component_pattern() {
         ],
     };
     assert_eq!(String::from("cat.edge1"),
-               matched_components_to_pattern(&matched_components, &graph));
+    matched_components_to_pattern(&matched_components, &graph));
 }
 
 pub fn subgraph_nodes_to_extract_string(node_indexes: &Vec<usize>, graph: &Graph) -> String {
@@ -183,5 +196,5 @@ fn subgraph_string() {
     attributes.insert(String::from("after"), String::from("empty"));
     graph.add_node(String::from("node1"), Some(attributes.clone()));
     assert_eq!(String::from(" cat"),
-               subgraph_nodes_to_extract_string(&vec![0], &graph));
+    subgraph_nodes_to_extract_string(&vec![0], &graph));
 }

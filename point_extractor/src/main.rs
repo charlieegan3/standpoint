@@ -33,15 +33,25 @@ fn main() {
     let frames = frames::frame_index();
     let verbs = verbs::verb_index();
     let banned_edges: Vec<String> = vec![String::from("advcl"), String::from("csubj"), String::from("ccomp"), String::from("dep"), String::from("parataxis")];
+    let copula_verbs: Vec<String> = vec![
+        String::from("act"), String::from("appear"), String::from("be"), String::from("become"), String::from("come"),
+        String::from("end"), String::from("get"), String::from("go"), String::from("grow"), String::from("fall"), String::from("feel"),
+        String::from("keep"), String::from("look"), String::from("prove"), String::from("remain"), String::from("run"), String::from("seem"),
+        String::from("smell"), String::from("sound"), String::from("stay"), String::from("taste"), String::from("turn"), String::from("wax")
+    ];
 
     let mut router = Router::new();
-    router.post("/points", move |r: &mut Request| handle(r, &frames, &verbs, &banned_edges));
+    router.post("/points", move |r: &mut Request| handle(r, &frames, &verbs, &banned_edges, &copula_verbs));
 
     Iron::new(router).http("0.0.0.0:3456").unwrap();
     println!("Listening on 3456");
 }
 
-fn handle(request: &mut Request, frames: &HashMap<String, (usize, Graph)>, verbs: &HashMap<String, Vec<String>>, banned_edges: &Vec<String>) -> IronResult<Response> {
+fn handle(request: &mut Request,
+          frames: &HashMap<String, (usize, Graph)>,
+          verbs: &HashMap<String, Vec<String>>,
+          banned_edges: &Vec<String>,
+          copula_verbs: &Vec<String>) -> IronResult<Response> {
     let mut text: String = String::new();
     if request.body.read_to_string(&mut text).is_err() {
         let response: IronResult<Response> = Ok(Response::with((status::InternalServerError, "Failed to read the request body.")));
@@ -76,7 +86,7 @@ fn handle(request: &mut Request, frames: &HashMap<String, (usize, Graph)>, verbs
             }
         };
 
-        let queries = match points::build_queries(&verb_indices, &graph, &verbs, &frames) {
+        let queries = match points::build_queries(&verb_indices, &graph, &verbs, &frames, &copula_verbs) {
             Some(queries) => queries,
             None => {
                 println!("No queries could be generated.");
@@ -87,7 +97,7 @@ fn handle(request: &mut Request, frames: &HashMap<String, (usize, Graph)>, verbs
         for query in queries {
             match frames.get(&query.1) {
                 Some(frame) => {
-                    for matched_components in graph_match::match_graph(&frame.1, frame.0, &graph, Some(query.0), &EqualityRequirement::Contains) {
+                    for matched_components in graph_match::match_graph(&frame.1, frame.0, &graph, query.0, &EqualityRequirement::Contains) {
                         let root_node_index = matched_components.list[0].node;
                         let node_indexes = graph_match::expand_subgraph(&graph, root_node_index, &banned_edges);
 

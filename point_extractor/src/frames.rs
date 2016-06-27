@@ -19,6 +19,7 @@ pub fn frame_index() -> HashMap<String, (usize, Graph)> {
         prep_np_v_np(),
 
         copula_np_v_adj(),
+        copula_np_v_np(),
     ];
 
     for frame in frames {
@@ -177,8 +178,17 @@ fn copula_np_v_adj() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
                         type:node identifier:adj\n\
-                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
-                        type:edge identifier:xcomp source:1 target:2 label:xcomp";
-    return (String::from("copula:NP VERB ADJ"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+                        type:edge identifier:cop source:2 target:1 label:cop\n\
+                        type:edge identifier:subj source:2 target:0 label:nsubj";
+    return (String::from("copula:NP VERB ADJ"), 2, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn copula_np_v_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:dobj\n\
+                        type:edge identifier:cop source:2 target:1 label:cop\n\
+                        type:edge identifier:subj source:2 target:0 label:nsubj";
+    return (String::from("copula:NP VERB NP"), 2, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
