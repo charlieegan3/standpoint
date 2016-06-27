@@ -52,7 +52,7 @@ fn get_corenlp_response(text: &String) -> Result<String, hyper::error::Error> {
 fn parse_sentences(body: &String) -> Result<Vec<(Array, Array)>, String> {
     let json = match Json::from_str(&body) {
         Ok(json) => json,
-        Err(error) => return Err(format!("Failed get parse. Error: {}", error)),
+        Err(error) => return Err(format!("Failed get parse. ({}) ({})", error, body)),
     };
 
     let raw_sentences = match json.find_path(&["sentences"]) {

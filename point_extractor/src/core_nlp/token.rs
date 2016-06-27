@@ -33,7 +33,9 @@ fn test_token_to_node_string() {
 
 enum Context {
     Space,
+    BigSpace,
     Empty,
+    NewLine,
     Unknown,
 }
 
@@ -41,7 +43,9 @@ impl fmt::Display for Context {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Context::Space => write!(f, "space"),
+            Context::BigSpace => write!(f, "bigspace"),
             Context::Empty => write!(f, "empty"),
+            Context::NewLine=> write!(f, "newline"),
             Context::Unknown => write!(f, "unknown"),
         }
     }
@@ -51,17 +55,23 @@ impl Decodable for Context {
     fn decode<D: Decoder>(d: &mut D) -> Result<Self, D::Error> {
         match d.read_str() {
             Ok(string) => {
-                match string.as_str() {
-                    " " => Ok(Context::Space),
-                    "" => Ok(Context::Empty),
-                    _ => { println!("Unknown Context: {}", string); Ok(Context::Unknown) }
+                if string.as_str() == " " {
+                    Ok(Context::Space)
+                } else if string.as_str() == "" {
+                    Ok(Context::Empty)
+                } else if string.contains("\n") {
+                    Ok(Context::NewLine)
+                } else if string.trim() == "" {
+                    Ok(Context::BigSpace)
+                } else {
+                    println!("Unknown Token Context ({})", string);
+                    Ok(Context::Unknown)
                 }
             },
             Err(error) => return Err(error),
         }
     }
 }
-
 
 struct Token {
     index: usize,

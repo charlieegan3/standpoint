@@ -29,7 +29,7 @@ pub fn parse(string: &String) -> Result<graph_match::graph::Graph, String> {
                             Some(identifier) => {
                                 graph.add_node(identifier.clone(), Some(graph_component_attributes));
                             }
-                            None => return Err("Missing identifier".to_string()),
+                            None => return Err(String::from("Missing node identifier")),
                         }
                     }
                     "edge" => {
@@ -42,16 +42,16 @@ pub fn parse(string: &String) -> Result<graph_match::graph::Graph, String> {
                                                        identifier.clone(),
                                                        Some(graph_component_attributes));
                                     }
-                                    None => return Err("Invalid source or target".to_string()),
+                                    None => return Err(String::from("Invalid source or target")),
                                 }
                             }
-                            None => return Err("Missing identifier".to_string()),
+                            None => return Err(String::from("Missing edge identifier")),
                         }
                     }
-                    _ => return Err("Invalid type".to_string()),
+                    _ => return Err(String::from("Invalid type")),
                 }
             }
-            None => return Err("A line must have a graph component type".to_string()),
+            None => return Err(String::from("A line must have a graph component type")),
         }
     }
     return Ok(graph);
