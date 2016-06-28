@@ -50,7 +50,7 @@ pub fn build_queries(verb_indices: &Vec<usize>,
                         Some(_) => {
                             queries.push((None, format!("copula:{}", pattern)));
                         },
-                        None => println!("Frame missing for: {}", pattern),
+                        None => println!("Frame missing for: copula:{}", pattern),
                     }
                 } else {
                     match frames.get(&format!("{}", pattern)) {
@@ -60,7 +60,9 @@ pub fn build_queries(verb_indices: &Vec<usize>,
                         None => println!("Frame missing for: {}", pattern),
                     }
                 }
-            }
+            };
+            queries.push((Some(*verb_index), String::from("generic:OBJ")));
+            queries.push((Some(*verb_index), String::from("generic:XCOMP")));
         }
         return Some(queries);
 }

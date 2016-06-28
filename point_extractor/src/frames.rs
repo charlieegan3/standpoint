@@ -24,6 +24,9 @@ pub fn frame_index() -> HashMap<String, (usize, Graph)> {
 
         copula_np_v_adj(),
         copula_np_v_np(),
+
+        generic_obj(),
+        generic_xcomp(),
     ];
 
     for frame in frames {
@@ -251,3 +254,20 @@ fn copula_np_v_np() -> (String, usize, Graph) {
     return (String::from("copula:NP VERB NP"), 2, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
+fn generic_obj() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:dobj";
+    return (String::from("generic:OBJ"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn generic_xcomp() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:xcomp\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:xcomp source:1 target:2 label:xcomp";
+    return (String::from("generic:XCOMP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
