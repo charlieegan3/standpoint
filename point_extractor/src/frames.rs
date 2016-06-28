@@ -52,7 +52,7 @@ fn np_v_np_lex() -> (String, usize, Graph) {
                         type:edge identifier:subj source:1 target:0 label:nsubj\n\
                         type:edge identifier:obj source:1 target:2 label:dobj\n\
                         type:edge identifier:advmod source:1 target:3 label:advmod";
-    return (String::from("NP VERB NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+    return (String::from("NP VERB NP LEX"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
 fn np_v() -> (String, usize, Graph) {
@@ -151,7 +151,7 @@ fn np_v_np_lex_np() -> (String, usize, Graph) {
                         type:edge identifier:obj source:1 target:2 label:dobj\n\
                         type:edge identifier:nmod source:1 target:4 label:advcl\n\
                         type:edge identifier:mark source:4 target:3 label:mark";
-    return (String::from("NP VERB NP PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+    return (String::from("NP VERB NP LEX NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
 // this requires a more fuzzy match on clausal relations that are assumed not to exist elsewhere
