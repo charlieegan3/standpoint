@@ -4,7 +4,6 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::collections::HashMap;
 use rustc_serialize::json::Json;
-use rustc_serialize::Decoder;
 
 struct Verb {
     lemma: String,

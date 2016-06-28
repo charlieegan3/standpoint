@@ -3,6 +3,7 @@ extern crate hyper;
 extern crate rustc_serialize;
 extern crate iron;
 extern crate router;
+extern crate encoding;
 
 #[macro_use]
 mod macros;
@@ -11,6 +12,7 @@ mod graph_parser;
 mod points;
 mod frames;
 mod verbs;
+mod sanitize;
 
 use std::io::Read;
 use std::collections::HashMap;
@@ -56,6 +58,14 @@ fn handle(request: &mut Request,
     if request.body.read_to_string(&mut text).is_err() {
         let response: IronResult<Response> = Ok(Response::with((status::InternalServerError, "Failed to read the request body.")));
         return response;
+    }
+
+    match sanitize::force_ascii(&text) {
+        Ok(clean_text) => text = clean_text,
+        Err(error) => {
+            let response: IronResult<Response> = Ok(Response::with((status::InternalServerError, error)));
+            return response;
+        }
     }
 
     let string_graphs = match core_nlp::graphs_for_text(&text) {
