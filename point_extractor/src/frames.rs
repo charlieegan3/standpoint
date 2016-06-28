@@ -7,15 +7,19 @@ pub fn frame_index() -> HashMap<String, (usize, Graph)> {
     let frames = vec![
         np_v(),
         np_v_np(),
+        np_v_np_prep_np(),
+        np_v_np_np(),
+        np_v_np_lex(),
+        np_v_np_prep_np_prep_np(),
+        np_v_np_lex_np(),
+        np_v_prep_np(),
+        np_v_prep_np_np(),
+        np_v_prep_np_prep_np(),
         np_v_adv(),
         np_v_adv_lex(),
         np_v_adv_prep_np(),
         lex_v_np_prep_np(),
         lex_v_prep_np_np(),
-        np_v_prep_np(),
-        np_v_prep_np_prep_np(),
-        np_v_np_prep_np(),
-        np_v_np_np(),
         prep_np_v_np(),
 
         copula_np_v_adj(),
@@ -34,6 +38,17 @@ fn np_v_np() -> (String, usize, Graph) {
                         type:node identifier:obj\n\
                         type:edge identifier:subj source:1 target:0 label:nsubj\n\
                         type:edge identifier:obj source:1 target:2 label:dobj";
+    return (String::from("NP VERB NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn np_v_np_lex() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:node identifier:lex\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:dobj\n\
+                        type:edge identifier:advmod source:1 target:3 label:advmod";
     return (String::from("NP VERB NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
@@ -79,6 +94,19 @@ fn np_v_prep_np() -> (String, usize, Graph) {
     return (String::from("NP VERB PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
+fn np_v_prep_np_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:node identifier:prep\n\
+                        type:node identifier:nmod\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:nmod source:1 target:4 label:nmod\n\
+                        type:edge identifier:obj source:4 target:2 label:appos\n\
+                        type:edge identifier:case source:4 target:3 label:case";
+    return (String::from("NP VERB PREP NP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
 fn np_v_np_prep_np() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
@@ -89,6 +117,37 @@ fn np_v_np_prep_np() -> (String, usize, Graph) {
                         type:edge identifier:obj source:1 target:2 label:dobj\n\
                         type:edge identifier:nmod source:1 target:4 label:nmod\n\
                         type:edge identifier:case source:4 target:3 label:case";
+    return (String::from("NP VERB NP PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+fn np_v_np_prep_np_prep_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:node identifier:nmod1\n\
+                        type:node identifier:nmod2\n\
+                        type:node identifier:prep1\n\
+                        type:node identifier:prep2\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:dobj\n\
+                        type:edge identifier:nmod1 source:1 target:3 label:nmod\n\
+                        type:edge identifier:nmod2 source:1 target:4 label:nmod\n\
+                        type:edge identifier:case1 source:3 target:5 label:case\n\
+                        type:edge identifier:case1 source:4 target:6 label:case";
+    return (String::from("NP VERB NP PREP NP PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
+}
+
+// this used a blacklisted relation, advcl, that is not permitted in extract creation
+fn np_v_np_lex_np() -> (String, usize, Graph) {
+    let query_string = "type:node identifier:subj\n\
+                        type:node identifier:verb pos:VB\n\
+                        type:node identifier:obj\n\
+                        type:node identifier:lex\n\
+                        type:node identifier:np2\n\
+                        type:edge identifier:subj source:1 target:0 label:nsubj\n\
+                        type:edge identifier:obj source:1 target:2 label:dobj\n\
+                        type:edge identifier:nmod source:1 target:4 label:advcl\n\
+                        type:edge identifier:mark source:4 target:3 label:mark";
     return (String::from("NP VERB NP PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
@@ -121,7 +180,7 @@ fn np_v_adv_prep_np() -> (String, usize, Graph) {
     return (String::from("NP VERB ADV PREP NP"), 1, graph_parser::parse(&query_string.to_string()).unwrap());
 }
 
-// lex should be before avd
+// lex should be before adv
 fn np_v_adv_lex() -> (String, usize, Graph) {
     let query_string = "type:node identifier:subj\n\
                         type:node identifier:verb pos:VB\n\
