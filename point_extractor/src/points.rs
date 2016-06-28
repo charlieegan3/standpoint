@@ -52,13 +52,16 @@ pub fn build_queries(verb_indices: &Vec<usize>,
                         },
                         None => println!("Frame missing for: copula:{}", pattern),
                     }
-                } else {
-                    match frames.get(&format!("{}", pattern)) {
-                        Some(_) => {
-                            queries.push((Some(*verb_index), pattern.clone()));
-                        },
-                        None => println!("Frame missing for: {}", pattern),
-                    }
+                }
+                match frames.get(&format!("{}", pattern)) {
+                    Some(_) => {
+                        queries.push((Some(*verb_index), pattern.clone()));
+                    },
+                    None => {
+                        if !is_copula {
+                            println!("Frame missing for: {}", pattern)
+                        }
+                    },
                 }
             };
             queries.push((Some(*verb_index), String::from("generic:OBJ")));
