@@ -13,6 +13,7 @@ mod graph_parser;
 mod points;
 mod frames;
 mod formatting;
+mod validate;
 mod verbs;
 mod sanitize;
 
@@ -118,12 +119,13 @@ fn handle(request: &mut Request,
 
                         let pattern = formatting::pattern(pattern);
 
-                        let point = Point {
-                            frame: query.1.clone(),
-                            pattern: pattern,
-                            extract: extract,
-                        };
-                        points.push(point);
+                        if validate::pattern(&pattern) {
+                            points.push(Point {
+                                frame: query.1.clone(),
+                                pattern: pattern,
+                                extract: extract,
+                            });
+                        }
                     }
                 },
                 None => println!("Previously matched frame now missing."),
