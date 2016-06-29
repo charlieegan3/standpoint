@@ -97,7 +97,7 @@ fn build_queries_for_verbs_in_graph() {
     let frame = (1, graph_parser::parse(&query_string.to_string()).unwrap());
     frames.insert(String::from("NP V NP"), frame);
     let result = build_queries(&verb_indices, &graph, &verbs, &frames, &vec![]).unwrap();
-    assert_eq!(vec![(Some(0), String::from("NP V NP"))], result);
+    assert_eq!(vec![(Some(0), String::from("NP V NP")), (Some(0), String::from("generic:OBJ")), (Some(0), String::from("generic:XCOMP"))], result);
 }
 
 pub fn matched_components_to_pattern(matched_components: &graph_match::matching::MatchedComponents,
@@ -117,9 +117,30 @@ pub fn matched_components_to_pattern(matched_components: &graph_match::matching:
                 None => label.push_str("BLANK"),
             }
             label.push_str(".");
-            match component.from_edge {
-                Some(edge) => label.push_str(&graph.edges[edge].identifier.as_str()),
-                None => label.push_str("root"),
+            match graph.nodes[component.node].attributes {
+                Some(ref attrs) => {
+                    match attrs.get("pos") {
+                        Some(pos) => {
+                            if pos.contains("VB") {
+                                label.push_str("verb")
+                            } else if pos.contains("NN") {
+                                label.push_str("noun")
+                            } else if pos.contains("PRP") {
+                                label.push_str("pn")
+                            } else if pos.contains("JJ") {
+                                label.push_str("adj")
+                            } else if pos.contains("RB") {
+                                label.push_str("adv")
+                            } else if pos.contains("IN") {
+                                label.push_str("prep")
+                            } else {
+                                label.push_str(pos.as_str())
+                            }
+                        }
+                        None => label.push_str("BLANK")
+                    }
+                }
+                None => label.push_str("BLANK"),
             }
             pattern.push((component.node, label));
         }
@@ -137,6 +158,7 @@ fn matched_component_pattern() {
     };
     let mut attributes: HashMap<String, String> = HashMap::new();
     attributes.insert(String::from("lemma"), String::from("cat"));
+    attributes.insert(String::from("pos"), String::from("NN"));
     graph.add_node(String::from("node1"), Some(attributes.clone()));
     graph.add_edge(0, 0, String::from("edge1"), None);
     let matched_components = graph_match::matching::MatchedComponents {
@@ -144,7 +166,7 @@ fn matched_component_pattern() {
             graph_match::matching::Component { from_edge: Some(0), node: 0},
         ],
     };
-    assert_eq!(String::from("cat.edge1"),
+    assert_eq!(String::from("cat.noun"),
     matched_components_to_pattern(&matched_components, &graph));
 }
 
