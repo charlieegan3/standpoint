@@ -107,6 +107,7 @@ fn handle(request: &mut Request,
             }
         };
 
+        let mut used_patterns: Vec<String> = Vec::new();
         for query in queries {
             match frames.get(&query.1) {
                 Some(frame) => {
@@ -119,7 +120,8 @@ fn handle(request: &mut Request,
 
                         let pattern = formatting::pattern(pattern);
 
-                        if validate::pattern(&pattern) {
+                        if !used_patterns.contains(&pattern) && validate::pattern(&pattern) {
+                            used_patterns.push(pattern.clone());
                             points.push(Point {
                                 frame: query.1.clone(),
                                 pattern: pattern,
