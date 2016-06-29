@@ -1,7 +1,14 @@
 use regex::Regex;
 
 pub fn pattern(pattern: &String) -> bool {
-    return !is_banned_speech_act(pattern) && !is_banned_pattern(pattern);
+    return !is_banned_speech_act(pattern) &&
+        !is_banned_pattern(pattern) &&
+        !has_banned_subject(&pattern);
+}
+
+fn has_banned_subject(pattern: &String) -> bool {
+    let re = Regex::new(r"(^|\s)(it.pn|which.wdt|what.wp|that.dt|this.dt)($|\s)").unwrap();
+    return re.is_match(pattern);
 }
 
 fn is_banned_speech_act(pattern: &String) -> bool {
