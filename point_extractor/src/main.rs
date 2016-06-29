@@ -4,6 +4,7 @@ extern crate rustc_serialize;
 extern crate iron;
 extern crate router;
 extern crate encoding;
+extern crate regex;
 
 #[macro_use]
 mod macros;
@@ -11,6 +12,7 @@ mod core_nlp;
 mod graph_parser;
 mod points;
 mod frames;
+mod formatting;
 mod verbs;
 mod sanitize;
 
@@ -111,10 +113,15 @@ fn handle(request: &mut Request,
                         let root_node_index = matched_components.list[0].node;
                         let node_indexes = graph_match::expand_subgraph(&graph, root_node_index, &banned_edges);
 
+                        let pattern = points::matched_components_to_pattern(&matched_components, &graph);
+                        let extract = points::subgraph_nodes_to_extract_string(&node_indexes, &graph);
+
+                        let pattern = formatting::pattern(pattern);
+
                         let point = Point {
                             frame: query.1.clone(),
-                            pattern: points::matched_components_to_pattern(&matched_components, &graph),
-                            extract: points::subgraph_nodes_to_extract_string(&node_indexes, &graph),
+                            pattern: pattern,
+                            extract: extract,
                         };
                         points.push(point);
                     }
