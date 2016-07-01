@@ -1,5 +1,8 @@
 p =link_to @discussion.title, @discussion.url
 
+h2 Graph
+= render 'discussions/graph', discussion: @discussion
+
 h2 Point Clusters
 
 ul

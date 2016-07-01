@@ -12,4 +12,16 @@ class Discussion < ActiveRecord::Base
       .sort_by { |k, v| v.size }
       .reverse
   end
+
+  def point_pattern_graph
+    nodes, edges = [], []
+    point_clusters.each do |k, v|
+      v.each do |point|
+        tokens = point.pattern.split(" ")
+        nodes += tokens
+        (0...tokens.size - 1).to_a.each { |i| edges << tokens[i, 2] }
+      end
+    end
+    return { nodes: nodes, edges: edges }
+  end
 end

@@ -25,3 +25,8 @@
 .comment .meta {
   color: grey;
 }
+
+#graph {
+  width: 400px;
+  height: 300px;
+}
