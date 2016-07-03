@@ -54,7 +54,7 @@ $(document).ready(function() {
         .attr("class", "group")
         .on("mouseover", fade(.02))
         .on("mouseout", fade(.80))
-        .on("click", function(d) {
+        .on("mouseover", function(d) {
           list_matching_patterns(nodeByIndex[d.index].name);
         });
 
@@ -91,11 +91,6 @@ $(document).ready(function() {
         .transition()
           .style("stroke-opacity", opacity)
           .style("fill-opacity", opacity);
-    };
-  }
-  function click() {
-    return function(d, i) {
-      console.log(nodeByIndex[i]);
     };
   }
 });

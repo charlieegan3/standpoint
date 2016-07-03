@@ -35,7 +35,7 @@ $(document).ready(function() {
           d.fixed = true;
           d3.select(this).classed("sticky", true);
         })
-        .on("click", function(d) {
+        .on("mouseover", function(d) {
           list_matching_patterns(d.name);
         });
 

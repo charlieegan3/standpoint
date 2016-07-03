@@ -9,13 +9,11 @@ function list_matching_patterns(pattern) {
       var list = document.createElement("ul");
       for (var j = 0; j < data[i][1].length; j++) {
         var item = $("<li>");
-        var link = $("<a href=\"#\">");
-        link.html(data[i][1][j].extract);
-        $(link).attr("data-comment", data[i][1][j].comment_id)
-        $(link).click(function() {
+        item.html(data[i][1][j].extract);
+        $(item).attr("data-comment", data[i][1][j].comment_id)
+        $(item).mouseover(function() {
           show_comment($(this).attr("data-comment"), $(this).html());
         });
-        $(item).append(link);
         $(list).append(item);
       }
       $(container).append(list);

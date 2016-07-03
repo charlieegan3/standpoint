@@ -32,6 +32,10 @@ a.current {
   text-decoration: none;
 }
 
+#comment-col {
+  position: fixed;
+}
+
 .comment-text mark {
   background-color: Gold;
 }
