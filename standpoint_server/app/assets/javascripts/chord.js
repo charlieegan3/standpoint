@@ -1,6 +1,6 @@
 $(document).ready(function() {
-  var w = 500,
-      h = 500,
+  var w = 400,
+      h = 400,
       r1 = h / 2,
       r0 = r1 - 80;
 

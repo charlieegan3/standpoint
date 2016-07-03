@@ -1,9 +1,12 @@
 =javascript_include_tag "graph"
 =javascript_include_tag "chord"
 
-div#graph_data style=("display: none;")
-  =@discussion.graph_data.to_json.html_safe
+.row
+  .col-md-12
+    h2 =link_to @discussion.title, @discussion.url
 
-#graph
-
-#plot
+.row
+  .col-md-6
+    #graph
+  .col-md-6
+    #plot

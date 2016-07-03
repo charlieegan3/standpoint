@@ -14,6 +14,8 @@
  *= require_self
  */
 
+@import url('https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.0/flexboxgrid.min.css');
+
 .link {
   stroke: #ccc;
 }
@@ -21,4 +23,8 @@
 .node text {
   pointer-events: none;
   font: 15px sans-serif;
+}
+
+.group text {
+  font: 10px sans-serif;
 }
