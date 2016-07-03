@@ -16,6 +16,10 @@ class DiscussionsController < ApplicationController
     render json: Discussion.find(params[:id]).chord_data
   end
 
+  def matching_patterns
+    render json: Discussion.find(params[:id]).matching_patterns(params[:pattern])
+  end
+
   def create
     url = params[:url]
     if url.match(/^https:\/\/news\.ycombinator\.com\/item\?id=[0-9]+$/)

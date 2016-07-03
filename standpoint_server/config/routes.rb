@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :discussions, only: [:show, :create]
   get 'discussions/:id/graph_data' => 'discussions#graph_data'
   get 'discussions/:id/chord_data' => 'discussions#chord_data'
+  get 'discussions/:id/matching_patterns' => 'discussions#matching_patterns'
 
   # Example resource route with options:
   #   resources :products do

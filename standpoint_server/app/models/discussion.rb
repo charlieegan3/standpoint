@@ -38,9 +38,9 @@ class Discussion < ActiveRecord::Base
     end
     name_index = Hash.new()
     nodes = Utils.sorted_dup_hash(nodes).take(30).each_with_index.to_a.map do |e, i|
-      name, type = e[0].split(".")
+      lemma, pos = e[0].split(".")
       name_index[e[0]] = i
-      { name: name, group: type, value: e[1] }
+      { name: e[0], lemma: lemma, group: pos, value: e[1] }
     end
     edges = Utils.sorted_dup_hash(edges).map do |k, v|
 	  source, target = name_index[k.first], name_index[k.last]
@@ -48,5 +48,10 @@ class Discussion < ActiveRecord::Base
       { source: name_index[k.first], target: name_index[k.last], value: v }
     end.compact
     return { nodes: nodes, links: edges }
+  end
+
+  def matching_patterns(pattern)
+    return [] if pattern.nil?
+    point_clusters.select { |k, _| k.downcase.include? pattern.downcase }
   end
 end

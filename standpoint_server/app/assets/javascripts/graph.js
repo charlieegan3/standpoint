@@ -36,7 +36,7 @@ $(document).ready(function() {
           d3.select(this).classed("sticky", true);
         })
         .on("click", function(d) {
-          console.log(d);
+          list_matching_patterns(d);
         });
 
     node.append("circle")
@@ -50,7 +50,7 @@ $(document).ready(function() {
     node.append("text")
           .attr("text-anchor", "middle")
           .attr("dy", 4)
-          .text(function(d) { return d.name });
+          .text(function(d) { return d.lemma});
 
     force.on("tick", function () {
         link.attr("x1", function (d) { return d.source.x; })
