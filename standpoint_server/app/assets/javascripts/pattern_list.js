@@ -13,7 +13,7 @@ function list_matching_patterns(pattern) {
         link.html(data[i][1][j].extract);
         $(link).attr("data-comment", data[i][1][j].comment_id)
         $(link).click(function() {
-          show_comment($(this).attr("data-comment"));
+          show_comment($(this).attr("data-comment"), $(this).html());
         });
         $(item).append(link);
         $(list).append(item);

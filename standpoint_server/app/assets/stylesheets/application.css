@@ -32,15 +32,11 @@ a.current {
   text-decoration: none;
 }
 
-.link {
-  stroke: #ccc;
+.comment-text mark {
+  background-color: Gold;
 }
 
-.node text {
+.node text, .group text {
+  font: 12px sans-serif;
   pointer-events: none;
-  font: 15px sans-serif;
-}
-
-.group text {
-  font: 10px sans-serif;
 }
