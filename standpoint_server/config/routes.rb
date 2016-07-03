@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get 'discussions/:id/chord_data' => 'discussions#chord_data'
   get 'discussions/:id/matching_patterns' => 'discussions#matching_patterns'
 
+  resources :comments, only: [:show]
+
   # Example resource route with options:
   #   resources :products do
   #     member do

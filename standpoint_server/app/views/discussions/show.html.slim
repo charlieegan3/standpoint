@@ -1,17 +1,24 @@
+=javascript_include_tag "show_comment"
 =javascript_include_tag "pattern_list"
 =javascript_include_tag "graph"
 =javascript_include_tag "chord"
 
 .row
   .col-md-12
-    h2 =link_to @discussion.title, @discussion.url
+    h1 =@discussion.title
+    p =link_to "View Source Discussion", @discussion.url
 
 .row
-  .col-md-6
+  .col-md-4
+    h2 1. Choose a word
     #graph
-  .col-md-6
     #plot
-
-.row
-  .col-md-12
+  .col-md-4
+    h2 2. Explore points
     #list
+      p Click a node or ring-edge word to view related points
+  .col-md-4
+    h2 3. Inspect comments
+    #comment
+      p Click extracts in column 2 to view the source comment here
+    p =link_to "View Source Discussion", @discussion.url

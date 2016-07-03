@@ -14,7 +14,23 @@
  *= require_self
  */
 
-@import url('https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.0/flexboxgrid.min.css');
+body {
+  font-size: 13px;
+  font-family: sans-serif;
+}
+
+a, a:visited {
+  color: CornflowerBlue;
+}
+
+a:hover {
+  color: DarkBlue;
+}
+
+a.current {
+  color: black;
+  text-decoration: none;
+}
 
 .link {
   stroke: #ccc;

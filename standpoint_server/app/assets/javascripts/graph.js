@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  d3.json(window.location + "/graph_data.json", function(graph) {
+  d3.json(window.location.href.split("#")[0] + "/graph_data.json", function(graph) {
     var width = 400,
         height = 400;
 
@@ -36,7 +36,7 @@ $(document).ready(function() {
           d3.select(this).classed("sticky", true);
         })
         .on("click", function(d) {
-          list_matching_patterns(d);
+          list_matching_patterns(d.name);
         });
 
     node.append("circle")

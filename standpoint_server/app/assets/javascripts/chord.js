@@ -21,7 +21,7 @@ $(document).ready(function() {
     .append("svg:g")
       .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
-  d3.json(window.location + "/chord_data.json", function(connections) {
+  d3.json(window.location.href.split("#")[0] + "/chord_data.json", function(connections) {
     var indexByName = {},
         nodeByIndex = {},
         matrix = [],
@@ -55,7 +55,7 @@ $(document).ready(function() {
         .on("mouseover", fade(.02))
         .on("mouseout", fade(.80))
         .on("click", function(d) {
-          list_matching_patterns(nodeByIndex[d.index]);
+          list_matching_patterns(nodeByIndex[d.index].name);
         });
 
     g.append("svg:path")
