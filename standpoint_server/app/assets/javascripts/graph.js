@@ -36,6 +36,9 @@ $(document).ready(function() {
       .on("mousedown", function(d) {
         d.fixed = true;
         d3.select(this).classed("sticky", true);
+      })
+      .on("click", function(d) {
+        console.log(d);
       });
 
   node.append("circle")
@@ -48,7 +51,7 @@ $(document).ready(function() {
 
   node.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", 1.5)
+        .attr("dy", 4)
         .text(function(d) { return d.name });
 
   force.on("tick", function () {

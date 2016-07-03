@@ -21,14 +21,14 @@ $(document).ready(function() {
     .append("svg:g")
       .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
-  d3.json(window.location + "/chord_data.json", function(imports) {
+  d3.json(window.location + "/chord_data.json", function(connections) {
     var indexByName = {},
         nodeByIndex = {},
         matrix = [],
         n = 0;
 
     // Compute a unique index for each word name.
-    imports.forEach(function(d) {
+    connections.forEach(function(d) {
       if (!(d.name in indexByName)) {
         nodeByIndex[n] = d;
         indexByName[d.name] = n++;
@@ -36,7 +36,7 @@ $(document).ready(function() {
     });
 
     // Construct a square matrix counting word connections.
-    imports.forEach(function(d) {
+    connections.forEach(function(d) {
       var source = indexByName[d.name];
       var row = matrix[source];
       if (!row) {
@@ -53,7 +53,10 @@ $(document).ready(function() {
       .enter().append("svg:g")
         .attr("class", "group")
         .on("mouseover", fade(.02))
-        .on("mouseout", fade(.80));
+        .on("mouseout", fade(.80))
+        .on("click", function(d) {
+          console.log(nodeByIndex[d.index]);
+        });
 
     g.append("svg:path")
         .style("stroke", function(d) { return fill(nodeByIndex[d.index].type); })
@@ -78,7 +81,6 @@ $(document).ready(function() {
         .style("stroke", function(d) { return d3.rgb(fill(nodeByIndex[d.source.index].type)).darker(); })
         .style("fill", function(d) { return fill(nodeByIndex[d.source.index].type); })
         .attr("d", d3.svg.chord().radius(r0));
-
   });
 
   // Returns an event handler for fading a given chord group.
@@ -89,6 +91,11 @@ $(document).ready(function() {
         .transition()
           .style("stroke-opacity", opacity)
           .style("fill-opacity", opacity);
+    };
+  }
+  function click() {
+    return function(d, i) {
+      console.log(nodeByIndex[i]);
     };
   }
 });
