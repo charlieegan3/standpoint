@@ -1,14 +1,6 @@
-p =link_to @discussion.title, @discussion.url
+=javascript_include_tag "graph"
 
-h2 Graph
-= render 'discussions/graph', discussion: @discussion
+div#graph_data style=("display: none;")
+  =@discussion.graph_data.to_json.html_safe
 
-h2 Point Clusters
-
-ul
-  -@discussion.point_clusters.each do |pattern, points|
-    li =render 'points/show_cluster', pattern: pattern, points: points
-
-h2 Comments
--@discussion.root_comments.each do |c|
-  =render 'comments/show', comment: c
+#graph

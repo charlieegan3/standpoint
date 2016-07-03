@@ -14,19 +14,11 @@
  *= require_self
  */
 
-.comment {
-  margin-left: 5px;
-  border-left: 1px solid #eee;
-  background-color: white;
-}
-.comment:target {
-  background-color: yellow;
-}
-.comment .meta {
-  color: grey;
+.link {
+  stroke: #ccc;
 }
 
-#graph {
-  width: 400px;
-  height: 300px;
+.node text {
+  pointer-events: none;
+  font: 15px sans-serif;
 }
