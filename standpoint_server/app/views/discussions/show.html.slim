@@ -1,6 +1,9 @@
 =javascript_include_tag "graph"
+=javascript_include_tag "chord"
 
 div#graph_data style=("display: none;")
   =@discussion.graph_data.to_json.html_safe
 
 #graph
+
+#plot

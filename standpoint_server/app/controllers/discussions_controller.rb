@@ -8,6 +8,14 @@ class DiscussionsController < ApplicationController
     @discussion = Discussion.find(params[:id])
   end
 
+  def graph_data
+    render json: Discussion.find(params[:id]).graph_data
+  end
+
+  def chord_data
+    render json: Discussion.find(params[:id]).chord_data
+  end
+
   def create
     url = params[:url]
     if url.match(/^https:\/\/news\.ycombinator\.com\/item\?id=[0-9]+$/)

@@ -13,6 +13,20 @@ class Discussion < ActiveRecord::Base
       .reverse
   end
 
+  def chord_data
+    connections = Hash.new([])
+    point_clusters.map(&:first).take(30).each do |pattern|
+      tokens = pattern.split(" ")
+      (0...tokens.size - 1).to_a.each do |i|
+        connections[tokens[i]] += [tokens[i + 1]]
+      end
+    end
+    connections.map do |k, v|
+      lemma, pos = k.split(".")
+      { name: k, lemma: lemma, type: pos, connections: v.uniq }
+    end
+  end
+
   def graph_data
     nodes, edges = [], []
     point_clusters.each do |k, v|
@@ -23,7 +37,7 @@ class Discussion < ActiveRecord::Base
       end
     end
     name_index = Hash.new()
-    nodes = Utils.sorted_dup_hash(nodes).take(25).each_with_index.to_a.map do |e, i|
+    nodes = Utils.sorted_dup_hash(nodes).take(30).each_with_index.to_a.map do |e, i|
       name, type = e[0].split(".")
       name_index[e[0]] = i
       { name: name, group: type, value: e[1] }

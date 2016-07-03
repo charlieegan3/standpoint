@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   resources :discussions, only: [:show, :create]
+  get 'discussions/:id/graph_data' => 'discussions#graph_data'
+  get 'discussions/:id/chord_data' => 'discussions#chord_data'
 
   # Example resource route with options:
   #   resources :products do

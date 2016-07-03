@@ -5,7 +5,7 @@ $(document).ready(function() {
   var width = 500,
       height = 500;
 
-  var color = d3.scale.category20();
+  var color = d3.scale.category10();
 
   var force = d3.layout.force()
       .charge(-120)
