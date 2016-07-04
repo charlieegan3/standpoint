@@ -55,7 +55,7 @@ $(document).ready(function() {
         .on("mouseover", fade(.02))
         .on("mouseout", fade(.80))
         .on("mouseover", function(d) {
-          list_matching_patterns(nodeByIndex[d.index].name);
+          list_matching_patterns(nodeByIndex[d.index].name, "pattern");
         });
 
     g.append("svg:path")

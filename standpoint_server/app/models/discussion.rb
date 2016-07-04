@@ -51,7 +51,14 @@ class Discussion < ActiveRecord::Base
   end
 
   def matching_patterns(pattern)
-    return [] if pattern.nil?
+    return [] if pattern.blank?
     point_clusters.select { |k, _| k.downcase.include? pattern.downcase }
+  end
+
+  def matching_extracts(word)
+    return [] if word.blank?
+    point_clusters.map do |k, v|
+      [k, v.select { |point| point.extract.downcase.include? word.downcase }]
+    end.reject { |_, v| v.empty? }
   end
 end

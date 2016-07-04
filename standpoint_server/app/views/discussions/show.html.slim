@@ -2,6 +2,7 @@
 =javascript_include_tag "pattern_list"
 =javascript_include_tag "graph"
 =javascript_include_tag "chord"
+=javascript_include_tag "extract_search"
 
 .row
   .col-md-12
@@ -11,7 +12,12 @@
 .row
   .col-md-4
     h2 1. Choose a word
+    input#query placeholder=("Enter word/phrase e.g. 'cat' or 'I think'")
+    p.center
+      strong or
     #graph
+    p.center
+      strong or
     #plot
   .col-md-4
     h2 2. Explore points

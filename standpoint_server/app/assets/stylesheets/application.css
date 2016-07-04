@@ -36,7 +36,16 @@ a.current {
   position: fixed;
 }
 
-.comment-text mark {
+#query {
+  width: 100%;
+  font-size: 1.3em;
+}
+
+p.center {
+  text-align: center;
+}
+
+mark {
   background-color: Gold;
 }
 

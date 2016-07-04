@@ -36,7 +36,7 @@ $(document).ready(function() {
           d3.select(this).classed("sticky", true);
         })
         .on("mouseover", function(d) {
-          list_matching_patterns(d.name);
+          list_matching_patterns(d.name, "pattern");
         });
 
     node.append("circle")
