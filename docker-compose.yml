@@ -1,3 +1,12 @@
+caddy:
+  container_name: caddy
+  image: zzrot/alpine-caddy
+  ports:
+    - 80:80
+  links:
+    - standpoint_server
+  volumes:
+    - "./caddy/Caddyfile:/etc/Caddyfile"
 topic_api:
   container_name: topic_api
   build: ./topic_api
