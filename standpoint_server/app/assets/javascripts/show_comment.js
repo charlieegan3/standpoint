@@ -1,4 +1,5 @@
 function show_comment(id, extract_string) {
+  $("#comment").html("Loading comment #" + id + "...");
   $.get("/comments/" + id, function( data ) {
     $("#comment").html("");
     var text = $("<p class=\"comment-text\">");

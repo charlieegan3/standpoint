@@ -1,7 +1,8 @@
 function list_matching_patterns(pattern) {
+  var container = $("#list");
+  container.html("Loading \"" + pattern + "\"...");
   $.get(window.location.href.split("#")[0] + "/matching_patterns?pattern=" + pattern, function(data) {
-    var container = document.getElementById("list");
-    container.innerHTML = "";
+    container.html("");
     for (var i = 0; i < data.length; i++) {
       var title = $("<b>");
       title.append(build_clickable_pattern(data[i][0], pattern));
