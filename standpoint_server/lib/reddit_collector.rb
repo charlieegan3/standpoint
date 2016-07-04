@@ -4,7 +4,7 @@ require_relative '../config/environment'
 
 class RedditCollector
   def perform(url)
-    data_url = url.gsub(/\/$/, "") + ".json"
+    data_url = url.gsub(/\/$|\?.*/, "") + ".json"
     post, comments = JSON.parse(open(data_url, "User-Agent" => "Chrome").read)
 
 	discussion = Discussion.create(
