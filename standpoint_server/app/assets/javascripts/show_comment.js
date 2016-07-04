@@ -3,7 +3,7 @@ function show_comment(id, extract_string) {
   $.get("/comments/" + id, function( data ) {
     $("#comment").html("");
     var text = $("<p class=\"comment-text\">");
-    text.html(highlight_text(data.text, extract_string));
+    text.html(break_text(highlight_text(data.text, extract_string)));
     $("#comment").append(text);
     if (data.parent_id) {
       var parent_link = $("<a href=\"#\">");
@@ -32,4 +32,8 @@ function highlight_text(comment, extract) {
     new_comment = new_comment.replace(/<\/mark>(\W+)<mark>/g, "$1");
   }
   return new_comment;
+}
+
+function break_text(text) {
+  return text.replace("\n", "<br/><br/>");
 }
