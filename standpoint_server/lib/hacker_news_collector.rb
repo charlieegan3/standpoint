@@ -28,7 +28,7 @@ class HackerNewsCollector
 	  comment = Comment.create(
         discussion: discussion,
         parent: parent,
-		text: Nokogiri::HTML(c["text"]).css('p').map(&:text).join(" "),
+		text: Nokogiri::HTML(c["text"]).css('p').map(&:text).join("\n"),
         user: c["author"],
         votes: c["points"]
       )
