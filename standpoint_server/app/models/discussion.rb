@@ -61,4 +61,15 @@ class Discussion < ActiveRecord::Base
       [k, v.select { |point| point.extract.downcase.include? word.downcase }]
     end.reject { |_, v| v.empty? }
   end
+
+  def top_nouns
+    nouns = comments.map(&:points)
+      .flatten
+      .collect(&:pattern)
+      .map { |p| p.split(" ") }
+      .flatten
+      .select { |p| p.include? "noun" }
+      .reject { |p| p.include? "PERSON" }
+    return Utils.sorted_dup_hash(nouns).to_a
+  end
 end

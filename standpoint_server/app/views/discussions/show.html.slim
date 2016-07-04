@@ -3,6 +3,7 @@
 =javascript_include_tag "graph"
 =javascript_include_tag "chord"
 =javascript_include_tag "extract_search"
+=javascript_include_tag "top_nouns"
 
 .row
   .col-md-12
@@ -13,6 +14,9 @@
   .col-md-4
     h2 1. Choose a word
     input#query placeholder=("Enter word/phrase e.g. 'cat' or 'I think'")
+    p.center
+      strong or
+    #top_nouns
     p.center
       strong or
     #graph

@@ -24,6 +24,10 @@ class DiscussionsController < ApplicationController
     render json: Discussion.find(params[:id]).matching_extracts(params[:word])
   end
 
+  def top_nouns
+    render json: Discussion.find(params[:id]).top_nouns
+  end
+
   def create
     url = params[:url]
     if url.match(/^https:\/\/news\.ycombinator\.com\/item\?id=[0-9]+$/)

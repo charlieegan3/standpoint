@@ -9,7 +9,7 @@ function list_matching_patterns(query, type) {
   $.get(window.location.href.split("#")[0] + query_path + query, function(data) {
     container.html("");
     for (var i = 0; i < data.length; i++) {
-      var title = $("<b>");
+      var title = $("<strong>");
       title.append(build_clickable_pattern(data[i][0], query));
       $(container).append(title);
       var list = document.createElement("ul");

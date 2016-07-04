@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'discussions/:id/chord_data' => 'discussions#chord_data'
   get 'discussions/:id/matching_patterns' => 'discussions#matching_patterns'
   get 'discussions/:id/matching_extracts' => 'discussions#matching_extracts'
+  get 'discussions/:id/top_nouns' => 'discussions#top_nouns'
 
   resources :comments, only: [:show]
 
