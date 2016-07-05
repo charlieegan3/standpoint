@@ -3,19 +3,41 @@
   remote_user: root
   vars:
     - swap_size: "6144"
+  environment:
+    - POSTGRES_USER: username
+    - POSTGRES_PASSWORD: password
+    - SECRET_KEY_BASE: secret_key_base
   roles:
     - role: novuso.swap
     - role: angstwad.docker_ubuntu
     - role: franklinkim.docker-compose
     - role: geerlingguy.git
   tasks:
-    - git: repo=git://github.com/charlieegan3/standpoint.git
-           dest=~/app
+    - name: Checkout App
+      command: git pull origin master
+      args:
+        chdir: ~/app
     - name: Stop app
       command: docker-compose stop
       args:
         chdir: ~/app
     - name: Build App
       command: docker-compose build
+      args:
+        chdir: ~/app
+    - name: Remove pids
+      command: rm -rf standpoint_server/tmp
+      args:
+        chdir: ~/app
+    - name: Run migrations
+      command: docker-compose run standpoint_worker rake db:migrate
+      args:
+        chdir: ~/app
+    - name: Compile assets
+      command: docker-compose run standpoint_worker rake assets:precompile
+      args:
+        chdir: ~/app
+    - name: Start application
+      command: docker-compose up -d
       args:
         chdir: ~/app
