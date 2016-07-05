@@ -11,8 +11,8 @@
   tasks:
     - git: repo=git://github.com/charlieegan3/standpoint.git
            dest=~/app
-    - name: Kill app
-      command: docker-compose kill
+    - name: Stop app
+      command: docker-compose stop
       args:
         chdir: ~/app
     - name: Build App

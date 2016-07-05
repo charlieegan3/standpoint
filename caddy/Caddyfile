@@ -1,3 +1,10 @@
 0.0.0.0:80 {
-  proxy / http://standpoint_server:3000
+  root /www/standpoint
+  gzip
+  proxy / http://standpoint_server:3000 {
+      except /assets
+      proxy_header Host {host}
+      proxy_header X-Real-IP {remote}
+      proxy_header X-Forwarded-Proto {scheme}
+  }
 }
