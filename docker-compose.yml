@@ -47,6 +47,7 @@ standpoint_server:
   volumes:
     - "./standpoint_server:/app"
   environment:
+    RAILS_ENV: "production"
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
 
@@ -60,6 +61,7 @@ standpoint_worker:
   volumes:
     - "./standpoint_server:/app"
   environment:
+    RAILS_ENV: "production"
     POSTGRES_USER: "${POSTGRES_USER}"
     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
 
