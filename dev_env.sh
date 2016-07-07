@@ -1,0 +1,3 @@
+export POSTGRES_USER=username
+export POSTGRES_PASSWORD=password
+export SECRET_KEY_BASE=secret_key_base
