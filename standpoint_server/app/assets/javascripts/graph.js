@@ -35,8 +35,25 @@ $(document).ready(function() {
           d.fixed = true;
           d3.select(this).classed("sticky", true);
         })
-        .on("mouseover", function(d) {
+        .on("click", function(d) {
           list_matching_patterns(d.name, "pattern");
+        })
+        .on("mouseenter", function(d) {
+          var circ = d3.select(this).select("circle");
+          if (circ.attr("original_size") === null) {
+            circ.attr("original_size", circ.attr("r"));
+          }
+          circ.transition()
+            .duration(100)
+            .attr("r", circ.attr("r") * 1.5)
+            .style("cursor", "pointer");
+        })
+        .on("mouseleave", function(d) {
+          var circ = d3.select(this).select("circle");
+          circ.transition()
+            .duration(100)
+            .attr("r", circ.attr("original_size"))
+            .style("cursor", "default");
         });
 
     node.append("circle")
