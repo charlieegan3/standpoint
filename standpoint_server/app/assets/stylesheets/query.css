@@ -1,0 +1,9 @@
+.node text, .group text {
+  font: 12px sans-serif;
+  pointer-events: none;
+}
+
+#query {
+  width: 100%;
+  font-size: 1.3em;
+}

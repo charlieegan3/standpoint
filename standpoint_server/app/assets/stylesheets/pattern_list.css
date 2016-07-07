@@ -1,0 +1,11 @@
+#list li {
+  list-style: none;
+}
+
+#list ul {
+  padding-left: 1em;
+}
+
+.extract {
+  cursor: help;
+}
