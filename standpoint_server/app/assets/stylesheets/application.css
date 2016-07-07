@@ -27,9 +27,16 @@ a:hover {
   color: DarkBlue;
 }
 
-a.current {
-  color: black;
-  text-decoration: none;
+#list li {
+  list-style: none;
+}
+
+#list ul {
+  padding-left: 1em;
+}
+
+.extract {
+  cursor: help;
 }
 
 #comment-col {
@@ -52,4 +59,16 @@ mark {
 .node text, .group text {
   font: 12px sans-serif;
   pointer-events: none;
+}
+
+.pulsate {
+    -webkit-animation: pulsate 0.2s ease-out;
+    -webkit-animation-iteration-count: 2;
+    opacity: 1;
+}
+
+@-webkit-keyframes pulsate {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1.0; }
 }

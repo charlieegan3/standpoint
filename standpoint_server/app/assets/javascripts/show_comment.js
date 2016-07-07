@@ -3,6 +3,7 @@ function show_comment(id, extract_string) {
   $.get("/comments/" + id, function( data ) {
     $("#comment").html("");
     var text = $("<p class=\"comment-text\">");
+    text.attr("class", "pulsate");
     text.html(break_text(highlight_text(data.text, extract_string)));
     $("#comment").append(text);
     if (data.parent_id) {
