@@ -1,9 +1,6 @@
-#list li {
-  list-style: none;
-}
-
 #list ul {
-  padding-left: 1em;
+  margin: 0.3em 1em 1em 0.5em;
+  padding-left: 1.1em;
 }
 
 .extract {
