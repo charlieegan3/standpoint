@@ -15,6 +15,10 @@
   font-family: "Londrina Outline", "Londrina Solid", monospace;
 }
 
+.point {
+  font-family: "Londrina Solid", "Londrina Outline", monospace;
+}
+
 .navbar h1 a {
   text-decoration: none;
   color: white;

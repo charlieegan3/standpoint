@@ -7,28 +7,33 @@
 
 .row
   .col-md-12
-    h1 =@discussion.title
-    p =link_to "View Source Discussion", @discussion.url
+    h1
+      span.muted Discussion:&thinsp;
+      =@discussion.title
+    p
+      span.muted Source:&thinsp;
+      =link_to "#{@discussion.source} thread", @discussion.url
 
 .row
   .col-md-4
-    h2 1. Choose a word
+    h2
+      span.muted 1.&thinsp;
+      |Filter by interest
+    p Search or select for tokens of interest.
     input#query placeholder=("Enter word/phrase e.g. 'cat' or 'I think'")
-    p.center
-      strong or
     #top_nouns
-    p.center
-      strong or
     #graph
-    p.center
-      strong or
     #plot
   .col-md-4
-    h2 2. Explore points
+    h2
+      span.muted 2.&thinsp;
+      |Explore related points
     #list
       p Click a node or ring-edge word to view related points
   .col-md-4#comment-col
-    h2 3. Inspect comments
+    h2
+      span.muted 3.&thinsp;
+      |Inspect source comments
     #comment
       p Hover on extracts in column 2 to view the source comment here
     p =link_to "View Source Discussion", @discussion.url

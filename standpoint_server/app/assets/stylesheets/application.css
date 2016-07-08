@@ -16,11 +16,12 @@
 
 @import url(https://fonts.googleapis.com/css?family=Londrina+Solid);
 @import url(https://fonts.googleapis.com/css?family=Londrina+Outline);
-@import url(https://fonts.googleapis.com/css?family=Nixie+One);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Lato);
 
 body {
   font-size: 13px;
-  font-family: sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 a, a:visited {
@@ -39,14 +40,15 @@ p.center {
   text-align: center;
 }
 
-h1 {
-  font-family: "Londrina Solid", monospace;
-  font-size: 1.8em;
+h1, h2, h3, h4 {
+  font-family: "Lato", serif;
   margin: 0px;
 }
 
-h2, h3, h4 {
-  font-family: "Nixie One", monospace;
-  font-size: 1.3em;
-  margin: 0px;
+h1 {
+  font-size: 1.8em;
+}
+
+.muted {
+  opacity: 0.5;
 }
