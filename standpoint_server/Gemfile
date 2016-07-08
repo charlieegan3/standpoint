@@ -12,6 +12,8 @@ gem 'd3-rails'
 gem 'delayed_job_active_record'
 gem 'pg'
 
+gem 'rollbar'
+
 group :development do
   gem 'pry'
 end
