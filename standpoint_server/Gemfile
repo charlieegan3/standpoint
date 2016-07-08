@@ -9,7 +9,10 @@ gem 'turbolinks'
 gem 'slim'
 gem 'd3-rails'
 
+gem 'nokogiri'
+
 gem 'delayed_job_active_record'
+gem 'rufus-scheduler'
 gem 'pg'
 
 gem 'rollbar'
