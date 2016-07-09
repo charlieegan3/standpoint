@@ -1,5 +1,5 @@
 class Discussion < ActiveRecord::Base
-  has_many :comments
+  has_many :comments, dependent: :destroy
 
   def root_comments
     comments.where(parent: nil).order('votes DESC')
