@@ -7,6 +7,8 @@ class RedditCollector
     data_url = url.gsub(/\/$|\?.*/, "") + ".json"
     post, comments = JSON.parse(open(data_url, "User-Agent" => "Chrome").read)
 
+    return if comments["data"]["children"].empty?
+
 	discussion = Discussion.create(
       title: post["data"]["children"].first["data"]["title"],
 	  url: url,

@@ -8,6 +8,8 @@ class HackerNewsCollector
 	data_url = "https://hn.algolia.com/api/v1/items/#{id}"
 	data = JSON.parse(open(data_url).read)
 
+    return if data["children"].empty?
+
 	discussion = Discussion.create(
 	  title: data["title"],
 	  url: url,

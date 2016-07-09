@@ -18,7 +18,9 @@
         ="#{@discussion.source} thread,"
       |&thinsp;
       =@discussion.comments.count
-      |&thinsp;comments
+      |&thinsp;comments,&thinsp;
+      =@discussion.comments.map { |c| c.points.count }.reduce(:+)
+      |&thinsp;points
 
 .row
   .col-md-4

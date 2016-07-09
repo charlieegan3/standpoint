@@ -17,4 +17,5 @@ table
       td
         =distance_of_time_in_words(Time.zone.now, d.created_at) + " ago"
       td =d.source
+      td ="#{d.comments.size} comments"
       td =link_to d.title, discussion_path(d)
