@@ -4,13 +4,17 @@ p
 h2 Collect a New Discussion
 p ="Currently processing #{@jobs} jobs" if @jobs > 0
 =form_tag("discussions", method: "post") do
-  =text_field_tag(:url)
+  =text_field_tag(:url, nil, placeholder: "Reddit or HN thread URL")
   =submit_tag("Analyze")
+p
+  |Or&thinsp;
+  =link_to "submit your own comments", new_discussion_path
 
-h2 Collected Discussions
+h2 Recently Analyzed Discussions
 table
   - @discussions.each do |d|
     tr
       td
         =distance_of_time_in_words(Time.zone.now, d.created_at) + " ago"
+      td =d.source
       td =link_to d.title, discussion_path(d)

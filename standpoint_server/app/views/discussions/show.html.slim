@@ -12,7 +12,10 @@
       =@discussion.title
     p
       span.muted Source:&thinsp;
-      =link_to "#{@discussion.source} thread", @discussion.url
+      -if @discussion.url
+        =link_to "#{@discussion.source} thread", @discussion.url
+      -else
+        ="#{@discussion.source} thread,"
       |&thinsp;
       =@discussion.comments.count
       |&thinsp;comments

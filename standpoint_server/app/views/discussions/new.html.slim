@@ -1,0 +1,12 @@
+h2 Option 1
+p Submit a Hacker News or Reddit thread for analysis.
+=form_tag(discussions_path, method: "post") do
+  =text_field_tag(:url, nil, placeholder: "Reddit or HN thread URL")
+  =submit_tag("Analyze")
+
+h2 Option 2
+p Submit some text of your own, 1 comment per line
+=form_tag(discussions_path, method: "post") do
+  =text_area_tag(:text, nil, placeholder: "Comments, 1 per line.", rows: 25, cols: 75)
+  br
+  =submit_tag("Analyze")
