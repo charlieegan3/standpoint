@@ -36,3 +36,16 @@ To develop on a single service run `docker-compose run -p {external_port}:{inter
 * Points Extractor: `cargo run`
 
 Those commands should be enough to develop on any of the services. Sometimes you'll need to run others in the service environment, e.g. `rake db:migrate`.
+
+## Using the point_extractor from terminal
+
+If you are only interested in extracting points from a list of comments follow these steps:
+
+1. `docker-compose pull && docker-compose build` (technically  you only need to build `core_nlp` and `point_extractor`)
+2. Create a text file, one comment per line.
+3. Find out your docker host
+4. Run `ruby point_extractor_cli.rb {docker_host} {comment_file}`
+
+E.g. `ruby point_extractor_cli.rb http://local.docker:3456 comments.txt`.
+
+Note: the point_extractor runs on 3456 by default.
