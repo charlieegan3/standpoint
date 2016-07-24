@@ -8,15 +8,6 @@ caddy:
   volumes:
     - "./caddy/Caddyfile:/etc/Caddyfile"
     - "./standpoint_server/public:/www/standpoint"
-topic_api:
-  container_name: topic_api
-  build: ./topic_api
-  environment:
-    PORT: 4567
-  ports:
-    - "4567:4567"
-  volumes:
-    - "./topic_api:/app"
 
 point_extractor:
   container_name: point_extractor
