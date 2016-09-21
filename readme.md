@@ -25,6 +25,12 @@ From the project root run `docker-compose pull && docker-compose build`. This wi
 
 You will also want to set some environment variables, to use the development defaults run `source dev_env.sh`.
 
+Next make sure that there is an database ready for the app to use:
+
+```
+docker-compose run standpoint_server rake db:create db:migrate
+```
+
 The application is now ready to start. To start up the services as they run on standpoint.io run `docker-compose up -d`. The application will now be available on port 80 of the docker host.
 
 To stop the application run `docker-compose stop`.
@@ -46,6 +52,6 @@ If you are only interested in extracting points from a list of comments follow t
 3. Find out your docker host
 4. Run `ruby point_extractor_cli.rb {docker_host} {comment_file}`
 
-E.g. `ruby point_extractor_cli.rb http://local.docker:3456 comments.txt`.
+E.g. `ruby point_extractor_cli.rb http://localhost:3456 comments.txt`.
 
 Note: the point_extractor runs on 3456 by default.
