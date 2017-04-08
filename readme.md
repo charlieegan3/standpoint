@@ -4,16 +4,16 @@
 
 Standpoint is a tool for analyzing large online discussions. The approach implemented in the Standpoint application was developed as part of an undergraduate project at the University of Aberdeen. The work was written up as a [conference paper](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=pqb-ZNAAAAAJ&citation_for_view=pqb-ZNAAAAAJ:u5HHmVD_uO8C) and as an [honors thesis](http://charlieegan3.com/timeline/2016-07-20-summarising-the-points/thesis.pdf).
 
-This repository contains the history for that academic project and is now the repo for the 'Standpoint Application'; [standpoint.io](http://standpoint.io) is a hosted instance of the application. This allows visitors to queue analysis jobs for online discussions on Hacker News and Reddit. It is also possible to manually submit a collection of comments (from any site) for analysis.
+This repository contains the history for that academic project and is now the repo for the 'Standpoint Application'. This allows visitors to queue analysis jobs for online discussions on Hacker News and Reddit. It is also possible to manually submit a collection of comments (from any site) for analysis.
 
 ## Application Services
 
 The application is implemented as a series of services. These run in containers described in `docker-compose.yml`.
 
-* *caddy*: production web server for the standpoint.io site. Configured to proxy requests to the app and serve static assets.
+* *caddy*: production web server for the standpoint site & UI. Configured to proxy requests to the app and serve static assets.
 * *point_extractor*: implantation of the points extraction approach. Makes use of dependency graphs and matches patterns within them to find points. The process is detailed in the paper and thesis linked above.
 * *corenlp_server*: a container running an copy of [corenlp.run](http://www.corenlp.run). This is provides the dependency parses to the `point_extractor`.
-* *standpoint_server*: the Rails app that serves the analysis interface to the point_extractor at standpoint.io.
+* *standpoint_server*: the Rails app that serves the analysis interface to the point_extractor.
 * *standpoint_worker*: another instance of the rails app, running a worker for analysis jobs rather than the Rails server.
 * *standpoint_server_postgres*: this container hosts the database used to store the results of the points extraction analysis. This is used by the worker and the server only.
 
@@ -31,7 +31,7 @@ Next make sure that there is an database ready for the app to use:
 docker-compose run standpoint_server rake db:create db:migrate
 ```
 
-The application is now ready to start. To start up the services as they run on standpoint.io run `docker-compose up -d`. The application will now be available on port 80 of the docker host.
+The application is now ready to start. To start up the services run `docker-compose up -d`. The application will now be available on port 80 of the docker host.
 
 To stop the application run `docker-compose stop`.
 
