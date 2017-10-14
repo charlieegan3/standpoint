@@ -1,6 +1,6 @@
 caddy:
   container_name: caddy
-  image: zzrot/alpine-caddy
+  image: zzrot/alpine-caddy:0.9
   ports:
     - 80:80
   links:
