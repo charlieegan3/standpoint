@@ -1,5 +1,5 @@
 FROM java:8
-RUN curl http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip > corenlp.zip
+RUN curl -L http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip > corenlp.zip
 RUN unzip corenlp.zip -d /corenlp
 RUN mv /corenlp/*/* /corenlp
 WORKDIR /corenlp
