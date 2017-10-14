@@ -1,3 +1,4 @@
 !*.zip
 local_env.sh
 hosts
+standpoint_server/public/assets/*
