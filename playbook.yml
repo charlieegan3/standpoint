@@ -5,6 +5,5 @@
     - swap_size: "6144"
   roles:
     - role: novuso.swap
-    - role: angstwad.docker_ubuntu
     - role: geerlingguy.docker
     - role: geerlingguy.git
