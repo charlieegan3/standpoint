@@ -10,3 +10,5 @@ RUN apt-get install -y git curl freeglut3-dev autoconf libx11-dev \
 WORKDIR /app
 ADD . /app
 RUN cargo build --verbose
+
+CMD cargo run
