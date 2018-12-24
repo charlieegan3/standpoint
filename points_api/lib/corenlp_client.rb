@@ -8,8 +8,9 @@ class CoreNlpClient
     #params = URI.encode('properties={"annotators": "lemma,parse,depparse", "parse.flags": " -makeCopulaHead"}')
     params = URI.encode('properties={"annotators": "lemma,tokenize,ssplit,depparse"}')
 
-    @uri = URI(host + "/?" + params)
-    @http_client = Net::HTTP.new(@uri.host, @uri.port)
+    @uri = host + "/?" + params
+    _, host, port = host.split(/\W+/)
+    @http_client = Net::HTTP.new(host, port)
   end
 
   def request_parse(text)
